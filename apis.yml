@@ -1,8 +1,15 @@
 aid: safetyculture
 name: SafetyCulture
-description: 'SafetyCulture is a company surfaced as a portfolio company of index-ventures, insight-partners
-  and added to the API Evangelist network as a stub for enrichment. Sector: business-applications. This
-  profile is a lead awaiting the enrichment pipeline.'
+description: >-
+  SafetyCulture (formerly iAuditor) is a workplace operations and safety platform used
+  by frontline teams to run inspections, capture and track issues, assign corrective
+  actions, manage assets and sites, deliver training, and provision users. Its public
+  REST API at https://api.safetyculture.io exposes more than 380 documented operations
+  across inspections, templates, assets, actions, issues, users, groups, schedules,
+  training, credentials, and webhooks, secured with bearer API tokens (service-user and
+  personal). Near real-time webhooks stream a rich catalog of inspection, action,
+  incident, media, and training events, and SCIM 2.0 supports user provisioning via
+  Microsoft Entra ID and Okta.
 url: https://raw.githubusercontent.com/api-evangelist/safetyculture/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,13 +18,56 @@ x-backed-by:
 - insight-partners
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
+image: https://safetyculture.com/favicon.ico
 tags:
 - Company
 - Business Applications
-apis: []
+- Safety
+- Inspections
+- Workplace Operations
+- EHS
+- Compliance
+- Training
+- Field Service
+- Webhooks
+apis:
+- name: SafetyCulture API
+  description: >-
+    REST API for the SafetyCulture platform — inspections, templates, assets, actions,
+    issues, users, groups, schedules, training, credentials, and webhooks. Bearer-token
+    auth over HTTPS.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  properties:
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -25,4 +75,71 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: http://safetyculture.com
+  url: https://safetyculture.com
+- type: DeveloperPortal
+  url: https://developer.safetyculture.com
+- type: Documentation
+  url: https://developer.safetyculture.com
+- type: APIReference
+  url: https://developer.safetyculture.com/reference/introduction
+- type: GettingStarted
+  url: https://developer.safetyculture.com/reference/getting-started
+- type: Blog
+  url: https://safetyculture.com/blog/
+- type: Pricing
+  url: https://safetyculture.com/pricing
+- type: SignUp
+  url: https://app.safetyculture.com
+- type: TermsOfService
+  url: https://safetyculture.com/legal/terms-and-conditions
+- type: PrivacyPolicy
+  url: https://safetyculture.com/legal/privacy-policy/
+- type: Support
+  url: https://safetyculture.com/partner-program/
+- type: GitHubOrganization
+  url: https://github.com/SafetyCulture
+- type: StatusPage
+  url: https://status.safetyculture.com
+- type: Authentication
+  url: authentication/safetyculture-authentication.yml
+- type: LLMsTxt
+  url: llms/safetyculture-llms.txt
+- type: WellKnown
+  url: well-known/safetyculture-well-known.yml
+- type: SecurityTxt
+  url: well-known/safetyculture-security.txt
+- type: RateLimits
+  url: rate-limits/safetyculture-rate-limits.yml
+- type: Webhooks
+  url: asyncapi/safetyculture-webhooks.yml
+- type: Conventions
+  url: conventions/safetyculture-conventions.yml
+- type: Lifecycle
+  url: lifecycle/safetyculture-lifecycle.yml
+- type: Conformance
+  url: conformance/safetyculture-conformance.yml
+- type: Compliance
+  url: https://safetyculture.com/security
+- type: Packages
+  url: packages/safetyculture-packages.yml
+- type: SDKs
+  url: packages/safetyculture-packages.yml
+- type: CLI
+  url: cli/safetyculture-cli.yml
+- type: MCPServer
+  url: mcp/safetyculture-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/safetyculture-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/safetyculture-vulnerability-disclosure.yml
+- type: Security
+  url: https://safetyculture.com/security
+- type: TrustCenter
+  url: security/safetyculture-trust-center.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 19
+  pass: local-v1

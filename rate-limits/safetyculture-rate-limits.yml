@@ -1,0 +1,33 @@
+generated: '2026-07-21'
+method: searched
+source: https://developer.safetyculture.com/reference/rate-limits
+docs: https://developer.safetyculture.com/reference/rate-limits
+window_seconds: 60
+throttle_status: 429
+throttle_message: Too Many Requests
+headers:
+- name: x-ratelimit-limit
+  description: The rate limit credit for that endpoint.
+- name: x-ratelimit-remaining
+  description: The number of requests left for the window.
+- name: x-ratelimit-reset
+  description: The number of seconds until this window resets.
+limits:
+- endpoint: default (all other endpoints)
+  limit_count: 800
+  window_seconds: 60
+- endpoint: most endpoints
+  limit_count: 200
+  window_seconds: 60
+- endpoint: POST /audits
+  limit_count: 30
+  window_seconds: 60
+- endpoint: POST /audits/<audit ID>/export
+  limit_count: 20
+  window_seconds: 60
+- endpoint: POST /users/v1/users/upsert
+  limit_count: 5
+  window_seconds: 60
+- endpoint: POST /users/v1/users/upsert/jobs/{job_id}
+  limit_count: 5
+  window_seconds: 60

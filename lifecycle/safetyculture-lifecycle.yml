@@ -1,0 +1,20 @@
+generated: '2026-07-21'
+method: searched
+source: https://developer.safetyculture.com
+versioning:
+  scheme: uri-path
+  note: Resource paths are version-segmented (e.g. /users/v1/...). No global dated version header documented.
+  docs: https://developer.safetyculture.com/reference/introduction
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: >-
+    No formal RFC 8594 Sunset/Deprecation header policy documented. Some operations are
+    marked "legacy" in the reference (e.g. Create Issue (legacy), Get Issue (legacy)),
+    superseded by newer endpoints, but no dated sunset policy is published.
+  legacy_operations:
+  - https://developer.safetyculture.com/reference/incidentsservice_createincident
+  - https://developer.safetyculture.com/reference/incidentsservice_getincident
+sla:
+  url: null
+status_page: https://status.safetyculture.com

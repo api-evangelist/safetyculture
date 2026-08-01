@@ -1,0 +1,49 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: >-
+  Derived from operations documented at https://developer.safetyculture.com/reference.
+  No official hosted/remote SafetyCulture MCP server was found (mcp.safetyculture.com and
+  developer.safetyculture.com/docs/mcp did not resolve to a published server).
+server:
+  name: safetyculture
+  transport: http
+  base_url: https://api.safetyculture.io
+  auth: bearer-token
+tools:
+- name: list_inspections_modified
+  description: Get inspections modified since a specified time.
+  source_operation: https://developer.safetyculture.com/reference/get-modified-inspections
+- name: start_inspection
+  description: Start an inspection, optionally pre-filled with answers.
+  source_operation: https://developer.safetyculture.com/reference/start-inspection
+- name: search_templates
+  description: Search modified inspection templates.
+  source_operation: https://developer.safetyculture.com/reference/thepubservice_searchtemplates
+- name: get_template
+  description: Get a template by ID.
+  source_operation: https://developer.safetyculture.com/reference/templatesservice_gettemplatebyid
+- name: list_assets
+  description: List assets.
+  source_operation: https://developer.safetyculture.com/reference/assetsservice_listassets
+- name: create_asset
+  description: Create an asset.
+  source_operation: https://developer.safetyculture.com/reference/assetsservice_createasset
+- name: list_issues
+  description: List issues (incidents).
+  source_operation: https://developer.safetyculture.com/reference/incidentsservice_getincidents
+- name: create_issue
+  description: Create an issue (incident).
+  source_operation: https://developer.safetyculture.com/reference/incidentsservice_submitincident
+- name: list_groups
+  description: List groups.
+  source_operation: https://developer.safetyculture.com/reference/thepubservice_listgroups
+- name: create_group
+  description: Create a group.
+  source_operation: https://developer.safetyculture.com/reference/thepubservice_creategroup
+- name: list_webhooks
+  description: List webhook subscriptions.
+  source_operation: https://developer.safetyculture.com/reference/webhooksservice_listwebhooks
+- name: create_webhook
+  description: Create a webhook subscription.
+  source_operation: https://developer.safetyculture.com/reference/webhooksservice_createwebhook

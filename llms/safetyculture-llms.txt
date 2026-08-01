@@ -1,0 +1,461 @@
+# SafetyCulture Developer Portal Documentation
+
+> The SafetyCulture API enables you to access data and interact with the SafetyCulture platform.
+
+## Guides
+- [Run SafetyCulture Exporter](https://developer.safetyculture.com/docs/safetyculture-exporter-run.md): Download, configure, and run SafetyCulture Exporter.
+- [Database support](https://developer.safetyculture.com/docs/safetyculture-exporter-database-support.md): Using different relational databases
+- [Exported data formats](https://developer.safetyculture.com/docs/safetyculture-exporter-data.md): Understanding the data exported by SafetyCulture Exporter
+- [Schedule exports](https://developer.safetyculture.com/docs/safetyculture-exporter-scheduling.md): Schedule SafetyCulture Exporter to run automatically.
+- [Export your SafetyCulture Data](https://developer.safetyculture.com/docs/export-your-safetyculture-data.md): SafetyCulture offers multiple ways to export your data. Choose a method based on your team's needs, the size of your organization, and how often you need updated data.
+- [Data relationships](https://developer.safetyculture.com/docs/data-relationships.md)
+- [Understanding the Exporter, Power BI, and API data](https://developer.safetyculture.com/docs/understanding-the-data.md): See how SafetyCulture Exporter data maps to Data Feeds and Power BI.
+- [Automate user management with user provisioning](https://developer.safetyculture.com/docs/automate-user-management-with-user-provisioning.md): Learn how to set up user provisioning to manage users in your SafetyCulture organization.
+- [User provisioning with Microsoft Entra ID (Azure AD) and SCIM](https://developer.safetyculture.com/docs/user-provisioning-with-microsoft-entra-id-and-scim.md): Learn how to set up user provisioning with Microsoft Entra ID and SCIM to automate user management and sync with custom user fields in SafetyCulture.
+- [User provisioning with Okta and SCIM](https://developer.safetyculture.com/docs/user-provisioning-with-okta-and-scim.md): Learn how to set up user provisioning with Okta and SCIM to automate user management and sync with custom user fields in SafetyCulture.
+- [Partner listing guide](https://developer.safetyculture.com/docs/partner-listing-guide.md): Create a listing that helps customers discover, trust, and adopt your integration.
+- [Apps](https://developer.safetyculture.com/docs/safetyculture-apps-guide.md): Explore how you can build, connect, and access third-party applications inside the SafetyCulture platform.
+- [Create and install apps in SafetyCulture](https://developer.safetyculture.com/docs/create-and-install-apps-in-safetyculture.md): Step-by-step guide to create and install private apps into your SafetyCulture organization.
+- [Third party notices](https://developer.safetyculture.com/docs/third-party-notices.md): Third-party software notices and information.
+
+## API Reference
+- [Introduction](https://developer.safetyculture.com/reference/introduction.md): Use the SafetyCulture API to connect SafetyCulture with your systems, retrieve data, and automate workflows.
+- [Use cases](https://developer.safetyculture.com/reference/use-cases.md): Common SafetyCulture API use cases and patterns.
+- [Get modified inspections](https://developer.safetyculture.com/reference/get-modified-inspections.md): Get inspections modified since a specified time.
+- [Extract historical inspection data](https://developer.safetyculture.com/reference/extract-data.md): Export SafetyCulture data to integrate with your systems.
+- [Start and pre-fill inspections](https://developer.safetyculture.com/reference/start-inspection.md): Start an inspection with prefilled answers.
+- [Remove owner's access to a completed inspection](https://developer.safetyculture.com/reference/remove-owners-access-to-a-completed-inspection.md): Remove an owner's access to a completed inspection.
+- [Add notes to inspection questions](https://developer.safetyculture.com/reference/add-notes-to-inspection-questions.md): Add notes to inspection questions using the API.
+- [Update inspection responses based on selected responses](https://developer.safetyculture.com/reference/update-inspection-responses-based-on-a-selected-response.md): Automatically modify inspection responses based on specific responses within the inspection.
+- [Manage inspection access](https://developer.safetyculture.com/reference/manage-inspection-access.md): Control who can view, edit, and delete inspections using access management APIs.
+- [Rate limits](https://developer.safetyculture.com/reference/rate-limits.md): API rate limits and how to handle them.
+- [Date/Time Format](https://developer.safetyculture.com/reference/date-time-format.md): Accepted date/time formats for SafetyCulture APIs.
+- [List groups for a user](https://developer.safetyculture.com/reference/organisationservice_getusergroups.md)
+- [List groups](https://developer.safetyculture.com/reference/thepubservice_listgroups.md)
+- [List calling user's groups and organizations](https://developer.safetyculture.com/reference/thepubservice_getusergroups.md)
+- [Create a group](https://developer.safetyculture.com/reference/thepubservice_creategroup.md)
+- [Add user to a group](https://developer.safetyculture.com/reference/thepubservice_addnewusertogroup.md)
+- [Bulk delete groups](https://developer.safetyculture.com/reference/organisationservice_bulkdeletegroups.md)
+- [Remove user from a group](https://developer.safetyculture.com/reference/thepubservice_removeuser.md)
+- [List a group's or an organization's users](https://developer.safetyculture.com/reference/thepubservice_listusersingroup.md)
+- [Heads Up](https://developer.safetyculture.com/reference/heads-up.md)
+- [Gets Heads Up](https://developer.safetyculture.com/reference/headsupservice_getheadsup.md)
+- [Get Heads Up completion counts](https://developer.safetyculture.com/reference/headsupservice_getheadsupcompletioncounts.md)
+- [Get a Heads Ups comments](https://developer.safetyculture.com/reference/headsupservice_getheadsupmessages.md)
+- [List Heads Ups](https://developer.safetyculture.com/reference/headsupservice_listheadsupmanage.md)
+- [List Heads Up users](https://developer.safetyculture.com/reference/headsupservice_listheadsupusers.md)
+- [Assets](https://developer.safetyculture.com/reference/assets.md)
+- [List assets](https://developer.safetyculture.com/reference/assetsservice_listassets.md)
+- [Create an asset](https://developer.safetyculture.com/reference/assetsservice_createasset.md)
+- [Create multiple assets](https://developer.safetyculture.com/reference/assetsservice_bulkcreateassets.md)
+- [Get full detail information of an asset](https://developer.safetyculture.com/reference/assetsservice_getasset.md)
+- [Get asset by code](https://developer.safetyculture.com/reference/assetsservice_getassetbycode.md)
+- [Lookup assets by a field](https://developer.safetyculture.com/reference/assetsservice_lookupassetsbyfield.md)
+- [Update an asset](https://developer.safetyculture.com/reference/assetsservice_updateasset.md)
+- [Update multiple assets](https://developer.safetyculture.com/reference/assetsservice_bulkupdateassets.md)
+- [Set field values of an asset](https://developer.safetyculture.com/reference/assetsservice_setassetfieldvalues.md)
+- [Update asset location](https://developer.safetyculture.com/reference/assetsservice_updateassetlocation.md)
+- [Archive an asset](https://developer.safetyculture.com/reference/assetsservice_archiveasset.md)
+- [Restore an archived asset](https://developer.safetyculture.com/reference/assetsservice_restorearchivedasset.md)
+- [Delete an asset](https://developer.safetyculture.com/reference/assetsservice_deleteasset.md)
+- [List asset fields](https://developer.safetyculture.com/reference/fieldsservice_listfields.md)
+- [Create an asset field](https://developer.safetyculture.com/reference/fieldsservice_createfield.md)
+- [Update an asset field](https://developer.safetyculture.com/reference/fieldsservice_updatefield.md)
+- [Delete an asset field](https://developer.safetyculture.com/reference/fieldsservice_deletefield.md)
+- [List asset types](https://developer.safetyculture.com/reference/typesservice_listtypes.md)
+- [Create an asset type](https://developer.safetyculture.com/reference/typesservice_createtype.md)
+- [Get an asset type](https://developer.safetyculture.com/reference/typesservice_gettype.md)
+- [Update an asset type](https://developer.safetyculture.com/reference/typesservice_updatetype.md)
+- [Delete an asset type](https://developer.safetyculture.com/reference/typesservice_deletetype.md)
+- [List an asset type's asset field associations](https://developer.safetyculture.com/reference/typesservice_listtypefields.md)
+- [Update an asset type's asset field associations](https://developer.safetyculture.com/reference/typesservice_updatetypefields.md)
+- [Create a status group](https://developer.safetyculture.com/reference/statusgroupsservice_createstatusgroup.md): Creates a status group with its initial status options.
+- [Get a status group](https://developer.safetyculture.com/reference/statusgroupsservice_getstatusgroup.md): Returns a status group by ID, including its status options and the asset types it is assigned to.
+- [List status groups](https://developer.safetyculture.com/reference/statusgroupsservice_liststatusgroups.md): Lists the status groups in your organization, including each group's status options and the asset types it is assigned to.
+- [Update a status group](https://developer.safetyculture.com/reference/statusgroupsservice_updatestatusgroup.md): Updates a status group's name, description, and status options. Removing an option reassigns or clears the assets currently using it.
+- [Delete a status group](https://developer.safetyculture.com/reference/statusgroupsservice_deletestatusgroup.md): Deletes a status group and clears the status from any assets using it.
+- [Create a maintenance program](https://developer.safetyculture.com/reference/maintenanceservice_createprogram.md)
+- [Get a maintenance program](https://developer.safetyculture.com/reference/maintenanceservice_getprogram.md)
+- [Update a maintenance program](https://developer.safetyculture.com/reference/maintenanceservice_updateprogram.md)
+- [List maintenance program details](https://developer.safetyculture.com/reference/maintenanceservice_listprogramsdetails.md)
+- [Add assets to a maintenance program](https://developer.safetyculture.com/reference/maintenanceservice_addassetstoprogram.md)
+- [/assets/v1/maintenance/program/{id}/assets](https://developer.safetyculture.com/reference/maintenanceservice_removeassetsfromprogram.md)
+- [Delete a maintenance program](https://developer.safetyculture.com/reference/maintenanceservice_deleteprogram.md)
+- [Create a maintenance plan](https://developer.safetyculture.com/reference/maintenanceservice_createplan.md)
+- [Update a maintenance plan](https://developer.safetyculture.com/reference/maintenanceservice_updateplan.md)
+- [Delete a maintenance plan](https://developer.safetyculture.com/reference/maintenanceservice_deleteplan.md)
+- [Adds maintenance last service information to asset](https://developer.safetyculture.com/reference/maintenanceservice_addassetlastservice.md)
+- [Add a status group to asset types](https://developer.safetyculture.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md): Assigns a status group to one or more asset types.
+- [Remove a status group from asset types](https://developer.safetyculture.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md): Removes a status group from one or more asset types.
+- [List assets maintenance details](https://developer.safetyculture.com/reference/maintenanceservice_listassetsmaintenancedetails.md)
+- [ListAssetsMaintenanceStatusCounts returns the maintenance status counts](https://developer.safetyculture.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md)
+- [List asset service history](https://developer.safetyculture.com/reference/maintenanceservice_listassetservicehistory.md)
+- [Data Feeds](https://developer.safetyculture.com/reference/data-feeds.md): Retrieve all of your SafetyCulture data in a flat format.
+- [Data feed for action assignees](https://developer.safetyculture.com/reference/thepubservice_feedactionassignees.md)
+- [Data feed for action timeline items](https://developer.safetyculture.com/reference/thepubservice_feedactiontimelineitems.md)
+- [Data feed for actions](https://developer.safetyculture.com/reference/thepubservice_feedactions.md)
+- [Data feed for activity log events](https://developer.safetyculture.com/reference/thepubservice_feedactivitylogevents.md)
+- [Data feed for assets](https://developer.safetyculture.com/reference/thepubservice_feedassets.md)
+- [Data feed for group users](https://developer.safetyculture.com/reference/thepubservice_feedgroupusers.md)
+- [Data feed for groups](https://developer.safetyculture.com/reference/thepubservice_feedgroups.md)
+- [Data feed for inspection items](https://developer.safetyculture.com/reference/thepubservice_feedinspectionitems.md)
+- [Data feed for inspections](https://developer.safetyculture.com/reference/thepubservice_feedinspections.md)
+- [Data feed for issue assignees](https://developer.safetyculture.com/reference/thepubservice_feedissueassignees.md)
+- [Data feed for issue relations items](https://developer.safetyculture.com/reference/thepubservice_feedissuerelationships.md)
+- [Data feed for issue timeline items](https://developer.safetyculture.com/reference/thepubservice_feedissuetimelineitems.md)
+- [Data feed for issues](https://developer.safetyculture.com/reference/thepubservice_feedissues.md)
+- [Data feed for schedule assignees (legacy)](https://developer.safetyculture.com/reference/thepubservice_feedscheduleassignees.md)
+- [Data feed for schedule occurrences (legacy)](https://developer.safetyculture.com/reference/thepubservice_feedscheduleoccurrences.md)
+- [Data feed for Schedules (legacy)](https://developer.safetyculture.com/reference/thepubservice_feedschedules.md)
+- [Data feed for site members](https://developer.safetyculture.com/reference/thepubservice_feedsitemembers.md)
+- [Data feed for sites](https://developer.safetyculture.com/reference/thepubservice_feedsites.md)
+- [Data feed for template permissions](https://developer.safetyculture.com/reference/thepubservice_feedtemplatepermissions.md)
+- [Data feed for templates](https://developer.safetyculture.com/reference/thepubservice_feedtemplates.md)
+- [Data feed for users](https://developer.safetyculture.com/reference/thepubservice_feedusers.md)
+- [Data feed for Course Progress](https://developer.safetyculture.com/reference/feedservice_feedtrainingcourseprogress.md)
+- [Data feed for schedule assignees](https://developer.safetyculture.com/reference/schedulingfeedservice_feedscheduleassignees.md)
+- [Data feed for schedule occurrences](https://developer.safetyculture.com/reference/schedulingfeedservice_feedscheduleoccurrences.md)
+- [Data feed for schedules](https://developer.safetyculture.com/reference/schedulingfeedservice_feedschedules.md)
+- [Data feed for action fields](https://developer.safetyculture.com/reference/feedservice_feedactionfields.md)
+- [Data feed for investigation detail fields](https://developer.safetyculture.com/reference/feedservice_feedinvestigationdetailfields.md)
+- [Data feed for investigation fields](https://developer.safetyculture.com/reference/feedservice_feedinvestigationfields.md)
+- [Data feed for investigation relationships](https://developer.safetyculture.com/reference/feedservice_feedinvestigationrelationships.md)
+- [Data feed for investigations](https://developer.safetyculture.com/reference/feedservice_feedinvestigations.md)
+- [Data feed for action fields](https://developer.safetyculture.com/reference/feedservice_feedactionfields2.md)
+- [Data feed for contractor companies](https://developer.safetyculture.com/reference/feedservice_feedcontractorcompanies.md): Provides a data feed of contractor companies across your organization. Use this to sync company data to external systems. Supports incremental sync via the modified_after parameter.
+- [Data feed for contractor company documents](https://developer.safetyculture.com/reference/feedservice_feedcontractorcompanydocuments.md): Provides a data feed of documents associated with contractor companies. Use this to sync company document data to external systems. Supports incremental sync via the modified_after parameter.
+- [Data feed for contractor company members](https://developer.safetyculture.com/reference/feedservice_feedcontractorcompanyusermemberships.md): Provides a data feed of user memberships within contractor companies. Use this to sync company member data to external systems.
+- [Data feed for credential types](https://developer.safetyculture.com/reference/feedservice_credentialtypes.md): Provides a data feed of credential types configured in your organization. Use this to sync credential type definitions to external systems.
+- [Data feed for credentials](https://developer.safetyculture.com/reference/feedservice_credentials.md): Provides a data feed of credentials across your organization. Use this to sync credential data to external systems. Supports incremental sync via the modified_after parameter.
+- [Data feed for credential types](https://developer.safetyculture.com/reference/feedservice_feeddocumenttypes.md): Syncs credential type definitions from your organization to external systems.
+- [Data feed for credentials](https://developer.safetyculture.com/reference/feedservice_feeduserdocuments.md): Syncs credential data across your organization to external systems.
+- [Data feed for assets maintenance details](https://developer.safetyculture.com/reference/feedservice_feedassetsmaintenance.md)
+- [Data feed for maintenance plans](https://developer.safetyculture.com/reference/feedservice_feedmaintenanceplans.md)
+- [Data feed for maintenance programs](https://developer.safetyculture.com/reference/feedservice_feedmaintenanceprograms.md)
+- [Inspections](https://developer.safetyculture.com/reference/inspections.md): This API provides a number of interfaces to interact with your inspection data.
+- [Start an inspection](https://developer.safetyculture.com/reference/thepubservice_startinspection.md)
+- [Search modified inspections](https://developer.safetyculture.com/reference/thepubservice_searchinspections.md)
+- [Clone an inspection](https://developer.safetyculture.com/reference/inspectionservice_cloneinspection.md)
+- [Get an inspection (legacy)](https://developer.safetyculture.com/reference/thepubservice_getinspection.md)
+- [Update an inspection](https://developer.safetyculture.com/reference/thepubservice_updateinspection.md)
+- [Generate an inspection deep link](https://developer.safetyculture.com/reference/thepubservice_getinspectiondeeplink.md): Generate a URL to the specified inspection. The link opens in the SafetyCulture mobile app if clicked on a mobile device with the app installed. Otherwise it opens in the SafetyCulture web app.
+- [Retrieve the selected media for a given inspection](https://developer.safetyculture.com/reference/thepubservice_getinspectionmedia.md)
+- [Share an inspection](https://developer.safetyculture.com/reference/thepubservice_shareinspection.md)
+- [Get inspection web report link](https://developer.safetyculture.com/reference/thepubservice_getinspectionwebreportlink.md): Retrieve the web report link for the specified inspection. This will return the existing link if one has been generated before, or generate a new one if one does not exist already. </br></br> This link does not expire, it is valid until deleted.
+- [Delete inspection web report link](https://developer.safetyculture.com/reference/thepubservice_deleteinspectionwebreportlink.md)
+- [Export inspection to PDF or Word](https://developer.safetyculture.com/reference/reportsservice_startinspectionexport.md)
+- [Get answers from an inspection](https://developer.safetyculture.com/reference/answerservice_getanswersforinspection.md): This endpoint is a streaming API that returns answers/responses from an inspection in real-time.  A stream API pushes data to the client when it becomes available and there is no need for the client to poll the requests to the server for new data.  Please note that if you're using a classic REST client, you may find that the data returned in the stream API are individual JSON structures that are not separated by `,` (comma) or encapsulated in a collection `[...]`.
+- [Get an inspection](https://developer.safetyculture.com/reference/inspectionservice_getinspection.md)
+- [Delete an inspection](https://developer.safetyculture.com/reference/inspectionservice_deleteinspection.md)
+- [Get details of an inspection](https://developer.safetyculture.com/reference/externalinspectionservice_getinspectiondetails.md)
+- [Restore an archived inspection](https://developer.safetyculture.com/reference/inspectionservice_restorearchivedinspection.md): Restores an archived inspection by removing its archived status.
+- [Archive an inspection](https://developer.safetyculture.com/reference/inspectionservice_archiveinspection.md)
+- [Set an inspections start or finish location](https://developer.safetyculture.com/reference/inspectionservice_setinspectionlocation.md)
+- [Set inspection owner](https://developer.safetyculture.com/reference/inspectionservice_setowner.md)
+- [Set inspection site](https://developer.safetyculture.com/reference/inspectionservice_setinspectionsite.md)
+- [Remove user access to an inspection](https://developer.safetyculture.com/reference/inspectionservice_removeinspectionuseraccess.md)
+- [Answer an asset field question](https://developer.safetyculture.com/reference/answerservice_answerasset.md)
+- [Answer a check box question](https://developer.safetyculture.com/reference/answerservice_answercheckbox.md)
+- [Generate a dynamic field (repeated section)](https://developer.safetyculture.com/reference/answerservice_generatedynamicfield.md): This endpoint is used to generate new dynamic field elements (a.k.a. repeated sections) under the specified dynamic field. The generated element and its items will be empty.
+- [Get inspection access](https://developer.safetyculture.com/reference/inspectionservice_getinspectionaccess.md): Retrieve the complete access configuration for an inspection, including owner, permissions, and site access levels.
+- [Set inspection access](https://developer.safetyculture.com/reference/inspectionservice_setinspectionaccess.md): Replace the access configuration for an inspection.
+- [Complete inspection](https://developer.safetyculture.com/reference/inspectionservice_completeinspection.md): Mark an inspection as complete.
+- [Create inspection](https://developer.safetyculture.com/reference/inspectionservice_createinspection.md): Create a new inspection from a template and optionally pre-fill item values. Items are matched to the template by item_id. See InspectionItem.ItemType for the list of supported item types. For tables, include pre-filled lines with cell values keyed by column field_id, which you can obtain via GetTemplateDefinition. Items not listed in the request are left empty.
+- [Update inspection](https://developer.safetyculture.com/reference/inspectionservice_updateinspection.md): Update item values on an existing inspection. Only items listed in the request are changed; omitted items are left untouched. See InspectionItem.ItemType for the list of supported item types.
+- [Add table line](https://developer.safetyculture.com/reference/inspectionservice_addtableline.md): Add a new line to a table in an inspection. Returns a server-generated line_id for the newly created line. Each cell is identified by a field_id corresponding to a table column; use GetTemplateDefinition to obtain column field_ids. Cells not listed are left empty. Returns FAILED_PRECONDITION if the table has reached its maximum line limit.
+- [Delete table line](https://developer.safetyculture.com/reference/inspectionservice_deletetableline.md): Remove an existing line and all its cell values from an inspection table. The line_id must belong to the table identified by item_id.
+- [Update table line](https://developer.safetyculture.com/reference/inspectionservice_updatetableline.md): Update cell values on an existing line in an inspection table. Only cells listed in the request are changed; omitted cells are left untouched. Each cell is identified by a field_id corresponding to a table column; use GetTemplateDefinition to obtain column field_ids.
+- [Companies](https://developer.safetyculture.com/reference/companies.md): Manage contractor companies, users, types, and documents through SafetyCulture’s Companies API.
+- [Create a company](https://developer.safetyculture.com/reference/contractorsservice_createcontractorcompany.md): Creates a new contractor company in your SafetyCulture organization. Requires the 'Companies: Manage' permission.
+- [Get a company](https://developer.safetyculture.com/reference/contractorsservice_getcontractorcompany.md): Retrieves a contractor company by its ID, including compliance statistics.
+- [Delete a company](https://developer.safetyculture.com/reference/contractorsservice_deletecontractorcompany.md): Deletes a contractor company. Requires the 'Companies: Manage' permission.
+- [Update a company](https://developer.safetyculture.com/reference/contractorsservice_updatecontractorcompany.md): Updates an existing contractor company by providing its ID and a field mask of attributes to change.
+- [List company documents](https://developer.safetyculture.com/reference/companydocumentsservice_listcompanydocuments.md): Lists documents for a company based on applied filters, with support for sorting and pagination.
+- [List companies](https://developer.safetyculture.com/reference/contractorsservice_listcontractorcompanies.md): Lists contractor companies based on applied filters, with support for sorting and pagination.
+- [List company users](https://developer.safetyculture.com/reference/contractorsservice_listcompanyusermetadata.md): Lists users in a company along with their roles and metadata.
+- [List company document types](https://developer.safetyculture.com/reference/companydocumentsservice_listcompanydocumenttypes.md): Lists all company document types available in the organization.
+- [Delete a company document type](https://developer.safetyculture.com/reference/companydocumentsservice_deletecompanydocumenttype.md): Deletes a company document type. Requires the 'Companies: Manage' permission.
+- [Get a company type](https://developer.safetyculture.com/reference/contractorcompanytypesservice_getcompanytype.md): Retrieves a company type by its ID.
+- [List company types](https://developer.safetyculture.com/reference/contractorcompanytypesservice_listcompanytypes.md): Lists company types based on applied filters.
+- [List company type metrics](https://developer.safetyculture.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md): Lists company types with a breakdown of status metrics for each type.
+- [Credentials](https://developer.safetyculture.com/reference/credentials.md)
+- [Deletes a credential including all its versions.](https://developer.safetyculture.com/reference/userdocumentsservice_deletedocumentforuser.md)
+- [Creates a credential type](https://developer.safetyculture.com/reference/documenttypesservice_createdocumenttype.md)
+- [Updates a credential type](https://developer.safetyculture.com/reference/documenttypesservice_updatedocumenttype.md)
+- [Gets a credential type](https://developer.safetyculture.com/reference/documenttypesservice_getdocumenttype.md)
+- [Deletes a credential type](https://developer.safetyculture.com/reference/documenttypesservice_deletedocumenttype.md)
+- [Lists credential types](https://developer.safetyculture.com/reference/documenttypesservice_listdocumenttypes.md)
+- [Deletes all media for a credential version](https://developer.safetyculture.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md)
+- [Gets a version of a credential.](https://developer.safetyculture.com/reference/userdocumentsservice_getdocumentversion.md)
+- [Adds a version to a credential.](https://developer.safetyculture.com/reference/userdocumentsservice_adddocumentversionforuser.md)
+- [Updates a version of a credential.](https://developer.safetyculture.com/reference/userdocumentsservice_updatedocumentversionforuser.md)
+- [Lists all versions of a credential.](https://developer.safetyculture.com/reference/userdocumentsservice_getdocumenthistory.md)
+- [Lists the latest version of credentials based on applied filters.](https://developer.safetyculture.com/reference/userdocumentsservice_getdocuments.md)
+- [Gets the Credential settings for your organization.](https://developer.safetyculture.com/reference/userdocumentsservice_getsettings.md)
+- [Updates the Credential settings for your organization.](https://developer.safetyculture.com/reference/userdocumentsservice_updatesettings.md)
+- [Directory (sites and template folders)](https://developer.safetyculture.com/reference/directory-sites.md): The SafetyCulture API gives you access to list, search, create, update, and delete folders.
+- [Create a folder](https://developer.safetyculture.com/reference/directory_createfolder.md)
+- [Retrieve a folder](https://developer.safetyculture.com/reference/directory_getfolder.md)
+- [Update a folder](https://developer.safetyculture.com/reference/directory_updatefolderproperties.md)
+- [Retrieve users associated to a folder, includes both directly and
+indirectly (inherited)](https://developer.safetyculture.com/reference/directory_getallusersbyfolder.md)
+- [Remove association for multiple users to a specific folder](https://developer.safetyculture.com/reference/directory_removeusersassociation.md)
+- [Retrieve users directly associated to a folder](https://developer.safetyculture.com/reference/directory_getusersbyfolder.md)
+- [Retrieve users indirectly associated (inherited) to a folder](https://developer.safetyculture.com/reference/directory_getinheritedusersbyfolder.md)
+- [List folders](https://developer.safetyculture.com/reference/directory_getfolders.md)
+- [Delete folders (bulk)](https://developer.safetyculture.com/reference/directory_deletefolders.md)
+- [Move folder to another parent folder or as a root folder](https://developer.safetyculture.com/reference/directory_movefolders.md)
+- [Search folders](https://developer.safetyculture.com/reference/directory_searchfolders.md)
+- [Get custom labels](https://developer.safetyculture.com/reference/directory_getorglabels.md)
+- [Get folders (by parent)](https://developer.safetyculture.com/reference/directory_getfoldersbyparent.md)
+- [List folders the requesting user is associated with](https://developer.safetyculture.com/reference/directory_getfolderidsforuser.md)
+- [Remove association for a specific user to multiple folders](https://developer.safetyculture.com/reference/directory_removefoldersassociation.md)
+- [Associate users to folders](https://developer.safetyculture.com/reference/directory_addusersfoldersassociations.md): Add a list of one or more users to a list of one or more folders.
+- [Documents](https://developer.safetyculture.com/reference/documents.md): Use the Documents API to manage files and folders in SafetyCulture.
+- [/documents/v1](https://developer.safetyculture.com/reference/documentspublicservice_createfile.md)
+- [/documents/v1/bulk/add_owners](https://developer.safetyculture.com/reference/documentspublicservice_bulkaddfileowners.md)
+- [/documents/v1/{file_id}](https://developer.safetyculture.com/reference/documentspublicservice_updatefile.md)
+- [/documents/v1/search](https://developer.safetyculture.com/reference/documentspublicservice_searchitems.md)
+- [/documents/v1/move/{item_id}](https://developer.safetyculture.com/reference/documentspublicservice_moveitem.md)
+- [/documents/v1/link](https://developer.safetyculture.com/reference/documentspublicservice_linkfiles.md)
+- [/documents/v1/bulk/update_owners](https://developer.safetyculture.com/reference/documentspublicservice_bulkupdatefileowners.md)
+- [/documents/v1/bulk/remove_owners](https://developer.safetyculture.com/reference/documentspublicservice_bulkremovefileowners.md)
+- [/documents/v1/archive/{item_id}](https://developer.safetyculture.com/reference/documentspublicservice_archiveitem.md)
+- [/documents/v1/children](https://developer.safetyculture.com/reference/documentspublicservice_getfolderchildren.md)
+- [Create Investigation](https://developer.safetyculture.com/reference/investigationsservice_createinvestigation.md)
+- [Delete Investigation](https://developer.safetyculture.com/reference/investigationsservice_deleteinvestigation.md)
+- [Get Investigation Access](https://developer.safetyculture.com/reference/investigationsservice_getinvestigationaccess.md)
+- [Get Investigation Actions](https://developer.safetyculture.com/reference/investigationsservice_getinvestigationactioncount.md)
+- [Get Investigation Inspection Count](https://developer.safetyculture.com/reference/investigationsservice_getinvestigationinspectioncount.md)
+- [Get Investigation Issue Count](https://developer.safetyculture.com/reference/investigationsservice_getinvestigationissuecount.md)
+- [Get Investigation Media Count](https://developer.safetyculture.com/reference/investigationsservice_getinvestigationmediacount.md)
+- [Get Investigation PDF Report](https://developer.safetyculture.com/reference/investigationsservice_getinvestigationpdfreport.md)
+- [Get Investigation](https://developer.safetyculture.com/reference/investigationsservice_getinvestigation.md)
+- [Get Investigations Count](https://developer.safetyculture.com/reference/investigationsservice_getinvestigationscount.md)
+- [List Fields](https://developer.safetyculture.com/reference/investigationsservice_listfields.md)
+- [List Investigation Actions](https://developer.safetyculture.com/reference/investigationsservice_listinvestigationactions.md)
+- [List Investigation Inspections](https://developer.safetyculture.com/reference/investigationsservice_listinvestigationinspections.md)
+- [List Investigation Issues](https://developer.safetyculture.com/reference/investigationsservice_listinvestigationissues.md)
+- [List Investigation Activity](https://developer.safetyculture.com/reference/investigationsservice_listinvestigationlog.md)
+- [List Investigation Media](https://developer.safetyculture.com/reference/investigationsservice_listinvestigationmedia.md)
+- [List Investigations](https://developer.safetyculture.com/reference/investigationsservice_listinvestigations.md)
+- [List Statuses](https://developer.safetyculture.com/reference/investigationsservice_liststatuses.md)
+- [Update Fields](https://developer.safetyculture.com/reference/investigationsservice_updatefields.md)
+- [Update Investigation](https://developer.safetyculture.com/reference/investigationsservice_updateinvestigation.md)
+- [Update Investigation Access](https://developer.safetyculture.com/reference/investigationsservice_updateinvestigationaccess.md)
+- [Update Investigations (bulk)](https://developer.safetyculture.com/reference/investigationsservice_updateinvestigations.md)
+- [List Settings Log Events](https://developer.safetyculture.com/reference/investigationsservice_listsettingslog.md)
+- [Update Statuses](https://developer.safetyculture.com/reference/investigationsservice_updatestatuses.md)
+- [List Categories](https://developer.safetyculture.com/reference/investigationsservice_listcategories.md)
+- [Create Category](https://developer.safetyculture.com/reference/investigationsservice_createcategory.md)
+- [Delete Category](https://developer.safetyculture.com/reference/investigationsservice_deletecategory.md)
+- [Update Category](https://developer.safetyculture.com/reference/investigationsservice_updatecategory.md)
+- [Clone Category](https://developer.safetyculture.com/reference/investigationsservice_clonecategory.md)
+- [List Category Detail Fields](https://developer.safetyculture.com/reference/investigationsservice_listcategorydetailfields.md)
+- [Set Category Detail Fields](https://developer.safetyculture.com/reference/investigationsservice_setcategorydetailfields.md)
+- [Create Detail Field](https://developer.safetyculture.com/reference/investigationsservice_createdetailfield.md)
+- [Delete Detail Field](https://developer.safetyculture.com/reference/investigationsservice_deletedetailfield.md)
+- [Rename Detail Field](https://developer.safetyculture.com/reference/investigationsservice_renamedetailfield.md)
+- [Set Detail Field Options](https://developer.safetyculture.com/reference/investigationsservice_setdetailfieldoptions.md)
+- [List Detail Field Library](https://developer.safetyculture.com/reference/investigationsservice_listdetailfieldlibrary.md)
+- [List Investigation Courses](https://developer.safetyculture.com/reference/investigationsservice_listinvestigationcourses.md)
+- [Get Investigation Course Count](https://developer.safetyculture.com/reference/investigationsservice_getinvestigationcoursecount.md)
+- [List Cases](https://developer.safetyculture.com/reference/oshaservice_listcases.md)
+- [Create Case](https://developer.safetyculture.com/reference/oshaservice_createcase.md)
+- [Update Case](https://developer.safetyculture.com/reference/oshaservice_updatecase.md)
+- [Get Case](https://developer.safetyculture.com/reference/oshaservice_getcase.md)
+- [Delete Case](https://developer.safetyculture.com/reference/oshaservice_deletecase.md)
+- [List Establishments](https://developer.safetyculture.com/reference/oshaservice_listestablishments.md)
+- [Create Establishment](https://developer.safetyculture.com/reference/oshaservice_createestablishment.md)
+- [Update Establishment](https://developer.safetyculture.com/reference/oshaservice_updateestablishment.md)
+- [Get Establishment](https://developer.safetyculture.com/reference/oshaservice_getestablishment.md)
+- [Delete Establishment](https://developer.safetyculture.com/reference/oshaservice_deleteestablishment.md)
+- [Get Establishment Employees](https://developer.safetyculture.com/reference/oshaservice_getestablishmentemployees.md)
+- [Update Establishment Employees](https://developer.safetyculture.com/reference/oshaservice_updateestablishmentemployees.md)
+- [Get Establishment Hours](https://developer.safetyculture.com/reference/oshaservice_getestablishmenthours.md)
+- [Update Establishment Hours](https://developer.safetyculture.com/reference/oshaservice_updateestablishmenthours.md)
+- [Apps](https://developer.safetyculture.com/reference/apps.md): This API provides a number of interfaces to interact with the SafetyCulture platform.
+- [Registers a new external application](https://developer.safetyculture.com/reference/partnerintegrationservice_registerapplication.md)
+- [List applications](https://developer.safetyculture.com/reference/partnerintegrationservice_listapplications.md)
+- [Updates an external application](https://developer.safetyculture.com/reference/partnerintegrationservice_updateapplication.md)
+- [Create an installation](https://developer.safetyculture.com/reference/partnerintegrationservice_createinstallation.md)
+- [Create configuration](https://developer.safetyculture.com/reference/partnerintegrationservice_createconfiguration.md)
+- [List all installations](https://developer.safetyculture.com/reference/partnerintegrationservice_listinstallations.md)
+- [Get installation](https://developer.safetyculture.com/reference/partnerintegrationservice_getinstallation.md)
+- [Delete an installation](https://developer.safetyculture.com/reference/partnerintegrationservice_deleteinstallation.md)
+- [Deletes the configuration](https://developer.safetyculture.com/reference/partnerintegrationservice_deleteconfiguration.md)
+- [Updates the configuration](https://developer.safetyculture.com/reference/partnerintegrationservice_updateconfiguration.md)
+- [Get jobs](https://developer.safetyculture.com/reference/jobsservice_getjobs.md): Retrieves all jobs in your organization.
+- [Get media download URL](https://developer.safetyculture.com/reference/mediaservice_getdownloadsignedurl.md)
+- [Users](https://developer.safetyculture.com/reference/users.md)
+- [Create a user (legacy)](https://developer.safetyculture.com/reference/thepubservice_adduser.md)
+- [Bulk user operations](https://developer.safetyculture.com/reference/bulk-user-operations.md)
+- [Bulk user operations errors](https://developer.safetyculture.com/reference/bulk-user-operations-errors.md)
+- [Create or update users synchronously](https://developer.safetyculture.com/reference/usersservice_createorupdateusers.md): Performs bulk user creation or updates synchronously and returns the results in real time.
+- [Initialize a create-or-update users job](https://developer.safetyculture.com/reference/usersservice_initcreateorupdateusersjob.md): Creates a new job to create or update users and returns a job ID for later execution.
+- [Start a create-or-update users job](https://developer.safetyculture.com/reference/usersservice_startcreateorupdateusersjob.md): Starts an initialized job to create or update users.
+- [Get a create-or-update users job](https://developer.safetyculture.com/reference/usersservice_getcreateorupdateusersjob.md): Retrieves details of a create-or-update users job, including the submitted users and any validation results if the job has started.
+- [Cancel a create-or-update users job](https://developer.safetyculture.com/reference/usersservice_cancelcreateorupdateusersjob.md): Cancels a previously created job to create or update users.
+- [List create-or-update users jobs](https://developer.safetyculture.com/reference/usersservice_listcreateorupdateusersjobs.md): Retrieves a list of all the create-or-update users jobs.
+- [Assign user to a permission set](https://developer.safetyculture.com/reference/permissionsservice_assignpermissionset.md)
+- [Get a permission set](https://developer.safetyculture.com/reference/permissionsservice_getpermissionset.md)
+- [List permission sets](https://developer.safetyculture.com/reference/permissionsservice_listpermissionsets.md)
+- [Create a user field](https://developer.safetyculture.com/reference/userfieldservice_createfield.md)
+- [List user fields](https://developer.safetyculture.com/reference/userfieldservice_listfields.md)
+- [Delete a user field](https://developer.safetyculture.com/reference/userfieldservice_deletefield.md)
+- [Update a user field](https://developer.safetyculture.com/reference/userfieldservice_updatefield.md)
+- [Archive a field](https://developer.safetyculture.com/reference/userfieldservice_disablefield.md)
+- [Restore an archived field](https://developer.safetyculture.com/reference/userfieldservice_restorefield.md)
+- [Update field settings](https://developer.safetyculture.com/reference/userfieldservice_setfieldsettings.md)
+- [Get user attributes](https://developer.safetyculture.com/reference/userattributeservice_getuserattributes.md)
+- [Set user attributes](https://developer.safetyculture.com/reference/userattributeservice_setuserattributes.md)
+- [List users by email (legacy)](https://developer.safetyculture.com/reference/thepubservice_searchusers.md)
+- [Get a user (legacy)](https://developer.safetyculture.com/reference/thepubservice_getuser.md)
+- [Update a user (legacy)](https://developer.safetyculture.com/reference/thepubservice_updateuser.md)
+- [List users](https://developer.safetyculture.com/reference/usersservice_listusers.md): Returns org members matching the supplied filters. Filters are combined with AND across fields and ANY within each field's values. At least one filter must be set, or list_all must be true.
+- [Response Sets](https://developer.safetyculture.com/reference/response-sets.md)
+- [Create a global response set](https://developer.safetyculture.com/reference/thepubservice_createglobalresponseset.md)
+- [List global response sets](https://developer.safetyculture.com/reference/thepubservice_listallglobalresponsesets.md)
+- [Get a global response set](https://developer.safetyculture.com/reference/thepubservice_getglobalresponseset.md)
+- [Delete a global response set](https://developer.safetyculture.com/reference/thepubservice_deleteglobalresponseset.md)
+- [Update a global response set](https://developer.safetyculture.com/reference/thepubservice_updateglobalresponseset.md)
+- [Create a global response set response](https://developer.safetyculture.com/reference/thepubservice_creategrsresponse.md)
+- [Delete a global response set response](https://developer.safetyculture.com/reference/thepubservice_deletegrsresponse.md)
+- [Update a global response set response](https://developer.safetyculture.com/reference/thepubservice_updategrsresponse.md)
+- [Schedules (legacy)](https://developer.safetyculture.com/reference/schedules-legacy.md)
+- [Create a schedule item](https://developer.safetyculture.com/reference/schedulesservice_createscheduleitem.md)
+- [List schedule items](https://developer.safetyculture.com/reference/schedulesservice_listscheduleitems.md)
+- [Update a schedule item](https://developer.safetyculture.com/reference/schedulesservice_updatescheduleitem.md)
+- [Delete a schedule item](https://developer.safetyculture.com/reference/schedulesservice_deletescheduleitem.md)
+- [Schedules](https://developer.safetyculture.com/reference/schedules.md): The SafetyCulture API gives you access to create, update and delete schedule items.
+- [Create a new schedule](https://developer.safetyculture.com/reference/schedulingservice_createnewschedule.md): Creates a new schedule with the specified configuration. For site/asset targets, sub-schedules are created asynchronously. Poll the schedule state to check creation progress.
+- [Get a schedule](https://developer.safetyculture.com/reference/schedulingservice_getschedule.md): Returns the full configuration of a schedule by its ID. For site and asset schedules, target counts are returned as totals only.
+- [List schedule targets](https://developer.safetyculture.com/reference/schedulingservice_listscheduletargets.md): Returns the sites or assets a schedule applies to, along with the recurrence for each. Results are filtered by the caller's access — only items the caller has permission to view are returned. total_count reflects the full number of sites or assets on the schedule and may exceed the number of items returned.
+- [List schedule access](https://developer.safetyculture.com/reference/schedulingservice_listscheduleaccess.md): Returns a list of authorization rules for the schedule.
+- [Pause a schedule](https://developer.safetyculture.com/reference/schedulingservice_pauseschedule.md): Pauses an active schedule so that it stops generating new occurrences. Existing occurrences are not affected. The schedule can be resumed later via the Resume schedule endpoint.
+- [Resume a schedule](https://developer.safetyculture.com/reference/schedulingservice_resumeschedule.md): Resumes a paused schedule so that it begins generating new occurrences again. Schedules that have ended cannot be resumed.
+- [End a schedule](https://developer.safetyculture.com/reference/schedulingservice_endschedule.md): Ends an active or paused schedule so that it stops generating new occurrences. Existing occurrences are not affected. This action cannot be undone — ended schedules cannot be reactivated.
+- [Update schedule details](https://developer.safetyculture.com/reference/schedulingservice_updatescheduledetails.md): Updates schedule details such as title or completion rule.
+- [Update schedule recurrence](https://developer.safetyculture.com/reference/schedulingservice_updateschedulerecurrence.md): Updates the recurrence configuration for a schedule, including the recurrence pattern, duration, timezone, and late submission rule. All recurrence fields are replaced with the provided values. Use `effective_from` to control whether changes apply from the current or next occurrence.
+- [Update schedule assignees](https://developer.safetyculture.com/reference/schedulingservice_updatescheduleassignees.md): Replaces the assignment rule for a schedule. The selected option replaces the current assignees entirely. Use 'users' to assign specific users, 'groups' to assign all members of a group, 'site_members' to assign all members of the target site(s), or 'site_members_in_group' to assign site members who are also in a group. The site_members and site_members_in_group options require the schedule to have targets (sites or assets) set.
+- [Update schedule target](https://developer.safetyculture.com/reference/schedulingservice_updatescheduletarget.md): Updates schedule targets (sites or assets) and related configuration.
+- [Delete a schedule](https://developer.safetyculture.com/reference/schedulingservice_deleteschedule.md): Deletes a schedule. Deleted schedules are no longer active and will not generate new occurrences. This action cannot be undone.
+- [Sensors](https://developer.safetyculture.com/reference/sensors.md)
+- [Ingest sensor readings](https://developer.safetyculture.com/reference/sensorsservice_ingestsensorreadings.md)
+- [List sensors](https://developer.safetyculture.com/reference/sensorsservice_listsensors.md)
+- [Provision a sensor](https://developer.safetyculture.com/reference/sensorsservice_provisionsensor.md)
+- [Get a sensor ID](https://developer.safetyculture.com/reference/sensorsservice_getsensorid.md)
+- [Get sensor's latest readings](https://developer.safetyculture.com/reference/sensorsservice_getsensorlatestreadings.md)
+- [Get sensor](https://developer.safetyculture.com/reference/sensorsservice_getsensor.md)
+- [De-provision a sensor](https://developer.safetyculture.com/reference/sensorsservice_deprovisionsensor.md)
+- [Actions](https://developer.safetyculture.com/reference/actions.md)
+- [Create an action](https://developer.safetyculture.com/reference/actionsservice_createaction.md)
+- [Delete actions (Bulk)](https://developer.safetyculture.com/reference/actionsservice_deleteactions.md)
+- [List actions](https://developer.safetyculture.com/reference/actionsservice_getactions.md)
+- [Updates the labels associated with an action](https://developer.safetyculture.com/reference/actionsservice_updateactionlabels.md)
+- [Get an Action](https://developer.safetyculture.com/reference/actionsservice_getaction.md)
+- [Update the asset of an action](https://developer.safetyculture.com/reference/actionsservice_updateasset.md)
+- [Update the assignees of an action](https://developer.safetyculture.com/reference/actionsservice_updateassignees.md)
+- [Update the description of an action](https://developer.safetyculture.com/reference/actionsservice_updatedescription.md)
+- [Update the due date of an action](https://developer.safetyculture.com/reference/actionsservice_updatedueat.md)
+- [Update the priority of an action](https://developer.safetyculture.com/reference/actionsservice_updatepriority.md)
+- [Get an action link](https://developer.safetyculture.com/reference/actionsservice_getactionsharedlink.md)
+- [Delete an action link](https://developer.safetyculture.com/reference/actionsservice_revokeactionsharedlink.md)
+- [Create an action link](https://developer.safetyculture.com/reference/actionsservice_createactionsharedlink.md)
+- [Update the site of an action](https://developer.safetyculture.com/reference/actionsservice_updatesite.md)
+- [Update the status of an action](https://developer.safetyculture.com/reference/actionsservice_updatestatus.md)
+- [Update the title of an action](https://developer.safetyculture.com/reference/actionsservice_updatetitle.md)
+- [Get all action labels](https://developer.safetyculture.com/reference/customerconfigurationservice_getactionlabels.md)
+- [Delete action labels](https://developer.safetyculture.com/reference/customerconfigurationservice_deleteactionlabels.md)
+- [Create an action with recurring schedule](https://developer.safetyculture.com/reference/actionsservice_createactionschedule.md)
+- [Create or update an action label](https://developer.safetyculture.com/reference/customerconfigurationservice_upsertactionlabel.md)
+- [Delete a custom field](https://developer.safetyculture.com/reference/customerconfigurationservice_deletecustomfield.md)
+- [Rename a custom field](https://developer.safetyculture.com/reference/customerconfigurationservice_renamecustomfield.md)
+- [Create a custom field and map it to a specific action type](https://developer.safetyculture.com/reference/customerconfigurationservice_createcustomfield.md)
+- [Create an action type](https://developer.safetyculture.com/reference/customerconfigurationservice_createtasktype.md)
+- [Delete an action type](https://developer.safetyculture.com/reference/customerconfigurationservice_deletetasktype.md)
+- [Rename an action type](https://developer.safetyculture.com/reference/customerconfigurationservice_renametasktype.md)
+- [Unmap a field from a action type](https://developer.safetyculture.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md)
+- [Map a field to a action type](https://developer.safetyculture.com/reference/customerconfigurationservice_mapfieldtotasktype.md)
+- [Get all custom fields mapped to a specific action type](https://developer.safetyculture.com/reference/customerconfigurationservice_gettasktypecustomfields.md)
+- [Get the custom fields not mapped to a specific action type](https://developer.safetyculture.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md)
+- [Update a custom field for an Action](https://developer.safetyculture.com/reference/tasksservice_updatetaskcustomfield.md)
+- [Get a single action type by id](https://developer.safetyculture.com/reference/customerconfigurationservice_gettasktype.md)
+- [List all action types for the org](https://developer.safetyculture.com/reference/customerconfigurationservice_gettasktypes.md)
+- [Issues](https://developer.safetyculture.com/reference/issues.md)
+- [List Categories](https://developer.safetyculture.com/reference/customerconfigurationservice_getcategories.md)
+- [Get Issue](https://developer.safetyculture.com/reference/incidentsservice_getincidentbyid.md)
+- [Create Issue (legacy)](https://developer.safetyculture.com/reference/incidentsservice_createincident.md)
+- [Delete Issues](https://developer.safetyculture.com/reference/incidentsservice_deleteincidents.md)
+- [List Issues](https://developer.safetyculture.com/reference/incidentsservice_getincidents.md)
+- [Get count of Issues](https://developer.safetyculture.com/reference/incidentsservice_getincidentscount.md)
+- [Create Issue](https://developer.safetyculture.com/reference/incidentsservice_submitincident.md)
+- [Get Issue (legacy)](https://developer.safetyculture.com/reference/incidentsservice_getincident.md)
+- [Get Issue questions and answers](https://developer.safetyculture.com/reference/incidentsservice_getincidentquestionsandanswers.md)
+- [Update Category](https://developer.safetyculture.com/reference/incidentsservice_updatecategory.md)
+- [Add Issue assignee](https://developer.safetyculture.com/reference/incidentsservice_addcollaborators.md)
+- [Remove Issue assignee](https://developer.safetyculture.com/reference/incidentsservice_removecollaborators.md)
+- [Update Issue description](https://developer.safetyculture.com/reference/incidentsservice_updatedescription.md)
+- [Update Issue due date](https://developer.safetyculture.com/reference/incidentsservice_updatedueat.md)
+- [Update Issue occurred at](https://developer.safetyculture.com/reference/incidentsservice_updateoccurredat.md)
+- [Export Issue to PDF](https://developer.safetyculture.com/reference/incidentsservice_getpdfreport.md)
+- [Update Issue priority](https://developer.safetyculture.com/reference/incidentsservice_updatepriority.md)
+- [Update Issue site](https://developer.safetyculture.com/reference/incidentsservice_updatesite.md)
+- [Updates Issue status](https://developer.safetyculture.com/reference/incidentsservice_updatestatus.md)
+- [Update Issue title](https://developer.safetyculture.com/reference/incidentsservice_updatetitle.md)
+- [Get Issue web report link](https://developer.safetyculture.com/reference/sharedlinkservice_generateforwebreport.md)
+- [List timeline events](https://developer.safetyculture.com/reference/timelineservice_gettimeline.md)
+- [Add comment to timeline](https://developer.safetyculture.com/reference/timelineservice_addcomment.md)
+- [Update Issue asset](https://developer.safetyculture.com/reference/incidentsservice_updateasset.md)
+- [Get template definition](https://developer.safetyculture.com/reference/templateservice_gettemplatedefinition.md): Retrieve the structural definition of a template, including its item hierarchy, item types, and response sets. Use this endpoint to discover column IDs for table operations: for each TableItem, the child items define the table columns, and each child item_id is the field_id required by AddTableLine and UpdateTableLine in the Inspections API.
+- [Search modified templates](https://developer.safetyculture.com/reference/thepubservice_searchtemplates.md)
+- [Get template (by inspection)](https://developer.safetyculture.com/reference/templatesservice_gettemplatebyinspectionid.md)
+- [Get a template](https://developer.safetyculture.com/reference/templatesservice_gettemplatebyid.md)
+- [Delete a template by template ID](https://developer.safetyculture.com/reference/templatesservice_deletetemplatebyid.md)
+- [Restore an archived template](https://developer.safetyculture.com/reference/templatesservice_restorearchivedtemplate.md)
+- [Archive a template](https://developer.safetyculture.com/reference/templatesservice_archivetemplate.md)
+- [Training](https://developer.safetyculture.com/reference/training.md): Use this API to retrieve Training course metadata, monitor user progress, and access training results in your organization.
+- [Collections](https://developer.safetyculture.com/reference/collections.md): Use these endpoints to manage and retrieve course collections in SafetyCulture.
+- [Get collections](https://developer.safetyculture.com/reference/trainingcollectionsservice_getcoursecollections.md): Retrieves all collections in your organization.
+- [Get courses by collection](https://developer.safetyculture.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md): Retrieves all courses in a collection.
+- [Courses](https://developer.safetyculture.com/reference/courses.md): Use these endpoints to retrieve metadata about training courses, their associated lessons, and manage course assignments in your organization.
+- [Get courses](https://developer.safetyculture.com/reference/trainingcoursesservice_getcourses.md): Retrieves all courses in your organization.
+- [Get lessons by course ID](https://developer.safetyculture.com/reference/trainingcoursesservice_getlessonsbycourseid.md): Retrieves all lessons for a given course.
+- [Update course assignments](https://developer.safetyculture.com/reference/trainingcoursesservice_updatecourseassignments.md): Updates assignments for users, groups, and sites for a specific course.
+- [Lessons](https://developer.safetyculture.com/reference/lessons.md): Use these endpoints to retrieve metadata about training lessons.
+- [Get lesson by ID](https://developer.safetyculture.com/reference/traininglessonsservice_getlessonbyid.md): Retrieves details for a specific lesson.
+- [Paths](https://developer.safetyculture.com/reference/paths.md): Use these endpoints to retrieve learning path metadata in SafetyCulture.
+- [Get paths](https://developer.safetyculture.com/reference/trainingpathsservice_getpaths.md): Retrieves a list of learning paths in your organization.
+- [Get path by ID](https://developer.safetyculture.com/reference/trainingpathsservice_getpathbyid.md): Retrieves details for a specific learning path.
+- [Individual Leaderboards](https://developer.safetyculture.com/reference/individual-leaderboards.md): Use these endpoints to retrieve individual leaderboards in SafetyCulture.
+- [Get individual leaderboards](https://developer.safetyculture.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md): Retrieves all individual leaderboards in your organization.
+- [Get individual leaderboard rankings](https://developer.safetyculture.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md): Retrieves rankings for a specific individual leaderboard.
+- [Rapid Refresh](https://developer.safetyculture.com/reference/rapid-refresh.md)
+- [Get rapid refresh](https://developer.safetyculture.com/reference/trainingrapidrefreshservice_getrapidrefresh.md): Retrieves all rapid refreshes in your organization.
+- [Get rapid refresh by ID](https://developer.safetyculture.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md): Retrieves details for a specific rapid refresh.
+- [Analytics](https://developer.safetyculture.com/reference/training-analytics.md): Use these endpoints to retrieve training statistics, progress tracking, and user-level outcomes for courses, lessons, slides and rapid refresh.
+- [Get Slide Statistics](https://developer.safetyculture.com/reference/traininganalyticsservice_getslidestatistics-1.md)
+- [Get Course Statistics](https://developer.safetyculture.com/reference/traininganalyticsservice_getcoursestatistics.md): Retrieves all course statistics for courses in your organization.
+- [Get Lesson Attempts](https://developer.safetyculture.com/reference/traininganalyticsservice_getlessonattempts.md): Retrieves all lesson attempts for users in your organization.
+- [Get Lesson Progress Events](https://developer.safetyculture.com/reference/traininganalyticsservice_getlessonprogressevents.md): Retrieves all lesson progress events for users in your organization.
+- [Get Lesson Statistics](https://developer.safetyculture.com/reference/traininganalyticsservice_getlessonstatistics.md): Retrieves all lesson statistics for lessons in your organization.
+- [Get Slide Statistics](https://developer.safetyculture.com/reference/traininganalyticsservice_getslidestatistics.md): Retrieves all slide statistics for slides in your organization.
+- [Get Slide User Statistics](https://developer.safetyculture.com/reference/traininganalyticsservice_getslideuserstatistics.md): Retrieves all slide statistics for users in your organization.
+- [Get User Lesson Progress](https://developer.safetyculture.com/reference/traininganalyticsservice_getuserlessonprogress.md): Retrieves lesson progress for a specific user.
+- [Get User Lesson Progress Events](https://developer.safetyculture.com/reference/traininganalyticsservice_getuserlessonprogressevents.md): Retrieves lesson progress events for a specific user.
+- [Get Survey Question Definitions](https://developer.safetyculture.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md): Retrieves all survey question definitions in your organization.
+- [Get Survey Answers](https://developer.safetyculture.com/reference/traininganalyticsservice_getsurveyanswers.md): Retrieves all survey answers from users in your organization.
+- [Get Rapid Refresh Answers](https://developer.safetyculture.com/reference/traininganalyticsservice_getrapidrefreshanswers.md): Retrieves all rapid refresh slide answers from users in your organization.
+- [Reset a course's progress](https://developer.safetyculture.com/reference/course-progress.md): Use this endpoint to reset a course's progress for users in SafetyCulture.
+- [Reset course progress](https://developer.safetyculture.com/reference/trainingcourseprogressservice_resetcourseprogress.md): Resets course progress for one or more users.
+- [Webhooks](https://developer.safetyculture.com/reference/webhooks.md): Webhooks allow third-party services to receive near real-time inspection event notifications from SafetyCulture.
+- [Get signature secret](https://developer.safetyculture.com/reference/webhooksservice_gettoken.md)
+- [Regenerate signature secret](https://developer.safetyculture.com/reference/webhooksservice_generatetoken.md)
+- [List webhooks](https://developer.safetyculture.com/reference/webhooksservice_listwebhooks.md)
+- [Create a webhook](https://developer.safetyculture.com/reference/webhooksservice_createwebhook.md)
+- [Get a webhook](https://developer.safetyculture.com/reference/webhooksservice_getwebhook.md)
+- [Delete a webhook](https://developer.safetyculture.com/reference/webhooksservice_deletewebhook.md)
+- [Update a webhook](https://developer.safetyculture.com/reference/webhooksservice_updatewebhook.md)
+
+## Recipes
+- [Convert between legacy SafetyCulture IDs and UUIDs](https://developer.safetyculture.com/recipes/convert-between-legacy-safetyculture-ids-and-uuids.md)

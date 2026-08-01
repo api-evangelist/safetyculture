@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/SafetyCulture/safetyculture-exporter
+name: safetyculture-exporter
+official: true
+language: go
+repo: https://github.com/SafetyCulture/safetyculture-exporter
+docs: https://developer.safetyculture.com/docs/safetyculture-exporter
+availability: Premium and Enterprise customers
+install:
+- method: binary
+  detail: >-
+    Download the platform binary from the developer docs download section
+    (Linux/amd64, macOS/amd64, macOS/arm64, Windows/amd64). Also ships as a desktop app.
+surface:
+  summary: >-
+    Command-line tool (and desktop app) for bulk-exporting SafetyCulture data to files
+    and databases for BI/analytics.
+  data_sets:
+  - inspections
+  - templates
+  - schedules
+  - actions
+  - sites
+  - assets
+  export_targets:
+  - CSV
+  - relational databases (incl. MSSQL)
+  - Power BI

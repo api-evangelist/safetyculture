@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: generated
+source: https://developer.safetyculture.com/reference
+note: >-
+  Skills are grounded in operations published in the SafetyCulture API reference. No
+  downloadable OpenAPI is offered; each step cites its documented reference operation.
+skills:
+- file: safetyculture-subscribe-to-events.md
+  name: Subscribe to SafetyCulture events with webhooks
+  api: https://api.safetyculture.io
+  operations:
+  - webhooksservice_createwebhook
+  - webhooksservice_gettoken
+  - webhooksservice_listwebhooks
+- file: safetyculture-capture-and-track-issue.md
+  name: Capture and track an issue
+  api: https://api.safetyculture.io
+  operations:
+  - incidentsservice_submitincident
+  - incidentsservice_addcollaborators
+  - incidentsservice_updatestatus
+  - incidentsservice_getincidents
+- file: safetyculture-provision-users-and-groups.md
+  name: Provision users and groups
+  api: https://api.safetyculture.io
+  operations:
+  - thepubservice_creategroup
+  - thepubservice_addnewusertogroup
+  - thepubservice_listusersingroup

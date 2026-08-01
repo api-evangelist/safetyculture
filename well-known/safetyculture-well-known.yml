@@ -1,0 +1,22 @@
+generated: '2026-07-21'
+method: searched
+source: live probes of /.well-known/ on SafetyCulture hosts
+hosts:
+- host: https://api.safetyculture.io
+  documents:
+  - path: /.well-known/security.txt          # RFC 9116 (PGP-signed)
+    status: 200
+    file: safetyculture-security.txt
+  - path: /.well-known/openid-configuration   # OIDC discovery
+    status: 404
+  - path: /.well-known/oauth-authorization-server  # RFC 8414
+    status: 503
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://safetyculture.com
+  documents:
+  - path: /.well-known/security.txt          # RFC 9116 (PGP-signed), canonical
+    status: 200
+    file: safetyculture-security.txt

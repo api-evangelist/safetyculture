@@ -1,0 +1,24 @@
+generated: '2026-07-21'
+method: searched
+source: github.com/SafetyCulture + pypi.org
+packages:
+- language: go
+  registry: github
+  name: safetyculture-exporter
+  url: https://github.com/SafetyCulture/safetyculture-exporter
+  install: Download platform binary (Linux/amd64, macOS/amd64, macOS/arm64, Windows/amd64)
+  official: true
+  kind: cli
+  note: >-
+    Official SafetyCulture Exporter, written in Go (with a Svelte desktop UI). Bulk-exports
+    inspections, templates, schedules, actions and more to CSV/SQL/PowerBI. Premium/Enterprise.
+- language: python
+  registry: pypi
+  name: safetyculture-sdk-python
+  url: https://pypi.org/project/safetyculture-sdk-python/
+  install: pip install safetyculture-sdk-python
+  official: true
+  deprecated: true
+  note: >-
+    Earlier first-party Python SDK / iAuditor exporter. Superseded by the Go
+    safetyculture-exporter and no longer maintained.

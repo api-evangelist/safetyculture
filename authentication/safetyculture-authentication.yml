@@ -1,0 +1,35 @@
+generated: '2026-07-21'
+method: searched
+source: https://developer.safetyculture.com/reference/authentication
+docs: https://developer.safetyculture.com/reference/authentication
+summary:
+  types: [http]
+  scheme: bearer
+  api_key_in: [header]
+  oauth2_flows: []
+  note: >-
+    No OAuth 2.0 authorization flow. Access is a bearer API token whose effective
+    permissions mirror the token owner's role, permission sets, and access rules.
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  in: header
+  header: Authorization
+  format: 'Authorization: Bearer {api_token}'
+  sources: [https://developer.safetyculture.com/reference/authentication]
+token_kinds:
+- kind: service_user_token
+  description: >-
+    Shared integration / long-running automation token. Up to 20 active tokens per
+    organization. Configurable inactivity expiry (31, 45, 60, or 180 days). Scoped by
+    selected permission sets.
+  generate_at: Organization > Integrations > API tokens
+- kind: user_token
+  description: >-
+    Personal token whose access mirrors a specific user. Up to 10 active tokens per
+    user. Expires after 30 days of inactivity.
+  generate_at: My Profile > Settings > API tokens
+authorization_model: >-
+  The API only returns or changes data the token owner can access, evaluated through
+  permissions (which actions are allowed) and access rules (which items are visible).

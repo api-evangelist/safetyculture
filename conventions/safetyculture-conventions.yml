@@ -1,0 +1,49 @@
+generated: '2026-07-21'
+method: searched
+source: https://developer.safetyculture.com/reference/introduction
+docs: https://developer.safetyculture.com
+summary: >-
+  Cross-cutting request/response semantics for the SafetyCulture API, harvested from
+  the developer docs. REST over HTTPS at https://api.safetyculture.io, bearer-token
+  auth, RFC 3339 date/times, cursor/page-token pagination, and x-ratelimit-* signaling.
+base_url: https://api.safetyculture.io
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer {api_token}'
+  detail: authentication/safetyculture-authentication.yml
+idempotency:
+  supported: false
+  note: >-
+    SafetyCulture does not document an idempotency-key header. Several write flows are
+    naturally idempotent by resource identity (e.g. user upsert), but there is no
+    documented client-supplied idempotency key.
+pagination:
+  style: cursor
+  note: >-
+    List endpoints support filtering, sorting, and pagination; cursor/page-token style
+    is used across list operations (e.g. company documents, contractor companies).
+date_time:
+  standard: rfc3339
+  pattern: '{year}-{month}-{day}T{hour}:{min}:{sec}[.{frac_sec}]Z'
+  examples:
+  - '1990-12-31T23:59:59Z'
+  - '1985-04-12T23:20:50.52Z'
+  - '2024-03-15T02:22:20.6546022Z'
+  - '1996-12-19T16:39:57-08:00'
+  query_param_encoding: URL-encode date/time in query params (colon -> %3A)
+  docs: https://developer.safetyculture.com/reference/date-time-format
+rate_limit_signaling:
+  headers: [x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset]
+  throttle_status: 429
+  detail: rate-limits/safetyculture-rate-limits.yml
+versioning:
+  style: uri-path
+  note: >-
+    Some resource paths are version-segmented (e.g. /users/v1/users/upsert). No global
+    dated API version header is documented.
+ids:
+  note: >-
+    Resources use UUIDs; a recipe documents converting between legacy SafetyCulture IDs
+    and UUIDs.
+  docs: https://developer.safetyculture.com/recipes/convert-between-legacy-safetyculture-ids-and-uuids
+webhooks: asyncapi/safetyculture-webhooks.yml
