@@ -1,10 +1,9 @@
 generated: '2026-07-21'
 method: derived
 status: candidate
-source: >-
-  Derived from operations documented at https://developer.safetyculture.com/reference.
-  No official hosted/remote SafetyCulture MCP server was found (mcp.safetyculture.com and
-  developer.safetyculture.com/docs/mcp did not resolve to a published server).
+source: Derived from operations documented at https://developer.safetyculture.com/reference. No official
+  hosted/remote SafetyCulture MCP server was found (mcp.safetyculture.com and developer.safetyculture.com/docs/mcp
+  did not resolve to a published server).
 server:
   name: safetyculture
   transport: http
@@ -47,3 +46,9 @@ tools:
 - name: create_webhook
   description: Create a webhook subscription.
   source_operation: https://developer.safetyculture.com/reference/webhooksservice_createwebhook
+deployment:
+  mode: none
+  verified: derived
+  tools: 12
+  checked: '2026-08-12'
+  source: catalog MCP census
