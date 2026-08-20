@@ -44,6 +44,17 @@ tags:
 - Compliance
 - Training
 - Field Service
+- Webhook
+tags_raw:
+- Company
+- Business Applications
+- Safety
+- Inspections
+- Workplace Operations
+- EHS
+- Compliance
+- Training
+- Field Service
 - Webhooks
 apis:
 - name: SafetyCulture API
