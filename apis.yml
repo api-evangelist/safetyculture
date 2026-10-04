@@ -59,6 +59,7 @@ tags:
 - Training
 - Field Service
 - Webhook
+- Australia
 tags_raw:
 - Company
 - Business Applications
@@ -70,6 +71,7 @@ tags_raw:
 - Training
 - Field Service
 - Webhooks
+- Australia
 apis:
 - name: SafetyCulture API
   description: >-
