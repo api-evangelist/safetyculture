@@ -3,6 +3,7 @@ method: searched
 source:
 - https://composio.dev/toolkits/safetyculture
 checked:
+- geotab/integrations/geotab-integration-edges.yml
 - https://composio.dev/toolkits/safetyculture
 - https://monid.ai/tools/safetyculture
 - https://n8n.io/integrations/safetyculture/
@@ -270,5 +271,21 @@ marketplace_apps:
   - key: SAFETYCULTURE_UPDATE_WEBHOOKS_WEBHOOKS
   - key: SAFETYCULTURE_UPSERT_ACTION_LABEL
   - key: SAFETYCULTURE_UPSERT_USERS
-edges: []
+edges:
+- partner_name: Geotab (own)
+  partner: geotab
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.geotab.com/partner/safetyculture-pty-ltd/
+  mirror_of: geotab/integrations/geotab-integration-edges.yml
+  apps:
+  - SafetyCulture Pty Ltd
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
 templates: []
