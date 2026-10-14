@@ -1,0 +1,731 @@
+{
+  "@context": {
+    "@vocab": "https://safetyculture.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "safetyculture": "https://safetyculture.com/schema#",
+    "google.protobuf.Any": "safetyculture:google.protobuf.Any",
+    "google.rpc.Status": "safetyculture:google.rpc.Status",
+    "code": {
+      "@id": "safetyculture:code",
+      "@type": "xsd:integer"
+    },
+    "message": {
+      "@id": "safetyculture:message",
+      "@type": "xsd:string"
+    },
+    "details": {
+      "@id": "safetyculture:details",
+      "@container": "@list"
+    },
+    "s12.thepub.v1.ListGroupsResponse": "safetyculture:s12.thepub.v1.ListGroupsResponse",
+    "groups": {
+      "@id": "safetyculture:groups",
+      "@container": "@list"
+    },
+    "s12.thepub.v1.ListGroupsResponse.Group": "safetyculture:s12.thepub.v1.ListGroupsResponse.Group",
+    "id": {
+      "@id": "safetyculture:id",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "safetyculture:name",
+      "@type": "xsd:string"
+    },
+    "s12.accounts.organisation.v1.GetUserGroupsResponse": "safetyculture:s12.accounts.organisation.v1.GetUserGroupsResponse",
+    "s12.common.Group": "safetyculture:s12.common.Group",
+    "type": {
+      "@id": "safetyculture:type",
+      "@type": "xsd:string"
+    },
+    "members": {
+      "@id": "safetyculture:members",
+      "@container": "@list"
+    },
+    "description": {
+      "@id": "safetyculture:description",
+      "@type": "xsd:string"
+    },
+    "dynamic": {
+      "@id": "safetyculture:dynamic",
+      "@type": "xsd:boolean"
+    },
+    "s12.thepub.v1.GetUserGroupsResponse": "safetyculture:s12.thepub.v1.GetUserGroupsResponse",
+    "s12.thepub.v1.GetUserGroupsResponse.Group": "safetyculture:s12.thepub.v1.GetUserGroupsResponse.Group",
+    "s12.thepub.v1.GetUserGroupsResponse.Group.Type": "safetyculture:s12.thepub.v1.GetUserGroupsResponse.Group.Type",
+    "s12.thepub.v1.CreateGroupRequest": "safetyculture:s12.thepub.v1.CreateGroupRequest",
+    "s12.thepub.v1.CreateGroupResponse": "safetyculture:s12.thepub.v1.CreateGroupResponse",
+    "s12.thepub.v1.AddNewUserToGroupResponse": "safetyculture:s12.thepub.v1.AddNewUserToGroupResponse",
+    "users": {
+      "@id": "safetyculture:users",
+      "@container": "@list"
+    },
+    "s12.thepub.v1.ThePubService.AddNewUserToGroupBody": "safetyculture:s12.thepub.v1.ThePubService.AddNewUserToGroupBody",
+    "user_id": {
+      "@id": "safetyculture:user_id",
+      "@type": "xsd:string"
+    },
+    "s12.thepub.v1.RemoveUserResponse": "safetyculture:s12.thepub.v1.RemoveUserResponse",
+    "ok": {
+      "@id": "safetyculture:ok",
+      "@type": "xsd:boolean"
+    },
+    "s12.accounts.organisation.v1.BulkDeleteGroupsRequest": "safetyculture:s12.accounts.organisation.v1.BulkDeleteGroupsRequest",
+    "group_ids": {
+      "@id": "safetyculture:group_ids",
+      "@container": "@list"
+    },
+    "s12.accounts.organisation.v1.BulkDeleteGroupsResponse": "safetyculture:s12.accounts.organisation.v1.BulkDeleteGroupsResponse",
+    "results": {
+      "@id": "safetyculture:results",
+      "@container": "@list"
+    },
+    "s12.accounts.organisation.v1.BulkDeleteGroupsResponse.BulkDeleteGroupsResult": "safetyculture:s12.accounts.organisation.v1.BulkDeleteGroupsResponse.BulkDeleteGroupsResult",
+    "group_id": {
+      "@id": "safetyculture:group_id",
+      "@type": "xsd:string"
+    },
+    "s12.accounts.organisation.v1.BulkDeleteGroupsResponse.BulkDeleteGroupsResultCode": "safetyculture:s12.accounts.organisation.v1.BulkDeleteGroupsResponse.BulkDeleteGroupsResultCode",
+    "s12.thepub.v1.ListUsersInGroupResponse": "safetyculture:s12.thepub.v1.ListUsersInGroupResponse",
+    "total": {
+      "@id": "safetyculture:total",
+      "@type": "xsd:integer"
+    },
+    "offset": {
+      "@id": "safetyculture:offset",
+      "@type": "xsd:integer"
+    },
+    "limit": {
+      "@id": "safetyculture:limit",
+      "@type": "xsd:integer"
+    },
+    "s12.thepub.v1.ListUsersInGroupResponse.User": "safetyculture:s12.thepub.v1.ListUsersInGroupResponse.User",
+    "firstname": {
+      "@id": "safetyculture:firstname",
+      "@type": "xsd:string"
+    },
+    "lastname": {
+      "@id": "safetyculture:lastname",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "safetyculture:email",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "safetyculture:status"
+    },
+    "seat_type": {
+      "@id": "safetyculture:seat_type"
+    },
+    "s12.thepub.v1.ThePubSeatType": "safetyculture:s12.thepub.v1.ThePubSeatType",
+    "s12.thepub.v1.ThePubUserStatus": "safetyculture:s12.thepub.v1.ThePubUserStatus",
+    "s12.announcements.v1.DocumentMeta": "safetyculture:s12.announcements.v1.DocumentMeta",
+    "document_type": {
+      "@id": "safetyculture:document_type"
+    },
+    "s12.announcements.v1.DocumentType": "safetyculture:s12.announcements.v1.DocumentType",
+    "s12.announcements.v1.HeadsUp": "safetyculture:s12.announcements.v1.HeadsUp",
+    "created_at": {
+      "@id": "safetyculture:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "modified_at": {
+      "@id": "safetyculture:modified_at",
+      "@type": "xsd:dateTime"
+    },
+    "organisation_id": {
+      "@id": "safetyculture:organisation_id",
+      "@type": "xsd:string"
+    },
+    "deleted": {
+      "@id": "safetyculture:deleted",
+      "@type": "xsd:boolean"
+    },
+    "title": {
+      "@id": "safetyculture:title",
+      "@type": "xsd:string"
+    },
+    "author_id": {
+      "@id": "safetyculture:author_id",
+      "@type": "xsd:string"
+    },
+    "author_name": {
+      "@id": "safetyculture:author_name",
+      "@type": "xsd:string"
+    },
+    "is_published": {
+      "@id": "safetyculture:is_published",
+      "@type": "xsd:boolean"
+    },
+    "published_at": {
+      "@id": "safetyculture:published_at",
+      "@type": "xsd:dateTime"
+    },
+    "has_acknowledgement": {
+      "@id": "safetyculture:has_acknowledgement",
+      "@type": "xsd:boolean"
+    },
+    "video": {
+      "@id": "safetyculture:video"
+    },
+    "images": {
+      "@id": "safetyculture:images",
+      "@container": "@list"
+    },
+    "author_profile_image": {
+      "@id": "safetyculture:author_profile_image"
+    },
+    "is_assigned": {
+      "@id": "safetyculture:is_assigned",
+      "@type": "xsd:boolean"
+    },
+    "is_video_transcoded": {
+      "@id": "safetyculture:is_video_transcoded",
+      "@type": "xsd:boolean"
+    },
+    "is_comments_disabled": {
+      "@id": "safetyculture:is_comments_disabled",
+      "@type": "xsd:boolean"
+    },
+    "media": {
+      "@id": "safetyculture:media",
+      "@container": "@list"
+    },
+    "is_reactions_disabled": {
+      "@id": "safetyculture:is_reactions_disabled",
+      "@type": "xsd:boolean"
+    },
+    "s12.announcements.v1.HeadsUpMedia": "safetyculture:s12.announcements.v1.HeadsUpMedia",
+    "document": {
+      "@id": "safetyculture:document"
+    },
+    "linked_document": {
+      "@id": "safetyculture:linked_document"
+    },
+    "s12.announcements.v1.HeadsUpResponse": "safetyculture:s12.announcements.v1.HeadsUpResponse",
+    "heads_up": {
+      "@id": "safetyculture:heads_up"
+    },
+    "s12.announcements.v1.LinkedDocument": "safetyculture:s12.announcements.v1.LinkedDocument",
+    "link_id": {
+      "@id": "safetyculture:link_id",
+      "@type": "xsd:string"
+    },
+    "is_archived": {
+      "@id": "safetyculture:is_archived",
+      "@type": "xsd:boolean"
+    },
+    "document_node_id": {
+      "@id": "safetyculture:document_node_id",
+      "@type": "xsd:string"
+    },
+    "expiry_status": {
+      "@id": "safetyculture:expiry_status"
+    },
+    "acknowledgement_type": {
+      "@id": "safetyculture:acknowledgement_type"
+    },
+    "acknowledged": {
+      "@id": "safetyculture:acknowledged",
+      "@type": "xsd:boolean"
+    },
+    "acknowledged_at": {
+      "@id": "safetyculture:acknowledged_at",
+      "@type": "xsd:dateTime"
+    },
+    "s12.announcements.v1.VideoMeta": "safetyculture:s12.announcements.v1.VideoMeta",
+    "video_duration": {
+      "@id": "safetyculture:video_duration",
+      "@type": "xsd:integer"
+    },
+    "s12.common.ExpiryStatus": "safetyculture:s12.common.ExpiryStatus",
+    "s12.common.Media": "safetyculture:s12.common.Media",
+    "token": {
+      "@id": "safetyculture:token",
+      "@type": "xsd:string"
+    },
+    "filename": {
+      "@id": "safetyculture:filename",
+      "@type": "xsd:string"
+    },
+    "media_type": {
+      "@id": "safetyculture:media_type",
+      "@type": "@id"
+    },
+    "s12.common.MediaType": "safetyculture:s12.common.MediaType",
+    "s12.documents.v1.AcknowledgementType": "safetyculture:s12.documents.v1.AcknowledgementType",
+    "s12.announcements.v1.GetHeadsUpCompletionCountsResponse": "safetyculture:s12.announcements.v1.GetHeadsUpCompletionCountsResponse",
+    "viewed_count": {
+      "@id": "safetyculture:viewed_count",
+      "@type": "xsd:integer"
+    },
+    "acknowledged_count": {
+      "@id": "safetyculture:acknowledged_count",
+      "@type": "xsd:integer"
+    },
+    "message_count": {
+      "@id": "safetyculture:message_count",
+      "@type": "xsd:integer"
+    },
+    "reaction_summary": {
+      "@id": "safetyculture:reaction_summary",
+      "@container": "@list"
+    },
+    "s12.announcements.v1.HeadsUpReactionSummary": "safetyculture:s12.announcements.v1.HeadsUpReactionSummary",
+    "emoji_short_code": {
+      "@id": "safetyculture:emoji_short_code",
+      "@type": "xsd:string"
+    },
+    "total_reaction_count": {
+      "@id": "safetyculture:total_reaction_count",
+      "@type": "xsd:integer"
+    },
+    "did_user_react": {
+      "@id": "safetyculture:did_user_react",
+      "@type": "xsd:boolean"
+    },
+    "reaction_user_limit": {
+      "@id": "safetyculture:reaction_user_limit",
+      "@type": "xsd:integer"
+    },
+    "s12.announcements.v1.HeadsUpReactionUser": "safetyculture:s12.announcements.v1.HeadsUpReactionUser",
+    "user_full_name": {
+      "@id": "safetyculture:user_full_name",
+      "@type": "xsd:string"
+    },
+    "user_profile_picture": {
+      "@id": "safetyculture:user_profile_picture"
+    },
+    "s12.common.RequestByID": "safetyculture:s12.common.RequestByID",
+    "s12.announcements.v1.GetHeadsUpMessagesRequest": "safetyculture:s12.announcements.v1.GetHeadsUpMessagesRequest",
+    "message_request": {
+      "@id": "safetyculture:message_request",
+      "@type": "@id"
+    },
+    "s12.announcements.v1.GetHeadsUpMessagesResponse": "safetyculture:s12.announcements.v1.GetHeadsUpMessagesResponse",
+    "message_response": {
+      "@id": "safetyculture:message_response",
+      "@type": "@id"
+    },
+    "s12.common.GetMessagesRequest": "safetyculture:s12.common.GetMessagesRequest",
+    "page_size": {
+      "@id": "safetyculture:page_size",
+      "@type": "xsd:integer"
+    },
+    "page_token": {
+      "@id": "safetyculture:page_token",
+      "@type": "xsd:string"
+    },
+    "reference_id": {
+      "@id": "safetyculture:reference_id",
+      "@type": "xsd:string"
+    },
+    "reference_type": {
+      "@id": "safetyculture:reference_type"
+    },
+    "parent_id": {
+      "@id": "safetyculture:parent_id",
+      "@type": "xsd:string"
+    },
+    "sort_direction": {
+      "@id": "safetyculture:sort_direction"
+    },
+    "s12.common.GetMessagesResponse": "safetyculture:s12.common.GetMessagesResponse",
+    "messages": {
+      "@id": "safetyculture:messages",
+      "@container": "@list"
+    },
+    "next_page_token": {
+      "@id": "safetyculture:next_page_token",
+      "@type": "xsd:string"
+    },
+    "s12.common.MentionMessage": "safetyculture:s12.common.MentionMessage",
+    "mention_id": {
+      "@id": "safetyculture:mention_id",
+      "@type": "xsd:string"
+    },
+    "mention_type": {
+      "@id": "safetyculture:mention_type",
+      "@type": "@id"
+    },
+    "text": {
+      "@id": "safetyculture:text",
+      "@type": "xsd:string"
+    },
+    "s12.common.MentionType": "safetyculture:s12.common.MentionType",
+    "s12.common.Message": "safetyculture:s12.common.Message",
+    "sent_at": {
+      "@id": "safetyculture:sent_at",
+      "@type": "xsd:dateTime"
+    },
+    "reply_count": {
+      "@id": "safetyculture:reply_count",
+      "@type": "xsd:integer"
+    },
+    "s12.common.MessageContent": "safetyculture:s12.common.MessageContent",
+    "mention": {
+      "@id": "safetyculture:mention",
+      "@type": "@id"
+    },
+    "s12.common.MessageReferenceTypes": "safetyculture:s12.common.MessageReferenceTypes",
+    "s12.common.SortDirection": "safetyculture:s12.common.SortDirection",
+    "s12.common.TextMessage": "safetyculture:s12.common.TextMessage",
+    "s12.announcements.v1.HeadsUpManageListItem": "safetyculture:s12.announcements.v1.HeadsUpManageListItem",
+    "acknowledgement_count": {
+      "@id": "safetyculture:acknowledgement_count",
+      "@type": "xsd:integer"
+    },
+    "assigned_users_count": {
+      "@id": "safetyculture:assigned_users_count",
+      "@type": "xsd:integer"
+    },
+    "complete": {
+      "@id": "safetyculture:complete",
+      "@type": "xsd:boolean"
+    },
+    "reaction_count": {
+      "@id": "safetyculture:reaction_count",
+      "@type": "xsd:integer"
+    },
+    "s12.announcements.v1.ListHeadsUpManageRequest": "safetyculture:s12.announcements.v1.ListHeadsUpManageRequest",
+    "sort_field": {
+      "@id": "safetyculture:sort_field"
+    },
+    "search_value": {
+      "@id": "safetyculture:search_value",
+      "@type": "xsd:string"
+    },
+    "filters": {
+      "@id": "safetyculture:filters"
+    },
+    "s12.announcements.v1.ListHeadsUpManageRequest.Filter": "safetyculture:s12.announcements.v1.ListHeadsUpManageRequest.Filter",
+    "user_ids": {
+      "@id": "safetyculture:user_ids",
+      "@container": "@list"
+    },
+    "completed": {
+      "@id": "safetyculture:completed",
+      "@type": "@id"
+    },
+    "author_ids": {
+      "@id": "safetyculture:author_ids",
+      "@container": "@list"
+    },
+    "statuses": {
+      "@id": "safetyculture:statuses",
+      "@container": "@list"
+    },
+    "s12.announcements.v1.ListHeadsUpManageRequest.Filter.CompletedFilter": "safetyculture:s12.announcements.v1.ListHeadsUpManageRequest.Filter.CompletedFilter",
+    "s12.announcements.v1.ListHeadsUpManageRequest.Filter.StatusFilter": "safetyculture:s12.announcements.v1.ListHeadsUpManageRequest.Filter.StatusFilter",
+    "s12.announcements.v1.ListHeadsUpManageRequest.SortField": "safetyculture:s12.announcements.v1.ListHeadsUpManageRequest.SortField",
+    "s12.announcements.v1.ListHeadsUpManageResponse": "safetyculture:s12.announcements.v1.ListHeadsUpManageResponse",
+    "heads_ups": {
+      "@id": "safetyculture:heads_ups",
+      "@container": "@list"
+    },
+    "s12.announcements.v1.HeadsUpCompletionDetails": "safetyculture:s12.announcements.v1.HeadsUpCompletionDetails",
+    "viewed": {
+      "@id": "safetyculture:viewed",
+      "@type": "xsd:boolean"
+    },
+    "viewed_at": {
+      "@id": "safetyculture:viewed_at",
+      "@type": "xsd:dateTime"
+    },
+    "s12.announcements.v1.HeadsUpUserListItem": "safetyculture:s12.announcements.v1.HeadsUpUserListItem",
+    "first_name": {
+      "@id": "safetyculture:first_name",
+      "@type": "xsd:string"
+    },
+    "last_name": {
+      "@id": "safetyculture:last_name",
+      "@type": "xsd:string"
+    },
+    "profile_picture": {
+      "@id": "safetyculture:profile_picture"
+    },
+    "completion_details": {
+      "@id": "safetyculture:completion_details"
+    },
+    "s12.announcements.v1.ListHeadsUpUsersRequest": "safetyculture:s12.announcements.v1.ListHeadsUpUsersRequest",
+    "heads_up_id": {
+      "@id": "safetyculture:heads_up_id",
+      "@type": "xsd:string"
+    },
+    "s12.announcements.v1.ListHeadsUpUsersRequest.Filter": "safetyculture:s12.announcements.v1.ListHeadsUpUsersRequest.Filter",
+    "s12.announcements.v1.ListHeadsUpUsersRequest.Filter.AcknowledgedFilter": "safetyculture:s12.announcements.v1.ListHeadsUpUsersRequest.Filter.AcknowledgedFilter",
+    "s12.announcements.v1.ListHeadsUpUsersRequest.Filter.ViewedFilter": "safetyculture:s12.announcements.v1.ListHeadsUpUsersRequest.Filter.ViewedFilter",
+    "s12.announcements.v1.ListHeadsUpUsersRequest.SortField": "safetyculture:s12.announcements.v1.ListHeadsUpUsersRequest.SortField",
+    "s12.announcements.v1.ListHeadsUpUsersResponse": "safetyculture:s12.announcements.v1.ListHeadsUpUsersResponse",
+    "s12.assets.v1.Asset": "safetyculture:s12.assets.v1.Asset",
+    "fields": {
+      "@id": "safetyculture:fields",
+      "@container": "@list"
+    },
+    "site": {
+      "@id": "safetyculture:site"
+    },
+    "profile_image": {
+      "@id": "safetyculture:profile_image"
+    },
+    "state": {
+      "@id": "safetyculture:state"
+    },
+    "inspected_at": {
+      "@id": "safetyculture:inspected_at",
+      "@type": "xsd:dateTime"
+    },
+    "sourced_from_external_system": {
+      "@id": "safetyculture:sourced_from_external_system",
+      "@type": "xsd:boolean"
+    },
+    "s12.assets.v1.AssetField": "safetyculture:s12.assets.v1.AssetField",
+    "string_value": {
+      "@id": "safetyculture:string_value",
+      "@type": "xsd:string"
+    },
+    "money_value": {
+      "@id": "safetyculture:money_value"
+    },
+    "timestamp_value": {
+      "@id": "safetyculture:timestamp_value",
+      "@type": "xsd:dateTime"
+    },
+    "field_id": {
+      "@id": "safetyculture:field_id",
+      "@type": "xsd:string"
+    },
+    "s12.assets.v1.AssetFilter": "safetyculture:s12.assets.v1.AssetFilter",
+    "site_id": {
+      "@id": "safetyculture:site_id",
+      "@type": "xsd:string"
+    },
+    "type_id": {
+      "@id": "safetyculture:type_id",
+      "@type": "xsd:string"
+    },
+    "asset_id": {
+      "@id": "safetyculture:asset_id",
+      "@type": "xsd:string"
+    },
+    "asset_code": {
+      "@id": "safetyculture:asset_code",
+      "@type": "xsd:string"
+    },
+    "motion_status": {
+      "@id": "safetyculture:motion_status"
+    },
+    "location_source": {
+      "@id": "safetyculture:location_source"
+    },
+    "status_option": {
+      "@id": "safetyculture:status_option"
+    },
+    "s12.assets.v1.AssetLocationSource": "safetyculture:s12.assets.v1.AssetLocationSource",
+    "s12.assets.v1.AssetSite": "safetyculture:s12.assets.v1.AssetSite",
+    "s12.assets.v1.AssetState": "safetyculture:s12.assets.v1.AssetState",
+    "s12.assets.v1.AssetStatus": "safetyculture:s12.assets.v1.AssetStatus",
+    "status_option_id": {
+      "@id": "safetyculture:status_option_id",
+      "@type": "xsd:string"
+    },
+    "status_group_id": {
+      "@id": "safetyculture:status_group_id",
+      "@type": "xsd:string"
+    },
+    "color": {
+      "@id": "safetyculture:color"
+    },
+    "status_group_name": {
+      "@id": "safetyculture:status_group_name",
+      "@type": "xsd:string"
+    },
+    "s12.assets.v1.AssetStatusOptionFilter": "safetyculture:s12.assets.v1.AssetStatusOptionFilter",
+    "not_set": {
+      "@id": "safetyculture:not_set",
+      "@type": "xsd:boolean"
+    },
+    "s12.assets.v1.AssetType": "safetyculture:s12.assets.v1.AssetType",
+    "s12.assets.v1.AssetsOrderBy": "safetyculture:s12.assets.v1.AssetsOrderBy",
+    "s12.assets.v1.AssetsOrderBy.SortField": "safetyculture:s12.assets.v1.AssetsOrderBy.SortField",
+    "s12.assets.v1.ListAssetsRequest": "safetyculture:s12.assets.v1.ListAssetsRequest",
+    "search": {
+      "@id": "safetyculture:search",
+      "@type": "xsd:string"
+    },
+    "asset_filters": {
+      "@id": "safetyculture:asset_filters",
+      "@container": "@list"
+    },
+    "order_by": {
+      "@id": "safetyculture:order_by"
+    },
+    "s12.assets.v1.ListAssetsResponse": "safetyculture:s12.assets.v1.ListAssetsResponse",
+    "assets": {
+      "@id": "safetyculture:assets",
+      "@container": "@list"
+    },
+    "s12.assets.v1.MotionStatus": "safetyculture:s12.assets.v1.MotionStatus",
+    "s12.assets.v1.TypeCategory": "safetyculture:s12.assets.v1.TypeCategory",
+    "s12.common.Money": "safetyculture:s12.common.Money",
+    "currency_code": {
+      "@id": "safetyculture:currency_code",
+      "@type": "xsd:string"
+    },
+    "units": {
+      "@id": "safetyculture:units",
+      "@type": "xsd:string"
+    },
+    "nanos": {
+      "@id": "safetyculture:nanos",
+      "@type": "xsd:integer"
+    },
+    "s12.common.v1.StatusBadgeColor": "safetyculture:s12.common.v1.StatusBadgeColor",
+    "s12.assets.v1.AssetMedia": "safetyculture:s12.assets.v1.AssetMedia",
+    "media_id": {
+      "@id": "safetyculture:media_id",
+      "@type": "xsd:string"
+    },
+    "s12.assets.v1.CreateAssetRequest": "safetyculture:s12.assets.v1.CreateAssetRequest",
+    "status_option_ids": {
+      "@id": "safetyculture:status_option_ids",
+      "@container": "@list"
+    },
+    "s12.assets.v1.CreateAssetResponse": "safetyculture:s12.assets.v1.CreateAssetResponse",
+    "s12.assets.v1.BulkCreateAssetsRequest": "safetyculture:s12.assets.v1.BulkCreateAssetsRequest",
+    "s12.assets.v1.BulkCreateAssetsRequest.Asset": "safetyculture:s12.assets.v1.BulkCreateAssetsRequest.Asset",
+    "s12.assets.v1.BulkCreateAssetsResponse": "safetyculture:s12.assets.v1.BulkCreateAssetsResponse",
+    "created_assets": {
+      "@id": "safetyculture:created_assets",
+      "@container": "@list"
+    },
+    "failed_assets": {
+      "@id": "safetyculture:failed_assets",
+      "@container": "@list"
+    },
+    "s12.assets.v1.BulkCreateAssetsResponse.CreatedAsset": "safetyculture:s12.assets.v1.BulkCreateAssetsResponse.CreatedAsset",
+    "s12.assets.v1.BulkCreateAssetsResponse.FailedAsset": "safetyculture:s12.assets.v1.BulkCreateAssetsResponse.FailedAsset",
+    "s12.common.Status": "safetyculture:s12.common.Status",
+    "s12.assets.v1.GetAssetResponse": "safetyculture:s12.assets.v1.GetAssetResponse",
+    "asset": {
+      "@id": "safetyculture:asset"
+    },
+    "s12.assets.v1.GetAssetByCodeResponse": "safetyculture:s12.assets.v1.GetAssetByCodeResponse",
+    "s12.assets.v1.LookupAssetsByFieldRequest": "safetyculture:s12.assets.v1.LookupAssetsByFieldRequest",
+    "field_name": {
+      "@id": "safetyculture:field_name",
+      "@type": "xsd:string"
+    },
+    "s12.assets.v1.LookupAssetsByFieldResponse": "safetyculture:s12.assets.v1.LookupAssetsByFieldResponse",
+    "s12.assets.v1.UpdateAssetResponse": "safetyculture:s12.assets.v1.UpdateAssetResponse",
+    "operation_id": {
+      "@id": "safetyculture:operation_id",
+      "@type": "xsd:string"
+    },
+    "s12.assets.v1.BulkUpdateAssetsRequest": "safetyculture:s12.assets.v1.BulkUpdateAssetsRequest",
+    "update_mask": {
+      "@id": "safetyculture:update_mask",
+      "@type": "xsd:string"
+    },
+    "s12.assets.v1.BulkUpdateAssetsResponse": "safetyculture:s12.assets.v1.BulkUpdateAssetsResponse",
+    "updated_assets": {
+      "@id": "safetyculture:updated_assets",
+      "@container": "@list"
+    },
+    "hierarchy_operations": {
+      "@id": "safetyculture:hierarchy_operations",
+      "@container": "@list"
+    },
+    "s12.assets.v1.BulkUpdateAssetsResponse.FailedAsset": "safetyculture:s12.assets.v1.BulkUpdateAssetsResponse.FailedAsset",
+    "s12.assets.v1.BulkUpdateAssetsResponse.HierarchyOperation": "safetyculture:s12.assets.v1.BulkUpdateAssetsResponse.HierarchyOperation",
+    "s12.assets.v1.BulkUpdateAssetsResponse.UpdatedAsset": "safetyculture:s12.assets.v1.BulkUpdateAssetsResponse.UpdatedAsset",
+    "s12.assets.v1.AssetsService.SetAssetFieldValuesBody": "safetyculture:s12.assets.v1.AssetsService.SetAssetFieldValuesBody",
+    "s12.assets.v1.SetAssetFieldValuesResponse": "safetyculture:s12.assets.v1.SetAssetFieldValuesResponse",
+    "s12.assets.v1.AssetLocation": "safetyculture:s12.assets.v1.AssetLocation",
+    "location": {
+      "@id": "safetyculture:location"
+    },
+    "source": {
+      "@id": "safetyculture:source"
+    },
+    "s12.assets.v1.AssetsService.UpdateAssetLocationBody": "safetyculture:s12.assets.v1.AssetsService.UpdateAssetLocationBody",
+    "s12.assets.v1.Location": "safetyculture:s12.assets.v1.Location",
+    "geo_position": {
+      "@id": "safetyculture:geo_position"
+    },
+    "address": {
+      "@id": "safetyculture:address",
+      "@type": "xsd:string"
+    },
+    "last_updated_at": {
+      "@id": "safetyculture:last_updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "motion_status_updated_at": {
+      "@id": "safetyculture:motion_status_updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "s12.assets.v1.LocationStatus": "safetyculture:s12.assets.v1.LocationStatus",
+    "s12.assets.v1.UpdateAssetLocationResponse": "safetyculture:s12.assets.v1.UpdateAssetLocationResponse",
+    "s12.common.GeoPosition": "safetyculture:s12.common.GeoPosition",
+    "longitude": {
+      "@id": "safetyculture:longitude",
+      "@type": "xsd:decimal"
+    },
+    "latitude": {
+      "@id": "safetyculture:latitude",
+      "@type": "xsd:decimal"
+    },
+    "accuracy": {
+      "@id": "safetyculture:accuracy",
+      "@type": "xsd:integer"
+    },
+    "s12.assets.v1.ArchiveAssetResponse": "safetyculture:s12.assets.v1.ArchiveAssetResponse",
+    "s12.assets.v1.RestoreArchivedAssetResponse": "safetyculture:s12.assets.v1.RestoreArchivedAssetResponse",
+    "s12.assets.v1.DeleteAssetResponse": "safetyculture:s12.assets.v1.DeleteAssetResponse",
+    "s12.assets.v1.Field": "safetyculture:s12.assets.v1.Field",
+    "field_type": {
+      "@id": "safetyculture:field_type"
+    },
+    "value_type": {
+      "@id": "safetyculture:value_type"
+    },
+    "select_options": {
+      "@id": "safetyculture:select_options",
+      "@container": "@list"
+    },
+    "s12.assets.v1.FieldType": "safetyculture:s12.assets.v1.FieldType",
+    "s12.assets.v1.FieldValueType": "safetyculture:s12.assets.v1.FieldValueType",
+    "s12.assets.v1.ListFieldsRequest": "safetyculture:s12.assets.v1.ListFieldsRequest",
+    "s12.assets.v1.ListFieldsResponse": "safetyculture:s12.assets.v1.ListFieldsResponse",
+    "result": {
+      "@id": "safetyculture:result",
+      "@container": "@list"
+    },
+    "s12.typefield.v1.FieldOption": "safetyculture:s12.typefield.v1.FieldOption",
+    "label": {
+      "@id": "safetyculture:label",
+      "@type": "xsd:string"
+    },
+    "order": {
+      "@id": "safetyculture:order",
+      "@type": "xsd:integer"
+    },
+    "s12.assets.v1.CreateFieldRequest": "safetyculture:s12.assets.v1.CreateFieldRequest",
+    "s12.assets.v1.CreateFieldResponse": "safetyculture:s12.assets.v1.CreateFieldResponse",
+    "s12.assets.v1.FieldsService.UpdateFieldBody": "safetyculture:s12.assets.v1.FieldsService.UpdateFieldBody",
+    "field": {
+      "@id": "safetyculture:field"
+    },
+    "s12.assets.v1.UpdateFieldResponse": "safetyculture:s12.assets.v1.UpdateFieldResponse"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "SafetyCulture API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects SafetyCulture's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-14) from openapi/safetyculture-mitti-api-openapi.yml.",
+  "dcterms:created": "2026-10-14",
+  "dcterms:source": [
+    "openapi/safetyculture-mitti-api-openapi.yml"
+  ]
+}

@@ -1,0 +1,393 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/safetyculture/main/json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json",
+  "title": "SubmitIncidentRequest represents the incident submitted by a contributor",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.tasks.v1.SubmitIncidentRequest",
+  "type": "object",
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Optional. The unique identifier of the incident\nIf not provided, UUID will be generated server side"
+    },
+    "title": {
+      "type": "string",
+      "description": "Required. Title of the incident\nTitle is limited to only 255 characters max"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional. Date and time this incident was created"
+    },
+    "category_id": {
+      "type": "string",
+      "description": "Required. ID of the incident's category\nIf not set, this incident will be stored with the default category(None)"
+    },
+    "answered_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Optional. An array of all, if any, custom questions that have been answered\nby the contributor\n@deprecated: Use `QuestionAnswer` instead. This was a field used for string\ncustom questions. We've since moved to structured custom questions in the\n`QuestionAnswer` field."
+    },
+    "email": {
+      "type": "string",
+      "description": "Optional. The email address of the contributor"
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/s12.common.Media"
+      },
+      "description": "Optional. Array of media items to be linked to the incident."
+    },
+    "site_id": {
+      "type": "string",
+      "description": "Optional. ID of the site to associate with the incident.\nIf not provided, no site will be associated with the incident."
+    },
+    "name": {
+      "type": "string",
+      "description": "Optional. The name of the contributor"
+    },
+    "contact": {
+      "type": "string",
+      "description": "Optional. The contact details of the contributor"
+    },
+    "location": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/s12.tasks.v1.Task.AddressLocation"
+        }
+      ],
+      "description": "The location that the incident occurred at"
+    },
+    "access_token": {
+      "type": "string",
+      "description": "Optional. The access token used to authenticate the request. This field\nshould be set when following the contributor flow. Otherwise, authenticate\nvia normal means."
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional. Description of the issue (maximum 500 characters)."
+    },
+    "questions_and_answers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/s12.tasks.v1.SubmitIncidentRequest.QuestionAnswer"
+      },
+      "description": "Optional. An array of all, if any, custom questions that have been answered\nfor this issue."
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/s12.tasks.v1.Item"
+      },
+      "description": "Optional. The category fields and questions that applied to this incident\nwhen it was created."
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional. Date and time this incident occurred at"
+    },
+    "asset_id": {
+      "type": "string",
+      "description": "Optional. The ID of the asset associated with this incident."
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "description": "Use `ai_marking`. True when this issue was created via an AI-assisted\nflow, for example the QR-code AI Issue Creation flow seeded by\nGenerateIncidentStream."
+    },
+    "ai_marking": {
+      "description": "Optional. The AI marking the caller declares for this issue, under the\nwrite rules. A caller can set a flag true and cannot clear it, and false is\nrecorded as absent. Surfaces on Incident.ai_marking. The Assistant sets it\nthrough the mitti-ai-marked header rather than this field.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/s12.common.v1.AiMarking"
+        }
+      ]
+    }
+  },
+  "required": [
+    "title",
+    "category_id"
+  ],
+  "$defs": {
+    "s12.common.GeoPosition": {
+      "type": "object",
+      "properties": {
+        "longitude": {
+          "type": "number",
+          "format": "double",
+          "description": "The geographical longitude"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "double",
+          "description": "The geographical latitude"
+        },
+        "accuracy": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The accuracy in meters"
+        }
+      },
+      "description": "A position is the fundamental geographical geometry construct."
+    },
+    "s12.common.Media": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string",
+          "description": "full file name, including file extension"
+        },
+        "media_type": {
+          "$ref": "#/$defs/s12.common.MediaType"
+        }
+      },
+      "title": "Represents an image or video"
+    },
+    "s12.common.MediaType": {
+      "type": "string",
+      "enum": [
+        "MEDIA_TYPE_IMAGE",
+        "MEDIA_TYPE_VIDEO",
+        "MEDIA_TYPE_PDF",
+        "MEDIA_TYPE_DOCX",
+        "MEDIA_TYPE_XLSX",
+        "MEDIA_TYPE_PPTX",
+        "MEDIA_TYPE_CSV"
+      ],
+      "description": " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    },
+    "s12.common.v1.AiMarking": {
+      "type": "object",
+      "properties": {
+        "ai_edited": {
+          "type": "boolean",
+          "description": "True when something non deterministic, in practice an LLM, produced or\nchanged this content. False when no AI did, which includes content a person\nwrote and content a deterministic path produced. Absent when the origin was\nnot recorded. Do not report false in place of absent."
+        },
+        "human_edited": {
+          "type": "boolean",
+          "description": "True when a person authored or changed this content. False when no person\ndid, which includes content a model generated and content a deterministic\npath produced. Absent when the origin was not recorded. Do not report false\nin place of absent."
+        }
+      },
+      "description": "AiMarking carries the AI marking fact on an API representation, so a machine\ncan read whether AI and whether a person produced or changed the content.\nIt is the read side of the express path: one shared message with standard\nproperty names, rather than every domain inventing its own field for the\nsame fact.\n\nBoth fields are presence tracked. The three states each carry a different\nmeaning and must not be collapsed:\n\n  true    The actor named by the field produced or changed this content.\n  false   The actor named by the field is known not to have produced or\n          changed this content. It is a claim about that actor only.\n  absent  We did not record the origin.\n\nfalse is not evidence that a deterministic path produced the content. Known\nhuman only content can read ai_edited false, and known AI only content can\nread human_edited false. Set a field to false only when you know it is false.\nLeave it absent when you do not, so a consumer relying on the API for their\nown obligation can tell \"not true\" from \"not recorded\". EU AI Act Article\n50(2), engineering approach page."
+    },
+    "s12.tasks.v1.AnswerText": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "The text that answers the question."
+        }
+      },
+      "description": "A type of answer for a custom question containing text data."
+    },
+    "s12.tasks.v1.Item": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The UUID of the item."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the item"
+        },
+        "is_mandatory": {
+          "type": "boolean",
+          "description": "Whether or not the item must be filled before submission"
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Item.ItemType"
+            }
+          ],
+          "description": "Type of item"
+        },
+        "question_data": {
+          "$ref": "#/$defs/s12.tasks.v1.Question"
+        },
+        "is_disabled": {
+          "type": "boolean",
+          "description": "Whether or not the item is disabled and hidden from submission"
+        }
+      },
+      "title": "Item for a given category/incident"
+    },
+    "s12.tasks.v1.Item.ItemType": {
+      "type": "string",
+      "enum": [
+        "ITEM_TYPE_UNSPECIFIED",
+        "ITEM_TYPE_TITLE",
+        "ITEM_TYPE_DESCRIPTION",
+        "ITEM_TYPE_SITE",
+        "ITEM_TYPE_MEDIA",
+        "ITEM_TYPE_LOCATION",
+        "ITEM_TYPE_QUESTION",
+        "ITEM_TYPE_OCCURRED_AT",
+        "ITEM_TYPE_ASSET"
+      ],
+      "default": "ITEM_TYPE_UNSPECIFIED",
+      "description": "- ITEM_TYPE_UNSPECIFIED: The item type is unspecified",
+      "title": "The types of items"
+    },
+    "s12.tasks.v1.MultipleChoiceOption": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The UUID of the multiple choice option."
+        },
+        "text": {
+          "type": "string",
+          "description": "The text of the multiple choice option. This does not use the new `validator.string` option as question processing\nlogic fails when symbols are substituted for similar-looking symbols."
+        }
+      },
+      "description": "MultipleChoiceOption represents a possible answer for a multiple choice question."
+    },
+    "s12.tasks.v1.MultipleChoiceOptions": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/s12.tasks.v1.MultipleChoiceOption"
+          }
+        }
+      },
+      "description": "MultipleChoiceOptions is an explicit message for a set of MultipleChoiceOption's to use in a oneof field below."
+    },
+    "s12.tasks.v1.Question": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The UUID of the question."
+        },
+        "text": {
+          "type": "string",
+          "description": "The text of the question being asked (e.g. \"How many eggs are in a dozen?\"). This does not use the new\n`validator.string` option as question processing logic fails when symbols are substituted for similar-looking\nsymbols."
+        },
+        "type": {
+          "description": "The type of the question. See `enum QuestionType` for more details.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Question.QuestionType"
+            }
+          ]
+        },
+        "is_mandatory": {
+          "type": "boolean",
+          "description": "Whether the question is mandatory or not"
+        },
+        "multiple_choice_options": {
+          "$ref": "#/$defs/s12.tasks.v1.MultipleChoiceOptions"
+        }
+      },
+      "description": "Question represents the question structure for a custom question."
+    },
+    "s12.tasks.v1.Question.QuestionType": {
+      "type": "string",
+      "enum": [
+        "QUESTION_TYPE_UNSPECIFIED",
+        "QUESTION_TYPE_TEXT",
+        "QUESTION_TYPE_MULTIPLE_CHOICE"
+      ],
+      "default": "QUESTION_TYPE_UNSPECIFIED",
+      "description": "- QUESTION_TYPE_UNSPECIFIED: The question type is unspecified. This generally should not happen.\n - QUESTION_TYPE_TEXT: The question is text type. This question accepts freetext answers.\n - QUESTION_TYPE_MULTIPLE_CHOICE: The question is multiple choice. This question provides a list of options to choose from.",
+      "title": "The types of questions"
+    },
+    "s12.tasks.v1.SubmitIncidentRequest.QuestionAnswer": {
+      "type": "object",
+      "properties": {
+        "question_id": {
+          "type": "string",
+          "description": "The ID of the question being answered."
+        },
+        "answer_text": {
+          "description": "AnswerText indicates that the question being answered has a text\nresponse.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.AnswerText"
+            }
+          ]
+        },
+        "answer_multiple_choice": {
+          "description": "MultipleChoiceOption indicates that the question being answered is a multiple choice question.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.MultipleChoiceOption"
+            }
+          ]
+        }
+      },
+      "description": "QuestionAnswer contains data about a question configured for this issue's\ncategory, as well as the answer to that question."
+    },
+    "s12.tasks.v1.Task.AddressLocation": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the task's location."
+        },
+        "thoroughfare": {
+          "type": "string",
+          "description": "The thoroughfare of the location."
+        },
+        "sub_thoroughfare": {
+          "type": "string",
+          "description": "The sub_thoroughfare of the location,"
+        },
+        "locality": {
+          "type": "string",
+          "description": "The locality of the location"
+        },
+        "sub_locality": {
+          "type": "string",
+          "description": "The sub_locality of the location"
+        },
+        "administrative_area": {
+          "type": "string",
+          "description": "The administrative_area of the location"
+        },
+        "sub_administrative_area": {
+          "type": "string",
+          "description": "The sub_administrative_area of the location"
+        },
+        "postal_code": {
+          "type": "string",
+          "description": "The postal_code of the location"
+        },
+        "country": {
+          "type": "string",
+          "description": "The country of the location"
+        },
+        "iso_country_code": {
+          "type": "string",
+          "description": "The iso_country_code of the location"
+        },
+        "geo_position": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.GeoPosition"
+            }
+          ],
+          "description": "The geometry of the location"
+        }
+      },
+      "description": "The location of the task.\nThe latitude and longitude in the `geo_position` object are required.\nAll other fields are optional, but add extra context to the location on\nplatform."
+    }
+  }
+}

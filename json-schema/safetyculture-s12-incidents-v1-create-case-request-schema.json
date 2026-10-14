@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/safetyculture/main/json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json",
+  "title": "s12.incidents.v1.CreateCaseRequest",
+  "description": "CreateCaseRequest is the request message for creating an OSHA case.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.incidents.v1.CreateCaseRequest",
+  "type": "object",
+  "properties": {
+    "establishment_id": {
+      "type": "string",
+      "description": "establishment_id is the ID of the establishment this case belongs to (required)."
+    },
+    "year_of_filing": {
+      "type": "integer",
+      "format": "int32",
+      "description": "year_of_filing is the year this case is filed for (required)."
+    },
+    "case_number": {
+      "type": "string",
+      "description": "case_number is the case number."
+    },
+    "job_title": {
+      "type": "string",
+      "description": "job_title is the job title of the affected employee."
+    },
+    "date_of_incident": {
+      "type": "string",
+      "format": "date-time",
+      "description": "date_of_incident is the date the incident occurred."
+    },
+    "incident_location": {
+      "type": "string",
+      "description": "incident_location is where the incident occurred."
+    },
+    "incident_description": {
+      "type": "string",
+      "description": "incident_description is description of the incident."
+    },
+    "incident_outcome": {
+      "type": "integer",
+      "format": "int32",
+      "description": "incident_outcome is the outcome of the incident (1=Death, 2=Days away, 3=Job transfer, 4=Other)."
+    },
+    "dafw_num_away": {
+      "type": "integer",
+      "format": "int32",
+      "description": "dafw_num_away is days away from work."
+    },
+    "djtr_num_tr": {
+      "type": "integer",
+      "format": "int32",
+      "description": "djtr_num_tr is days job transfer or restriction."
+    },
+    "type_of_incident": {
+      "type": "integer",
+      "format": "int32",
+      "description": "type_of_incident is the type of incident (1=Injury, 2=Skin disorder, 3=Respiratory, 4=Poisoning, 5=Hearing loss, 6=Other)."
+    },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date-time",
+      "description": "date_of_birth is the employee's date of birth."
+    },
+    "date_of_hire": {
+      "type": "string",
+      "format": "date-time",
+      "description": "date_of_hire is the employee's date of hire."
+    },
+    "sex": {
+      "type": "string",
+      "description": "sex is the employee's sex (M or F)."
+    },
+    "treatment_facility_type": {
+      "type": "integer",
+      "format": "int32",
+      "description": "treatment_facility_type is whether emergency room was used (1=yes, 0=no)."
+    },
+    "treatment_in_patient": {
+      "type": "integer",
+      "format": "int32",
+      "description": "treatment_in_patient is whether hospitalization was required (1=yes, 0=no)."
+    },
+    "time_started_work": {
+      "type": "string",
+      "description": "time_started_work is time employee began work (hh:mm format)."
+    },
+    "time_of_incident": {
+      "type": "string",
+      "description": "time_of_incident is time of incident (hh:mm format)."
+    },
+    "time_unknown": {
+      "type": "boolean",
+      "description": "time_unknown is whether time of incident is unknown."
+    },
+    "nar_before_incident": {
+      "type": "string",
+      "description": "nar_before_incident is what employee was doing before incident."
+    },
+    "nar_what_happened": {
+      "type": "string",
+      "description": "nar_what_happened is how injury/illness occurred."
+    },
+    "nar_injury_illness": {
+      "type": "string",
+      "description": "nar_injury_illness is what the injury/illness was."
+    },
+    "nar_object_substance": {
+      "type": "string",
+      "description": "nar_object_substance is object/substance that harmed employee."
+    },
+    "date_of_death": {
+      "type": "string",
+      "format": "date-time",
+      "description": "date_of_death is the date of death if applicable."
+    },
+    "employee_name": {
+      "type": "string",
+      "description": "employee_name is the name of the employee."
+    },
+    "employee_street_address": {
+      "type": "string",
+      "description": "employee_street_address is the street address of the employee."
+    },
+    "employee_city": {
+      "type": "string",
+      "description": "employee_city is the city where the employee resides."
+    },
+    "employee_state": {
+      "type": "string",
+      "description": "employee_state is the two-letter state code for the employee."
+    },
+    "employee_zip": {
+      "type": "string",
+      "description": "employee_zip is the ZIP code for the employee."
+    },
+    "physician_name": {
+      "type": "string",
+      "description": "physician_name is the name of the physician who treated the employee."
+    },
+    "facility_name": {
+      "type": "string",
+      "description": "facility_name is the name of the treatment facility."
+    },
+    "facility_street_address": {
+      "type": "string",
+      "description": "facility_street_address is the street address of the treatment facility."
+    },
+    "facility_city": {
+      "type": "string",
+      "description": "facility_city is the city where the treatment facility is located."
+    },
+    "facility_state": {
+      "type": "string",
+      "description": "facility_state is the two-letter state code for the treatment facility."
+    },
+    "facility_zip": {
+      "type": "string",
+      "description": "facility_zip is the ZIP code for the treatment facility."
+    }
+  }
+}

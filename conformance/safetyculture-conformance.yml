@@ -4,9 +4,8 @@ source: https://developer.safetyculture.com + https://safetyculture.com/security
 standards:
 - id: scim2
   conforms: true
-  evidence: >-
-    User provisioning via SCIM 2.0 with Microsoft Entra ID (Azure AD) and Okta,
-    documented at developer.safetyculture.com user-provisioning guides.
+  evidence: User provisioning via SCIM 2.0 with Microsoft Entra ID (Azure AD) and Okta, documented at developer.safetyculture.com user-provisioning
+    guides.
 - id: rfc3339-datetime
   conforms: true
   evidence: API accepts a subset of RFC 3339 Internet Date-Time Format for date/time values.
@@ -29,3 +28,15 @@ standards:
   conforms: false
 - id: fapi
   conforms: false
+- id: openapi-3.1
+  conforms: true
+  evidence: the document declares 3.1.0
+- id: rfc9457
+  conforms: false
+  evidence: no response declares application/problem+json
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key parameter on mutating operations
+- id: pagination
+  conforms: true
+  evidence: list operations take limit, next_page_token, offset, page, page_number, page_size

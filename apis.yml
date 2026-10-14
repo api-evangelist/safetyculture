@@ -1,23 +1,27 @@
 aid: safetyculture
+
 name: SafetyCulture
-description: >-
-  SafetyCulture (formerly iAuditor) is a workplace operations and safety platform used
-  by frontline teams to run inspections, capture and track issues, assign corrective
-  actions, manage assets and sites, deliver training, and provision users. Its public
-  REST API at https://api.safetyculture.io exposes more than 380 documented operations
-  across inspections, templates, assets, actions, issues, users, groups, schedules,
-  training, credentials, and webhooks, secured with bearer API tokens (service-user and
-  personal). Near real-time webhooks stream a rich catalog of inspection, action,
-  incident, media, and training events, and SCIM 2.0 supports user provisioning via
-  Microsoft Entra ID and Okta.
+
+description: SafetyCulture (formerly iAuditor) is a workplace operations and safety platform used by frontline teams to run inspections, capture
+  and track issues, assign corrective actions, manage assets and sites, deliver training, and provision users. Its public REST API at https://api.safetyculture.io
+  exposes more than 380 documented operations across inspections, templates, assets, actions, issues, users, groups, schedules, training, credentials,
+  and webhooks, secured with bearer API tokens (service-user and personal). Near real-time webhooks stream a rich catalog of inspection, action,
+  incident, media, and training events, and SCIM 2.0 supports user provisioning via Microsoft Entra ID and Okta.
+
 url: https://raw.githubusercontent.com/api-evangelist/safetyculture/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: vc-portfolio
+
 x-backed-by:
 - index-ventures
 - insight-partners
+
 x-tier: stub
+
 x-tier-reason: portfolio-lead
+
 deliveryModel:
   model: saas
   open_source: false
@@ -29,6 +33,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: unknown
   onboarding: unknown
@@ -41,13 +46,21 @@ accessModel:
   - authentication
   - rate-limits
   - security
-  - {url: 'https://safetyculture.com', status: 301, note: 'declared website redirects to https://mitti.com/ — a different registrable domain (safetyculture.com -> mitti.com), possible rename or acquisition (probed 2026-09-03, roadmap#169)'}
+  - url: https://safetyculture.com
+    status: 301
+    note: declared website redirects to https://mitti.com/ — a different registrable domain (safetyculture.com -> mitti.com), possible rename
+      or acquisition (probed 2026-09-03, roadmap#169)
   generated: '2026-09-03'
   method: derived
+
 specificationVersion: '0.23'
+
 created: '2026-07-17'
+
 modified: '2026-07-21'
+
 image: https://safetyculture.com/favicon.ico
+
 tags:
 - Company
 - Business Applications
@@ -60,6 +73,7 @@ tags:
 - Field Service
 - Webhook
 - Australia
+
 tags_raw:
 - Company
 - Business Applications
@@ -72,35 +86,32 @@ tags_raw:
 - Field Service
 - Webhooks
 - Australia
-apis:
-- name: SafetyCulture API
-  description: >-
-    REST API for the SafetyCulture platform — inspections, templates, assets, actions,
-    issues, users, groups, schedules, training, credentials, and webhooks. Bearer-token
-    auth over HTTPS.
-  humanURL: https://developer.safetyculture.com
-  baseURL: https://api.safetyculture.io
-  properties:
-  - type: Documentation
-    url: https://developer.safetyculture.com
-  - type: APIReference
-    url: https://developer.safetyculture.com/reference/introduction
-  - type: GettingStarted
-    url: https://developer.safetyculture.com/reference/getting-started
-  - type: Authentication
-    url: authentication/safetyculture-authentication.yml
-  - type: RateLimits
-    url: rate-limits/safetyculture-rate-limits.yml
-  - type: Webhooks
-    url: asyncapi/safetyculture-webhooks.yml
-  - type: LLMsTxt
-    url: llms/safetyculture-llms.txt
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: AgenticAccess
+  url: agentic-access/safetyculture-agentic-access.yml
+- type: Spectral
+  url: rules/safetyculture-rules.yml
+- type: JSONLD
+  url: json-ld/safetyculture-context.jsonld
+- type: Vocabulary
+  url: vocabulary/safetyculture-vocabulary.yml
+- type: DataModel
+  url: data-model/safetyculture-data-model.yml
+- type: Deprecation
+  url: lifecycle/safetyculture-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/safetyculture-problem-types.yml
+- type: Hosts
+  url: hosts/safetyculture-hosts.yml
+- type: Vendors
+  url: vendors/safetyculture-vendors.yml
 - type: Website
   url: https://safetyculture.com
 - type: DeveloperPortal
@@ -155,7 +166,9 @@ common:
   url: cli/safetyculture-cli.yml
 - type: X-MCPServerCandidate
   url: mcp/safetyculture-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published
+    API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting
+    the artifact-type surfaces with a server that does not exist.'
 - type: AgentSkill
   url: skills/_index.yml
 - type: DomainSecurity
@@ -166,8 +179,52 @@ common:
   url: https://safetyculture.com/security
 - type: TrustCenter
   url: security/safetyculture-trust-center.yml
+
+apis:
+- name: SafetyCulture API
+  description: REST API for the SafetyCulture platform — inspections, templates, assets, actions, issues, users, groups, schedules, training,
+    credentials, and webhooks. Bearer-token auth over HTTPS.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  properties:
+  - url: openapi/safetyculture-mitti-api-openapi.yml
+    type: OpenAPI
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+  aid: safetyculture:safetyculture-api
+
 x-enrichment:
   date: '2026-07-21'
   status: enriched
   artifacts_added: 19
   pass: local-v1
+
+x-readme-harvest:
+  date: '2026-10-14'
+  ops: 416
+  tool: harvest-readme-openapi.py
+  portal: https://developer.mitti.com

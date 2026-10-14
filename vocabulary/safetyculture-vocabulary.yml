@@ -1,0 +1,439 @@
+generated: '2026-10-14'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/safetyculture-mitti-api-openapi.yml
+vocabulary:
+  name: SafetyCulture Domain Vocabulary
+  description: 'Terms declared by SafetyCulture''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-14'
+  terms:
+  - term: google.protobuf.Any
+    definition: '`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.
+      Protobuf library provides support to pack/unpack Any values in the form of utility functions or additional generated methods of the Any
+      type. Example 1: Pack and unpack a message in C++. Foo foo = ...; Any any; any.PackFrom(foo); ... if (any.UnpackTo(&foo)) { ... } Exa'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/google.protobuf.Any
+  - term: google.rpc.Status
+    definition: 'Object declared by the contract with fields: code, message, details.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/google.rpc.Status
+  - term: ListGroupsResponse
+    definition: Result returned from `ListGroups`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.ListGroupsResponse
+  - term: Group
+    definition: A group returned by `ListGroups`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.ListGroupsResponse.Group
+  - term: GetUserGroupsResponse contains the result of calling GetUserGroups
+    definition: 'Object declared by the contract with fields: groups.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.accounts.organisation.v1.GetUserGroupsResponse
+  - term: Groups contains all information about a group
+    definition: 'Object declared by the contract with fields: id, name, type, members, description, dynamic.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.Group
+  - term: GetUserGroupsResponse
+    definition: Result returned from `GetUserGroups`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.GetUserGroupsResponse
+  - term: GetUserGroupsResponseGroup
+    definition: A group returned from `GetUserGroups`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.GetUserGroupsResponse.Group
+  - term: "- group: Group\n - organisation: Organisation"
+    definition: 'Enumeration declared by the contract with values: group, organisation.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.GetUserGroupsResponse.Group.Type
+  - term: CreateGroupRequest
+    definition: The parameters for `CreateGroup`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.CreateGroupRequest
+  - term: CreateGroupResponse
+    definition: Result returned from `CreateGroup`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.CreateGroupResponse
+  - term: AddNewUserToGroupResponse
+    definition: Result returned from `AddNewUserToGroup`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.AddNewUserToGroupResponse
+  - term: AddNewUserToGroupRequest
+    definition: The parameters for `AddNewUserToGroup`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.ThePubService.AddNewUserToGroupBody
+  - term: RemoveUserResponse
+    definition: Result returned from `RemoveUser`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.RemoveUserResponse
+  - term: BulkDeleteGroupsRequest contains the parameters to bulk delete groups
+    definition: 'Object declared by the contract with fields: group_ids.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.accounts.organisation.v1.BulkDeleteGroupsRequest
+  - term: BulkDeleteGroupsResponse contains the result of calling BulkDeleteGroups
+    definition: 'Object declared by the contract with fields: results.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.accounts.organisation.v1.BulkDeleteGroupsResponse
+  - term: s12.accounts.organisation.v1.BulkDeleteGroupsResponse.BulkDeleteGroupsResult
+    definition: 'Object declared by the contract with fields: group_id, code.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.accounts.organisation.v1.BulkDeleteGroupsResponse.BulkDeleteGroupsResult
+  - term: s12.accounts.organisation.v1.BulkDeleteGroupsResponse.BulkDeleteGroupsResultCode
+    definition: 'Type of result for each group in the BulkDeleteGroups operation. Allows for defining specific reasons for errors to display to
+      customers. - BULK_DELETE_GROUPS_RESULT_CODE_UNSPECIFIED: Default - BULK_DELETE_GROUPS_RESULT_CODE_SUCCESS: Operation was a success - BULK_DELETE_GROUPS_RESULT_CODE_INTERNAL:
+      Internal or unknown failure - BULK_DELETE_GROUPS_RESULT_CODE_MALFORMED_ID: Malformed group ID - BUL'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.accounts.organisation.v1.BulkDeleteGroupsResponse.BulkDeleteGroupsResultCode
+  - term: ListUsersInGroupResponse
+    definition: Result returned from `ListUsersInGroup`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.ListUsersInGroupResponse
+  - term: s12.thepub.v1.ListUsersInGroupResponse.User
+    definition: User returned for list operations.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.ListUsersInGroupResponse.User
+  - term: "- full: Full seat\n - free: Free seat\n - lite: Lite seat"
+    definition: 'Enumeration declared by the contract with values: full, free, lite.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.ThePubSeatType
+  - term: ThePubUserStatus
+    definition: '- active: Active user. - inactive: Inactive user.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.thepub.v1.ThePubUserStatus
+  - term: s12.announcements.v1.DocumentMeta
+    definition: 'Object declared by the contract with fields: document_type.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.DocumentMeta
+  - term: '- DOCUMENT_TYPE_UNKNOWN_UNSPECIFIED: Defaults to PDF'
+    definition: 'Enumeration declared by the contract with values: DOCUMENT_TYPE_UNKNOWN_UNSPECIFIED, DOCUMENT_TYPE_PDF.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.DocumentType
+  - term: 'HeadsUp represents a communication to one or more users containing
+
+      one or more announcement cards'
+    definition: 'Object declared by the contract with fields: id, created_at, modified_at, organisation_id, deleted, title, author_id, author_name,
+      is_published, published_at, has_acknowledgement, description. (8 more)'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.HeadsUp
+  - term: HeadsUpMedia represents media associated with a HeadsUp
+    definition: 'Object declared by the contract with fields: media, video, document, linked_document.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.HeadsUpMedia
+  - term: HeadsUpResponse
+    definition: Result returned from `GetHeadsUp`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.HeadsUpResponse
+  - term: s12.announcements.v1.LinkedDocument
+    definition: 'Object declared by the contract with fields: link_id, is_archived, document_node_id, expiry_status, acknowledgement_type, acknowledged,
+      acknowledged_at.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.LinkedDocument
+  - term: s12.announcements.v1.VideoMeta
+    definition: 'Object declared by the contract with fields: video_duration, is_video_transcoded.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.VideoMeta
+  - term: s12.common.ExpiryStatus
+    definition: The expiry status of an object based on its validity period.
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.ExpiryStatus
+  - term: Represents an image or video
+    definition: 'Object declared by the contract with fields: id, token, filename, media_type.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.Media
+  - term: s12.common.MediaType
+    definition: '- MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP). - MEDIA_TYPE_VIDEO: A video file (MP4, MOV). - MEDIA_TYPE_PDF: A PDF
+      document. - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC). - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS). - MEDIA_TYPE_PPTX:
+      A Microsoft PowerPoint presentation (PPTX, PPT). - MEDIA_TYPE_CSV: A CSV file.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.MediaType
+  - term: s12.documents.v1.AcknowledgementType
+    definition: 'The acknowledgement type for a linked node — used both as the requirement on a link and as the type recorded when a user acknowledges.
+      UNSPECIFIED means no acknowledgement is required. - ACKNOWLEDGEMENT_TYPE_UNSPECIFIED: No acknowledgement required.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.documents.v1.AcknowledgementType
+  - term: GetHeadsUpCompletionCountsResponse
+    definition: Result returned from `GetHeadsUpCompletionCounts`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.GetHeadsUpCompletionCountsResponse
+  - term: HeadsUpReactionSummary a summary of all the reactions for a given heads up
+    definition: 'Object declared by the contract with fields: emoji_short_code, total_reaction_count, did_user_react, users, reaction_user_limit.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.HeadsUpReactionSummary
+  - term: HeadsUpReactionUser represents a user who has reacted to a HeadsUp
+    definition: 'Object declared by the contract with fields: user_id, user_full_name, user_profile_picture, created_at.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.HeadsUpReactionUser
+  - term: Generic request by ID structure
+    definition: 'Object declared by the contract with fields: id.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.RequestByID
+  - term: GetHeadsUpMessagesRequest
+    definition: The parameters for `GetHeadsUpMessages`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.GetHeadsUpMessagesRequest
+  - term: GetHeadsUpMessagesResponse
+    definition: Result returned from `GetHeadsUpMessages`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.GetHeadsUpMessagesResponse
+  - term: GetMessagesRequest
+    definition: The parameters for `GetMessages`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.GetMessagesRequest
+  - term: GetMessagesResponse
+    definition: The result of `GetMessages`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.GetMessagesResponse
+  - term: Mentionmessage is the message type used for sending @mentions
+    definition: 'Object declared by the contract with fields: mention_id, mention_type, text.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.MentionMessage
+  - term: s12.common.MentionType
+    definition: MentionType the type of mention that is being used. This could be users/roles etc.
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.MentionType
+  - term: Message represents a given singular message
+    definition: 'Object declared by the contract with fields: id, parent_id, reference_id, reference_type, message, user_id, name, author_profile_image,
+      sent_at, reply_count.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.Message
+  - term: s12.common.MessageContent
+    definition: MessageContent list of possible message types.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.MessageContent
+  - term: s12.common.MessageReferenceTypes
+    definition: MessageReferenceTypes is a list of supported message reference types.
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.MessageReferenceTypes
+  - term: Common set of sorting directions as used by lists
+    definition: 'Enumeration declared by the contract with values: SORT_DIRECTION_UNSPECIFIED, SORT_DIRECTION_ASC, SORT_DIRECTION_DESC.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.SortDirection
+  - term: TextMessage the message type containing a message in text
+    definition: 'Object declared by the contract with fields: text.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.TextMessage
+  - term: HeadsUpManageListItem response item of listing ManageHeadsUps
+    definition: 'Object declared by the contract with fields: id, title, published_at, author_id, author_name, viewed_count, acknowledgement_count,
+      has_acknowledgement, media_type, assigned_users_count, complete, message_count. (4 more)'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.HeadsUpManageListItem
+  - term: ListHeadsUpManageRequest
+    definition: The parameters for `ListHeadsUpManage`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpManageRequest
+  - term: s12.announcements.v1.ListHeadsUpManageRequest.Filter
+    definition: 'Object declared by the contract with fields: group_ids, user_ids, completed, author_ids, statuses.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpManageRequest.Filter
+  - term: '- COMPLETED_FILTER_UNKNOWN_NONE_UNSPECIFIED: Defaults to no filter'
+    definition: 'Enumeration declared by the contract with values: COMPLETED_FILTER_UNKNOWN_NONE_UNSPECIFIED, COMPLETED_FILTER_HAS_COMPLETED,
+      COMPLETED_FILTER_HAS_NOT_COMPLETED.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpManageRequest.Filter.CompletedFilter
+  - term: s12.announcements.v1.ListHeadsUpManageRequest.Filter.StatusFilter
+    definition: 'Enumeration declared by the contract with values: STATUS_FILTER_UNSPECIFIED, STATUS_FILTER_INCOMPLETE, STATUS_FILTER_COMPLETED,
+      STATUS_FILTER_DRAFT, STATUS_FILTER_SCHEDULED.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpManageRequest.Filter.StatusFilter
+  - term: The SortField for request items to be sorted in
+    definition: '- SORT_FIELD_UNKNOWN_UNSPECIFIED: Defaults to published_at'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpManageRequest.SortField
+  - term: ListHeadsUpManageResponse
+    definition: Result returned from `ListHeadsUpManage`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpManageResponse
+  - term: HeadsUpCompletionDetails is a composition for the headsup completion details
+    definition: 'Object declared by the contract with fields: viewed, viewed_at, acknowledged, acknowledged_at.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.HeadsUpCompletionDetails
+  - term: 'HeadsUpUserListItem represents a list response item containing information on
+
+      a user'
+    definition: 'Object declared by the contract with fields: id, email, first_name, last_name, profile_picture, completion_details, status.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.HeadsUpUserListItem
+  - term: ListHeadsUpUsersRequest
+    definition: The parameters for `ListHeadsUpUsers`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest
+  - term: s12.announcements.v1.ListHeadsUpUsersRequest.Filter
+    definition: 'Object declared by the contract with fields: viewed, acknowledged, group_ids.'
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.Filter
+  - term: '- ACKNOWLEDGED_FILTER_UNKNOWN_NONE_UNSPECIFIED: Defaults to no filter'
+    definition: 'Enumeration declared by the contract with values: ACKNOWLEDGED_FILTER_UNKNOWN_NONE_UNSPECIFIED, ACKNOWLEDGED_FILTER_HAS_ACKNOWLEDGED,
+      ACKNOWLEDGED_FILTER_HAS_NOT_ACKNOWLEDGED.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.Filter.AcknowledgedFilter
+  - term: '- VIEWED_FILTER_UNKNOWN_NONE_UNSPECIFIED: Defaults to no filter'
+    definition: 'Enumeration declared by the contract with values: VIEWED_FILTER_UNKNOWN_NONE_UNSPECIFIED, VIEWED_FILTER_HAS_VIEWED, VIEWED_FILTER_HAS_NOT_VIEWED.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.Filter.ViewedFilter
+  - term: The SortField for request items to be sorted in
+    definition: '- SORT_FIELD_UNKNOWN_UNSPECIFIED: Defaults to NAME'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.SortField
+  - term: ListHeadsUpUsersResponse
+    definition: Result returned from `ListHeadsUpUsers`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.announcements.v1.ListHeadsUpUsersResponse
+  - term: s12.assets.v1.Asset
+    definition: Asset entity.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.Asset
+  - term: s12.assets.v1.AssetField
+    definition: Describes the values of an asset field.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetField
+  - term: s12.assets.v1.AssetFilter
+    definition: Describes the filter options for the list assets endpoint..
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetFilter
+  - term: s12.assets.v1.AssetLocationSource
+    definition: 'Describes the source of asset location. - ASSET_LOCATION_SOURCE_UNSPECIFIED: Indicates that the source of asset location is unspecified.
+      - ASSET_LOCATION_SOURCE_INSPECTION: Indicates that the source of asset location is inspection. - ASSET_LOCATION_SOURCE_GEO: Indicates that
+      the source is GEO location. - ASSET_LOCATION_SOURCE_MOBILE_DEVICE: Indicates that the source is mobile device location.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetLocationSource
+  - term: s12.assets.v1.AssetSite
+    definition: Describes the values of a site that's assigned to an asset.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetSite
+  - term: s12.assets.v1.AssetState
+    definition: 'Describes the state of an asset. Either active or archived. - ASSET_STATE_UNSPECIFIED: Indicates that an asset state is unspecified.
+      - ASSET_STATE_ACTIVE: Indicates that an asset is active. - ASSET_STATE_ARCHIVED: Indicates that an asset is archived.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetState
+  - term: s12.assets.v1.AssetStatus
+    definition: A status option assigned to an asset.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetStatus
+  - term: s12.assets.v1.AssetStatusOptionFilter
+    definition: Describes a status option filter matching either a specific status option or assets with no status set.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetStatusOptionFilter
+  - term: s12.assets.v1.AssetType
+    definition: Asset type entity.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetType
+  - term: s12.assets.v1.AssetsOrderBy
+    definition: Describes the sorting options for the list assets endpoint. By default, assets are sorted by creation date from the most recent
+      to the least recent.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetsOrderBy
+  - term: s12.assets.v1.AssetsOrderBy.SortField
+    definition: 'Defaults to SORT_FIELD_CODE. - SORT_FIELD_UNSPECIFIED: The sort field is unspecified. - SORT_FIELD_CREATED_AT: Sort assets by
+      `created_at`. - SORT_FIELD_MODIFIED_AT: Sort assets by `modified_at`. - SORT_FIELD_CODE: Sort assets by `code`. - SORT_FIELD_ASSET_FIELD:
+      Sort assets by an asset-field. - SORT_FIELD_INSPECTED_AT: Sort assets by `inspected_at`. - SORT_FIELD_STATUS_OPTION_NAME: Sort assets by'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.AssetsOrderBy.SortField
+  - term: ListAssetsRequest
+    definition: The parameters for `ListAssets`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.ListAssetsRequest
+  - term: ListAssetsResponse
+    definition: Result returned from `ListAssets`
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.ListAssetsResponse
+  - term: s12.assets.v1.MotionStatus
+    definition: 'Status of the motion. - LOCATION_MOTION_STATUS_UNSPECIFIED: Indicates the status of the motion is unspecified. - LOCATION_MOTION_STATUS_PARKED:
+      Indicates the status of the motion is parked. - LOCATION_MOTION_STATUS_IDLING: Indicates the status of the motion is idling. - LOCATION_MOTION_STATUS_MOVING:
+      Indicates the status of the motion is moving. - LOCATION_MOTION_STATUS_OFFLINE: Indicates the offl'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.MotionStatus
+  - term: s12.assets.v1.TypeCategory
+    definition: 'Category of Type. - TYPE_CATEGORY_UNSPECIFIED: Type Category Unspecified. - TYPE_CATEGORY_PREDEFINED: Predefined Type defined
+      by system. - TYPE_CATEGORY_CUSTOM: Custom type defined by organisation.'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.assets.v1.TypeCategory
+  - term: s12.common.Money
+    definition: Represents an amount of money with its currency type.
+    tags:
+    - Object
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.Money
+  - term: s12.common.v1.StatusBadgeColor
+    definition: 'StatusBadgeColor defines the semantic color palette for status badges. - STATUS_BADGE_COLOR_ACCENT: Color is accent - STATUS_BADGE_COLOR_INFO:
+      Color is info - STATUS_BADGE_COLOR_NEGATIVE: Color is negative - STATUS_BADGE_COLOR_POSITIVE: Color is positive - STATUS_BADGE_COLOR_WARNING:
+      Color is warning - STATUS_BADGE_COLOR_SURFACE: Color is surface'
+    tags:
+    - Enumeration
+    source: openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.common.v1.StatusBadgeColor

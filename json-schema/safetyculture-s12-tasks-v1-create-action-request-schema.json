@@ -1,0 +1,1437 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/safetyculture/main/json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json",
+  "title": "CreateActionRequest represents the parameters to `CreateAction`",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.tasks.v1.CreateActionRequest",
+  "type": "object",
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "The unique identifier of the action\nIf not provided, UUID will be generated server side."
+    },
+    "title": {
+      "type": "string",
+      "description": "Required. Title of the action\nTitle is limited to only 255 characters max."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the action (maximum 30000 characters)."
+    },
+    "collaborators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/s12.tasks.v1.Task.Collaborator"
+      },
+      "description": "The collaborators involved into this action."
+    },
+    "priority_id": {
+      "type": "string",
+      "description": "ID of the action's priority\nIf not set, this action will be stored with the default priority(none)."
+    },
+    "status_id": {
+      "type": "string",
+      "description": "ID of the action's status\nIf not set, this action will be stored with the default status(to do)."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time this action was created."
+    },
+    "due_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date/time this action is due"
+    },
+    "inspection_id": {
+      "type": "string",
+      "description": "ID of the inspection the action belongs to\nIf not set, this action is a standalone action and the inspection ID will\nbe null."
+    },
+    "inspection_item_id": {
+      "type": "string",
+      "description": "ID of the item in the inspection associated with the action"
+    },
+    "template_id": {
+      "type": "string",
+      "description": "If a template ID is provided then an inspection ID must be\nprovided. If not set, this action is a standalone action and the template\nID will be null."
+    },
+    "site_id": {
+      "type": "string",
+      "description": "ID of the Site associated with the action."
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/s12.tasks.v1.Task.Reference"
+      },
+      "description": "Array of references attached to this action."
+    },
+    "asset_id": {
+      "type": "string",
+      "description": "ID of the Asset associated with the action"
+    },
+    "label_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs of the labels associated with the action."
+    },
+    "type": {
+      "description": "The type to create an action in.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/s12.tasks.v1.Type"
+        }
+      ]
+    },
+    "field_values": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/s12.typefield.v1.FieldValue"
+      },
+      "description": "Array of custom fields and their values to create with the action."
+    },
+    "template_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The list of templates to be linked to the action."
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "$defs": {
+    "s12.common.Color": {
+      "type": "object",
+      "properties": {
+        "red": {
+          "type": "number",
+          "format": "float",
+          "description": "The amount of red in the color as a value in the interval [0, 255]."
+        },
+        "green": {
+          "type": "number",
+          "format": "float",
+          "description": "The amount of green in the color as a value in the interval [0, 255]."
+        },
+        "blue": {
+          "type": "number",
+          "format": "float",
+          "description": "The amount of blue in the color as a value in the interval [0, 255]."
+        }
+      },
+      "title": "Color represents a color representation of given option and is decimal\nrepresentation of RGB"
+    },
+    "s12.common.GeoPosition": {
+      "type": "object",
+      "properties": {
+        "longitude": {
+          "type": "number",
+          "format": "double",
+          "description": "The geographical longitude"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "double",
+          "description": "The geographical latitude"
+        },
+        "accuracy": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The accuracy in meters"
+        }
+      },
+      "description": "A position is the fundamental geographical geometry construct."
+    },
+    "s12.common.MeasurementUnitSymbol": {
+      "type": "string",
+      "enum": [
+        "MEASUREMENT_UNIT_SYMBOL_KILOMETERS",
+        "MEASUREMENT_UNIT_SYMBOL_MILES",
+        "MEASUREMENT_UNIT_SYMBOL_HOURS",
+        "MEASUREMENT_UNIT_SYMBOL_MINUTES",
+        "MEASUREMENT_UNIT_SYMBOL_INCHES",
+        "MEASUREMENT_UNIT_SYMBOL_FOOT",
+        "MEASUREMENT_UNIT_SYMBOL_MILLIMETERS",
+        "MEASUREMENT_UNIT_SYMBOL_CENTIMETERS",
+        "MEASUREMENT_UNIT_SYMBOL_METERS",
+        "MEASUREMENT_UNIT_SYMBOL_MILLILITRES",
+        "MEASUREMENT_UNIT_SYMBOL_LITRES",
+        "MEASUREMENT_UNIT_SYMBOL_GALLONS",
+        "MEASUREMENT_UNIT_SYMBOL_CUBIC_METERS",
+        "MEASUREMENT_UNIT_SYMBOL_SECONDS",
+        "MEASUREMENT_UNIT_SYMBOL_FAHRENHEIT",
+        "MEASUREMENT_UNIT_SYMBOL_CELSIUS",
+        "MEASUREMENT_UNIT_SYMBOL_KELVIN",
+        "MEASUREMENT_UNIT_SYMBOL_OUNCE",
+        "MEASUREMENT_UNIT_SYMBOL_POUNDS",
+        "MEASUREMENT_UNIT_SYMBOL_TONNES",
+        "MEASUREMENT_UNIT_SYMBOL_GRAMS",
+        "MEASUREMENT_UNIT_SYMBOL_KILOGRAMS",
+        "MEASUREMENT_UNIT_SYMBOL_AMPERES",
+        "MEASUREMENT_UNIT_SYMBOL_HERTZ",
+        "MEASUREMENT_UNIT_SYMBOL_OHM",
+        "MEASUREMENT_UNIT_SYMBOL_VOLTS",
+        "MEASUREMENT_UNIT_SYMBOL_WATTS",
+        "MEASUREMENT_UNIT_SYMBOL_CANDELA",
+        "MEASUREMENT_UNIT_SYMBOL_CYCLES",
+        "MEASUREMENT_UNIT_SYMBOL_PERCENT",
+        "MEASUREMENT_UNIT_SYMBOL_POUNDS_PER_SQUARE_INCH",
+        "MEASUREMENT_UNIT_SYMBOL_MOLE",
+        "MEASUREMENT_UNIT_SYMBOL_DAYS",
+        "MEASUREMENT_UNIT_SYMBOL_WEEKS",
+        "MEASUREMENT_UNIT_SYMBOL_MONTHS"
+      ],
+      "description": "Collection of symbols (km, mi, hr, etc) used in units of measurement.\n\n - MEASUREMENT_UNIT_SYMBOL_KILOMETERS: Measurement unit symbol for kilometers.\n - MEASUREMENT_UNIT_SYMBOL_MILES: Measurement unit symbol for miles.\n - MEASUREMENT_UNIT_SYMBOL_HOURS: Measurement unit symbol for hours.\n - MEASUREMENT_UNIT_SYMBOL_MINUTES: Measurement unit symbol for minutes.\n - MEASUREMENT_UNIT_SYMBOL_INCHES: Measurement unit symbol for inches.\n - MEASUREMENT_UNIT_SYMBOL_FOOT: Measurement unit symbol for foot.\n - MEASUREMENT_UNIT_SYMBOL_MILLIMETERS: Measurement unit symbol for Millimeters.\n - MEASUREMENT_UNIT_SYMBOL_CENTIMETERS: Measurement unit symbol for Centimeters.\n - MEASUREMENT_UNIT_SYMBOL_METERS: Measurement unit symbol for meters.\n - MEASUREMENT_UNIT_SYMBOL_MILLILITRES: Measurement unit symbol for millilitres.\n - MEASUREMENT_UNIT_SYMBOL_LITRES: Measurement unit symbol for litres.\n - MEASUREMENT_UNIT_SYMBOL_GALLONS: Measurement unit symbol for gallons.\n - MEASUREMENT_UNIT_SYMBOL_CUBIC_METERS: Measurement unit symbol for cubic meters.\n - MEASUREMENT_UNIT_SYMBOL_SECONDS: Measurement unit symbol for seconds.\n - MEASUREMENT_UNIT_SYMBOL_FAHRENHEIT: Measurement unit symbol for fahrenheit.\n - MEASUREMENT_UNIT_SYMBOL_CELSIUS: Measurement unit symbol for celsius.\n - MEASUREMENT_UNIT_SYMBOL_KELVIN: Measurement unit symbol for kelvin.\n - MEASUREMENT_UNIT_SYMBOL_OUNCE: Measurement unit symbol for ounce.\n - MEASUREMENT_UNIT_SYMBOL_POUNDS: Measurement unit symbol for pounds.\n - MEASUREMENT_UNIT_SYMBOL_TONNES: Measurement unit symbol for tonnes.\n - MEASUREMENT_UNIT_SYMBOL_GRAMS: Measurement unit symbol for grams.\n - MEASUREMENT_UNIT_SYMBOL_KILOGRAMS: Measurement unit symbol for kilograms.\n - MEASUREMENT_UNIT_SYMBOL_AMPERES: Measurement unit symbol for amperes.\n - MEASUREMENT_UNIT_SYMBOL_HERTZ: Measurement unit symbol for hertz.\n - MEASUREMENT_UNIT_SYMBOL_OHM: Measurement unit symbol for ohm.\n - MEASUREMENT_UNIT_SYMBOL_VOLTS: Measurement unit symbol for volts.\n - MEASUREMENT_UNIT_SYMBOL_WATTS: Measurement unit symbol for watts.\n - MEASUREMENT_UNIT_SYMBOL_CANDELA: Measurement unit symbol for candela.\n - MEASUREMENT_UNIT_SYMBOL_CYCLES: Measurement unit symbol for cycles.\n - MEASUREMENT_UNIT_SYMBOL_PERCENT: Measurement unit symbol for percent.\n - MEASUREMENT_UNIT_SYMBOL_POUNDS_PER_SQUARE_INCH: Measurement unit symbol for pounds per square inch.\n - MEASUREMENT_UNIT_SYMBOL_MOLE: Measurement unit symbol for mole.\n - MEASUREMENT_UNIT_SYMBOL_DAYS: Measurement unit symbol for days.\n - MEASUREMENT_UNIT_SYMBOL_WEEKS: Measurement unit symbol for weeks.\n - MEASUREMENT_UNIT_SYMBOL_MONTHS: Measurement unit symbol for months."
+    },
+    "s12.common.Media": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string",
+          "description": "full file name, including file extension"
+        },
+        "media_type": {
+          "$ref": "#/$defs/s12.common.MediaType"
+        }
+      },
+      "title": "Represents an image or video"
+    },
+    "s12.common.MediaType": {
+      "type": "string",
+      "enum": [
+        "MEDIA_TYPE_IMAGE",
+        "MEDIA_TYPE_VIDEO",
+        "MEDIA_TYPE_PDF",
+        "MEDIA_TYPE_DOCX",
+        "MEDIA_TYPE_XLSX",
+        "MEDIA_TYPE_PPTX",
+        "MEDIA_TYPE_CSV"
+      ],
+      "description": " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    },
+    "s12.common.Money": {
+      "type": "object",
+      "properties": {
+        "currency_code": {
+          "type": "string",
+          "description": "The 3-letter currency code defined in ISO 4217."
+        },
+        "units": {
+          "type": "string",
+          "format": "int64",
+          "description": "The whole units of the amount.\nFor example if `currencyCode` is `\"USD\"`, then 1 unit is one US dollar."
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of nano (10^-9) units of the amount.\nThe value must be between -999,999,999 and +999,999,999 inclusive.\nIf `units` is positive, `nanos` must be positive or zero.\nIf `units` is zero, `nanos` can be positive, zero, or negative.\nIf `units` is negative, `nanos` must be negative or zero.\nFor example £-1.75 is represented as `units`=-1 and `nanos`=-750,000,000."
+        }
+      },
+      "description": "Represents an amount of money with its currency type."
+    },
+    "s12.common.TemperatureUnit": {
+      "type": "string",
+      "enum": [
+        "KELVIN",
+        "CELSIUS",
+        "FAHRENHEIT"
+      ],
+      "default": "UNKNOWN_TEMPERATURE_UNIT",
+      "description": "- KELVIN: Represents Kelvin temperature unit\n - CELSIUS: Represents Celsius temperature unit\n - FAHRENHEIT: Represents Fahrenheit temperature unit",
+      "title": "Represents different units to measure temperature"
+    },
+    "s12.tasks.v1.AlertEventLevel": {
+      "type": "string",
+      "enum": [
+        "OK",
+        "INFO",
+        "WARN",
+        "CRITICAL"
+      ],
+      "default": "UNKNOWN_LEVEL",
+      "description": "- OK: `OK` level indicates that device metric became healthy\n - INFO: `INFO` level indicates that the first alert event sent\n - WARN: `WARN` level indicates that the second alert event sent\n - CRITICAL: `CRITICAL` level indicates that the third alert event sent",
+      "title": "Alert event level represents a level of importance of the alert event"
+    },
+    "s12.tasks.v1.CollaboratorRole": {
+      "type": "string",
+      "enum": [
+        "ASSIGNEE",
+        "CREATOR"
+      ],
+      "default": "COLLABORATOR_ROLE_NOT_SET",
+      "description": "- ASSIGNEE: The collaborator has been assigned to a task.\n - CREATOR: The collaborator has created the task.",
+      "title": "The role of the collaborator in relation to a task"
+    },
+    "s12.tasks.v1.CollaboratorType": {
+      "type": "string",
+      "enum": [
+        "USER",
+        "GROUP",
+        "EXTERNAL_USER",
+        "CONTRIBUTOR"
+      ],
+      "default": "COLLABORATOR_TYPE_NOT_SET",
+      "description": "- USER: The collaborator is an internal user.\n - GROUP: The collaborator is a group.\n - EXTERNAL_USER: The collaborator is an external user.\nThis happens when a task is assigned to an email address.\n - CONTRIBUTOR: The collaborator is a contributor.\nA contributor is an individual who raises a task anonymously. For example,\ncreating an incident through the incident QR code functionality.",
+      "title": "The type of the collaborator"
+    },
+    "s12.tasks.v1.MetricType": {
+      "type": "string",
+      "enum": [
+        "TEMPERATURE",
+        "HUMIDITY",
+        "BATTERY",
+        "SIGNAL",
+        "AIR_QUALITY_PM25",
+        "AIR_QUALITY_PM10",
+        "TEMPERATURE_2",
+        "DIFFERENTIAL_AIR_PRESSURE",
+        "CO",
+        "DOOR_OPEN_CLOSED",
+        "BATTERY_VOLTAGE",
+        "WEATHER",
+        "WIND_SPEED",
+        "WIND_DIRECTION",
+        "WIND_GUST",
+        "CO2"
+      ],
+      "default": "UNKNOWN_TYPE",
+      "description": "- TEMPERATURE: Temperature metric\n - HUMIDITY: Humidity metric\n - BATTERY: Battery level. Percentage based i.e. 0 - 100\n - SIGNAL: Signal strength metric\n - AIR_QUALITY_PM25: Air quality for particulate matter less than 2.5 microns\n - AIR_QUALITY_PM10: Air quality for particulate matter less than 10 microns\n - TEMPERATURE_2: Alternative temperature (Some hardware i.e. Avem Quirks do have 2 probes\nand are sending 2 temperatures)\n - DIFFERENTIAL_AIR_PRESSURE: Differential air pressure\n - CO: Carbon monoxide\n - DOOR_OPEN_CLOSED: Door open/closed boolean metric\n - BATTERY_VOLTAGE: Battery voltage metric\n - WEATHER: Weather (e.g. sunny, thunderstorms)\n - WIND_SPEED: Wind speed\n - WIND_DIRECTION: Wind direction\n - WIND_GUST: Wind gust\n - CO2: Carbon dioxide",
+      "title": "Metric type represents a type of received metric"
+    },
+    "s12.tasks.v1.ReferenceType": {
+      "type": "string",
+      "enum": [
+        "SENSOR",
+        "SENSOR_ALERT",
+        "INSPECTION",
+        "INCIDENT",
+        "SCHEDULE",
+        "ACTION",
+        "LINKED_INSPECTION",
+        "ASSET_MAINTENANCE_PLAN"
+      ],
+      "default": "REFERENCE_TYPE_NOT_SET",
+      "description": "Reference type. The idea here is to list all the \"external\" types that would\nbe used as a reference when creating actions."
+    },
+    "s12.tasks.v1.Task.ActionContext": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the action"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the action"
+        },
+        "creator": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.User"
+            }
+          ],
+          "description": "User that created the action"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.Status"
+            }
+          ],
+          "description": "Status ID of the action"
+        },
+        "due_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date/time the action is due"
+        },
+        "priority_id": {
+          "type": "string",
+          "description": "Priority ID of the action"
+        },
+        "unique_id": {
+          "type": "string",
+          "description": "The human readable unique ID of the action"
+        },
+        "collaborators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/s12.tasks.v1.Task.Collaborator"
+          },
+          "description": "The collaborators of the action"
+        },
+        "inspection": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.Inspection"
+            }
+          ],
+          "description": "The inspection of the related action (if relevant)"
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Type"
+            }
+          ],
+          "description": "The type id and label associated with the action"
+        }
+      },
+      "title": "context of an action associated with the incident"
+    },
+    "s12.tasks.v1.Task.AddressAnswer": {
+      "type": "object",
+      "properties": {
+        "location_text": {
+          "type": "string",
+          "description": "Location text"
+        },
+        "location": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.AddressLocation"
+            }
+          ],
+          "description": "Location info generated only when location is added using a location\npicker"
+        }
+      },
+      "title": "Answer returned for AddressItem"
+    },
+    "s12.tasks.v1.Task.AddressLocation": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the task's location."
+        },
+        "thoroughfare": {
+          "type": "string",
+          "description": "The thoroughfare of the location."
+        },
+        "sub_thoroughfare": {
+          "type": "string",
+          "description": "The sub_thoroughfare of the location,"
+        },
+        "locality": {
+          "type": "string",
+          "description": "The locality of the location"
+        },
+        "sub_locality": {
+          "type": "string",
+          "description": "The sub_locality of the location"
+        },
+        "administrative_area": {
+          "type": "string",
+          "description": "The administrative_area of the location"
+        },
+        "sub_administrative_area": {
+          "type": "string",
+          "description": "The sub_administrative_area of the location"
+        },
+        "postal_code": {
+          "type": "string",
+          "description": "The postal_code of the location"
+        },
+        "country": {
+          "type": "string",
+          "description": "The country of the location"
+        },
+        "iso_country_code": {
+          "type": "string",
+          "description": "The iso_country_code of the location"
+        },
+        "geo_position": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.GeoPosition"
+            }
+          ],
+          "description": "The geometry of the location"
+        }
+      },
+      "description": "The location of the task.\nThe latitude and longitude in the `geo_position` object are required.\nAll other fields are optional, but add extra context to the location on\nplatform."
+    },
+    "s12.tasks.v1.Task.AssetMaintenancePlan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the maintenance plan."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the maintenance plan."
+        },
+        "state": {
+          "description": "The state of the maintenance plan.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.AssetMaintenancePlan.AssetMaintenancePlanState"
+            }
+          ]
+        }
+      },
+      "description": "AssetMaintenancePlan represents the maintenance plan associated with the\naction."
+    },
+    "s12.tasks.v1.Task.AssetMaintenancePlan.AssetMaintenancePlanState": {
+      "type": "string",
+      "enum": [
+        "ASSET_MAINTENANCE_PLAN_STATE_UNSPECIFIED",
+        "ASSET_MAINTENANCE_PLAN_STATE_ACTIVE",
+        "ASSET_MAINTENANCE_PLAN_STATE_DELETED"
+      ],
+      "default": "ASSET_MAINTENANCE_PLAN_STATE_UNSPECIFIED",
+      "description": " - ASSET_MAINTENANCE_PLAN_STATE_UNSPECIFIED: ASSET_MAINTENANCE_PLAN_STATE_UNSPECIFIED is an unknown maintenance plan state.\n - ASSET_MAINTENANCE_PLAN_STATE_ACTIVE: ASSET_MAINTENANCE_PLAN_STATE_ACTIVE is a maintenance plan state that is active.\n - ASSET_MAINTENANCE_PLAN_STATE_DELETED: ASSET_MAINTENANCE_PLAN_STATE_DELETED is a maintenance plan state that is deleted."
+    },
+    "s12.tasks.v1.Task.AssetMaintenancePlanContext": {
+      "type": "object",
+      "properties": {
+        "maintenance_plan": {
+          "description": "The maintenance plan associated with the action.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.AssetMaintenancePlan"
+            }
+          ]
+        },
+        "maintenance_program": {
+          "description": "The maintenance program where the maintenance plan belongs.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.AssetMaintenanceProgram"
+            }
+          ]
+        }
+      },
+      "title": "AssetMaintenancePlanContext is the context of the maintenance plan associated\nwith the action"
+    },
+    "s12.tasks.v1.Task.AssetMaintenanceProgram": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the maintenance program."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the maintenance program."
+        },
+        "state": {
+          "description": "The state of the maintenance program.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.AssetMaintenanceProgram.AssetMaintenanceProgramState"
+            }
+          ]
+        }
+      },
+      "description": "AssetMaintenanceProgram represents the maintenance program where the\nmaintenance plan belongs."
+    },
+    "s12.tasks.v1.Task.AssetMaintenanceProgram.AssetMaintenanceProgramState": {
+      "type": "string",
+      "enum": [
+        "ASSET_MAINTENANCE_PROGRAM_STATE_UNSPECIFIED",
+        "ASSET_MAINTENANCE_PROGRAM_STATE_ACTIVE",
+        "ASSET_MAINTENANCE_PROGRAM_STATE_DELETED"
+      ],
+      "default": "ASSET_MAINTENANCE_PROGRAM_STATE_UNSPECIFIED",
+      "description": " - ASSET_MAINTENANCE_PROGRAM_STATE_UNSPECIFIED: ASSET_MAINTENANCE_PROGRAM_STATE_UNSPECIFIED is an unknown maintenance program state.\n - ASSET_MAINTENANCE_PROGRAM_STATE_ACTIVE: ASSET_MAINTENANCE_PROGRAM_STATE_ACTIVE is a maintenance program state that is active.\n - ASSET_MAINTENANCE_PROGRAM_STATE_DELETED: ASSET_MAINTENANCE_PROGRAM_STATE_DELETED is a maintenance program state that is deleted."
+    },
+    "s12.tasks.v1.Task.Attachments": {
+      "type": "object",
+      "properties": {
+        "note": {
+          "type": "string",
+          "description": "Note inside Attachments of inspectionItem Answer"
+        },
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/s12.common.Media"
+          },
+          "description": "images or pdf inside Attachments of inspectionItem Answer"
+        }
+      },
+      "title": "Attachments of inspectionItem Answer"
+    },
+    "s12.tasks.v1.Task.CheckboxAnswer": {
+      "type": "object",
+      "properties": {
+        "answer": {
+          "type": "boolean",
+          "description": "answer content for CheckboxAnswer"
+        }
+      },
+      "title": "Answer returned for CheckboxItem"
+    },
+    "s12.tasks.v1.Task.Collaborator": {
+      "type": "object",
+      "properties": {
+        "collaborator_id": {
+          "type": "string",
+          "description": "A UUID uniquely identifying this collaborator."
+        },
+        "collaborator_type": {
+          "description": "The type of the collaborator i.e. group or user.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.CollaboratorType"
+            }
+          ]
+        },
+        "assigned_role": {
+          "description": "The role of the collaborator in this task.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.CollaboratorRole"
+            }
+          ]
+        },
+        "user": {
+          "description": "Collaborator details for an authenticated user.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.User"
+            }
+          ]
+        },
+        "group": {
+          "description": "Collaborator details for a group.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.Group"
+            }
+          ]
+        },
+        "external_user": {
+          "description": "Collaborator details for an external user.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.ExternalUser"
+            }
+          ]
+        },
+        "contributor": {
+          "description": "Collaborator details for a contributor.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.Contributor"
+            }
+          ]
+        }
+      },
+      "description": "A collaborator is somebody who is involved with the task.\nThey have either created the task, or are assigned to it."
+    },
+    "s12.tasks.v1.Task.Contributor": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The UUID uniquely identifying this contributor"
+        },
+        "name": {
+          "type": "string",
+          "description": "Optional. The contributor's name."
+        },
+        "email": {
+          "type": "string",
+          "description": "Optional. The contributor's email address."
+        },
+        "contact": {
+          "type": "string",
+          "description": "Optional. The contributor's (freetext) contact details."
+        }
+      },
+      "title": "The contributor that raised the issue"
+    },
+    "s12.tasks.v1.Task.DateTimeAnswer": {
+      "type": "object",
+      "properties": {
+        "answer": {
+          "type": "string",
+          "format": "date-time",
+          "description": "answer content for DateTimeItem"
+        },
+        "enable_date": {
+          "type": "boolean",
+          "description": "Enable date turns on input for date values"
+        },
+        "enable_time": {
+          "type": "boolean",
+          "description": "Enable date turns on input for time values"
+        }
+      },
+      "title": "Answer returned for DateTimeItem"
+    },
+    "s12.tasks.v1.Task.DrawingAnswer": {
+      "type": "object",
+      "properties": {
+        "media": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.Media"
+            }
+          ],
+          "description": "media field contains media ID and token to download the media content"
+        }
+      },
+      "title": "Answer returned for DrawingItem"
+    },
+    "s12.tasks.v1.Task.ExternalUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The UUID uniquely identifying this external user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the external user."
+        }
+      },
+      "description": "The external user that is assigned to a task."
+    },
+    "s12.tasks.v1.Task.Group": {
+      "type": "object",
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "description": "The UUID of this group."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the group"
+        }
+      },
+      "description": "The group that is assigned to a task."
+    },
+    "s12.tasks.v1.Task.IncidentContext": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the incident"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the incident"
+        },
+        "creator": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.User"
+            }
+          ],
+          "description": "User that created the incident"
+        },
+        "status_id": {
+          "type": "string",
+          "description": "Status ID of the incident"
+        },
+        "category_id": {
+          "type": "string",
+          "description": "Category of the incident"
+        },
+        "due_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date/time the incident is due"
+        },
+        "priority_id": {
+          "type": "string",
+          "description": "Priority ID of the incident"
+        },
+        "unique_id": {
+          "type": "string",
+          "description": "The human readable unique ID of the incident"
+        },
+        "collaborators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/s12.tasks.v1.Task.Collaborator"
+          },
+          "description": "The collaborators of the incident"
+        }
+      },
+      "title": "context of an incident associated with the action"
+    },
+    "s12.tasks.v1.Task.Inspection": {
+      "type": "object",
+      "properties": {
+        "inspection_id": {
+          "type": "string",
+          "description": "ID of the inspection the action belongs to"
+        },
+        "inspection_name": {
+          "type": "string",
+          "description": "The name of the inspection the action belongs to"
+        }
+      },
+      "title": "The inspection data of this task"
+    },
+    "s12.tasks.v1.Task.InspectionContext": {
+      "type": "object",
+      "properties": {
+        "inspection_id": {
+          "type": "string",
+          "description": "ID of the inspection associated with the action"
+        },
+        "inspection_name": {
+          "type": "string",
+          "description": "name of the inspection associated with the action"
+        },
+        "inspection_item_id": {
+          "type": "string",
+          "description": "ID of the inspectionItem associated with the action"
+        },
+        "inspection_item_name": {
+          "type": "string",
+          "description": "name of the inspectionItem associated with the action"
+        },
+        "inspection_item_type": {
+          "type": "string",
+          "description": "@deprecated The type of the inspectionItem associated with the action"
+        },
+        "inspection_item_path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The path(breadcrumbs) of the inspectionItem associated with the action"
+        },
+        "inspection_item_attachments": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.Task.Attachments"
+            }
+          ],
+          "description": "Attachments of the inspectionItem associated with the action"
+        },
+        "list_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.ListAnswer"
+        },
+        "text_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.TextAnswer"
+        },
+        "checkbox_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.CheckboxAnswer"
+        },
+        "media_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.MediaAnswer"
+        },
+        "signature_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.SignatureAnswer"
+        },
+        "drawing_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.DrawingAnswer"
+        },
+        "slider_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.SliderAnswer"
+        },
+        "datetime_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.DateTimeAnswer"
+        },
+        "address_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.AddressAnswer"
+        },
+        "switch_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.SwitchAnswer"
+        },
+        "temperature_answer": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.TemperatureAnswer"
+        },
+        "inspection_deleted": {
+          "type": "boolean",
+          "description": "Flag indicated whether the inspection has been deleted"
+        },
+        "is_complete": {
+          "type": "boolean",
+          "description": "Flag to indicate the inspection is marked as complete."
+        },
+        "is_access_denied": {
+          "type": "boolean",
+          "description": "Flag to indicate the access for the inspection is denied."
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date the inspection was completed."
+        }
+      },
+      "title": "context of inspection associated with the action"
+    },
+    "s12.tasks.v1.Task.LinkedInspectionContext": {
+      "type": "object",
+      "properties": {
+        "inspection_id": {
+          "type": "string",
+          "description": "ID of the inspection associated with the action."
+        },
+        "template_id": {
+          "type": "string",
+          "description": "ID of the template this inspection was created from."
+        },
+        "inspection_name": {
+          "type": "string",
+          "description": "Name of the inspection linked to the action."
+        },
+        "is_complete": {
+          "type": "boolean",
+          "description": "Flag to indicate the inspection is marked as complete."
+        },
+        "is_access_denied": {
+          "type": "boolean",
+          "description": "Flag to indicate the access for the inspection is denied."
+        },
+        "is_deleted": {
+          "type": "boolean",
+          "description": "Flag to indicate whether the inspection is deleted or not."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date the inspection was created."
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date the inspection was completed."
+        },
+        "template_name": {
+          "type": "string",
+          "description": "Name of the template this inspection was created from."
+        }
+      },
+      "description": "Context of an inspection started from a template associated with the action."
+    },
+    "s12.tasks.v1.Task.ListAnswer": {
+      "type": "object",
+      "properties": {
+        "responses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/s12.tasks.v1.Task.ListResponse"
+          },
+          "description": "Responses of inspection item"
+        }
+      },
+      "title": "Answer returned for ListItem"
+    },
+    "s12.tasks.v1.Task.ListResponse": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "Label for the response"
+        },
+        "color": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.Color"
+            }
+          ],
+          "description": "Color represents a color representation of given option"
+        }
+      },
+      "title": "Response of List type InspectionItem"
+    },
+    "s12.tasks.v1.Task.MediaAnswer": {
+      "type": "object",
+      "properties": {
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/s12.common.Media"
+          },
+          "description": "answer content of MediaItem"
+        }
+      },
+      "title": "Answer returned for MediaItem"
+    },
+    "s12.tasks.v1.Task.NumberComparison": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "description": "Used to compare values against a single number."
+    },
+    "s12.tasks.v1.Task.RangeComparison": {
+      "type": "object",
+      "properties": {
+        "lower": {
+          "type": "number",
+          "format": "double",
+          "description": "Represents the lower value of the range."
+        },
+        "upper": {
+          "type": "number",
+          "format": "double",
+          "description": "Represents the upper value of the range."
+        }
+      },
+      "description": "Used to compare values within a range."
+    },
+    "s12.tasks.v1.Task.Reference": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "Required. Reference Type.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.ReferenceType"
+            }
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "Required. Reference ID."
+        },
+        "inspection_context": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.InspectionContext"
+        },
+        "sensor_alert_context": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.SensorAlertContext"
+        },
+        "sensor_context": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.SensorContext"
+        },
+        "incident_context": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.IncidentContext"
+        },
+        "action_context": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.ActionContext"
+        },
+        "linked_inspection_context": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.LinkedInspectionContext"
+        },
+        "asset_maintenance_plan_context": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.AssetMaintenancePlanContext"
+        }
+      },
+      "title": "Reference is a type/id pair defined as:"
+    },
+    "s12.tasks.v1.Task.SensorAlertContext": {
+      "type": "object",
+      "properties": {
+        "sensor_alert_id": {
+          "type": "string",
+          "description": "ID of sensor alert context associated with the action"
+        },
+        "level": {
+          "description": "The level of the alert event.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.AlertEventLevel"
+            }
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time the alert event was created/updated."
+        },
+        "detected_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time the first alert event was detected."
+        },
+        "sensor_id": {
+          "type": "string",
+          "description": "Sensor asset ID for which the event happened"
+        },
+        "site_name": {
+          "type": "string",
+          "description": "Name of the site at a time of event"
+        },
+        "metric_type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.MetricType"
+            }
+          ],
+          "description": "Metric type of an alert event"
+        },
+        "sensor_name": {
+          "type": "string",
+          "description": "Name of the sensor at a time of event"
+        },
+        "reading_type": {
+          "type": "string",
+          "description": "Sensor reading type"
+        },
+        "reading_name": {
+          "type": "string",
+          "description": "Sensor reading name"
+        }
+      },
+      "title": "context of sensor alert associated with the action"
+    },
+    "s12.tasks.v1.Task.SensorContext": {
+      "type": "object",
+      "title": "context of sensor associated with the action"
+    },
+    "s12.tasks.v1.Task.SignatureAnswer": {
+      "type": "object",
+      "properties": {
+        "media": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.Media"
+            }
+          ],
+          "description": "media field contains media ID and token to download the media content"
+        },
+        "name": {
+          "type": "string",
+          "description": "name on the signature"
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp for when the signature answer was last updated"
+        }
+      },
+      "title": "Signature item stores user name and an image with signature"
+    },
+    "s12.tasks.v1.Task.SliderAnswer": {
+      "type": "object",
+      "properties": {
+        "answer": {
+          "type": "number",
+          "format": "double",
+          "description": "number of sliderAnswer"
+        },
+        "max": {
+          "type": "number",
+          "format": "double",
+          "description": "A double representing the maximum value allowed for this item. Negatives\nare allowed."
+        },
+        "min": {
+          "type": "number",
+          "format": "double",
+          "description": "A double representing the minimum value allowed for this item. Negatives\nare allowed."
+        }
+      },
+      "title": "Answer returned for SliderItem"
+    },
+    "s12.tasks.v1.Task.Status": {
+      "type": "object",
+      "properties": {
+        "status_id": {
+          "type": "string",
+          "description": "An ID uniquely identifying this task status message.\nFor example: 'aa70d8a6-af37-44f4-8768d8899fe274c5'"
+        },
+        "key": {
+          "type": "string",
+          "description": "A pre-defined value that the system can use to handle\nthe particular label e.g. analytics, filter based on it\nA key may look like: \"to do\" | \"In progress\" | \"Done\" | \"Can't do\""
+        },
+        "label": {
+          "type": "string",
+          "description": "A label associated with the key, typically for display purposes"
+        },
+        "display_order": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Used to order this status when displaying a list of statuses"
+        }
+      },
+      "title": "The task status"
+    },
+    "s12.tasks.v1.Task.SwitchAnswer": {
+      "type": "object",
+      "properties": {
+        "answer": {
+          "type": "boolean",
+          "description": "Answer content for SwitchItem"
+        }
+      },
+      "description": "Answer returned for SwitchItem, exists in old inspections\nUsers can’t change answer to them & can’t attach actions to them either."
+    },
+    "s12.tasks.v1.Task.TemperatureAnswer": {
+      "type": "object",
+      "properties": {
+        "temperature": {
+          "type": "number",
+          "format": "double",
+          "description": "@deprecated. Use answer instead"
+        },
+        "display_unit": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.TemperatureUnit"
+            }
+          ],
+          "description": "Represents the temperature unit type"
+        },
+        "between": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.RangeComparison"
+        },
+        "above": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.NumberComparison"
+        },
+        "below": {
+          "$ref": "#/$defs/s12.tasks.v1.Task.NumberComparison"
+        },
+        "answer": {
+          "type": "number",
+          "format": "double",
+          "description": "answer of TemperatureAnswer"
+        }
+      },
+      "title": "Answer returned for temperatureItem"
+    },
+    "s12.tasks.v1.Task.TextAnswer": {
+      "type": "object",
+      "properties": {
+        "answer": {
+          "type": "string",
+          "description": "Text answer content"
+        },
+        "unit_symbol": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.MeasurementUnitSymbol"
+            }
+          ],
+          "description": "Unit symbol for number questions that has units assigned to them"
+        },
+        "format": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.TextAnswerFormat"
+            }
+          ],
+          "description": "Determines what is the format of the answer"
+        }
+      },
+      "title": "Answer returned for TextItem, TextSingleItem, ScannerItem type"
+    },
+    "s12.tasks.v1.Task.User": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "The UUID of this user."
+        },
+        "firstname": {
+          "type": "string",
+          "description": "The first name of the user."
+        },
+        "lastname": {
+          "type": "string",
+          "description": "The last name of the user."
+        }
+      },
+      "description": "The user associated to the task. They could be a creator or assignee."
+    },
+    "s12.tasks.v1.TaskType": {
+      "type": "string",
+      "enum": [
+        "TASK_TYPE_ACTION",
+        "TASK_TYPE_CUSTOM"
+      ],
+      "description": "- TASK_TYPE_ACTION: Indicates this task is of type Action.\n - TASK_TYPE_CUSTOM: Indicates this task is of a custom type.",
+      "title": "Type is the type of the current task"
+    },
+    "s12.tasks.v1.TextAnswerFormat": {
+      "type": "string",
+      "enum": [
+        "TEXT",
+        "NUMBER"
+      ],
+      "default": "UNKNOWN_FORMAT",
+      "description": "- TEXT: Normal textsingle item\n - NUMBER: Textsingle item with number format",
+      "title": "Represents the format of a Textsingle item for the inspection context"
+    },
+    "s12.tasks.v1.Type": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "The type associated with an action. We currently only support one type: `Action`.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.tasks.v1.TaskType"
+            }
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of a type."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of a type."
+        }
+      },
+      "description": "The type associated with an action."
+    },
+    "s12.typefield.v1.AddressLocation": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the location."
+        },
+        "thoroughfare": {
+          "type": "string",
+          "description": "The thoroughfare of the location."
+        },
+        "sub_thoroughfare": {
+          "type": "string",
+          "description": "The sub-thoroughfare of the location."
+        },
+        "locality": {
+          "type": "string",
+          "description": "The locality of the location."
+        },
+        "sub_locality": {
+          "type": "string",
+          "description": "The sub-locality of the location."
+        },
+        "administrative_area": {
+          "type": "string",
+          "description": "The administrative area of the location."
+        },
+        "sub_administrative_area": {
+          "type": "string",
+          "description": "The sub-administrative area of the location."
+        },
+        "postal_code": {
+          "type": "string",
+          "description": "The postal code of the location."
+        },
+        "country": {
+          "type": "string",
+          "description": "The country of the location."
+        },
+        "iso_country_code": {
+          "type": "string",
+          "description": "The ISO country code of the location."
+        },
+        "geo_position": {
+          "description": "The geographic position of the location.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.GeoPosition"
+            }
+          ]
+        }
+      },
+      "description": "Address and location details for a structure."
+    },
+    "s12.typefield.v1.ContactDetails": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the contact."
+        },
+        "phone": {
+          "type": "string",
+          "description": "The phone number of the contact."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the contact."
+        }
+      },
+      "description": "Contact details for a person or entity."
+    },
+    "s12.typefield.v1.FieldValue": {
+      "type": "object",
+      "properties": {
+        "field_id": {
+          "type": "string",
+          "description": "A global unique identifier for a field."
+        },
+        "string_value": {
+          "type": "string",
+          "description": "The string value of a field."
+        },
+        "money_value": {
+          "description": "The money value of a field.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.Money"
+            }
+          ]
+        },
+        "timestamp_value": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp value of a field."
+        },
+        "integer_value": {
+          "type": "string",
+          "format": "int64",
+          "description": "The integer value of a field. Signed, 64-bit integer."
+        },
+        "address_location_value": {
+          "description": "The address location value of a field.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.typefield.v1.AddressLocation"
+            }
+          ]
+        },
+        "contact_details_value": {
+          "description": "The contact details value of a field.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.typefield.v1.ContactDetails"
+            }
+          ]
+        },
+        "multi_select_value": {
+          "description": "The multi-select value of a field. Contains one or more selected option UUIDs.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.typefield.v1.MultiSelectValue"
+            }
+          ]
+        }
+      },
+      "description": "Individual field value definition."
+    },
+    "s12.typefield.v1.MultiSelectValue": {
+      "type": "object",
+      "properties": {
+        "option_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "UUIDs of the selected options. May be empty if the field was explicitly cleared."
+        },
+        "has_value": {
+          "type": "boolean",
+          "description": "True if this field has ever been explicitly saved (including a clear to empty).\nDistinguishes \"user cleared all selections\" from \"field was never touched\"."
+        }
+      },
+      "description": "MultiSelectValue represents the value of a multi-select custom field.\noption_ids contains the UUIDs of the selected options (as strings).\nAn empty option_ids with has_value = true means the field was explicitly cleared.\nhas_value = false (or absent) means the field has never been set on this record."
+    }
+  }
+}

@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/safetyculture/main/json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json",
+  "title": "UpdateScheduleItem",
+  "description": "The parameters for creating or updating a schedule item",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.schedules.v1.UpdateScheduleItem",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "Description of the schedule item"
+    },
+    "must_complete": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.MustComplete"
+        }
+      ],
+      "description": "Whom must complete a given schedule, either one assignee or all assignees"
+    },
+    "can_late_submit": {
+      "type": "boolean",
+      "description": "Can the inspections be started after the due date"
+    },
+    "recurrence": {
+      "type": "string",
+      "description": "[RRule](https://www.textmagic.com/free-tools/rrule-generator) formatted\nrecurrence string. <br> Example: `FREQ=WEEKLY;BYDAY=MO;INTERVAL=1`\nrepresents weekly on Monday."
+    },
+    "start_time": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.StartTime"
+        }
+      ],
+      "description": "The time the schedule item starts on each occurrence e.g. 9:10AM"
+    },
+    "duration": {
+      "type": "string",
+      "description": "ISO8601 duration string, e.g. PT1H. How long inspection can be started\nafter the start_date."
+    },
+    "timezone": {
+      "type": "string",
+      "description": "@deprecated, this field is not being used to dictate the timezone of the schedule item.\nThe timezone of the schedule item is based on the authenticated user's profile timezone."
+    },
+    "from_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this schedule will begin appearing"
+    },
+    "to_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the schedule will end"
+    },
+    "reminders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.Reminder"
+      },
+      "description": "Reminders that will be sent to assignees"
+    },
+    "assignees": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.Entity"
+      },
+      "description": "The users or groups that are assigned to complete the schedule"
+    },
+    "document": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.Document"
+        }
+      ],
+      "description": "The document that is assigned to this schedule items"
+    },
+    "location_id": {
+      "type": "string",
+      "description": "The location assigned to this schedule item"
+    },
+    "id": {
+      "type": "string",
+      "readOnly": true
+    },
+    "modified_at": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "status": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.Status"
+        }
+      ]
+    },
+    "creator": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.Entity"
+        }
+      ]
+    },
+    "next_occurrence": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.NextOccurrence"
+        }
+      ]
+    },
+    "asset_id": {
+      "type": "string",
+      "description": "The asset assigned to this schedule item"
+    }
+  },
+  "required": [
+    "description",
+    "must_complete",
+    "can_late_submit",
+    "recurrence",
+    "start_time",
+    "duration",
+    "from_date",
+    "assignees",
+    "document"
+  ],
+  "$defs": {
+    "s12.schedules.v1.ScheduleItem.Document": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the document"
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.DocumentType"
+            }
+          ],
+          "description": "The type of document, e.g. \"template\""
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The name of the document"
+        }
+      },
+      "description": "Document represents the document in a schedule",
+      "title": "ScheduleItem.Document",
+      "required": [
+        "id",
+        "type"
+      ]
+    },
+    "s12.schedules.v1.ScheduleItem.DocumentType": {
+      "type": "string",
+      "enum": [
+        "DOCUMENT_TYPE_UNSPECIFIED",
+        "TEMPLATE"
+      ],
+      "default": "DOCUMENT_TYPE_UNSPECIFIED",
+      "description": "- DOCUMENT_TYPE_UNSPECIFIED: Unspecified document type\n - TEMPLATE: Inspection Template",
+      "title": "DocumentType is the type of document (e.g. template)"
+    },
+    "s12.schedules.v1.ScheduleItem.Entity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the entity"
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.EntityType"
+            }
+          ],
+          "description": "The type of entity, e.g. \"user\" or \"role\""
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The name of the entity"
+        }
+      },
+      "description": "Entity represent the entity in a schedule, either creator or assignee",
+      "title": "ScheduleItem.Entity",
+      "required": [
+        "id",
+        "type"
+      ]
+    },
+    "s12.schedules.v1.ScheduleItem.EntityType": {
+      "type": "string",
+      "enum": [
+        "ENTITY_TYPE_UNSPECIFIED",
+        "USER",
+        "ROLE"
+      ],
+      "default": "ENTITY_TYPE_UNSPECIFIED",
+      "description": "- ENTITY_TYPE_UNSPECIFIED: Unspecified entity type\n - USER: User\n - ROLE: Role",
+      "title": "EntityType is the type of entity, either a user or a role"
+    },
+    "s12.schedules.v1.ScheduleItem.MustComplete": {
+      "type": "string",
+      "enum": [
+        "MUST_COMPLETE_UNSPECIFIED",
+        "ONE",
+        "ALL"
+      ],
+      "default": "MUST_COMPLETE_UNSPECIFIED",
+      "description": "- MUST_COMPLETE_UNSPECIFIED: Unspecified must complete value\n - ONE: Schedule must be completed by one assignee\n - ALL: Schedule must be completed by all assignees",
+      "title": "MustComplete is whom must complete a given schedule, either one assignee or\nall assignees"
+    },
+    "s12.schedules.v1.ScheduleItem.NextOccurrence": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp in the Internet Date-Time format when the next occurrence will occur"
+        },
+        "due": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp in the Internet Date-Time format when the next occurrence is due by"
+        }
+      },
+      "description": "NextOccurrence is the next time the schedule item will occur for assignees",
+      "title": "ScheduleItem.NextOccurrence"
+    },
+    "s12.schedules.v1.ScheduleItem.Reminder": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.schedules.v1.ScheduleItem.ReminderEventType"
+            }
+          ],
+          "description": "On what event to remind the assignees"
+        },
+        "duration": {
+          "type": "string",
+          "description": "ISO8601 duration string, e.g. PT1H. How long before the event to remind\nthe assignees."
+        }
+      },
+      "description": "Reminder represents a reminder for a schedule item",
+      "title": "ScheduleItem.Reminder",
+      "required": [
+        "event",
+        "duration"
+      ]
+    },
+    "s12.schedules.v1.ScheduleItem.ReminderEventType": {
+      "type": "string",
+      "enum": [
+        "REMINDER_EVENT_TYPE_UNSPECIFIED",
+        "START",
+        "DUE"
+      ],
+      "default": "REMINDER_EVENT_TYPE_UNSPECIFIED",
+      "description": "- REMINDER_EVENT_TYPE_UNSPECIFIED: Unspecified reminder event type\n - START: Default value - start of the schedule\n - DUE: End of the schedule",
+      "title": "ReminderEventType is the type of reminder event"
+    },
+    "s12.schedules.v1.ScheduleItem.StartTime": {
+      "type": "object",
+      "properties": {
+        "hour": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The hour of the day to start the schedule"
+        },
+        "minute": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The minute of the day to start the schedule"
+        }
+      },
+      "description": "StartTime represents the start time of a schedule item",
+      "title": "ScheduleItem.StartTime",
+      "required": [
+        "hour",
+        "minute"
+      ]
+    },
+    "s12.schedules.v1.ScheduleItem.Status": {
+      "type": "string",
+      "enum": [
+        "STATUS_UNSPECIFIED",
+        "ACTIVE",
+        "PAUSED",
+        "NO_TEMPLATE",
+        "NO_ASSIGNEE",
+        "FINISHED",
+        "SUBSCRIPTION_INACTIVE",
+        "NO_SITE"
+      ],
+      "default": "STATUS_UNSPECIFIED",
+      "description": "- STATUS_UNSPECIFIED: Unspecified status value\n - ACTIVE: Default value - schedule item is still active\n - PAUSED: Schedule has been paused e.g. manually paused/org frozen\n - NO_TEMPLATE: The template used for this schedule item has been deleted/archived\n - NO_ASSIGNEE: No valid assignees exist for this schedule item anymore\n - FINISHED: The schedule item has hit its end date or count limit and is now complete\n - SUBSCRIPTION_INACTIVE: User/org subscription is inactive\n - NO_SITE: The site used for this schedule has been removed",
+      "title": "Status is the current status of the schedule item"
+    }
+  }
+}

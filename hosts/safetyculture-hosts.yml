@@ -1,0 +1,83 @@
+generated: '2026-10-14'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 6
+  own: 4
+  other_domain: 1
+  platform: 1
+  roles:
+  - api
+  - identity
+  - portal
+  - source
+  - status
+  - website
+hosts:
+- host: api.safetyculture.io
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: safetyculture.io
+  role: api
+  relation: other-domain
+- host: app.safetyculture.com
+  found_by:
+  - pointer
+  types:
+  - SignUp
+  serves: []
+  registrable_domain: safetyculture.com
+  role: identity
+  relation: own
+- host: developer.safetyculture.com
+  found_by:
+  - pointer
+  - apis[]
+  types:
+  - DeveloperPortal
+  - Documentation
+  - APIReference
+  - GettingStarted
+  serves:
+  - docs
+  registrable_domain: safetyculture.com
+  role: portal
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: safetyculture.com
+  found_by:
+  - pointer
+  types:
+  - Website
+  - Blog
+  - Pricing
+  - TermsOfService
+  - PrivacyPolicy
+  - Support
+  - Compliance
+  - Security
+  serves: []
+  registrable_domain: safetyculture.com
+  role: website
+  relation: own
+- host: status.safetyculture.com
+  found_by:
+  - pointer
+  types:
+  - StatusPage
+  serves: []
+  registrable_domain: safetyculture.com
+  role: status
+  relation: own

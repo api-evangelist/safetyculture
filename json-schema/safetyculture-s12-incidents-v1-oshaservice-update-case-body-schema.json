@@ -1,0 +1,297 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/safetyculture/main/json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json",
+  "title": "s12.incidents.v1.OSHAService.UpdateCaseBody",
+  "description": "UpdateCaseRequest is the request message for updating an OSHA case.\nIf field_mask is set, only the fields specified will be updated (PATCH semantics).\nIf field_mask is not set, all fields will be updated (PUT semantics).",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/safetyculture-mitti-api-openapi.yml#/components/schemas/s12.incidents.v1.OSHAService.UpdateCaseBody",
+  "type": "object",
+  "properties": {
+    "case": {
+      "type": "object",
+      "properties": {
+        "establishment_id": {
+          "type": "string",
+          "description": "establishment_id is the ID of the establishment this case belongs to."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "created_at is the timestamp when the case was created."
+        },
+        "modified_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "modified_at is the timestamp when the case was last modified."
+        },
+        "created_by": {
+          "$ref": "#/$defs/s12.incidents.v1.UserMeta",
+          "description": "created_by is the user who created the case."
+        },
+        "modified_by": {
+          "$ref": "#/$defs/s12.incidents.v1.UserMeta",
+          "description": "modified_by is the user who last modified the case."
+        },
+        "year_of_filing": {
+          "type": "integer",
+          "format": "int32",
+          "description": "year_of_filing is the year this case is filed for."
+        },
+        "case_number": {
+          "type": "string",
+          "description": "case_number is the case number."
+        },
+        "job_title": {
+          "type": "string",
+          "description": "job_title is the job title of the affected employee."
+        },
+        "date_of_incident": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date_of_incident is the date the incident occurred."
+        },
+        "incident_location": {
+          "type": "string",
+          "description": "incident_location is where the incident occurred."
+        },
+        "incident_description": {
+          "type": "string",
+          "description": "incident_description is description of the incident."
+        },
+        "incident_outcome": {
+          "type": "integer",
+          "format": "int32",
+          "description": "incident_outcome is the outcome of the incident (1=Death, 2=Days away, 3=Job transfer, 4=Other)."
+        },
+        "dafw_num_away": {
+          "type": "integer",
+          "format": "int32",
+          "description": "dafw_num_away is days away from work."
+        },
+        "djtr_num_tr": {
+          "type": "integer",
+          "format": "int32",
+          "description": "djtr_num_tr is days job transfer or restriction."
+        },
+        "type_of_incident": {
+          "type": "integer",
+          "format": "int32",
+          "description": "type_of_incident is the type of incident (1=Injury, 2=Skin disorder, 3=Respiratory, 4=Poisoning, 5=Hearing loss, 6=Other)."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date_of_birth is the employee's date of birth."
+        },
+        "date_of_hire": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date_of_hire is the employee's date of hire."
+        },
+        "sex": {
+          "type": "string",
+          "description": "sex is the employee's sex (M or F)."
+        },
+        "treatment_facility_type": {
+          "type": "integer",
+          "format": "int32",
+          "description": "treatment_facility_type is whether emergency room was used (1=yes, 0=no)."
+        },
+        "treatment_in_patient": {
+          "type": "integer",
+          "format": "int32",
+          "description": "treatment_in_patient is whether hospitalization was required (1=yes, 0=no)."
+        },
+        "time_started_work": {
+          "type": "string",
+          "description": "time_started_work is time employee began work (hh:mm format)."
+        },
+        "time_of_incident": {
+          "type": "string",
+          "description": "time_of_incident is time of incident (hh:mm format)."
+        },
+        "time_unknown": {
+          "type": "boolean",
+          "description": "time_unknown is whether time of incident is unknown."
+        },
+        "nar_before_incident": {
+          "type": "string",
+          "description": "nar_before_incident is what employee was doing before incident."
+        },
+        "nar_what_happened": {
+          "type": "string",
+          "description": "nar_what_happened is how injury/illness occurred."
+        },
+        "nar_injury_illness": {
+          "type": "string",
+          "description": "nar_injury_illness is what the injury/illness was."
+        },
+        "nar_object_substance": {
+          "type": "string",
+          "description": "nar_object_substance is object/substance that harmed employee."
+        },
+        "date_of_death": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date_of_death is the date of death if applicable."
+        },
+        "employee_name": {
+          "type": "string",
+          "description": "employee_name is the name of the employee."
+        },
+        "employee_street_address": {
+          "type": "string",
+          "description": "employee_street_address is the street address of the employee."
+        },
+        "employee_city": {
+          "type": "string",
+          "description": "employee_city is the city where the employee resides."
+        },
+        "employee_state": {
+          "type": "string",
+          "description": "employee_state is the two-letter state code for the employee."
+        },
+        "employee_zip": {
+          "type": "string",
+          "description": "employee_zip is the ZIP code for the employee."
+        },
+        "physician_name": {
+          "type": "string",
+          "description": "physician_name is the name of the physician who treated the employee."
+        },
+        "facility_name": {
+          "type": "string",
+          "description": "facility_name is the name of the treatment facility."
+        },
+        "facility_street_address": {
+          "type": "string",
+          "description": "facility_street_address is the street address of the treatment facility."
+        },
+        "facility_city": {
+          "type": "string",
+          "description": "facility_city is the city where the treatment facility is located."
+        },
+        "facility_state": {
+          "type": "string",
+          "description": "facility_state is the two-letter state code for the treatment facility."
+        },
+        "facility_zip": {
+          "type": "string",
+          "description": "facility_zip is the ZIP code for the treatment facility."
+        }
+      },
+      "description": "case contains the updated case data.",
+      "title": "case contains the updated case data."
+    },
+    "field_mask": {
+      "type": "string",
+      "description": "field_mask specifies which fields to update. If not set, all fields will be updated."
+    }
+  },
+  "$defs": {
+    "s12.common.Media": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string",
+          "description": "full file name, including file extension"
+        },
+        "media_type": {
+          "$ref": "#/$defs/s12.common.MediaType"
+        }
+      },
+      "title": "Represents an image or video"
+    },
+    "s12.common.MediaType": {
+      "type": "string",
+      "enum": [
+        "MEDIA_TYPE_IMAGE",
+        "MEDIA_TYPE_VIDEO",
+        "MEDIA_TYPE_PDF",
+        "MEDIA_TYPE_DOCX",
+        "MEDIA_TYPE_XLSX",
+        "MEDIA_TYPE_PPTX",
+        "MEDIA_TYPE_CSV"
+      ],
+      "description": " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    },
+    "s12.common.SubscriptionSeatTypes": {
+      "type": "string",
+      "enum": [
+        "SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED",
+        "SUBSCRIPTION_SEAT_TYPE_PREMIUM",
+        "SUBSCRIPTION_SEAT_TYPE_COLLABORATOR",
+        "SUBSCRIPTION_SEAT_TYPE_LITE",
+        "SUBSCRIPTION_SEAT_TYPE_SERVICE_USER",
+        "SUBSCRIPTION_SEAT_TYPE_SUPPORT"
+      ],
+      "default": "SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED",
+      "title": "SubscriptionSeatTypes is a list of potential subscription seat types"
+    },
+    "s12.common.UserActiveStatus": {
+      "type": "string",
+      "enum": [
+        "USER_ACTIVE_STATUS_UNSPECIFIED",
+        "USER_ACTIVE_STATUS_ACTIVE",
+        "USER_ACTIVE_STATUS_DEACTIVATED"
+      ],
+      "default": "USER_ACTIVE_STATUS_UNSPECIFIED",
+      "description": "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated",
+      "title": "UserActiveStatus enumerates possible states of 'status' a user may be in"
+    },
+    "s12.incidents.v1.UserMeta": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "unique identifier for the user"
+        },
+        "display_name": {
+          "type": "string",
+          "description": "name of the user"
+        },
+        "profile_image": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.Media"
+            }
+          ],
+          "description": "profile image of the user"
+        },
+        "email": {
+          "type": "string",
+          "description": "email address of the user"
+        },
+        "seat_type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.SubscriptionSeatTypes"
+            }
+          ],
+          "description": "the seat type the user occupies"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/s12.common.UserActiveStatus"
+            }
+          ],
+          "description": "the active status of the user"
+        },
+        "timezone": {
+          "type": "string",
+          "description": "the timezone of the user"
+        }
+      },
+      "title": "Partial user information for embedding in other messages"
+    }
+  }
+}
