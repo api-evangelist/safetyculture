@@ -5,6 +5,7 @@ source:
 checked:
 - geotab/integrations/geotab-integration-edges.yml
 - https://composio.dev/toolkits/safetyculture
+- https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/
 - https://monid.ai/tools/safetyculture
 - https://n8n.io/integrations/safetyculture/
 - https://zapier.com/apps/safetyculture/integrations
@@ -288,4 +289,30 @@ edges:
   listing_count: 1
   detected: '2026-10-14'
   detected_by: mirror-platform-listings.py
+- partner_name: Pipedream
+  partner: pipedream
+  partner_match: aggregator
+  type: marketplace
+  marketplace: pipedream-components
+  channel: open-source-node
+  relationship: ipaas-bridge
+  direction: third-party
+  evidence: https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/iauditor_by_safetyculture
+  category: null
+  contract_reference:
+    register: Pipedream components (PipedreamHQ/pipedream components/)
+    spec_file: null
+    role: ipaas-connector:pipedream
+    registered_name: iauditor by safetyculture
+    matched_domain: safetyculture.com
+    matched_by: domain
+    detected_by: sweep-workflow-automation.py
+    detected: '2026-10-15'
+    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
+    app_slug: iauditor_by_safetyculture
+    actions: true
+    sources: true
+    builder: Pipedream repo (component)
+  detected_by: sweep-workflow-automation.py
+  first_seen: '2026-10-15'
 templates: []
