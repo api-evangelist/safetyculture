@@ -1,0 +1,1721 @@
+openapi: 3.2.0
+info:
+  title: Mitti Directory (Sites) API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Directory (Sites)
+paths:
+  /directory/v1/folder:
+    post:
+      summary: Create a folder
+      operationId: Directory_CreateFolder
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.CreateFolderResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.directory.v1.CreateFolderRequest'
+        description: The parameters for `CreateFolderRequest`
+        required: true
+      tags:
+      - Directory (Sites)
+  /directory/v1/folder/{id}:
+    get:
+      summary: Retrieve a folder
+      operationId: Directory_GetFolder
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.GetFolderResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Required. The folder identifier to retrieve info for
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: with_ancestors
+        description: When true, an array of the folders ancestors will also be returned.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: with_all_children_count
+        description: 'When true, the total count of all children underneath the folder will be
+
+          returned. This is a recursive count and will include children of children'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Directory (Sites)
+    patch:
+      summary: Update a folder
+      operationId: Directory_UpdateFolderProperties
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.UpdateFolderPropertiesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Required. The folder identifier of the folder to be updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.directory.v1.Directory.UpdateFolderPropertiesBody'
+        required: true
+      tags:
+      - Directory (Sites)
+  /directory/v1/folder/{id}/users:
+    get:
+      summary: Retrieve users associated to a folder, includes both directly and indirectly…
+      operationId: Directory_GetAllUsersByFolder
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.GetAllUsersByFolderResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Required. The folder identifier we want to get all the users for
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: get_users_of_descendants
+        description: 'Optional. When true, it will return all of the members of a specified folder
+
+          and its children folders recursively. Default false, will return all of the
+
+          members of a specified folder and its parent/ancestor folders.'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Directory (Sites)
+    delete:
+      summary: Remove association for multiple users to a specific folder
+      operationId: Directory_RemoveUsersAssociation
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.RemoveUsersAssociationResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Required. The folder identifier we want to remove users from
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: user_ids
+        description: List of UserIDs for users with an association type of "MEMBER" to be disassociated with the given folder
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - Directory (Sites)
+  /directory/v1/folder/{id}/users/associated:
+    get:
+      summary: Retrieve users directly associated to a folder
+      operationId: Directory_GetUsersByFolder
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.GetUsersByFolderResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Required. The folder identifier we want to get the users for
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Directory (Sites)
+  /directory/v1/folder/{id}/users/inherited:
+    get:
+      summary: Retrieve users indirectly associated (inherited) to a folder
+      operationId: Directory_GetInheritedUsersByFolder
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.GetInheritedUsersByFolderResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Required. The folder identifier we want to get the users for
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Directory (Sites)
+  /directory/v1/folders:
+    get:
+      summary: List folders
+      operationId: Directory_GetFolders
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.GetFoldersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: page_size
+        description: 'Required. This determines the max number of folders returned in the
+
+          response.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'Optional. base64 encoded. If this field is present, the list of folders
+
+          returned will start from the row after this token.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: order_by.sort_field
+        description: "The field to order by\n\n - SORT_FIELD_UNSPECIFIED: The sort field is unspecified\n - SORT_FIELD_NAME: Sort the folder by name\n - SORT_FIELD_FOLDER_ID: Sort the folders by folder id\n - SORT_FIELD_USER_ID: Sort the folders by user id\n - SORT_FIELD_CREATED_AT: Sort the folders by created at\n - SORT_FIELD_MODIFIED_AT: Sort the folders by modified at"
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - SORT_FIELD_UNSPECIFIED
+          - SORT_FIELD_NAME
+          - SORT_FIELD_FOLDER_ID
+          - SORT_FIELD_USER_ID
+          - SORT_FIELD_CREATED_AT
+          - SORT_FIELD_MODIFIED_AT
+          default: SORT_FIELD_UNSPECIFIED
+      - name: order_by.sort_order
+        description: "The direction to order by\n\n - SORT_ORDER_UNSPECIFIED: The sort order is not specified\n - SORT_ORDER_ASCENDING: The sort order is asc\n - SORT_ORDER_DESCENDING: The sort order is desc"
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - SORT_ORDER_UNSPECIFIED
+          - SORT_ORDER_ASCENDING
+          - SORT_ORDER_DESCENDING
+          default: SORT_ORDER_UNSPECIFIED
+      - name: only_leaf_nodes
+        description: 'Optional. When true, GetFolders will only return leaf node folders. leaf
+
+          nodes are folders that do not have children  Defaults to false.'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: with_ancestors
+        description: 'Optional. When true, folders will be returned with a list of their
+
+          ancestors as well. Defaults to false'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: include_deleted
+        description: When true, deleted folders will also be returned
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: ignore_folders_disabled
+        description: 'Optional. When true, folders will still be returned when disabled for the
+
+          organisation'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: domain
+        description: 'domain represents the type/domain/hierarchy for the folder. This is used
+
+          for getting folders of a certain domain, i.e. getting all `template`
+
+          folders or `site` folders'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Directory (Sites)
+    delete:
+      summary: Delete folders (bulk)
+      operationId: Directory_DeleteFolders
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.DeleteFoldersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: folder_ids
+        description: Required. Folder ids of the folders to be deleted
+        in: query
+        required: true
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: cascade_up
+        description: 'Deleting folders will always cascade down. If a parent is deleted, then all
+
+          of its children are deleted. When cascade_up is true, if a child is
+
+          deleted, and it''s parent no longer has any children, then it will be
+
+          deleted too. This will cascade all the way up the tree.'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: domain
+        description: 'domain represents the type/domain/hierarchy for the folder. This is used
+
+          for deleting folders within a specified domain'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Directory (Sites)
+  /directory/v1/folders/move:
+    post:
+      summary: Move folder to another parent folder or as a root folder
+      operationId: Directory_MoveFolders
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.MoveFoldersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.directory.v1.MoveFoldersRequest'
+        description: The parameters for `MoveFoldersRequest`
+        required: true
+      tags:
+      - Directory (Sites)
+  /directory/v1/folders/search:
+    post:
+      summary: Search folders
+      operationId: Directory_SearchFolders
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.SearchFoldersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.directory.v1.SearchFoldersRequest'
+        description: The parameters for `SearchFoldersRequest`
+        required: true
+      tags:
+      - Directory (Sites)
+  /directory/v1/organization/labels:
+    get:
+      summary: Get custom labels
+      operationId: Directory_GetOrgLabels
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.GetOrgLabelsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      tags:
+      - Directory (Sites)
+  /directory/v1/parent/{id}/folders:
+    get:
+      summary: Get folders (by parent)
+      operationId: Directory_GetFoldersByParent
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.GetFoldersByParentResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: 'Optional. The identifier of the parent folder.
+
+          When no parent folder ID is given all top level root folders
+
+          will be returned'
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: include_members_count
+        description: 'Optional. Whether to return the directly associated members
+
+          count with the folders. Defaults to false.'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: limit
+        description: The number of results to be returned.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'Optional. base64 encoded. If this field is present, the list of folders
+
+          returned will start from the row after this token.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: include_inherited_members_count
+        description: 'Optional. Whether to include the number of inherited members
+
+          for each folder'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: domain
+        description: 'domain represents the type/domain/hierarchy for the folder. This is used
+
+          for getting folders of a certain domain, i.e. getting all `template`
+
+          folders or `site` folders'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: only_assigned_folders
+        description: 'When true, GetFoldersByParent will only return folders that are assigned to
+
+          the user making the request. Defaults to false'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: with_deleted_folders
+        description: Optional. When true, deleted and non-deleted folders will be returned.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Directory (Sites)
+  /directory/v1/user/folder_ids:
+    get:
+      summary: List folders the requesting user is associated with
+      operationId: Directory_GetFolderIDsForUser
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.GetFolderIDsForUserResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      tags:
+      - Directory (Sites)
+  /directory/v1/user/{user_id}/folders:
+    delete:
+      summary: Remove association for a specific user to multiple folders
+      operationId: Directory_RemoveFoldersAssociation
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.RemoveFoldersAssociationResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: user_id
+        description: Required. The user identifier we want to remove folders from
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: folder_ids
+        description: Required. List of folder IDs to remove association to given user
+        in: query
+        required: true
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - Directory (Sites)
+  /directory/v1/users/folders/membership:
+    post:
+      summary: Associate users to folders
+      description: Add a list of one or more users to a list of one or more folders.
+      operationId: Directory_AddUsersFoldersAssociations
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsRequest'
+        required: true
+      tags:
+      - Directory (Sites)
+components:
+  schemas:
+    s12.directory.v1.CreateFolderRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Required. Non-empty folder name. Limited to maximum 250 characters.
+        parent_id:
+          type: string
+          description: 'Optional. Parent folder UUID. If unspecified, will be created as a root
+
+            folder'
+        id:
+          type: string
+          description: Optional. Folder UUID. If unspecified, backend will generate the ID.
+        meta_label:
+          type: string
+          description: 'Required. Must be one of: "location", "area", "region", "state", or "country".
+
+            Note that these meta labels may not match custom site hierarchy labels used by the organization.'
+        domain:
+          type: string
+          description: 'domain represents the type/domain/hierarchy for the folder. This is used
+
+            for getting folders of a certain domain, i.e. getting all `template`
+
+            folders or `site` folders'
+      description: The parameters for `CreateFolderRequest`
+      title: CreateFolderRequest
+      required:
+      - name
+      - meta_label
+    s12.directory.v1.GetFoldersByParentResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.FolderWithMembersCount'
+          description: 'List of children folders with a count of
+
+            their explicitly associated members
+
+            When `include_members_count` is set to false
+
+            `members_count` in `FolderWithMembersCount` is
+
+            always set to the default zero value'
+        next_page_token:
+          type: string
+          description: 'Optional. base64 encoded. If this field is present, the value should be
+
+            used in subsequent calls to GetFoldersByParent to get the next page of
+
+            results. Otherwise, no further calls should be made.'
+      description: Result returned from `GetFoldersByParentResponse`
+      title: GetFoldersByParentResponse
+    s12.directory.v1.FolderWithAncestors:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The folder we are interested in
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: 'The folders ancestors. For example, when returning a `location` leaf node,
+
+            the ancestors will be the [`area`,`region`] folders, when applicable'
+        members_count:
+          type: integer
+          format: int32
+          description: Members count are the count of active users associated with the folder.
+        has_children:
+          type: boolean
+          description: Whether the folder has children or not
+      description: FolderWithAncestors represents a a folder with an array of ancestor folders
+      title: FolderWithAncestors
+    s12.directory.v1.RemoveFoldersAssociationResponse.Status:
+      type: string
+      enum:
+      - UNKNOWN
+      - REMOVED
+      - NOT_FOUND
+      default: UNKNOWN
+      description: "- UNKNOWN: Status unknown\n - REMOVED: Folder was successfully removed from the user\n - NOT_FOUND: Folder user association was not found"
+      title: Resulting status values after removing a folder from a user
+    s12.directory.v1.AddUsersFoldersAssociationsResponse.Status:
+      type: string
+      enum:
+      - STATUS_UNSPECIFIED
+      - STATUS_ADDED
+      - STATUS_ALREADY_DIRECT_MEMBER
+      - STATUS_ALREADY_INHERITED_MEMBER
+      - STATUS_REMOVED
+      default: STATUS_UNSPECIFIED
+      description: "- STATUS_UNSPECIFIED: Status unknown\n - STATUS_ADDED: Folder was successfully associated to the user\n - STATUS_ALREADY_DIRECT_MEMBER: User was already a direct member of the folder\n - STATUS_ALREADY_INHERITED_MEMBER: User was already an inherited member of the folder\n - STATUS_REMOVED: User was removed from the folder (side-effect of being added to an ancestor)"
+      title: Resulting status values after associating a folder and user
+    s12.directory.v1.AddUsersFoldersAssociationsResponse.FolderAssignmentsStatuses:
+      type: object
+      properties:
+        users:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse.Status'
+          description: 'Map of UserIDs for users with an association type of "MEMBER" with their
+
+            resulting status after adding access to the folder. This map corresponds to the
+
+            list of UserIDs passed through `user_ids` in `AddUsersFoldersAssociationsRequest`'
+        manager_status:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse.Status'
+          description: 'Map of UserIDs for users with an association type of "MANAGER" with their
+
+            resulting status after adding access to the folder. This map corresponds to the
+
+            list of UserIDs passed through `manager_user_ids` in `AddUsersFoldersAssociationsRequest`'
+      title: FolderAssignmentsStatuses maps the user IDs to their status for the given folder
+    s12.directory.v1.DeleteFoldersResponse:
+      type: object
+      properties:
+        folder_ids:
+          type: array
+          items:
+            type: string
+          description: List of deleted folderIDs
+      description: Result returned from `DeleteFoldersResponse`
+      title: DeleteFoldersResponse
+    s12.directory.v1.AddUsersFoldersAssociationsRequest:
+      type: object
+      properties:
+        assignments:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsRequest.FolderAssignments'
+          description: Map of folder ID to users assignments
+      title: AddUsersFoldersAssociationsRequest is the request for the `AddUsersFoldersAssociations` endpoint
+    s12.directory.v1.MoveFoldersResponse:
+      type: object
+      properties:
+        new_parent_id:
+          type: string
+          description: 'New parent folder ID. Empty means the folder has been moved
+
+            as root.'
+      description: Result returned from `MoveFoldersResponse`
+      title: MoveFoldersResponse
+    s12.directory.v1.SearchFoldersResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.FolderWithAncestors'
+          description: An array of folders with their ancestors that match the search results
+        folder_count:
+          type: integer
+          format: int32
+          description: The total number of folders found for the search query
+        next_page_token:
+          type: string
+          description: 'Optional. base64 encoded. If this field is present, the value should be
+
+            used in subsequent calls to SearchFolders to get the next page of results.
+
+            Otherwise, no further calls should be made.'
+        folders_enabled:
+          type: boolean
+          description: Whether or not the org settings setting is enabled.
+      description: Result returned from `SearchFoldersResponse`
+      title: SearchFoldersResponse
+    s12.directory.v1.GetAllUsersByFolderResponse:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: 'The list of user_ids that have explicit and inherited access to the
+
+            requested folder'
+      description: Result returned from `GetAllUsersByFolderResponse`
+      title: GetAllUsersByFolderResponse
+    s12.directory.v1.RemoveFoldersAssociationResponse:
+      type: object
+      properties:
+        folder_status:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.RemoveFoldersAssociationResponse.Status'
+          description: 'Map of folders ids with their resulting status after removing the user
+
+            access to that folder. This map is populated with the list of folders
+
+            passed in through the `RemoveFoldersAssociation`
+
+            For example: <Key,Value> -> <5441fffcde344415bb7ccaceda27e196,
+
+            Status>'
+      description: Result returned from `RemoveFoldersAssociationResponse`
+      title: RemoveFoldersAssociationResponse
+    s12.directory.v1.GetFolderIDsForUserResponse:
+      type: object
+      properties:
+        folder_ids:
+          type: array
+          items:
+            type: string
+          description: 'List of folder IDs the user has access to.
+
+            For example: ''5441fffcde344415bb7ccaceda27e196'''
+        folder_paths:
+          type: array
+          items:
+            type: string
+          description: 'List of folder paths the user has access to.
+
+            For example: ''07c7acbf5b1f450d817e5ebb11fda832.5441fffcde344415bb7ccaceda27e196'''
+      description: Result returned from `GetFolderIDsForUserResponse`
+      title: GetFolderIDsForUserResponse
+    s12.directory.v1.FoldersOrderBy:
+      type: object
+      example:
+        sort_field: 1
+        sort_order: 1
+      properties:
+        sort_field:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.FoldersOrderBy.SortField'
+          description: The field to order by
+        sort_order:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.FoldersOrderBy.SortOrder'
+          description: The direction to order by
+      description: FoldersOrderBy represents the sort order folders will be returned in
+      title: FoldersOrderBy
+    s12.directory.v1.GetOrgLabelsResponse:
+      type: object
+      properties:
+        custom_labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Custom labels is a map of ''meta_label'' to the display label to return
+
+            instead'
+      description: Result returned from `GetOrgLabelsResponse`
+      title: GetOrgLabelsResponse
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.directory.v1.FolderList:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The list of folders in the message
+      description: FolderList represents an array of folders
+      title: FolderList
+    s12.directory.v1.FoldersFilter:
+      type: object
+      properties:
+        not:
+          type: boolean
+          description: If true, exclude results that match the condition
+        meta_label:
+          type: string
+          description: Filter on the status
+        folder_id:
+          type: string
+          description: Filter on a specific folder id
+        is_dynamic:
+          type: boolean
+          description: Filter on whether a folder is dynamic or not
+      description: FoldersFilter represents a filter when getting folders
+      title: FoldersFilter
+    s12.directory.v1.CreateFolderResponse:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: newly created folder
+      description: Result returned from `CreateFolderRequest`
+      title: CreateFolderResponse
+    s12.directory.v1.AddUsersFoldersAssociationsRequest.FolderAssignments:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: List of UserIDs for users to be granted a "MEMBER" association with the given folder
+      title: FolderAssignments represents the folders to be assigned to a given user
+    s12.directory.v1.FoldersOrderBy.SortOrder:
+      type: string
+      enum:
+      - SORT_ORDER_UNSPECIFIED
+      - SORT_ORDER_ASCENDING
+      - SORT_ORDER_DESCENDING
+      default: SORT_ORDER_UNSPECIFIED
+      title: "- SORT_ORDER_UNSPECIFIED: The sort order is not specified\n - SORT_ORDER_ASCENDING: The sort order is asc\n - SORT_ORDER_DESCENDING: The sort order is desc"
+    s12.directory.v1.Folder:
+      type: object
+      example:
+        id: 4fb56fa8-fa23-4a9c-907e-8367abc75a2f
+        name: Sydney
+        org_id: d31e24be-e7a4-4a28-a230-044f850041fc
+        creator_id: a3452937-9fa7-4ba2-9ffa-c3bbee3fc947
+        created_at: 2020-04-28T04:14:31:00Z
+        modified_at: 2020-04-28T04:14:31:00Z
+        meta_label: location
+      properties:
+        id:
+          type: string
+          description: 'An unique identifier for the folder. Must be a valid UUID.
+
+            For example: ''00001d65-d336-485a-8331-7b53f37e8f51'''
+        name:
+          type: string
+          description: Name associated with folder
+        org_id:
+          type: string
+          description: The organisation that the folder belongs to
+        creator_id:
+          type: string
+          description: 'The user id responsible for creating the folder
+
+            For example: ''user_5441fffcde344415bb7ccaceda27e196'''
+        created_at:
+          type: string
+          format: date-time
+          description: 'The creation timestamp of the folder (Date, Time, Timezone)
+
+            For example: ''2020-04-28T04:14:31:00Z'''
+        modified_at:
+          type: string
+          format: date-time
+          description: 'The timestamp of the last modification for the folder (Date, Time,
+
+            Timezone) For example: ''2020-04-28T04:14:00Z'''
+        meta_label:
+          type: string
+          description: 'Additional meta information that can be associated with the folder
+
+            e.g. ''location'''
+        members_count:
+          type: integer
+          format: int32
+          description: The number of users with a direct association of type 'MEMBER' for the folder
+        deleted:
+          type: boolean
+          description: Whether a folder has been marked as deleted or not.
+      description: Folder represents the main directory object
+      title: Folder
+    s12.directory.v1.GetInheritedUsersByFolderResponse:
+      type: object
+      properties:
+        user_folders:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.FolderList'
+          description: 'Map of UserIDs for users with an inherited association type of "MEMBER" for
+
+            the specified folder. The list of folders per user is ordered from highest to
+
+            highest to lowest ancestor.'
+      description: Result returned from `GetInheritedUsersByFolderResponse`
+      title: GetInheritedUsersByFolderResponse
+    s12.directory.v1.RemoveUsersAssociationResponse:
+      type: object
+      properties:
+        user_status:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.RemoveUsersAssociationResponse.Status'
+          description: 'Map of UserIDs for users with an association type of "MEMBER" with their
+
+            resulting status after removing access to the folder. This map corresponds to the
+
+            list of UserIDs passed through `user_ids` in `RemoveUsersAssociationRequest`
+
+            For example: <Key,Value> -> <5441fffcde344415bb7ccaceda27e196, Status>'
+        manager_status:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.RemoveUsersAssociationResponse.Status'
+          description: 'Map of UserIDs for users with an association type of "MANAGER" with their
+
+            resulting status after removing access to the folder. This map corresponds to the
+
+            list of UserIDs passed through `manager_user_ids` in `RemoveUsersAssociationRequest`
+
+            For example: <Key,Value> -> <5441fffcde344415bb7ccaceda27e196, Status>'
+      description: Result returned from `RemoveUsersAssociationResponse`
+      title: RemoveUsersAssociationResponse
+    s12.directory.v1.MoveFoldersRequest:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Required. An array of folder IDs to move under the new parent.
+        parent_id:
+          type: string
+          description: 'Optional. New parent folder ID. If unspecified, the folder will be moved as
+
+            a root folder'
+        domain:
+          type: string
+          description: 'domain represents the type/domain/hierarchy for the folder. This is used
+
+            for deleting folders within a specified domain. Defaults to site'
+      description: The parameters for `MoveFoldersRequest`
+      title: MoveFoldersRequest
+      required:
+      - ids
+    s12.directory.v1.UpdateFolderPropertiesRequest.FolderName:
+      type: object
+      properties:
+        val:
+          type: string
+    s12.directory.v1.GetUsersByFolderResponse:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: List of UserIDs for users that have been granted a "MEMBER" association with the given folder
+      description: Result returned from `GetUsersByFolderResponse`
+      title: GetUsersByFolderResponse
+    s12.directory.v1.FoldersOrderBy.SortField:
+      type: string
+      enum:
+      - SORT_FIELD_UNSPECIFIED
+      - SORT_FIELD_NAME
+      - SORT_FIELD_FOLDER_ID
+      - SORT_FIELD_USER_ID
+      - SORT_FIELD_CREATED_AT
+      - SORT_FIELD_MODIFIED_AT
+      default: SORT_FIELD_UNSPECIFIED
+      title: "- SORT_FIELD_UNSPECIFIED: The sort field is unspecified\n - SORT_FIELD_NAME: Sort the folder by name\n - SORT_FIELD_FOLDER_ID: Sort the folders by folder id\n - SORT_FIELD_USER_ID: Sort the folders by user id\n - SORT_FIELD_CREATED_AT: Sort the folders by created at\n - SORT_FIELD_MODIFIED_AT: Sort the folders by modified at"
+    s12.directory.v1.SearchFoldersRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          description: 'Optional. The search value to query folders with when provided. When not
+
+            provided, either all of the organisations folders or users folders will be
+
+            returned in a paginated way'
+        order_by:
+          description: The order in which folders are sorted.
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.FoldersOrderBy'
+        filters:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.FoldersFilter'
+          description: 'Optional. Filters to apply when getting folders. Used for only returning
+
+            folders that match the filter setting. i.e. only returning meta_label
+
+            ''location''. Maximum of 1000 filters allowed.'
+        only_assigned_folders:
+          type: boolean
+          description: 'When true, SearchFolders will only return folders that are assigned to
+
+            the user making the request. Defaults to false'
+        only_leaf_nodes:
+          type: boolean
+          description: When true, SearchFolders will only search location folders. Defaults to false.
+        include_members_count:
+          type: boolean
+          description: 'Whether to return the directly associated members
+
+            count with the folders. Defaults to false.'
+        include_folders_count:
+          type: boolean
+          description: 'Whether to return the total number of folders discovered
+
+            in the query. Defaults to false'
+        include_deleted_folders:
+          type: boolean
+          description: Whether to return both deleted and non-deleted folders. Defaults to false
+        limit:
+          type: integer
+          format: int32
+          description: The number of results to be returned. maximum 1500, default 500
+        page_token:
+          type: string
+          description: The offset used for pagination. The starting number for the next query
+        ignore_folders_disabled:
+          type: boolean
+          description: 'Optional. When true, folders will still be returned when disabled for the
+
+            organisation'
+        domain:
+          type: string
+          description: 'domain represents the type/domain/hierarchy for the folder. This is used
+
+            for getting folders of a certain domain, i.e. getting all `template`
+
+            folders or `site` folders'
+      description: The parameters for `SearchFoldersRequest`
+      title: SearchFoldersRequest
+    s12.directory.v1.GetFoldersResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The list of folders belonging to the organisation specified in the request.
+        next_page_token:
+          type: string
+          description: 'Optional. base64 encoded. If this field is present, the value should be
+
+            used in subsequent calls to GetFolders to get the next page of results.
+
+            Otherwise, no further calls should be made.'
+        folders_with_ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.FolderWithAncestors'
+          description: 'When with_ancestors is true, folders with ancestors will be returned
+
+            instead of an array of folders'
+        folders_enabled:
+          type: boolean
+          description: Whether or not the org settings setting is enabled.
+      description: Result returned from `GetFoldersResponse`
+      title: GetFoldersResponse
+    s12.directory.v1.FolderWithMembersCount:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The folder we are interested in
+        members_count:
+          type: integer
+          format: int32
+          description: The number of users with a direct association of type 'MEMBER' for the folder
+        has_children:
+          type: boolean
+          description: Whether or not a folder has children.
+        inherited_members_count:
+          type: integer
+          format: int32
+          description: The number of users with an inherited association of type 'MEMBER' for the folder
+        depth:
+          type: integer
+          format: int32
+          description: The depth of the folder. 0 being a top level folder with no parents
+        children_count:
+          type: integer
+          format: int32
+          description: The count of children folders
+      description: FolderWithMembersCount represents a a folder with additional properties
+      title: FolderWithMembersCount
+    s12.directory.v1.Directory.UpdateFolderPropertiesBody:
+      type: object
+      properties:
+        name:
+          description: Optional. Non-empty folder name. Limited to maximum 250 characters.
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.UpdateFolderPropertiesRequest.FolderName'
+        domain:
+          type: string
+          description: 'domain represents the type/domain/hierarchy for the folder. This is
+
+            used for changing the properties of a specific domain folder'
+      description: The parameters for `UpdateFolderPropertiesRequest`
+      title: UpdateFolderPropertiesRequest
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.directory.v1.UpdateFolderPropertiesResponse:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The updated folder itself
+      description: Result returned from `UpdateFolderPropertiesResponse`
+      title: UpdateFolderPropertiesResponse
+    s12.directory.v1.RemoveUsersAssociationResponse.Status:
+      type: string
+      enum:
+      - UNKNOWN
+      - REMOVED
+      - NOT_FOUND
+      default: UNKNOWN
+      description: "- UNKNOWN: Status unknown for user\n - REMOVED: User was successfully removed from the folder\n - NOT_FOUND: User folder association was not found"
+      title: Resulting status values after removing a user from a folder
+    s12.directory.v1.AddUsersFoldersAssociationsResponse:
+      type: object
+      properties:
+        assignments:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse.FolderAssignmentsStatuses'
+          description: Map of folder ID to statuses per user
+      title: AddUsersFoldersAssociationsResponse is the response for the `AddUsersFoldersAssociations` endpoint
+    s12.directory.v1.GetFolderResponse:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The folder itself
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: 'When with_ancestors is true, an array of the folders ancestors will be
+
+            returned. The array will be ordered, closest ancestor to furthest'
+        all_children_count:
+          type: integer
+          format: int32
+          description: 'The total count of children underneath the folder. I
+
+            Including children of children recursively'
+        member_count:
+          type: integer
+          format: int32
+          description: The number of users with a direct association of type 'MEMBER' for the folder
+        deleted:
+          type: boolean
+          description: Whether the folder is deleted or not
+      description: Result returned from `GetFolderResponse`
+      title: GetFolderResponse
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

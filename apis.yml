@@ -181,14 +181,16 @@ common:
   url: security/safetyculture-trust-center.yml
 
 apis:
-- name: SafetyCulture API
-  description: REST API for the SafetyCulture platform — inspections, templates, assets, actions, issues, users, groups, schedules, training,
-    credentials, and webhooks. Bearer-token auth over HTTPS.
+- aid: safetyculture:safetyculture-actions-api
+  name: SafetyCulture Actions API
+  description: The Actions API from SafetyCulture — 30 operation(s) for actions.
   humanURL: https://developer.safetyculture.com
   baseURL: https://api.safetyculture.io
+  tags:
+  - Actions
   properties:
-  - url: openapi/safetyculture-mitti-api-openapi.yml
-    type: OpenAPI
+  - type: OpenAPI
+    url: openapi/safetyculture-actions-api-openapi.yml
   - type: Documentation
     url: https://developer.safetyculture.com
   - type: APIReference
@@ -215,8 +217,943 @@ apis:
     url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
   - type: JSONSchema
     url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
-  aid: safetyculture:safetyculture-api
-
+- aid: safetyculture:safetyculture-apps-api
+  name: SafetyCulture Apps API
+  description: The Apps API from SafetyCulture — 7 operation(s) for apps.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Apps
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-apps-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-assets-api
+  name: SafetyCulture Assets API
+  description: The Assets API from SafetyCulture — 34 operation(s) for assets.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-assets-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-bulk-user-operations-api
+  name: SafetyCulture Bulk user operations API
+  description: >-
+    The Bulk user operations API from SafetyCulture — 4 operation(s) for bulk user operations.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Bulk user operations
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-bulk-user-operations-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-companies-api
+  name: SafetyCulture Companies API
+  description: The Companies API from SafetyCulture — 9 operation(s) for companies.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Companies
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-companies-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-credentials-api
+  name: SafetyCulture Credentials API
+  description: The Credentials API from SafetyCulture — 9 operation(s) for credentials.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Credentials
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-credentials-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-data-feeds-api
+  name: SafetyCulture Data Feeds API
+  description: The Data Feeds API from SafetyCulture — 39 operation(s) for data feeds.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Data Feeds
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-data-feeds-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-directory-sites-api
+  name: SafetyCulture Directory (Sites) API
+  description: The Directory (Sites) API from SafetyCulture — 13 operation(s) for directory (sites).
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Directory (Sites)
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-directory-sites-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-documents-api
+  name: SafetyCulture Documents API
+  description: The Documents API from SafetyCulture — 10 operation(s) for documents.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-documents-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-groups-api
+  name: SafetyCulture Groups API
+  description: The Groups API from SafetyCulture — 7 operation(s) for groups.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-groups-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-heads-up-api
+  name: SafetyCulture Heads Up API
+  description: The Heads Up API from SafetyCulture — 5 operation(s) for heads up.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Heads Up
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-heads-up-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-inspections-api
+  name: SafetyCulture Inspections API
+  description: The Inspections API from SafetyCulture — 26 operation(s) for inspections.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Inspections
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-inspections-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-investigations-api
+  name: SafetyCulture Investigations API
+  description: The Investigations API from SafetyCulture — 27 operation(s) for investigations.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Investigations
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-investigations-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-issues-api
+  name: SafetyCulture Issues API
+  description: The Issues API from SafetyCulture — 24 operation(s) for issues.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Issues
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-issues-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-lone-worker-api
+  name: SafetyCulture Lone Worker API
+  description: The Lone Worker API from SafetyCulture — 2 operation(s) for lone worker.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Lone Worker
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-lone-worker-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-media-api
+  name: SafetyCulture Media API
+  description: The Media API from SafetyCulture — 1 operation(s) for media.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Media
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-media-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-osha-api
+  name: SafetyCulture OSHA API
+  description: The OSHA API from SafetyCulture — 8 operation(s) for osha.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - OSHA
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-osha-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-response-sets-api
+  name: SafetyCulture Response Sets API
+  description: The Response Sets API from SafetyCulture — 5 operation(s) for response sets.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Response Sets
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-response-sets-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-roles-api
+  name: SafetyCulture Roles API
+  description: The Roles API from SafetyCulture — 3 operation(s) for roles.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Roles
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-roles-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-schedules-api
+  name: SafetyCulture Schedules API
+  description: The Schedules API from SafetyCulture — 12 operation(s) for schedules.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Schedules
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-schedules-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-schedules-legacy-api
+  name: SafetyCulture Schedules (legacy) API
+  description: The Schedules (legacy) API from SafetyCulture — 2 operation(s) for schedules (legacy).
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Schedules (legacy)
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-schedules-legacy-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-sensors-api
+  name: SafetyCulture Sensors API
+  description: The Sensors API from SafetyCulture — 7 operation(s) for sensors.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Sensors
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-sensors-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-structures-api
+  name: SafetyCulture Structures API
+  description: The Structures API from SafetyCulture — 11 operation(s) for structures.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Structures
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-structures-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-templates-api
+  name: SafetyCulture Templates API
+  description: The Templates API from SafetyCulture — 7 operation(s) for templates.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-templates-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-training-api
+  name: SafetyCulture Training API
+  description: The Training API from SafetyCulture — 24 operation(s) for training.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Training
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-training-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-users-api
+  name: SafetyCulture Users API
+  description: The Users API from SafetyCulture — 14 operation(s) for users.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-users-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
+- aid: safetyculture:safetyculture-webhooks-api
+  name: SafetyCulture Webhooks API
+  description: The Webhooks API from SafetyCulture — 3 operation(s) for webhooks.
+  humanURL: https://developer.safetyculture.com
+  baseURL: https://api.safetyculture.io
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/safetyculture-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://developer.safetyculture.com
+  - type: APIReference
+    url: https://developer.safetyculture.com/reference/introduction
+  - type: GettingStarted
+    url: https://developer.safetyculture.com/reference/getting-started
+  - type: Authentication
+    url: authentication/safetyculture-authentication.yml
+  - type: RateLimits
+    url: rate-limits/safetyculture-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/safetyculture-webhooks.yml
+  - type: LLMsTxt
+    url: llms/safetyculture-llms.txt
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-oshaservice-update-case-body-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-incidents-v1-create-case-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-submit-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-incident-request-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-schedules-v1-update-schedule-item-schema.json
+  - type: JSONSchema
+    url: json-schema/safetyculture-s12-tasks-v1-create-action-request-schema.json
 x-enrichment:
   date: '2026-07-21'
   status: enriched

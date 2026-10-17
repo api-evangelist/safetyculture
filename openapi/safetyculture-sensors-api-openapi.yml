@@ -1,0 +1,1277 @@
+openapi: 3.2.0
+info:
+  title: Mitti Sensors API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Sensors
+paths:
+  /sensors/v1/sensors/deprovision/{source_name}/{source_id}:
+    delete:
+      summary: De-provision a sensor
+      operationId: SensorsService_DeprovisionSensor
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.sensors.v1.DeprovisionSensorResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: source_name
+        description: The provider/origin of the sensor data.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: source_id
+        description: An ID for the sensor, specified by the provider/origin.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Sensors
+  /sensors/v1/sensors/ingest-readings:
+    post:
+      summary: Ingest sensor readings
+      operationId: SensorsService_IngestSensorReadings
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.sensors.v1.IngestSensorReadingsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.sensors.v1.IngestSensorReadingsRequest'
+        description: The parameters for `IngestSensorReadingsRequest`
+        required: true
+      tags:
+      - Sensors
+  /sensors/v1/sensors/list:
+    post:
+      summary: List sensors
+      operationId: SensorsService_ListSensors
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.sensors.v1.ListSensorsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.sensors.v1.ListSensorsRequest'
+        description: The parameters for `ListSensorsRequest`
+        required: true
+      tags:
+      - Sensors
+  /sensors/v1/sensors/provision:
+    post:
+      summary: Provision a sensor
+      operationId: SensorsService_ProvisionSensor
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.sensors.v1.ProvisionSensorResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.sensors.v1.ProvisionSensorRequest'
+        description: The parameters for `ProvisionSensorRequest`
+        required: true
+      tags:
+      - Sensors
+  /sensors/v1/sensors/sensor-id/{device_id}:
+    get:
+      summary: Get a sensor ID
+      operationId: SensorsService_GetSensorId
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.sensors.v1.GetSensorIdResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: device_id
+        description: The id of the device that was used to provision the sensor.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: source_name
+        description: 'An optional name to identify the source of the readings for this sensor.
+
+          This name could be the provider of the sensor, or a platform through
+
+          which the sensor is managed.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Sensors
+  /sensors/v1/sensors/{source_name}/{source_id}/details:
+    get:
+      summary: Get sensor
+      operationId: SensorsService_GetSensor
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.sensors.v1.GetSensorResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: source_name
+        description: The provider/origin of the sensor data.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: source_id
+        description: An ID for the sensor, specified by the provider/origin.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Sensors
+  /sensors/v1/sensors/{source_name}/{source_id}/latest-readings:
+    get:
+      summary: Get sensor's latest readings
+      operationId: SensorsService_GetSensorLatestReadings
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.sensors.v1.GetSensorLatestReadingsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: source_name
+        description: The provider/origin of the sensor data.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: source_id
+        description: An ID for the sensor, specified by the provider/origin.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Sensors
+components:
+  schemas:
+    s12.sensors.v1.HeadingReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: Unit of the reading. The default value is in degrees.
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.HeadingReadingType.HeadingReadingTypeUnit'
+      description: HeadingReadingType describes the compass direction in which a craft or vehicle is pointed.
+    s12.common.GeoPosition:
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+          description: The geographical longitude
+        latitude:
+          type: number
+          format: double
+          description: The geographical latitude
+        accuracy:
+          type: integer
+          format: int32
+          description: The accuracy in meters
+      description: A position is the fundamental geographical geometry construct.
+    s12.sensors.v1.CarbonDioxideReadingType.CarbonDioxideReadingTypeUnit:
+      type: string
+      enum:
+      - CARBON_DIOXIDE_READING_TYPE_UNIT_UNSPECIFIED
+      - CARBON_DIOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION
+      default: CARBON_DIOXIDE_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - CARBON_DIOXIDE_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - CARBON_DIOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION: Parts Per Million unit."
+    s12.sensors.v1.ListSensorsRequest:
+      type: object
+      properties:
+        page_token:
+          type: string
+          description: 'OPTIONAL. The value of next_page_token from a previous response. If
+
+            specified, the API will return the next batch of results following the
+
+            previous list sensors request.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'OPTIONAL. The number of sensors to return. By default, each request
+
+            returns 50 sensors. You can specify a page_size value between 1 to 100.'
+      description: The parameters for `ListSensorsRequest`
+      title: ListSensorsRequest
+    s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in decibel.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType.ReceivedSignalStrengthIndicatorReadingTypeUnit'
+      description: 'ReceivedSignalStrengthIndicatorReadingType describes a received signal
+
+        strength indicator (RSSI) reading type.'
+    s12.sensors.v1.HeadingReadingType.HeadingReadingTypeUnit:
+      type: string
+      enum:
+      - HEADING_READING_TYPE_UNIT_UNSPECIFIED
+      - HEADING_READING_TYPE_UNIT_DEGREES
+      default: HEADING_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - HEADING_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - HEADING_READING_TYPE_UNIT_DEGREES: A heading measured in degrees. This unit describes an angle in a circular coordinate system,\nwhere 0°, 90°, 180° and 270° represent North, South, East and West respectively."
+    s12.sensors.v1.SensorReading:
+      type: object
+      description: A sensor reading.
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp of the reading.
+        name:
+          type: string
+          description: 'Optional. The name of the reading. If not present, the reading name will be inferred from the type, eg: "Relative Humidity".'
+      required:
+      - timestamp
+      oneOf:
+      - type: object
+        title: Temperature
+        properties:
+          temperature:
+            $ref: '#/components/schemas/s12.sensors.v1.TemperatureReadingType'
+        required:
+        - temperature
+      - type: object
+        title: Relative Humidity
+        properties:
+          relative_humidity:
+            $ref: '#/components/schemas/s12.sensors.v1.RelativeHumidityReadingType'
+        required:
+        - relative_humidity
+      - type: object
+        title: Carbon Monoxide
+        properties:
+          carbon_monoxide:
+            $ref: '#/components/schemas/s12.sensors.v1.CarbonMonoxideReadingType'
+        required:
+        - carbon_monoxide
+      - type: object
+        title: Carbon Dioxide
+        properties:
+          carbon_dioxide:
+            $ref: '#/components/schemas/s12.sensors.v1.CarbonDioxideReadingType'
+        required:
+        - carbon_dioxide
+      - type: object
+        title: Received Signal Strength Indicator
+        properties:
+          received_signal_strength_indicator:
+            $ref: '#/components/schemas/s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType'
+        required:
+        - received_signal_strength_indicator
+      - type: object
+        title: Signal To Noise Ratio
+        properties:
+          signal_to_noise_ratio:
+            $ref: '#/components/schemas/s12.sensors.v1.SignalToNoiseRatioReadingType'
+        required:
+        - signal_to_noise_ratio
+      - type: object
+        title: Geo Position
+        properties:
+          geo_position:
+            $ref: '#/components/schemas/s12.sensors.v1.GeoPositionReadingType'
+        required:
+        - geo_position
+      - type: object
+        title: Odometer
+        properties:
+          odometer:
+            $ref: '#/components/schemas/s12.sensors.v1.OdometerReadingType'
+        required:
+        - odometer
+      - type: object
+        title: Running Time
+        properties:
+          running_time:
+            $ref: '#/components/schemas/s12.sensors.v1.RunningTimeReadingType'
+        required:
+        - running_time
+      - type: object
+        title: Speed
+        properties:
+          speed:
+            $ref: '#/components/schemas/s12.sensors.v1.SpeedReadingType'
+        required:
+        - speed
+      - type: object
+        title: Engine On
+        properties:
+          engine_on:
+            $ref: '#/components/schemas/s12.sensors.v1.EngineOnReadingType'
+        required:
+        - engine_on
+      - type: object
+        title: Moving
+        properties:
+          moving:
+            $ref: '#/components/schemas/s12.sensors.v1.MovingReadingType'
+        required:
+        - moving
+      - type: object
+        title: Ignition On
+        properties:
+          ignition_on:
+            $ref: '#/components/schemas/s12.sensors.v1.IgnitionOnReadingType'
+        required:
+        - ignition_on
+      - type: object
+        title: Heading
+        properties:
+          heading:
+            $ref: '#/components/schemas/s12.sensors.v1.HeadingReadingType'
+        required:
+        - heading
+    s12.sensors.v1.OdometerReadingType.OdometerReadingTypeUnit:
+      type: string
+      enum:
+      - ODOMETER_READING_TYPE_UNIT_UNSPECIFIED
+      - ODOMETER_READING_TYPE_UNIT_KILOMETER
+      - ODOMETER_READING_TYPE_UNIT_MILE
+      - ODOMETER_READING_TYPE_UNIT_METER
+      default: ODOMETER_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - ODOMETER_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - ODOMETER_READING_TYPE_UNIT_KILOMETER: Kilometer unit.\n - ODOMETER_READING_TYPE_UNIT_MILE: Mile unit.\n - ODOMETER_READING_TYPE_UNIT_METER: Meter unit."
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.sensors.v1.RelativeHumidityReadingType.RelativeHumidityReadingTypeUnit:
+      type: string
+      enum:
+      - RELATIVE_HUMIDITY_READING_TYPE_UNIT_UNSPECIFIED
+      - RELATIVE_HUMIDITY_READING_TYPE_UNIT_PERCENTAGE
+      default: RELATIVE_HUMIDITY_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - RELATIVE_HUMIDITY_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - RELATIVE_HUMIDITY_READING_TYPE_UNIT_PERCENTAGE: Percentage unit."
+    s12.sensors.v1.OdometerReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in kilometer.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.OdometerReadingType.OdometerReadingTypeUnit'
+      description: OdometerReadingType describes an odometer reading type.
+    s12.sensors.v1.TemperatureReadingType.TemperatureReadingTypeUnit:
+      type: string
+      enum:
+      - TEMPERATURE_READING_TYPE_UNIT_UNSPECIFIED
+      - TEMPERATURE_READING_TYPE_UNIT_CELSIUS
+      - TEMPERATURE_READING_TYPE_UNIT_FAHRENHEIT
+      - TEMPERATURE_READING_TYPE_UNIT_MILLIDEGREE_CELSIUS
+      default: TEMPERATURE_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - TEMPERATURE_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - TEMPERATURE_READING_TYPE_UNIT_CELSIUS: Celsius unit.\n - TEMPERATURE_READING_TYPE_UNIT_FAHRENHEIT: Fahrenheit unit.\n - TEMPERATURE_READING_TYPE_UNIT_MILLIDEGREE_CELSIUS: Millidegree Celsius unit."
+    s12.sensors.v1.RelativeHumidityReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in percentage.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.RelativeHumidityReadingType.RelativeHumidityReadingTypeUnit'
+      description: RelativeHumidityReadingType describes a relative humidity reading type.
+    s12.sensors.v1.MovingReadingType:
+      type: object
+      properties:
+        value:
+          type: boolean
+          description: 'Value of the reading.
+
+            True if it is moving, false if it is not moving.'
+      description: MovingReadingType describes a moving reading type.
+    s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType.ReceivedSignalStrengthIndicatorReadingTypeUnit:
+      type: string
+      enum:
+      - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_UNSPECIFIED
+      - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_DECIBEL
+      default: RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_DECIBEL: Decibel unit."
+    s12.sensors.v1.GetSensorIdResponse:
+      type: object
+      properties:
+        id:
+          description: 'The id of the provisioned sensor. This is the id that should be used to
+
+            interact with the sensor moving forward, such as ingesting new readings.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
+      description: Result returned from `GetSensorId`
+      title: GetSensorIdResponse
+    s12.sensors.v1.ProvisionSensorRequest:
+      type: object
+      properties:
+        device_id:
+          type: string
+          description: The id of the device that is being provisioned.
+        sensor_name:
+          type: string
+          description: The sensor name.
+        sensor_timezone:
+          type: string
+          description: IANA TZ Database timezone for the sensor.
+        sensor_location_name:
+          type: string
+          description: The location name for the sensor.
+        sc_site_id:
+          type: string
+          description: 'Optional. The SafetyCulture Directory Site ID (leaf-level site) to
+
+            associate the sensor with. Distinct from the legacy location tag.'
+      description: The parameters for `ProvisionSensorRequest`
+      title: ProvisionSensorRequest
+    s12.sensors.v1.SpeedReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in kilometers per hour.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SpeedReadingType.SpeedReadingTypeUnit'
+      description: SpeedReadingType describes a speed reading type.
+    s12.sensors.v1.SignalToNoiseRatioReadingType.SignalToNoiseRatioReadingTypeUnit:
+      type: string
+      enum:
+      - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_UNSPECIFIED
+      - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_DECIBEL
+      default: SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_DECIBEL: Decibel unit."
+    s12.sensors.v1.CarbonDioxideReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in parts per million.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.CarbonDioxideReadingType.CarbonDioxideReadingTypeUnit'
+      description: CarbonDioxideReadingType describes a carbon dioxide (CO2) reading type.
+    s12.sensors.v1.ListSensorsResponse:
+      type: object
+      properties:
+        sensors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.sensors.v1.SensorMetadata'
+          description: The list of sensors.
+        next_page_token:
+          type: string
+          description: The value of next_page_token to be used in the next list sensors request.
+      description: Result returned from `ListSensors`
+      title: ListSensorsResponse
+    s12.sensors.v1.GetSensorLatestReadingsResponse:
+      type: object
+      properties:
+        readings:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.sensors.v1.LatestSensorReading'
+          description: The latest readings associated with this device.
+      description: Result returned from `GetSensorLatestReadings`
+      title: GetSensorLatestReadingsResponse
+    s12.sensors.v1.GeoPositionReadingType:
+      type: object
+      properties:
+        value:
+          description: Value of the reading.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+      description: GeoPositionReadingType describes geographic coordinates.
+    s12.sensors.v1.CarbonMonoxideReadingType.CarbonMonoxideReadingTypeUnit:
+      type: string
+      enum:
+      - CARBON_MONOXIDE_READING_TYPE_UNIT_UNSPECIFIED
+      - CARBON_MONOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION
+      default: CARBON_MONOXIDE_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - CARBON_MONOXIDE_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - CARBON_MONOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION: Parts Per Million unit."
+    s12.sensors.v1.TemperatureReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in Celsius.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.TemperatureReadingType.TemperatureReadingTypeUnit'
+      description: TemperatureReadingType describes a temperature reading type.
+    s12.sensors.v1.LatestSensorReading:
+      type: object
+      properties:
+        id:
+          description: The id of the provisioned sensor.
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
+        timestamp:
+          type: string
+          format: date-time
+          description: The time of the reading.
+        name:
+          type: string
+          description: 'The name of the reading, eg: "Relative Humidity".'
+        type:
+          type: string
+          description: 'The type of the reading, eg: "relative_humidity".'
+        value:
+          type: string
+          description: 'The value of the reading, eg: "90". The value is rounded to 2 decimal places.'
+        unit:
+          type: string
+          description: 'The unit of the reading, eg: "Percentage". The unit might be converted from
+
+            the original unit to a corresponding standardised unit already supported on
+
+            SafetyCulture App for certain reading types.
+
+            For example, for the reading type "Odometer", if the unit is "Meters", it
+
+            will be converted to "Kilometers".'
+        raw_value:
+          type: string
+          description: The original value of the reading without any rounding.
+        raw_unit:
+          type: string
+          description: The original unit of the reading without any conversion.
+        alias:
+          type: string
+          description: Optional. A human-readable name for the reading specified by the user, e.g. 'Mileage', 'Usage'.
+      description: LatestSensorReading represents the latest sensor reading.
+    s12.sensors.v1.IgnitionOnReadingType:
+      type: object
+      properties:
+        value:
+          type: boolean
+          description: 'Value of the reading.
+
+            True if the ignition is on, false if the ignition is off.'
+      description: IgnitionOnReadingType describes an ignition on/off reading type.
+    s12.sensors.v1.SpeedReadingType.SpeedReadingTypeUnit:
+      type: string
+      enum:
+      - SPEED_READING_TYPE_UNIT_UNSPECIFIED
+      - SPEED_READING_TYPE_UNIT_KILOMETERS_PER_HOUR
+      - SPEED_READING_TYPE_UNIT_MILES_PER_HOUR
+      default: SPEED_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - SPEED_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - SPEED_READING_TYPE_UNIT_KILOMETERS_PER_HOUR: Kilometers per hour unit.\n - SPEED_READING_TYPE_UNIT_MILES_PER_HOUR: Miles per hour unit."
+    s12.sensors.v1.DeprovisionSensorResponse:
+      type: object
+      description: DeprovisionSensorResponse is the response for the endpoint `DeprovisionSensor`.
+    s12.sensors.v1.CarbonMonoxideReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in parts per million.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.CarbonMonoxideReadingType.CarbonMonoxideReadingTypeUnit'
+      description: CarbonMonoxideReadingType describes a carbon monoxide (CO) reading type.
+    s12.sensors.v1.SignalToNoiseRatioReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in decibel.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SignalToNoiseRatioReadingType.SignalToNoiseRatioReadingTypeUnit'
+      description: SignalToNoiseRatioReadingType describes a signal-to-noise ratio (SNR) reading type.
+    s12.sensors.v1.RunningTimeReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in hour.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.RunningTimeReadingType.RunningTimeReadingTypeUnit'
+      description: RunningTimeReadingType describes an operating time reading type.
+    s12.sensors.v1.EngineOnReadingType:
+      type: object
+      properties:
+        value:
+          type: boolean
+          description: 'Value of the reading.
+
+            True if the engine is on, false if the engine is off.'
+      description: EngineOnReadingType describes an engine on/off reading type.
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.sensors.v1.RunningTimeReadingType.RunningTimeReadingTypeUnit:
+      type: string
+      enum:
+      - RUNNING_TIME_READING_TYPE_UNIT_UNSPECIFIED
+      - RUNNING_TIME_READING_TYPE_UNIT_HOUR
+      - RUNNING_TIME_READING_TYPE_UNIT_MINUTE
+      - RUNNING_TIME_READING_TYPE_UNIT_SECOND
+      default: RUNNING_TIME_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - RUNNING_TIME_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - RUNNING_TIME_READING_TYPE_UNIT_HOUR: Hour unit.\n - RUNNING_TIME_READING_TYPE_UNIT_MINUTE: Minute unit.\n - RUNNING_TIME_READING_TYPE_UNIT_SECOND: Second unit."
+    s12.sensors.v1.IngestSensorReadingsResponse:
+      type: object
+      title: IngestSensorReadingsResponse is the response for the endpoint `IngestSensorReadings`
+    s12.sensors.v1.GetSensorResponse:
+      type: object
+      properties:
+        id:
+          description: The id of the provisioned sensor.
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
+        provisioned_at:
+          type: string
+          format: date-time
+          description: The time at which the sensor was provisioned on UTC.
+        asset_ids:
+          type: array
+          items:
+            type: string
+          description: The asset IDs associated with this sensor.
+        sensor_name:
+          type: string
+          description: The sensor name.
+        sensor_timezone:
+          type: string
+          description: IANA TZ Database timezone for the sensor.
+        sensor_location_name:
+          type: string
+          description: The location name for the sensor.
+      description: Result returned from `GetSensor`
+      title: GetSensorResponse
+    s12.sensors.v1.SensorMetadata:
+      type: object
+      properties:
+        source_name:
+          type: string
+          description: The provider/origin of the sensor data.
+        source_id:
+          type: string
+          description: An ID for the sensor, specified by the provider/origin.
+        asset_id:
+          type: string
+          description: The asset's id the sensor is associated with.
+        asset_name:
+          type: string
+          description: The asset's name the user has assigned the sensor with.
+        asset_timezone:
+          type: string
+          description: The timezone the sensor is operating in.
+        location_name:
+          type: string
+          description: The user created location label associated with the sensor.
+        site_id:
+          type: string
+          description: 'The SafetyCulture Site ID the sensor is associated with.
+
+            If empty, the sensor is not associated with any site.'
+      description: SensorMetadata represents the metadata associated with a single hardware sensor.
+    s12.sensors.v1.IngestSensorReadingsRequest:
+      type: object
+      properties:
+        id:
+          description: The id of the sensor.
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
+        readings:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.sensors.v1.SensorReading'
+          description: The readings to be ingested.
+      description: The parameters for `IngestSensorReadingsRequest`
+      title: IngestSensorReadingsRequest
+    s12.sensors.v1.ProvisionSensorResponse:
+      type: object
+      properties:
+        id:
+          description: 'The id of the provisioned sensor. This is the id that should be used to
+
+            interact with the sensor moving forward, such as ingesting new readings.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
+      description: Result returned from `ProvisionSensor`
+      title: ProvisionSensorResponse
+    s12.sensors.v1.SensorId:
+      type: object
+      properties:
+        source_name:
+          type: string
+          description: The provider/origin of the sensor data.
+        source_id:
+          type: string
+          description: An ID for the sensor, specified by the provider/origin.
+      description: 'SensorId represent a source name/source ID pairing that uniquely
+
+        identify a hardware sensor.'
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

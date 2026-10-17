@@ -1,0 +1,705 @@
+openapi: 3.2.0
+info:
+  title: Mitti Roles API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Roles
+paths:
+  /permissions/v1/roles:
+    post:
+      summary: Create a role
+      description: Creates a role with the given name, description and permissions, scoped to one or more structure types. Returns the created role.
+      operationId: RolesService_CreateRole
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.roles.v1.CreateRoleResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.roles.v1.CreateRoleRequest'
+        required: true
+      tags:
+      - Roles
+  /permissions/v1/roles/{role.id}:
+    put:
+      summary: Update a role
+      description: Replaces an existing role's name, description, permissions and structure type scope. The role is fully replaced from the request body. `name`, `description` and `structure_type_ids` are required, and omitting `permissions` clears every permission from the role.
+      operationId: RolesService_UpdateRole
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.roles.v1.UpdateRoleResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: role.id
+        description: Unique identifier for the role
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.roles.v1.RolesService.UpdateRoleBody'
+        required: true
+      tags:
+      - Roles
+  /permissions/v1/roles/{role_id}:
+    get:
+      summary: Get a role
+      description: Retrieves a single role by its unique identifier. Optionally includes the number of users assigned to the role.
+      operationId: RolesService_GetRole
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.roles.v1.GetRoleResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: role_id
+        description: UUID of the role
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: include_user_count
+        description: Whether to include user count for this role
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Roles
+components:
+  schemas:
+    s12.structures.roles.v1.Role:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the role
+        name:
+          type: string
+          description: The role title.
+        description:
+          type: string
+          description: The role description.
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.structures.roles.v1.PermissionType'
+          description: The list of permissions enabled for this role.
+        structure_type_ids:
+          type: array
+          items:
+            type: string
+          description: List of structure type IDs associated with the role. Limited to 100.
+        is_default:
+          type: boolean
+          description: Whether this role is a default role. This field is output only and cannot be edited.
+          readOnly: true
+        user_count:
+          type: integer
+          format: int32
+          description: The number of users assigned to this role. This field is output only and cannot be edited.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: The date created timestamp of a role.
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          description: The date last modified timestamp of a role.
+          readOnly: true
+      title: Role structure
+    s12.structures.roles.v1.RolesService.UpdateRoleBody:
+      type: object
+      properties:
+        role:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The role title.
+            description:
+              type: string
+              description: The role description.
+            permissions:
+              type: array
+              items:
+                $ref: '#/components/schemas/s12.structures.roles.v1.PermissionType'
+              description: The list of permissions enabled for this role.
+            structure_type_ids:
+              type: array
+              items:
+                type: string
+              description: List of structure type IDs associated with the role. Limited to 100.
+            is_default:
+              type: boolean
+              description: Whether this role is a default role. This field is output only and cannot be edited.
+              readOnly: true
+            user_count:
+              type: integer
+              format: int32
+              description: The number of users assigned to this role. This field is output only and cannot be edited.
+              readOnly: true
+            created_at:
+              type: string
+              format: date-time
+              description: The date created timestamp of a role.
+              readOnly: true
+            modified_at:
+              type: string
+              format: date-time
+              description: The date last modified timestamp of a role.
+              readOnly: true
+          description: The role to update
+      title: Request message to update a specific role
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.structures.roles.v1.UpdateRoleResponse:
+      type: object
+      title: Response message for updated role
+    s12.structures.roles.v1.CreateRoleRequest:
+      type: object
+      properties:
+        structure_type_ids:
+          type: array
+          items:
+            type: string
+          description: Required. List of structure type IDs to associate with the role. Limited to 100 per request.
+        name:
+          type: string
+          description: The role title
+        description:
+          type: string
+          description: The role description
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.structures.roles.v1.PermissionType'
+          description: The list of permissions enabled for this role.
+      title: Request message to create a specific role
+      required:
+      - structure_type_ids
+      - name
+      - description
+    s12.structures.roles.v1.PermissionType:
+      type: string
+      enum:
+      - PERMISSION_TYPE_CREATE_USERS
+      - PERMISSION_TYPE_MANAGE_USER_MEMBERSHIP
+      - PERMISSION_TYPE_EDIT_USERS
+      - PERMISSION_TYPE_VIEW_USERS
+      - PERMISSION_TYPE_CHANGE_USER_STATUS
+      - PERMISSION_TYPE_VIEW_DOCUMENTS
+      - PERMISSION_TYPE_LINK_DOCUMENTS
+      - PERMISSION_TYPE_MANAGE_DOCUMENTS
+      description: "- PERMISSION_TYPE_CREATE_USERS: Permission to create new users\n - PERMISSION_TYPE_MANAGE_USER_MEMBERSHIP: Permission to manage user membership (add and remove users)\n - PERMISSION_TYPE_EDIT_USERS: Permission to edit user details and settings\n - PERMISSION_TYPE_VIEW_USERS: Permission to view user information\n - PERMISSION_TYPE_CHANGE_USER_STATUS: Permission to activate or deactivate users\n - PERMISSION_TYPE_VIEW_DOCUMENTS: Permission to view documents linked to the structure\n - PERMISSION_TYPE_LINK_DOCUMENTS: Permission to link documents to the structure\n - PERMISSION_TYPE_MANAGE_DOCUMENTS: Permission to manage documents linked to the structure"
+      title: Supported Permission Types
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.structures.roles.v1.GetRoleResponse:
+      type: object
+      properties:
+        role:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.roles.v1.Role'
+          description: The role matching the search criteria
+      title: Response message containing a role if found
+    s12.structures.roles.v1.CreateRoleResponse:
+      type: object
+      properties:
+        role:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.roles.v1.Role'
+          description: The role created
+      title: Response message containing the created role
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

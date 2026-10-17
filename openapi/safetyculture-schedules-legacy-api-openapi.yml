@@ -1,0 +1,1020 @@
+openapi: 3.2.0
+info:
+  title: Mitti Schedules (legacy) API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Schedules (legacy)
+paths:
+  /schedules/v1/schedule_items:
+    post:
+      summary: Create a schedule item
+      operationId: SchedulesService_CreateScheduleItem
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.schedules.v1.CreateScheduleItemResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.schedules.v1.UpdateScheduleItem'
+              required:
+              - item
+        description: The schedule item to be created. The schedule will be created in the timezone of the authenticated user's profile timezone.
+        required: true
+      tags:
+      - Schedules (legacy)
+    get:
+      summary: List schedule items
+      operationId: SchedulesService_ListScheduleItems
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.schedules.v1.ListScheduleItemsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: page_size
+        description: 'Number of messages to be returned in a single request. Maximum
+
+          100. Non-positive values are ignored.  The presence of `next_page_token` in
+
+          the response indicates that more results might be available. For example:
+
+          ''20'''
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'If present, then retrieve the next batch of results from the
+
+          preceding call to this method.  `page_token` must be the value of
+
+          `next_page_token` from the previous response.  The values of other method
+
+          parameters should be identical to those in the previous call.
+
+          For example: ''MzA='''
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: statuses
+        description: "Filter ScheduleItems to those with one of the the given status\n\n - STATUS_UNSPECIFIED: Unspecified status value\n - ACTIVE: Default value - schedule item is still active\n - PAUSED: Schedule has been paused e.g. manually paused/org frozen\n - NO_TEMPLATE: The template used for this schedule item has been deleted/archived\n - NO_ASSIGNEE: No valid assignees exist for this schedule item anymore\n - FINISHED: The schedule item has hit its end date or count limit and is now complete\n - SUBSCRIPTION_INACTIVE: User/org subscription is inactive\n - NO_SITE: The site used for this schedule has been removed"
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - STATUS_UNSPECIFIED
+            - ACTIVE
+            - PAUSED
+            - NO_TEMPLATE
+            - NO_ASSIGNEE
+            - FINISHED
+            - SUBSCRIPTION_INACTIVE
+            - NO_SITE
+      tags:
+      - Schedules (legacy)
+  /schedules/v1/schedule_items/{id}:
+    put:
+      summary: Update a schedule item
+      operationId: SchedulesService_UpdateScheduleItem
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.schedules.v1.UpdateScheduleItemResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The id of the schedule item to update
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.schedules.v1.UpdateScheduleItem'
+              required:
+              - item
+        description: The new schedule item
+        required: true
+      tags:
+      - Schedules (legacy)
+    delete:
+      summary: Delete a schedule item
+      operationId: SchedulesService_DeleteScheduleItem
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.schedules.v1.DeleteScheduleItemResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Schedules (legacy)
+components:
+  schemas:
+    s12.schedules.v1.ScheduleItem.Entity:
+      type: object
+      example:
+        id: 0e7cff72-f919-4c84-aa37-e847b306423e
+        type: USER
+        name: Joe Bloggs
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the entity
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.EntityType'
+          description: The type of entity, e.g. "user" or "role"
+        name:
+          type: string
+          readOnly: true
+          description: The name of the entity
+      description: Entity represent the entity in a schedule, either creator or assignee
+      title: ScheduleItem.Entity
+      required:
+      - id
+      - type
+    s12.schedules.v1.ScheduleItem.Reminder:
+      type: object
+      example:
+        event: START
+        duration: PT5M
+      properties:
+        event:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.ReminderEventType'
+          description: On what event to remind the assignees
+        duration:
+          type: string
+          description: 'ISO8601 duration string, e.g. PT1H. How long before the event to remind
+
+            the assignees.'
+      description: Reminder represents a reminder for a schedule item
+      title: ScheduleItem.Reminder
+      required:
+      - event
+      - duration
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.schedules.v1.ScheduleItem.MustComplete:
+      type: string
+      enum:
+      - MUST_COMPLETE_UNSPECIFIED
+      - ONE
+      - ALL
+      default: MUST_COMPLETE_UNSPECIFIED
+      description: "- MUST_COMPLETE_UNSPECIFIED: Unspecified must complete value\n - ONE: Schedule must be completed by one assignee\n - ALL: Schedule must be completed by all assignees"
+      title: 'MustComplete is whom must complete a given schedule, either one assignee or
+
+        all assignees'
+    s12.schedules.v1.DeleteScheduleItemResponse:
+      type: object
+      description: Result returned from `DeleteScheduleItem`
+      title: DeleteScheduleItemResponse
+    s12.schedules.v1.ScheduleItem.NextOccurrence:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: The timestamp in the Internet Date-Time format when the next occurrence will occur
+        due:
+          type: string
+          format: date-time
+          description: The timestamp in the Internet Date-Time format when the next occurrence is due by
+      description: NextOccurrence is the next time the schedule item will occur for assignees
+      title: ScheduleItem.NextOccurrence
+    s12.schedules.v1.CreateScheduleItemResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the newly created schedule item
+      description: Result returned from `CreateScheduleItem`
+      title: CreateScheduleItemResponse
+    s12.schedules.v1.ScheduleItem.EntityType:
+      type: string
+      enum:
+      - ENTITY_TYPE_UNSPECIFIED
+      - USER
+      - ROLE
+      default: ENTITY_TYPE_UNSPECIFIED
+      description: "- ENTITY_TYPE_UNSPECIFIED: Unspecified entity type\n - USER: User\n - ROLE: Role"
+      title: EntityType is the type of entity, either a user or a role
+    s12.schedules.v1.ScheduleItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the schedule item
+        description:
+          type: string
+          description: Description of the schedule item
+        must_complete:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.MustComplete'
+          description: Whom must complete a given schedule, either one assignee or all assignees
+        can_late_submit:
+          type: boolean
+          description: Can the inspections be started after the due date
+        recurrence:
+          type: string
+          description: '[RRule](https://www.textmagic.com/free-tools/rrule-generator) formatted
+
+            recurrence string. <br> Example: `FREQ=WEEKLY;BYDAY=MO;INTERVAL=1`
+
+            represents weekly on Monday.'
+        start_time:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.StartTime'
+          description: The time the schedule item starts on each occurrence e.g. 9:10AM
+        duration:
+          type: string
+          description: 'ISO8601 duration string, e.g. PT1H. How long inspection can be started
+
+            after the start_date.'
+        timezone:
+          type: string
+          description: Timezone the schedule item will appear in
+        from_date:
+          type: string
+          format: date-time
+          description: When this schedule will begin appearing
+        to_date:
+          type: string
+          format: date-time
+          description: When the schedule will end
+        reminders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Reminder'
+          description: Reminders that will be sent to assignees
+        modified_at:
+          type: string
+          format: date-time
+          description: When the schedule item was last modified
+        created_at:
+          type: string
+          format: date-time
+          description: When the schedule item was created
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Status'
+          description: The current status of the schedule item
+        assignees:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Entity'
+          description: The users or groups that are assigned to complete the schedule
+        creator:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Entity'
+          description: The creator of the schedule item
+        document:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Document'
+          description: The document that is assigned to this schedule items
+        location_id:
+          type: string
+          description: The location assigned to this schedule item
+        next_occurrence:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.NextOccurrence'
+          description: The next occurrence of the schedule item
+        site_based_assignment_enabled:
+          type: boolean
+          description: Allows for site based assignments when enabled.
+        asset_id:
+          type: string
+          description: The asset assigned to this schedule item
+        migration_status:
+          description: The migration status of this schedule item, set during the legacy to new self-service migration.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.MigrationStatus'
+      description: ScheduleItem represents a the rule for a reoccuring schedule event
+      title: ScheduleItem
+    s12.schedules.v1.ListScheduleItemsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem'
+          description: A list of schedule items
+        next_page_token:
+          type: string
+          description: 'If there might be more results than those appearing in this response, then
+
+            `next_page_token` is included. If empty then there are no more results.
+
+            To get the next set of results, call this
+
+            method again using the value of `next_page_token` as `page_token`.
+
+            For Example: ''MzA='''
+        total:
+          type: integer
+          format: int32
+          description: Total number of schedule items found
+      description: Result returned from `ListScheduleItems`
+      title: ListScheduleItemsResponse
+    s12.schedules.v1.ScheduleItem.StartTime:
+      type: object
+      example:
+        hour: 15
+        minute: 56
+      properties:
+        hour:
+          type: integer
+          format: int32
+          description: The hour of the day to start the schedule
+        minute:
+          type: integer
+          format: int32
+          description: The minute of the day to start the schedule
+      description: StartTime represents the start time of a schedule item
+      title: ScheduleItem.StartTime
+      required:
+      - hour
+      - minute
+    s12.schedules.v1.ScheduleItem.Status:
+      type: string
+      enum:
+      - STATUS_UNSPECIFIED
+      - ACTIVE
+      - PAUSED
+      - NO_TEMPLATE
+      - NO_ASSIGNEE
+      - FINISHED
+      - SUBSCRIPTION_INACTIVE
+      - NO_SITE
+      default: STATUS_UNSPECIFIED
+      description: "- STATUS_UNSPECIFIED: Unspecified status value\n - ACTIVE: Default value - schedule item is still active\n - PAUSED: Schedule has been paused e.g. manually paused/org frozen\n - NO_TEMPLATE: The template used for this schedule item has been deleted/archived\n - NO_ASSIGNEE: No valid assignees exist for this schedule item anymore\n - FINISHED: The schedule item has hit its end date or count limit and is now complete\n - SUBSCRIPTION_INACTIVE: User/org subscription is inactive\n - NO_SITE: The site used for this schedule has been removed"
+      title: Status is the current status of the schedule item
+    s12.schedules.v1.ScheduleItem.ReminderEventType:
+      type: string
+      enum:
+      - REMINDER_EVENT_TYPE_UNSPECIFIED
+      - START
+      - DUE
+      default: REMINDER_EVENT_TYPE_UNSPECIFIED
+      description: "- REMINDER_EVENT_TYPE_UNSPECIFIED: Unspecified reminder event type\n - START: Default value - start of the schedule\n - DUE: End of the schedule"
+      title: ReminderEventType is the type of reminder event
+    s12.schedules.v1.ScheduleItem.Document:
+      type: object
+      example:
+        id: 0e7cff72-f919-4c84-aa37-e847b306423e
+        type: TEMPLATE
+        name: Joe's JSA Template
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the document
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.DocumentType'
+          description: The type of document, e.g. "template"
+        name:
+          type: string
+          readOnly: true
+          description: The name of the document
+      description: Document represents the document in a schedule
+      title: ScheduleItem.Document
+      required:
+      - id
+      - type
+    s12.schedules.v1.UpdateScheduleItem:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of the schedule item
+        must_complete:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.MustComplete'
+          description: Whom must complete a given schedule, either one assignee or all assignees
+        can_late_submit:
+          type: boolean
+          description: Can the inspections be started after the due date
+        recurrence:
+          type: string
+          description: '[RRule](https://www.textmagic.com/free-tools/rrule-generator) formatted
+
+            recurrence string. <br> Example: `FREQ=WEEKLY;BYDAY=MO;INTERVAL=1`
+
+            represents weekly on Monday.'
+        start_time:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.StartTime'
+          description: The time the schedule item starts on each occurrence e.g. 9:10AM
+        duration:
+          type: string
+          description: 'ISO8601 duration string, e.g. PT1H. How long inspection can be started
+
+            after the start_date.'
+        timezone:
+          type: string
+          description: '@deprecated, this field is not being used to dictate the timezone of the schedule item.
+
+            The timezone of the schedule item is based on the authenticated user''s profile timezone.'
+        from_date:
+          type: string
+          format: date-time
+          description: When this schedule will begin appearing
+        to_date:
+          type: string
+          format: date-time
+          description: When the schedule will end
+        reminders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Reminder'
+          description: Reminders that will be sent to assignees
+        assignees:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Entity'
+          description: The users or groups that are assigned to complete the schedule
+        document:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Document'
+          description: The document that is assigned to this schedule items
+        location_id:
+          type: string
+          description: The location assigned to this schedule item
+        id:
+          type: string
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Status'
+        creator:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.Entity'
+        next_occurrence:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.NextOccurrence'
+        asset_id:
+          type: string
+          description: The asset assigned to this schedule item
+      description: The parameters for creating or updating a schedule item
+      title: UpdateScheduleItem
+      required:
+      - description
+      - must_complete
+      - can_late_submit
+      - recurrence
+      - start_time
+      - duration
+      - from_date
+      - assignees
+      - document
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.schedules.v1.UpdateScheduleItemResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the updated schedule item
+      description: Result returned from `UpdateScheduleItem`
+      title: UpdateScheduleItemResponse
+    s12.schedules.v1.ScheduleItem.DocumentType:
+      type: string
+      enum:
+      - DOCUMENT_TYPE_UNSPECIFIED
+      - TEMPLATE
+      default: DOCUMENT_TYPE_UNSPECIFIED
+      description: "- DOCUMENT_TYPE_UNSPECIFIED: Unspecified document type\n - TEMPLATE: Inspection Template"
+      title: DocumentType is the type of document (e.g. template)
+    s12.schedules.v1.MigrationStatus:
+      type: string
+      enum:
+      - MIGRATION_STATUS_UNSPECIFIED
+      - MIGRATION_STATUS_MIGRATED
+      - MIGRATION_STATUS_STARTED
+      default: MIGRATION_STATUS_UNSPECIFIED
+      description: "MigrationStatus represents the legacy to new self-service migration state of a schedule item.\n\n - MIGRATION_STATUS_UNSPECIFIED: Default value; item has not been through migration.\n - MIGRATION_STATUS_MIGRATED: Item was successfully migrated to new scheduling.\n - MIGRATION_STATUS_STARTED: Item is being migrated: paused in legacy but new schedule has not been created yet."
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

@@ -1,0 +1,1512 @@
+openapi: 3.2.0
+info:
+  title: Mitti Documents API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Documents
+paths:
+  /documents/v1:
+    post:
+      summary: Create a file
+      description: Create a new file in Documents and return a URL to upload the file content to.
+      operationId: DocumentsPublicService_CreateFile
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.CreateFileResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.CreateFileRequest'
+        required: true
+      tags:
+      - Documents
+  /documents/v1/archive/{item_id}:
+    post:
+      summary: Archive a file or folder
+      description: Archive a file or folder in Documents.
+      operationId: DocumentsPublicService_ArchiveItem
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.ArchiveItemResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: item_id
+        description: 'The ID of the item (file or folder) you want to archive.
+
+          To get the `item_id`, open the item in the SafetyCulture web app and copy the last part of the URL.
+
+          For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+          the item ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.DocumentsPublicService.ArchiveItemBody'
+        required: true
+      tags:
+      - Documents
+  /documents/v1/bulk/add_owners:
+    post:
+      summary: Bulk add file owners
+      description: Add owners (users or groups) to multiple files without removing existing owners.
+      operationId: DocumentsPublicService_BulkAddFileOwners
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.BulkAddFileOwnersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.BulkAddFileOwnersRequest'
+        description: Request to add owners to multiple files without removing existing owners.
+        required: true
+      tags:
+      - Documents
+  /documents/v1/bulk/remove_owners:
+    post:
+      summary: Bulk remove file owners
+      description: Remove owners (users or groups) from multiple files.
+      operationId: DocumentsPublicService_BulkRemoveFileOwners
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.BulkRemoveFileOwnersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.BulkRemoveFileOwnersRequest'
+        description: Request to remove owners from multiple files.
+        required: true
+      tags:
+      - Documents
+  /documents/v1/bulk/update_owners:
+    post:
+      summary: Bulk update file owners
+      description: Replace the existing owners (users or groups) of multiple files.
+      operationId: DocumentsPublicService_BulkUpdateFileOwners
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.BulkUpdateFileOwnersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.BulkUpdateFileOwnersRequest'
+        description: Request to update and replace the existing owners of multiple files.
+        required: true
+      tags:
+      - Documents
+  /documents/v1/children:
+    post:
+      summary: Get folder items
+      description: Retrieve the files and folders within a specified folder.
+      operationId: DocumentsPublicService_GetFolderChildren
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.GetFolderChildrenResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.GetFolderChildrenRequest'
+        description: Request to get the children (files and folders) of a specified folder.
+        required: true
+      tags:
+      - Documents
+  /documents/v1/link:
+    post:
+      summary: Link files
+      description: Link files to other areas of the platform, such as an asset.
+      operationId: DocumentsPublicService_LinkFiles
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.LinkFilesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.LinkFilesRequest'
+        required: true
+      tags:
+      - Documents
+  /documents/v1/move/{item_id}:
+    post:
+      summary: Move a file or folder
+      description: Move a file or folder to a different folder in Documents.
+      operationId: DocumentsPublicService_MoveItem
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.MoveItemResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: item_id
+        description: 'The ID of the item (file or folder) you want to move.
+
+          To get the `item_id`, open the item in the SafetyCulture web app and copy the last part of the URL.
+
+          For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+          the item ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.DocumentsPublicService.MoveItemBody'
+        required: true
+      tags:
+      - Documents
+  /documents/v1/search:
+    post:
+      summary: Search files and folders
+      description: Search for files and folders in Documents.
+      operationId: DocumentsPublicService_SearchItems
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.SearchItemsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.SearchItemsRequest'
+        description: Request to search the files and folders.
+        required: true
+      tags:
+      - Documents
+  /documents/v1/{file_id}:
+    patch:
+      summary: Update a file
+      description: Update an existing file's metadata or content.
+      operationId: DocumentsPublicService_UpdateFile
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.documents.v1.UpdateFileResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: file_id
+        description: 'The ID of the file you want to update.
+
+          To get the `file_id`, open the file in the SafetyCulture web app and copy the last part of the URL.
+
+          For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+          the file ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.documents.v1.DocumentsPublicService.UpdateFileBody'
+        required: true
+      tags:
+      - Documents
+components:
+  schemas:
+    s12.documents.v1.UpdateFileRequest.Description:
+      type: object
+      properties:
+        value:
+          type: string
+      description: The new description of the file. Maximum of 1000 characters and must exclude invalid characters.
+    s12.documents.v1.DocumentsPublicService.UpdateFileBody:
+      type: object
+      properties:
+        file_type:
+          description: 'The type of the file to be created.
+
+            Please note that videos are currently not supported.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.MediaType'
+        file_size:
+          type: integer
+          format: int64
+          description: The size of the file in bytes. Must not exceed 50MB. This field is required if `file_type` is provided.
+        name:
+          type: string
+          description: The new name of the file. Maximum of 255 characters and must exclude invalid characters.
+        description:
+          $ref: '#/components/schemas/s12.documents.v1.UpdateFileRequest.Description'
+        owners:
+          $ref: '#/components/schemas/s12.documents.v1.UpdateFileRequest.Owners'
+        valid_to:
+          description: The expiry date of the file. Set year, month, and day to 0 to clear the file's expiry date.
+          allOf:
+          - $ref: '#/components/schemas/google.type.Date'
+        file_extension:
+          type: string
+          description: 'The file extension of the uploaded blob (e.g. "pdf", "jpg"), without the leading dot.
+
+            Used to populate the file''s extension when the extension cannot be derived from `name`
+
+            or the underlying media metadata is unavailable.'
+      title: Request to update the file with the specified ID
+    s12.documents.v1.BulkAddFileOwnersResponse:
+      type: object
+      title: Response for the BulkAddFileOwners request
+    s12.common.ExpiryStatus:
+      type: string
+      enum:
+      - EXPIRY_STATUS_VALID
+      - EXPIRY_STATUS_EXPIRED
+      - EXPIRY_STATUS_EXPIRING_SOON
+      description: The expiry status of an object based on its validity period.
+    s12.documents.v1.Site:
+      type: object
+      properties:
+        site_id:
+          type: string
+          description: The ID of the site
+        name:
+          type: string
+          description: The name of the site
+      title: A site associated with a file
+    s12.documents.v1.SearchItemsResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.Folder'
+          description: List of folders that match the search criteria.
+        files:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.File'
+          description: List of files that match the search criteria.
+        total:
+          type: integer
+          format: int32
+          description: Total number of files and folders that match the search criteria.
+        next_page_token:
+          type: string
+          description: The token used to retrieve the next page of results. Empty if there are no more items.
+      title: Response for the SearchItems request
+    s12.documents.v1.DocumentsPublicService.ArchiveItemBody:
+      type: object
+      description: Request to archive an item (file or folder).
+    s12.documents.v1.Group:
+      type: object
+      properties:
+        group_id:
+          type: string
+          description: The ID of the group
+        name:
+          type: string
+          description: The name of the group
+      title: A group that owns a folder or file
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.documents.v1.BulkAddFileOwnersRequest:
+      type: object
+      properties:
+        file_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the files you want to add owners to.
+
+            To get the `file_id`, open the file in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+            the file ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the users you want to add as owners.
+
+            To get the `user_id`, open the user in the SafetyCulture web app and copy the last part of the URL before /profile
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/users/user_7a7cddac38ac4dd197304ba0d05b981a/profile`,
+
+            the user ID is `user_7a7cddac38ac4dd197304ba0d05b981a`.'
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the groups you want to add as owners.
+
+            To get the `group_id`, open the group in the SafetyCulture web app and copy the last part of the URL before /users.
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/groups/role_1ebbbca147644b5aa4ea646429f941e7/users`,
+
+            the group ID is `role_1ebbbca147644b5aa4ea646429f941e7`.'
+      description: Request to add owners to multiple files without removing existing owners.
+      required:
+      - file_ids
+    s12.documents.v1.UpdateFileResponse:
+      type: object
+      properties:
+        upload_url:
+          type: string
+          description: The URL where you must upload the file’s binary content. It is valid for 20 minutes.
+        version_number:
+          type: integer
+          format: int32
+          description: The version number of the file after the update.
+      title: Response for the UpdateFile request
+    s12.documents.v1.ArchiveItemResponse:
+      type: object
+      title: Response for the ArchiveItem request
+    s12.documents.v1.ParentFolder:
+      type: object
+      properties:
+        folder_id:
+          type: string
+          description: The ID of the parent folder
+        name:
+          type: string
+          description: The name of the parent folder
+      title: Object representing the parent folder of a file or folder
+    s12.documents.v1.Label:
+      type: object
+      properties:
+        label_id:
+          type: string
+          description: The ID of the label
+        name:
+          type: string
+          description: The name of the label
+      title: The labels associated with the file
+    s12.documents.v1.LinkedFileDomain:
+      type: string
+      enum:
+      - LINKED_FILE_DOMAIN_UNSPECIFIED
+      - LINKED_FILE_DOMAIN_ASSET
+      default: LINKED_FILE_DOMAIN_UNSPECIFIED
+    s12.documents.v1.LinkFilesResponse:
+      type: object
+      properties:
+        linked_files:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.LinkFilesResponse.LinkedFile'
+          description: List of files that were linked.
+      title: Response for the LinkFiles request
+    s12.documents.v1.BulkUpdateFileOwnersRequest:
+      type: object
+      properties:
+        file_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the files you want to update the owners of.
+
+            To get the `file_id`, open the file in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+            the file ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the users you want to add as owners. Existing owners will be removed.
+
+            To get the `user_id`, open the user in the SafetyCulture web app and copy the last part of the URL before /profile.
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/users/user_7a7cddac38ac4dd197304ba0d05b981a/profile`,
+
+            the user ID is `user_7a7cddac38ac4dd197304ba0d05b981a`.'
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the groups you want to add as owners.
+
+            To get the `group_id`, open the group in the SafetyCulture web app and copy the last part of the URL before /users.
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/groups/role_1ebbbca147644b5aa4ea646429f941e7/users`,
+
+            the group ID is `role_1ebbbca147644b5aa4ea646429f941e7`.'
+      description: Request to update and replace the existing owners of multiple files.
+      required:
+      - file_ids
+    s12.documents.v1.GetFolderChildrenRequest:
+      type: object
+      properties:
+        parent_id:
+          type: string
+          description: 'The ID of the folder whose children (files and folders) you want to retrieve.
+
+            Leave empty to retrieve the root folder''s children.
+
+            To get the `parent_id`, open the folder in the SafetyCulture web app and copy the last part of the URL.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'The number of items (files and folders combined) to return.
+
+            Max value is 25. Defaults to 25 if not provided.'
+        page_token:
+          type: string
+          description: 'The token to retrieve the next page of results.
+
+            Use the value returned in the `next_page_token`` from the previous response.'
+        include_media_url:
+          type: boolean
+          description: If `true`, includes a temporary media URL for each file so it can be downloaded.
+        archived:
+          type: boolean
+          description: If `true`, only archived files will be returned.
+      description: Request to get the children (files and folders) of a specified folder.
+    s12.documents.v1.LinkFilesResponse.LinkedFile:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The ID of the file that was linked.
+        entity_id:
+          type: string
+          description: The ID of the entity that the file is linked to.
+        link_id:
+          type: string
+          description: The ID of the link that was created. Link ID is a unique identifier for the link used to retrieve the link details.
+    s12.documents.v1.User:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The ID of the user
+        email:
+          type: string
+          description: The email of the user
+        first_name:
+          type: string
+          description: The first name of the user
+        last_name:
+          type: string
+          description: The last name of the user
+      title: A user that owns a folder or file
+    s12.documents.v1.BulkUpdateFileOwnersResponse:
+      type: object
+      title: Response for the BulkUpdateFileOwners request
+    s12.documents.v1.File:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The ID of the file
+        name:
+          type: string
+          description: The name of the file
+        description:
+          type: string
+          description: The description of the file
+        file_extension:
+          type: string
+          description: The type extension of the file
+        file_size:
+          type: integer
+          format: int32
+          description: The file size in bytes
+        version_number:
+          type: integer
+          format: int32
+          description: The current version of the file
+        download_url:
+          type: string
+          description: The URL to download the file if specified in the request.
+        labels:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.Label'
+          description: The labels associated with the file
+        created_at:
+          type: string
+          format: date-time
+          description: The time the file was created
+        modified_at:
+          type: string
+          format: date-time
+          description: The time the file was last modified
+        archived_at:
+          type: string
+          format: date-time
+          description: If archived, the time the file was archived
+        archived:
+          type: boolean
+          description: If the file is archived or not
+        bookmarked:
+          type: boolean
+          description: If the file is bookmarked by the requested user
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.ParentFolder'
+          description: 'Ordered from Highest ancestor to the current node
+
+            eg. [Grandparent, Parent, Current]'
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.User'
+          description: The users that own the file
+        groups:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.Group'
+          description: The groups that own the file
+        valid_from:
+          allOf:
+          - $ref: '#/components/schemas/google.type.Date'
+          description: The date the file is valid from
+        valid_to:
+          allOf:
+          - $ref: '#/components/schemas/google.type.Date'
+          description: The date the file is valid to
+        expiry_status:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.ExpiryStatus'
+          description: The expiry status of the file based on its validity period
+        sites:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.Site'
+          description: The sites the file is associated with
+      title: The file structure of the file system
+    s12.documents.v1.TimeInterval:
+      type: object
+      properties:
+        from:
+          type: string
+          format: date-time
+          description: optional. represents the time should be after the time provided
+        to:
+          type: string
+          format: date-time
+          description: optional. represents the time should be before the time provided
+      title: Object representing the time interval applied to filtering folder and files
+    s12.common.MediaType:
+      type: string
+      enum:
+      - MEDIA_TYPE_IMAGE
+      - MEDIA_TYPE_VIDEO
+      - MEDIA_TYPE_PDF
+      - MEDIA_TYPE_DOCX
+      - MEDIA_TYPE_XLSX
+      - MEDIA_TYPE_PPTX
+      - MEDIA_TYPE_CSV
+      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    s12.documents.v1.GetFolderChildrenResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.Folder'
+          description: List of folders that match the search criteria.
+        files:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.File'
+          description: List of files that match the search criteria.
+        total:
+          type: integer
+          format: int32
+          description: Total number of files and folders that match the search criteria.
+        next_page_token:
+          type: string
+          description: The token used to retrieve the next page of results. Empty if there are no more items.
+      title: Response for the GetFolderChildrenResponse request
+    s12.documents.v1.Folder:
+      type: object
+      properties:
+        folder_id:
+          type: string
+          description: The ID of the folder
+        name:
+          type: string
+          description: The name of the folder
+        created_at:
+          type: string
+          format: date-time
+          description: The time the folder was created
+        modified_at:
+          type: string
+          format: date-time
+          description: The time the folder was last modified
+        archived_at:
+          type: string
+          format: date-time
+          description: If archived, the time the folder was archived
+        archived:
+          type: boolean
+          description: If the folder is archived or not
+        bookmarked:
+          type: boolean
+          description: If the folder is bookmarked by the requested user
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.ParentFolder'
+          description: 'Ordered from Highest ancestor to the current node
+
+            eg. [Grandparent, Parent, Current]'
+        child_count:
+          type: integer
+          format: int32
+          description: The number of children in the folder
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.User'
+          description: The users that own the folder
+        groups:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.Group'
+          description: The groups that own the folder
+      title: The folder structure of the file system
+    s12.documents.v1.MoveItemResponse:
+      type: object
+      title: Response for the MoveItem request
+    s12.documents.v1.BulkRemoveFileOwnersResponse:
+      type: object
+      title: Response for the BulkRemoveFileOwners request
+    google.type.Date:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          description: 'Year of the date. Must be from 1 to 9999, or 0 to specify a date without
+
+            a year.'
+        month:
+          type: integer
+          format: int32
+          description: 'Month of a year. Must be from 1 to 12, or 0 to specify a year without a
+
+            month and day.'
+        day:
+          type: integer
+          format: int32
+          description: 'Day of a month. Must be from 1 to 31 and valid for the year and month, or 0
+
+            to specify a year by itself or a year and month where the day isn''t
+
+            significant.'
+      description: '* A full date, with non-zero year, month, and day values
+
+        * A month and day value, with a zero year, such as an anniversary
+
+        * A year on its own, with zero month and day values
+
+        * A year and month value, with a zero day, such as a credit card expiration
+
+        date
+
+
+        Related types are [google.type.TimeOfDay][google.type.TimeOfDay] and
+
+        `google.protobuf.Timestamp`.'
+      title: 'Represents a whole or partial calendar date, such as a birthday. The time of
+
+        day and time zone are either specified elsewhere or are insignificant. The
+
+        date is relative to the Gregorian Calendar. This can represent one of the
+
+        following:'
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.documents.v1.UpdateFileRequest.Owners:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the users you want to add as owners.
+
+            To get the `user_id`, open the user in the SafetyCulture web app and copy the last part of the URL before /profile
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/users/user_7a7cddac38ac4dd197304ba0d05b981a/profile`,
+
+            the user ID is `user_7a7cddac38ac4dd197304ba0d05b981a`.'
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the groups you want to add as owners.
+
+            To get the `group_id`, open the group in the SafetyCulture web app and copy the last part of the URL before /users.
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/groups/role_1ebbbca147644b5aa4ea646429f941e7/users`,
+
+            the group ID is `role_1ebbbca147644b5aa4ea646429f941e7`.'
+      description: The new owners of the file. Maximum of 5 users and groups.
+    s12.documents.v1.CreateFileRequest:
+      type: object
+      properties:
+        path:
+          type: array
+          items:
+            type: string
+          description: 'An array of folder names that defines the path where the file will be stored.
+
+            The `path` is relative to the `parent_id` if it is provided. If not, it starts from the root folder.
+
+            The API will automatically create any folders in the path that don’t exist.
+
+            Each folder name must be 1-255 characters and exclude invalid characters.'
+        name:
+          type: string
+          description: 'The name of the file.
+
+            Must be between 1-255 characters and exclude invalid characters.'
+        file_type:
+          description: 'The type of the file to be created.
+
+            Please note that videos are currently not supported.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.MediaType'
+        file_size:
+          type: integer
+          format: int64
+          description: 'The size of the file in bytes. Must not exceed 50MB.
+
+            This field is required if `file_type` is provided.'
+        parent_id:
+          type: string
+          description: 'The ID of the folder where the file should be stored.
+
+            Any folders defined in the `path` will be created inside the parent folder.
+
+            If you don’t provide a parent_id, the file will be stored in the root folder.
+
+            To get the `parent_id`, open the folder in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/documents/9dd76834-65ef-41d3-815c-964df32450e4`,
+
+            the parent ID is `9dd76834-65ef-41d3-815c-964df32450e4`.'
+        file_extension:
+          type: string
+          description: 'The file extension of the uploaded blob (e.g. "pdf", "jpg"), without the leading dot.
+
+            Used to populate the file''s extension when the extension cannot be derived from `name`
+
+            or the underlying media metadata is unavailable.'
+      title: Request to create a file in the specified folder
+    s12.documents.v1.SearchItemsRequest:
+      type: object
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: 'The number of items (files and folders combined) to return.
+
+            Max value is 25. Defaults to 25 if not provided.'
+        page_token:
+          type: string
+          description: 'The token to retrieve the next page of results.
+
+            Use the value returned in the `next_page_token`` from the previous response.'
+        include_media_url:
+          type: boolean
+          description: If `true`, includes a temporary media URL for each file so it can be downloaded.
+        archived:
+          type: boolean
+          description: If `true`, only archived files will be returned.
+        search_term:
+          type: string
+          description: 'Search term to match against file or folder names.
+
+            This is case-insensitive, must be 1-130 characters, and exclude invalid characters.'
+        item_ids:
+          type: array
+          items:
+            type: string
+          description: List of item IDs to filter results. Only items matching any of the IDs will be returned.
+        valid_to:
+          description: TimeInterval to filter by expiry date. If only `from` is set, it will return files expiring after that date. If only `to` is set, it will return files expiring before that date. If both are set, it will return files expiring within that time range.
+          allOf:
+          - $ref: '#/components/schemas/s12.documents.v1.TimeInterval'
+      description: Request to search the files and folders.
+    s12.documents.v1.CreateFileResponse:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The ID of the file that was created.
+        upload_url:
+          type: string
+          description: 'The URL where you must upload the file’s binary content.
+
+            It is valid for 20 minutes.'
+        path:
+          type: string
+          description: If provided, the full folder path where the file was stored.
+        name:
+          type: string
+          description: The name of the created file.
+      title: Response for the CreateFile request
+    s12.documents.v1.BulkRemoveFileOwnersRequest:
+      type: object
+      properties:
+        file_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the files you want to remove owners from.
+
+            To get the `file_id`, open the file in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+            the file ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the users you want to remove as owners.
+
+            To get the `user_id`, open the user in the SafetyCulture web app and copy the last part of the URL before /profile.
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/users/user_7a7cddac38ac4dd197304ba0d05b981a/profile`,
+
+            the user ID is `user_7a7cddac38ac4dd197304ba0d05b981a`.'
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the groups you want to remove as owners.
+
+            To get the `group_id`, open the group in the SafetyCulture web app and copy the last part of the URL before /users.
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/groups/role_1ebbbca147644b5aa4ea646429f941e7/users`,
+
+            the group ID is `role_1ebbbca147644b5aa4ea646429f941e7`.'
+      description: Request to remove owners from multiple files.
+    s12.documents.v1.LinkFilesRequest:
+      type: object
+      properties:
+        file_ids:
+          type: array
+          items:
+            type: string
+          description: 'The ids of the files to be linked
+
+            To get the `file_id`, open the file in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+            the file ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        entity_ids:
+          type: array
+          items:
+            type: string
+          description: 'The ids of the entities that the file(s) are being linked to
+
+            To get the `entity_id`, open the entity (e.g. asset) in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/assets/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+            the entity ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        domain:
+          allOf:
+          - $ref: '#/components/schemas/s12.documents.v1.LinkedFileDomain'
+          description: 'The domain of the entity that the file(s) are being linked to
+
+            If the entity is an asset, use `DOMAIN_ASSET`'
+      title: Request to link documents to other areas of the platform e.g. an asset
+      required:
+      - entity_ids
+      - domain
+    s12.documents.v1.DocumentsPublicService.MoveItemBody:
+      type: object
+      properties:
+        target_folder_id:
+          type: string
+          description: 'The ID of the folder where the item (file or folder) should be moved.
+
+            If you don’t provide a target_folder_id, the item will be moved to the root folder.
+
+            To get the `target_folder_id`, open the target folder in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/documents/9dd76834-65ef-41d3-815c-964df32450e4`,
+
+            the target folder ID is `9dd76834-65ef-41d3-815c-964df32450e4`.'
+      description: Request to move an item (file or folder) to a different folder.
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

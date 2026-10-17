@@ -1,0 +1,2526 @@
+openapi: 3.2.0
+info:
+  title: Mitti Structures API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Structures
+paths:
+  /structures/v1/fields/list:
+    post:
+      summary: List fields
+      description: Returns the field definitions in your organization. Use it to resolve the `field_id` values you need before setting field values on a structure, filtering by the structure type a field applies to. Each field carries its type, whether it is required, and its per-structure-type settings.
+      operationId: StructuresFieldsService_ListFields
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.v1.ListFieldsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.v1.ListFieldsRequest'
+        required: true
+      tags:
+      - Structures
+  /structures/v1/roles/{role_id}/members:
+    post:
+      summary: Add users to a role
+      description: 'Assigns up to 100 users to a role, each against its own set of structures. This endpoint supports partial success: the memberships that were created are returned in `structure_memberships`, and any assignment that failed is reported in `errors` with a status code and a reason. A response with a populated `errors` array is still a 200.'
+      operationId: StructureMembershipService_AddUsersToRole
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.membership.v1.AddUsersToRoleResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: role_id
+        description: The unique identifier of the role to assign. Required.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembershipService.AddUsersToRoleBody'
+        required: true
+      tags:
+      - Structures
+  /structures/v1/roles/{role_id}/members/list:
+    post:
+      summary: List users by role
+      description: Lists the users assigned to a role, deduplicated across structure instances, one entry per user. Each entry samples the user's assigned structures per structure type.
+      operationId: StructureMembershipService_ListUsersByRole
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.membership.v1.ListUsersByRoleResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: role_id
+        description: Required. The unique identifier of the role.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembershipService.ListUsersByRoleBody'
+        required: true
+      tags:
+      - Structures
+  /structures/v1/structures:
+    post:
+      summary: Create a structure
+      description: Creates a structure, such as a site or a group, within your organization. Set `parent_structure_id` to place the new structure beneath an existing one, or leave it empty to create a top-level structure. Field values supplied in `fields` are applied to the new structure.
+      operationId: StructuresService_CreateStructure
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.v1.CreateStructureResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.v1.CreateStructureRequest'
+        required: true
+      tags:
+      - Structures
+  /structures/v1/structures/search:
+    post:
+      summary: Search structures
+      description: Searches the structures of a single type in your organization, ordered by relevance. `structure_type` is required — pass a built-in type such as `SYSTEM_STRUCTURE_TYPE_SITE` or an org-defined structure type UUID. Results are paginated with `page_token`.
+      operationId: StructuresService_SearchStructures
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.v1.SearchStructuresResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.v1.SearchStructuresRequest'
+        description: Request for SearchStructures. Organization is taken from the caller's auth.
+        required: true
+      tags:
+      - Structures
+  /structures/v1/structures/{structure_id}:
+    get:
+      summary: Get a structure
+      description: Returns a structure with its ancestors and its field values. Only field values whose field is configured to display on profiles for the structure's type are returned. Use the structure metadata endpoint when you only need the core attributes.
+      operationId: StructuresService_GetStructureProfile
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.v1.GetStructureProfileResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: structure_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Structures
+    put:
+      summary: Replace a structure
+      description: 'Replaces a structure''s name, description and field values. This is a full replacement, not a partial update: an omitted `description` is cleared, and any field value that is not present in `fields` is cleared. Send the structure''s complete field set on every request.'
+      operationId: StructuresService_UpdateStructure
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.v1.UpdateStructureResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: structure_id
+        description: The identifier of the structure to update
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.v1.StructuresService.UpdateStructureBody'
+        required: true
+      tags:
+      - Structures
+  /structures/v1/structures/{structure_id}/members:
+    post:
+      summary: Add users to a structure
+      description: 'Adds up to 100 users to a structure as direct members. This endpoint supports partial success: the memberships that were created are returned in `structure_memberships`, and any assignment that failed is reported in `errors` with a status code and a reason. A response with a populated `errors` array is still a 200.'
+      operationId: StructureMembershipService_AddUsersToStructure
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.membership.v1.AddUsersToStructureResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: structure_id
+        description: The unique identifier of the structure.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembershipService.AddUsersToStructureBody'
+        required: true
+      tags:
+      - Structures
+  /structures/v1/structures/{structure_id}/members/list:
+    post:
+      summary: List members of a structure
+      description: Returns the users assigned directly to a structure, each with their role and user details. Users who inherit membership from an ancestor structure are not included. Filter by role, by a partial match on name or email, or by active status, and page through results with `page_size` and `offset`. Use `total_membership_count` to size the full result set.
+      operationId: StructureMembershipService_ListDirectUsersInStructure
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.membership.v1.ListDirectUsersInStructureResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: structure_id
+        description: The unique identifier of the structure to list users for.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembershipService.ListDirectUsersInStructureBody'
+        required: true
+      tags:
+      - Structures
+  /structures/v1/structures/{structure_id}/members/remove:
+    post:
+      summary: Remove users from a structure
+      description: 'Removes up to 100 users from a structure. Only direct memberships are removed — a user who inherits membership from an ancestor structure keeps that inherited membership. This endpoint supports partial success: a user who could not be removed is reported in `errors` with a status code and a reason, and a response with a populated `errors` array is still a 200. A rule-based membership is reported this way rather than removed, because only a change to the rule can remove it.'
+      operationId: StructureMembershipService_RemoveUsersFromStructure
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.membership.v1.RemoveUsersFromStructureResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: structure_id
+        description: The unique identifier of the structure.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembershipService.RemoveUsersFromStructureBody'
+        required: true
+      tags:
+      - Structures
+  /structures/v1/structures/{structure_id}/metadata:
+    get:
+      summary: Get structure metadata
+      description: 'Returns the core metadata for a structure: its name, type, status, creator and timestamps. Use this instead of the full structure endpoint when you do not need ancestors or field values. Pass `field_mask` to restrict which metadata fields are populated.'
+      operationId: StructuresService_GetStructureMetadata
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.v1.GetStructureMetadataResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: structure_id
+        description: Required. The unique identifier of the structure.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: field_mask
+        description: Optional. Controls which fields of the StructureMetadata are populated in the response.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Structures
+  /structures/v1/structures/{structure_id}/move:
+    post:
+      summary: Move a structure
+      description: Moves a structure so that it sits beneath a different parent. The structure keeps its members and field values; only its position in the hierarchy changes. Only structures whose type supports hierarchy can be moved — check `can_move` on the structure first.
+      operationId: StructuresService_MoveStructure
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.structures.v1.MoveStructureResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: structure_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.structures.v1.StructuresService.MoveStructureBody'
+        required: true
+      tags:
+      - Structures
+components:
+  schemas:
+    s12.search.v1.StructureSearchResult.Parent:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: UUID of the parent structure.
+        name:
+          type: string
+          description: Display name of the parent structure.
+      description: The matched structure's parent.
+    s12.structures.membership.v1.ListDirectUsersInStructureRequest.Filter:
+      type: object
+      properties:
+        role_id:
+          type: string
+          description: Filter by role ID to list only users with a specific role.
+        query:
+          type: string
+          description: Used for filtering users by their name, family name or email. This supports partial matches to allow flexible searching.
+        user_status:
+          description: Used for filtering users by their active status. This allows clients to include or exclude inactive users from the results.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
+      description: Filter criteria for listing direct users in a structure.
+    s12.common.GeoPosition:
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+          description: The geographical longitude
+        latitude:
+          type: number
+          format: double
+          description: The geographical latitude
+        accuracy:
+          type: integer
+          format: int32
+          description: The accuracy in meters
+      description: A position is the fundamental geographical geometry construct.
+    s12.structures.membership.v1.RoleDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The role title.
+        id:
+          type: string
+          description: The unique identifier of the role.
+      title: RoleDetails contains basic details about a role
+    s12.structures.membership.v1.RemoveUsersFromStructureResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.RemoveUserAssignmentsError'
+          description: 'The users that could not be removed, each with a reason. Empty when every
+
+            removal succeeded.'
+      description: 'Response message for removing users from a structure. Supports partial
+
+        success: the users that could not be removed are returned with a reason.'
+    s12.structures.v1.UpdateStructureResponse:
+      type: object
+    s12.structures.membership.v1.RoleUserAssignments:
+      type: object
+      properties:
+        user_data:
+          description: Details about the user.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.UserDetails'
+        assigned_structure_details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.RoleStructureInfo'
+          description: 'Sampled structures assigned to the user for this role. The sample is
+
+            capped at max_structures_per_user PER structure_type_id, so each type a
+
+            user belongs to is represented. Use total_structure_count_by_type_id to
+
+            know the true per-type counts when a type is sampled out.'
+          readOnly: true
+        total_structure_count:
+          type: integer
+          format: int32
+          description: Total number of structures this user holds the role on.
+          readOnly: true
+        total_structure_count_by_type_id:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          description: 'Total number of structures this user holds the role on, bucketed by
+
+            structure_type_id. Counts are NOT capped by max_structures_per_user, so
+
+            callers can render accurate per-type overflow ("+N more") even when the
+
+            sampled `assigned_structure_details` list is truncated. A missing key
+
+            means the user has zero structures of that type for this role.'
+          readOnly: true
+      description: Details and structure assignments for a user assigned to a role.
+    s12.search.v1.StructureSearchResult.MatchedField:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Field name (e.g. "address", or a custom field id).
+        value:
+          type: string
+          description: Field value containing the matched substring.
+        field_id:
+          type: string
+          description: 'Field identifier for filter-derived matches. `key` may be empty for
+
+            such matches (e.g. optional custom fields), so clients should resolve
+
+            the display name from their own field definitions using this id.'
+      description: 'A field whose value matched the query. Useful for highlighting on
+
+        the client. The structure''s name is not included — it''s already at
+
+        the top level.'
+    s12.structures.membership.v1.StructureMembershipService.AddUsersToStructureBody:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: The unique identifiers of the users to add. Limited to 100 users per request.
+      description: Request message to add one or more users to a structure.
+      required:
+      - user_ids
+    s12.search.v1.StructureSearchResult.Ancestor:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: UUID of the ancestor structure.
+        name:
+          type: string
+          description: 'Display name of the ancestor structure. Empty when masked or
+
+            unresolved for the caller.'
+        label:
+          type: string
+          description: 'Hierarchical label of the ancestor structure (e.g. "region",
+
+            "country", "state").'
+        direct_member_count:
+          type: integer
+          format: int32
+          description: 'Number of direct members of the ancestor structure. Matches the type
+
+            of the outer StructureSearchResult.direct_member_count.'
+      description: Ancestor of the matched structure, from root down to the direct parent.
+    s12.structures.v1.Structure.Ancestor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Ancestor belonging to the Structure.
+          readOnly: true
+        name:
+          type: string
+          description: name of the Ancestor.
+          readOnly: true
+        depth:
+          type: integer
+          format: int32
+          description: Depth relative to the Structure. Structure self depth = 0. Direct parent depth = 1.
+          readOnly: true
+    s12.structures.membership.v1.RoleUserEntry:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user.
+          readOnly: true
+        assignments:
+          description: Details and structure assignments for the user.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.RoleUserAssignments'
+      description: A single user entry in a role user listing.
+    s12.structures.membership.v1.AddUsersToRoleResponse:
+      type: object
+      properties:
+        structure_memberships:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership'
+          description: The structure memberships that were successfully created.
+        errors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.AddUsersToRoleError'
+          description: 'The (user, structure) assignments that failed, each with a reason. Empty
+
+            when every assignment succeeded.'
+      description: 'Response message for adding users to a role. Supports partial success: the
+
+        memberships that were created are returned alongside per (user, structure)
+
+        failures.'
+    s12.structures.types.v1.SystemStructureType:
+      type: string
+      enum:
+      - SYSTEM_STRUCTURE_TYPE_UNSPECIFIED
+      - SYSTEM_STRUCTURE_TYPE_SITE
+      - SYSTEM_STRUCTURE_TYPE_GROUP
+      default: SYSTEM_STRUCTURE_TYPE_UNSPECIFIED
+      description: 'Built-in structure types that exist across every organization without
+
+        needing an org-defined UUID. Use SystemStructureType when referring to
+
+        these well-known types by name.'
+    s12.typefield.v1.ContactDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the contact.
+        phone:
+          type: string
+          description: The phone number of the contact.
+        email:
+          type: string
+          description: The email address of the contact.
+      description: Contact details for a person or entity.
+    s12.structures.v1.StatusType:
+      type: string
+      enum:
+      - STATUS_TYPE_ACTIVE
+      - STATUS_TYPE_PENDING
+      - STATUS_TYPE_DELETED
+      description: "- STATUS_TYPE_ACTIVE: The structure is active and can be used.\n - STATUS_TYPE_PENDING: The structure has been created but is not yet active.\n - STATUS_TYPE_DELETED: The structure has been deleted."
+      title: Status types for structures
+    s12.structures.v1.FieldValue:
+      type: object
+      description: 'FieldValue represents a single field and its value within a structure profile.
+
+        Each field value is associated with a field type definition and contains the actual data.'
+      properties:
+        field_id:
+          type: string
+          description: The unique identifier of the field type definition.
+        field_name:
+          type: string
+          description: The display name for the field.
+          readOnly: true
+        value_type:
+          description: The type of value stored in this field.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when this field value was created.
+          readOnly: true
+        created_by:
+          type: string
+          description: The user ID of the user who created this field value.
+          readOnly: true
+        is_default_value:
+          type: boolean
+          description: Indicates whether this field value is the default value for the field.
+          readOnly: true
+        is_field_required:
+          type: boolean
+          description: Indicates whether this field is required for the structure type.
+          readOnly: true
+      required:
+      - field_id
+      oneOf:
+      - type: object
+        title: String
+        properties:
+          string_value:
+            type: string
+            description: String value for FIELD_VALUE_TYPE_STRING and FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
+        required:
+        - string_value
+      - type: object
+        title: Integer
+        properties:
+          integer_value:
+            type: string
+            format: int64
+            description: Integer value for FIELD_VALUE_TYPE_INTEGER.
+        required:
+        - integer_value
+      - type: object
+        title: Timestamp
+        properties:
+          timestamp_value:
+            type: string
+            format: date-time
+            description: Timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
+        required:
+        - timestamp_value
+      - type: object
+        title: Select
+        properties:
+          select_value:
+            description: Single select value for FIELD_VALUE_TYPE_SELECT.
+            allOf:
+            - $ref: '#/components/schemas/s12.structures.v1.SingleSelectValue'
+        required:
+        - select_value
+      - type: object
+        title: Address
+        properties:
+          address_location_value:
+            description: Address location value for FIELD_VALUE_TYPE_ADDRESS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.AddressLocation'
+        required:
+        - address_location_value
+      - type: object
+        title: Contact Details
+        properties:
+          contact_details_value:
+            description: Contact details value for FIELD_VALUE_TYPE_CONTACT_DETAILS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.ContactDetails'
+        required:
+        - contact_details_value
+    s12.search.v1.StructureSearchResult:
+      type: object
+      properties:
+        structure_uuid:
+          type: string
+          description: UUID of the matched structure.
+        name:
+          type: string
+          description: Display name of the structure.
+        structure_type:
+          type: string
+          description: Structure type identifier (e.g. "folder", "site"). Empty if not categorized.
+        direct_member_count:
+          type: integer
+          format: int32
+          description: Number of direct members.
+        created_at:
+          type: string
+          format: date-time
+          description: When the structure was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: When the structure was last modified.
+        similarity_score:
+          type: number
+          format: float
+          description: Relevance score, 0.0–1.0. Higher is more relevant.
+        parent:
+          description: Parent of the matched structure. Unset for root structures.
+          allOf:
+          - $ref: '#/components/schemas/s12.search.v1.StructureSearchResult.Parent'
+        matches:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.search.v1.StructureSearchResult.MatchedField'
+          description: 'Fields that matched the query. Only populated when the request set
+
+            include_matches = true.'
+        is_dynamic:
+          type: boolean
+          description: True if membership is governed by a rule rather than explicit assignment.
+        description:
+          type: string
+          description: Free-text description of the structure. Empty if none is set.
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.types.v1.StructureFieldValue'
+          description: 'Fully-populated field values for the structure. Only populated when the
+
+            request set include_fields = true. Field display names (field_name) are
+
+            resolved to their current values at query time, so they stay correct even
+
+            if the field was renamed after the structure was last indexed.'
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.search.v1.StructureSearchResult.Ancestor'
+          description: 'Full ancestor chain from root to direct parent, in order. Empty for root
+
+            structures and for non-hierarchical (Group) results. Additive to `parent`.'
+      description: A single structure that matched the search query.
+    s12.structures.membership.v1.UserDetails:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: The user's first name.
+        last_name:
+          type: string
+          description: The user's last name.
+        email:
+          type: string
+          description: The user's email address.
+        status:
+          description: The user's active status.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
+        avatar:
+          description: Optional. The user's avatar information, used to render the avatar when available.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.Avatar'
+        last_seen:
+          type: string
+          format: date-time
+          readOnly: true
+          description: last_seen timestamp of the user
+        seat_type:
+          description: The user's subscription seat type.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
+      title: UserDetails contains basic details about a user
+    s12.structures.v1.SingleSelectValue:
+      type: object
+      properties:
+        selected_option_id:
+          type: string
+          description: 'The ID of the selected option.
+
+            This references a FieldOption defined in the associated field type.'
+        options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: 'The list of available options for this field.
+
+            This provides a snapshot of the options available at the time the value was set,
+
+            which is useful for historical accuracy and API convenience.'
+      description: 'SingleSelectValue represents a single-select field value.
+
+        This is used for fields where exactly one option can be selected from a predefined list.'
+    s12.search.v1.StructureSearchParams.Filters.FieldValueFilter:
+      type: object
+      properties:
+        field_id:
+          type: string
+        values:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.types.v1.FieldValueData'
+          description: 'Each entry is an exact-value predicate. Prefer `matches`, which
+
+            supersedes this field; `values` is retained for callers that have not
+
+            migrated and will be marked deprecated once `matches` is no longer
+
+            experimental.'
+      description: 'A single field plus the values it may match. Values within one
+
+        filter are OR-combined; multiple filters are AND-combined.'
+    s12.structures.types.v1.FieldValueData:
+      type: object
+      description: 'FieldValueData contains the typed value stored for a field, without field metadata such as
+
+        field ID, name, timestamps, or requirement/default information.
+
+
+        Intended to become the canonical FieldValueData across the API. For now the
+
+        wire-compatible original still lives at s12.structures.v1.FieldValueData to avoid
+
+        breaking existing consumers; that copy should be removed once callers have migrated.'
+      oneOf:
+      - type: object
+        title: String
+        properties:
+          string_value:
+            type: string
+            description: String value for FIELD_VALUE_TYPE_STRING, FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
+        required:
+        - string_value
+      - type: object
+        title: Integer
+        properties:
+          integer_value:
+            type: string
+            format: int64
+            description: Integer value for FIELD_VALUE_TYPE_INTEGER.
+        required:
+        - integer_value
+      - type: object
+        title: Timestamp
+        properties:
+          timestamp_value:
+            type: string
+            format: date-time
+            description: Timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
+        required:
+        - timestamp_value
+      - type: object
+        title: Select
+        properties:
+          select_value:
+            description: Single select value for FIELD_VALUE_TYPE_SELECT.
+            allOf:
+            - $ref: '#/components/schemas/s12.structures.types.v1.SingleSelectValue'
+        required:
+        - select_value
+      - type: object
+        title: Address
+        properties:
+          address_location_value:
+            description: Address location value for FIELD_VALUE_TYPE_ADDRESS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.AddressLocation'
+        required:
+        - address_location_value
+      - type: object
+        title: Contact Details
+        properties:
+          contact_details_value:
+            description: Contact details value for FIELD_VALUE_TYPE_CONTACT_DETAILS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.ContactDetails'
+        required:
+        - contact_details_value
+      - type: object
+        title: Reference
+        properties:
+          reference_value:
+            description: 'Reference value carrying both the raw id (the filter key) and an optional
+
+              resolved display label, for the reference field types FIELD_VALUE_TYPE_USER_ID,
+
+              FIELD_VALUE_TYPE_SITE and FIELD_VALUE_TYPE_TEMPLATE_ID. Used where a service
+
+              can resolve a human-readable label (e.g. ListUniqueFieldValues); the bare
+
+              string_value above is still used where no label is available.'
+            allOf:
+            - $ref: '#/components/schemas/s12.structures.types.v1.ReferenceValue'
+        required:
+        - reference_value
+    s12.structures.membership.v1.StructureMembershipService.ListUsersByRoleBody:
+      type: object
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: 'Optional. The maximum number of users to return. Default of 1000.
+
+            You can specify a value between 1 to 1000.'
+        offset:
+          type: integer
+          format: int32
+          description: Optional. The number of results to offset by.
+        sort_direction:
+          description: Optional. The sort direction for query results (ascending or descending).
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+        filter:
+          description: Filters to apply against the list of users.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.ListUsersByRoleRequest.Filter'
+        max_structures_per_user:
+          type: integer
+          format: int32
+          description: 'Optional. Maximum structures sampled per user (1-50), applied PER
+
+            structure_type_id, not globally. Omit it to sample none.
+
+            total_structure_count_by_type_id is never capped.'
+      description: Request message to list users assigned to a role.
+    s12.structures.v1.MoveStructureResponse:
+      type: object
+      title: Response message returned once a structure has been moved
+    s12.common.SortDirection:
+      type: string
+      enum:
+      - SORT_DIRECTION_UNSPECIFIED
+      - SORT_DIRECTION_ASC
+      - SORT_DIRECTION_DESC
+      default: SORT_DIRECTION_UNSPECIFIED
+      title: Common set of sorting directions as used by lists
+    s12.search.v1.StructureSearchParams.Filters:
+      type: object
+      properties:
+        is_dynamic:
+          type: boolean
+          description: 'Optional. Only return structures with this is_dynamic value.
+
+            Unset returns both dynamic and non-dynamic.'
+        structure_uuids:
+          type: array
+          items:
+            type: string
+          description: 'Optional. Restrict to these structure UUIDs (OR-combined).
+
+            api-directory forwards a restricted caller''s entire visible-site scope in
+
+            this field when scoping SearchStructures, so the cap must exceed the largest
+
+            visible scope (tens of thousands) while staying under OpenSearch''s default
+
+            65,536 terms-query limit.'
+        parent_uuids:
+          type: array
+          items:
+            type: string
+          description: 'Optional. Restrict to structures whose direct parent is one of these
+
+            structure UUIDs (OR-combined). Only the immediate parent is matched;
+
+            structures nested deeper under a listed UUID are not returned.'
+        field_values:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.search.v1.StructureSearchParams.Filters.FieldValueFilter'
+          description: 'Optional. Restrict to structures whose field values match these
+
+            filters. OR within a filter, AND across filters.'
+      description: Filters narrow which structures are returned.
+    s12.structures.v1.StructuresService.UpdateStructureBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The updated name of the structure
+        description:
+          type: string
+          description: The updated description for the structure (optional)
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.v1.FieldValueInput'
+          description: The updated fields for the structure
+    s12.structures.v1.SearchStructuresResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.search.v1.StructureSearchResult'
+          description: Matched structures, ordered by relevance.
+        next_page_token:
+          type: string
+          description: Token for the next page. Empty on the last page.
+        total_count:
+          type: integer
+          format: int32
+          description: 'Total number of matching structures across all pages. Accurate up to
+
+            10,000; beyond that it is a lower bound (treat a value of 10000 as
+
+            "10,000+").'
+      description: Response for SearchStructures.
+    s12.structures.v1.CreateStructureRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the structure
+        structure_type_id:
+          type: string
+          description: Structure type ID
+        parent_structure_id:
+          type: string
+          description: Parent structure ID
+        child_structure_id:
+          type: string
+          description: Child structure ID
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.v1.FieldValueInput'
+          description: The fields for the structure
+        description:
+          type: string
+          description: The updated description for the structure (optional)
+        meta_label:
+          type: string
+          description: 'Optional. The meta label only used for top-level structures, used to identify the hierarchy level type
+
+            (e.g. "location", "area", "region", "state", "country"). ignored if parent_structure_id is provided.
+
+            use cases: create a solo structure without parent but still want to assign a meta label to it,'
+      title: Request message to create a structure
+      required:
+      - name
+      - structure_type_id
+    s12.structures.membership.v1.StructureMembershipDetails:
+      type: object
+      properties:
+        structure_membership:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership'
+          description: The membership IDs
+        user_data:
+          description: Details for the user associated with the structure membership, used to display user details when available.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.UserDetails'
+        role_data:
+          description: Details for the role associated with the structure membership, used to display role details when available.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.RoleDetails'
+      description: 'StructureMembershipDetails is a structure membership resolved with the user
+
+        and role details needed to display it without a separate lookup.'
+    s12.structures.membership.v1.ListUsersByRoleRequest.Filter:
+      type: object
+      properties:
+        query:
+          type: string
+          description: Used for filtering users by their name, family name or email. This supports partial matches to allow flexible searching.
+        user_status:
+          description: Used for filtering users by their active status. This allows clients to include or exclude inactive users from the results.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
+      description: Filter criteria for listing users by role.
+    s12.structures.v1.ListFieldsRequest.FieldsFilter:
+      type: object
+      properties:
+        field_category:
+          description: 'Optional. Restrict to fields of a single category: the system fields that
+
+            exist in every organization, or the custom fields yours has defined.'
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
+        field_value_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
+          description: Optional. Restrict to fields whose value is one of these types.
+        query:
+          type: string
+          description: Optional. Restrict to fields whose name matches this search text.
+        created_by:
+          type: array
+          items:
+            type: string
+          description: 'Optional. Restrict to fields created by any of these users, identified by
+
+            user ID.'
+        applies_to:
+          type: array
+          items:
+            type: string
+          description: 'Optional. Restrict to fields mapped to any of these structure types,
+
+            identified by structure type ID. Set this to find the fields that apply to
+
+            the type of structure you are about to create.'
+        status:
+          description: Optional. Restrict to fields in this status.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.FieldStatus'
+        mapping_metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional. Restrict to fields that have at least one mapping whose
+
+            metadata contains every supplied key/value pair. Typically combined
+
+            with `applies_to` to scope to a specific structure type.
+
+            Supported keys today: "display_on_profiles", "field_required".'
+      description: 'Filters that narrow which fields are returned. Filters combine with AND —
+
+        a field is returned only when it satisfies every filter supplied.'
+    s12.structures.membership.v1.Avatar:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the avatar.
+        type:
+          type: string
+          description: The type of the avatar.
+        token:
+          type: string
+          description: The token used to access the avatar resource.
+      title: Avatar contains the information needed to render a user's avatar
+    s12.structures.v1.FieldStructureTypeSettings:
+      type: object
+      description: The mapping between a field and one structure type it applies to. The mapping controls whether the field is required for structures of that type, whether it displays on their profile, and what value it takes when none is supplied.
+      properties:
+        structure_type_id:
+          type: string
+          description: The unique identifier of the structure type this mapping applies to.
+        field_required:
+          type: boolean
+          description: Whether a structure of this type must carry a value for the field.
+        display_on_profiles:
+          type: boolean
+          description: Whether the field displays on the profile of a structure of this type. Reading a structure returns only the field values whose field has this set.
+      required:
+      - structure_type_id
+      oneOf:
+      - type: object
+        title: String
+        properties:
+          string_value:
+            type: string
+            description: Default string value for FIELD_VALUE_TYPE_STRING, FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
+        required:
+        - string_value
+      - type: object
+        title: Timestamp
+        properties:
+          timestamp_value:
+            type: string
+            format: date-time
+            description: Default timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
+        required:
+        - timestamp_value
+      - type: object
+        title: Integer
+        properties:
+          integer_value:
+            type: string
+            format: int64
+            description: Default integer value for FIELD_VALUE_TYPE_INTEGER.
+        required:
+        - integer_value
+      - type: object
+        title: Select
+        properties:
+          select_options:
+            description: Default option for FIELD_VALUE_TYPE_SELECT and FIELD_VALUE_TYPE_MULTI_SELECT.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+        required:
+        - select_options
+    s12.structures.membership.v1.StructureMembershipService.AddUsersToRoleBody:
+      type: object
+      properties:
+        user_structure_pairs:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.UserStructurePairs'
+          description: 'The user-to-structures assignments to apply for the role. Limited to 100
+
+            entries per request.'
+      description: 'Request message to add users to a role. Each entry assigns one user to the
+
+        role on its own set of structures.'
+      required:
+      - user_structure_pairs
+    s12.structures.membership.v1.RoleStructureInfo:
+      type: object
+      properties:
+        structure_id:
+          type: string
+          description: The unique identifier of the structure.
+          readOnly: true
+        structure_name:
+          type: string
+          description: The name of the structure.
+          readOnly: true
+        structure_type_id:
+          type: string
+          description: The unique identifier of the structure type.
+          readOnly: true
+      description: Basic info about a structure, used within a role user listing.
+    s12.structures.membership.v1.AddUserAssignmentsError:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user that could not be assigned.
+        structure_id:
+          type: string
+          description: The unique identifier of the structure the assignment targeted.
+        code:
+          type: integer
+          format: int32
+          description: The gRPC status code (google.rpc.Code) describing the failure.
+        message:
+          type: string
+          description: A human-readable, actionable description of why the assignment failed.
+        user_name:
+          type: string
+          description: 'The display name of the user that could not be assigned, for surfacing the
+
+            failure in the UI without a separate lookup. Best-effort: may be empty if
+
+            the name could not be resolved.'
+      description: A single failed (user, structure) assignment within an AddUsersToStructure request.
+    s12.structures.membership.v1.AddUsersToRoleError:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user that could not be assigned.
+        structure_id:
+          type: string
+          description: The unique identifier of the structure the assignment targeted.
+        code:
+          type: integer
+          format: int32
+          description: The gRPC status code (google.rpc.Code) describing the failure.
+        message:
+          type: string
+          description: A human-readable, actionable description of why the assignment failed.
+        user_name:
+          type: string
+          description: 'The display name of the user that could not be assigned, for surfacing the
+
+            failure in the UI without a separate lookup. Best-effort: may be empty if
+
+            the name could not be resolved.'
+      description: A single failed (user, structure) assignment within an AddUsersToRole request.
+    s12.structures.v1.StructureMetadata:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the structure
+        name:
+          type: string
+          description: Name of the structure
+        structure_type_id:
+          type: string
+          description: Structure type ID
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.StatusType'
+          description: Status of the structure
+        creator_id:
+          type: string
+          readOnly: true
+          description: The user id responsible for creating the structure
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The creation timestamp of the structure
+        modified_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The timestamp of the last modification for the structure
+      description: 'StructureMetadata contains the core metadata fields of a structure,
+
+        without the heavy nested data (ancestors, profile, field values).'
+      required:
+      - name
+      - structure_type_id
+      - status
+    s12.common.UserActiveStatus:
+      type: string
+      enum:
+      - USER_ACTIVE_STATUS_UNSPECIFIED
+      - USER_ACTIVE_STATUS_ACTIVE
+      - USER_ACTIVE_STATUS_DEACTIVATED
+      default: USER_ACTIVE_STATUS_UNSPECIFIED
+      description: "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated"
+      title: UserActiveStatus enumerates possible states of 'status' a user may be in
+    s12.typefield.v1.AddressLocation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the location.
+        thoroughfare:
+          type: string
+          description: The thoroughfare of the location.
+        sub_thoroughfare:
+          type: string
+          description: The sub-thoroughfare of the location.
+        locality:
+          type: string
+          description: The locality of the location.
+        sub_locality:
+          type: string
+          description: The sub-locality of the location.
+        administrative_area:
+          type: string
+          description: The administrative area of the location.
+        sub_administrative_area:
+          type: string
+          description: The sub-administrative area of the location.
+        postal_code:
+          type: string
+          description: The postal code of the location.
+        country:
+          type: string
+          description: The country of the location.
+        iso_country_code:
+          type: string
+          description: The ISO country code of the location.
+        geo_position:
+          description: The geographic position of the location.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+      description: Address and location details for a structure.
+    s12.structures.types.v1.ReferenceValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'The referenced entity''s id. This is the filter key — pass it back as a
+
+            string_value in SearchStructuresRequest.params.filters.field_values[].values
+
+            to filter on this value.'
+        label:
+          type: string
+          description: 'Human-readable label for the referenced entity (e.g. a user''s display name).
+
+            Display-only. Unset when the referent is deleted or inaccessible to the
+
+            caller; clients should fall back to the id in that case.'
+      description: 'ReferenceValue is the value of a reference field (user, site, template) paired
+
+        with an optional resolved display label.'
+    s12.structures.membership.v1.ListDirectUsersInStructureResponse:
+      type: object
+      properties:
+        structure_memberships:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembershipDetails'
+          description: The list of memberships for users directly assigned to the structure.
+        total_membership_count:
+          type: integer
+          format: int32
+          description: 'The total count of users directly assigned to the structure, for pagination.
+
+            This allows clients to understand the full size of the dataset when paginating results.'
+        offset:
+          type: integer
+          format: int32
+          description: The offset for the requested page.
+      description: Response message containing a list of direct user memberships in a structure.
+    s12.typefield.v1.FieldValueType:
+      type: string
+      enum:
+      - FIELD_VALUE_TYPE_UNSPECIFIED
+      - FIELD_VALUE_TYPE_STRING
+      - FIELD_VALUE_TYPE_MONEY
+      - FIELD_VALUE_TYPE_TIMESTAMP
+      - FIELD_VALUE_TYPE_USER_ID
+      - FIELD_VALUE_TYPE_SELECT
+      - FIELD_VALUE_TYPE_TEMPLATE_ID
+      - FIELD_VALUE_TYPE_MULTI_SELECT
+      - FIELD_VALUE_TYPE_SITE
+      - FIELD_VALUE_TYPE_MULTI_SITE
+      - FIELD_VALUE_TYPE_INTEGER
+      - FIELD_VALUE_TYPE_ADDRESS
+      - FIELD_VALUE_TYPE_TIMEZONE
+      - FIELD_VALUE_TYPE_CONTACT_DETAILS
+      default: FIELD_VALUE_TYPE_UNSPECIFIED
+      description: "Type of FieldValue.\nDefaults to type String.\n\n - FIELD_VALUE_TYPE_UNSPECIFIED: Field value type unspecified.\n - FIELD_VALUE_TYPE_STRING: Field value type string.\n - FIELD_VALUE_TYPE_MONEY: Field value type money.\n - FIELD_VALUE_TYPE_TIMESTAMP: Field value type timestamp.\n - FIELD_VALUE_TYPE_USER_ID: Field value type user ID.\n - FIELD_VALUE_TYPE_SELECT: Field value type select\n - FIELD_VALUE_TYPE_TEMPLATE_ID: Field value type template ID.\n - FIELD_VALUE_TYPE_MULTI_SELECT: Field value type multi-select\n - FIELD_VALUE_TYPE_SITE: Field value type site\n - FIELD_VALUE_TYPE_MULTI_SITE: Field value type multi-site\n - FIELD_VALUE_TYPE_INTEGER: Field value type integer\n - FIELD_VALUE_TYPE_ADDRESS: Field value type address.\n - FIELD_VALUE_TYPE_TIMEZONE: Field value type timezone\n - FIELD_VALUE_TYPE_CONTACT_DETAILS: Field value type contact details"
+    s12.structures.v1.FieldValueInput:
+      type: object
+      description: 'FieldValueInput is the input message for setting a field value.
+
+        Used by CreateStructureRequest and UpdateStructureRequest.'
+      properties:
+        field_id:
+          type: string
+          description: The unique identifier of the field type definition.
+        is_default_value:
+          type: boolean
+          description: 'Whether the value is the field''s default value. The default value can be updated, causing this field value
+
+            to change.'
+      required:
+      - field_id
+      oneOf:
+      - type: object
+        title: String
+        properties:
+          string_value:
+            type: string
+            description: String value for FIELD_VALUE_TYPE_STRING, FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
+        required:
+        - string_value
+      - type: object
+        title: Integer
+        properties:
+          integer_value:
+            type: string
+            format: int64
+            description: Integer value for FIELD_VALUE_TYPE_INTEGER.
+        required:
+        - integer_value
+      - type: object
+        title: Timestamp
+        properties:
+          timestamp_value:
+            type: string
+            format: date-time
+            description: Timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
+        required:
+        - timestamp_value
+      - type: object
+        title: Address
+        properties:
+          address_location_value:
+            description: Address location value for FIELD_VALUE_TYPE_ADDRESS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.AddressLocation'
+        required:
+        - address_location_value
+      - type: object
+        title: Contact Details
+        properties:
+          contact_details_value:
+            description: Contact details value for FIELD_VALUE_TYPE_CONTACT_DETAILS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.ContactDetails'
+        required:
+        - contact_details_value
+    s12.structures.v1.ListFieldsResponse:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.v1.Field'
+          description: 'The fields matching the request, ordered with system fields before custom
+
+            fields.'
+        next_page_token:
+          type: string
+          description: 'The token to pass as `page_token` to fetch the next page of results. Empty
+
+            when this is the last page.'
+      title: Response message containing a page of field definitions
+    s12.typefield.v1.FieldCategory:
+      type: string
+      enum:
+      - FIELD_CATEGORY_UNSPECIFIED
+      - FIELD_CATEGORY_SYSTEM_FIELD
+      - FIELD_CATEGORY_CUSTOM_FIELD
+      default: FIELD_CATEGORY_UNSPECIFIED
+      description: "- FIELD_CATEGORY_UNSPECIFIED: Field category Unspecified.\n - FIELD_CATEGORY_SYSTEM_FIELD: Field category pre-defined.\n - FIELD_CATEGORY_CUSTOM_FIELD: Field category custom."
+      title: Category of Field
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.structures.v1.Structure:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the structure
+        name:
+          type: string
+          description: Name of the structure
+        structure_type_id:
+          type: string
+          description: Structure type ID
+        parent_structure_id:
+          type: string
+          description: Parent structure ID
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.StatusType'
+          description: Status of the structure
+        creator_id:
+          type: string
+          readOnly: true
+          description: The user id responsible for creating the structure
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The creation timestamp of the structure
+        modified_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The timestamp of the last modification for the structure
+        deleted_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The timestamp of the structure deletion
+        is_dynamic:
+          type: boolean
+          description: 'Whether the structure''s membership is calculated by a rule rather than
+
+            assigned directly.'
+        description:
+          type: string
+          description: Free-text description of the structure. Empty if none is set.
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.v1.Structure.Ancestor'
+          description: Ancestors of Structure. List Ordered by Structure depth descending
+        is_hierarchical:
+          type: boolean
+          description: Whether this structure type supports hierarchical relationships (can have parent/children structures)
+        can_move:
+          type: boolean
+          description: 'Whether this structure can be moved to a different parent. Structures of a
+
+            type that does not support hierarchy cannot be moved.'
+        meta_label:
+          type: string
+          description: 'The hierarchical classification of this structure (e.g. "location", "area", "region", "state", "country").
+
+            Derived by the backend based on the structure''s position in the hierarchy — read-only.'
+          readOnly: true
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.v1.FieldValue'
+          description: Fields on Structure. Fields are shown only where "Show On Profile" Setting is True
+        direct_member_count:
+          type: integer
+          format: int32
+          description: 'The number of users assigned directly to this structure, excluding users
+
+            who inherit membership from an ancestor.'
+      title: Structure represents an organizational structure
+      required:
+      - name
+      - structure_type_id
+      - status
+    s12.structures.types.v1.SingleSelectValue:
+      type: object
+      properties:
+        selected_option_id:
+          type: string
+          description: 'The ID of the selected option.
+
+            This references a FieldOption defined in the associated field type.'
+        options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: 'The list of available options for this field.
+
+            This provides a snapshot of the options available at the time the value was set,
+
+            which is useful for historical accuracy and API convenience.'
+      description: 'SingleSelectValue represents a single-select field value.
+
+        This is used for fields where exactly one option can be selected from a predefined list.
+
+
+        Intended to become the canonical SingleSelectValue across the API. For now the
+
+        wire-compatible original still lives at s12.structures.v1.SingleSelectValue to avoid
+
+        breaking existing consumers; that copy should be removed once callers have migrated.'
+    s12.structures.v1.FieldStatus:
+      type: string
+      enum:
+      - FIELD_STATUS_ACTIVE
+      - FIELD_STATUS_ARCHIVED
+      description: "- FIELD_STATUS_ACTIVE: The field is active and can hold values on structures.\n - FIELD_STATUS_ARCHIVED: The field is archived and can no longer be set on structures."
+      title: Whether a field is available for use on structures
+    s12.search.v1.StructureSearchParams:
+      type: object
+      properties:
+        query:
+          type: string
+          description: Search query matched against structure content. May be empty.
+        filters:
+          description: Optional. Filters to apply to the result set.
+          allOf:
+          - $ref: '#/components/schemas/s12.search.v1.StructureSearchParams.Filters'
+        page:
+          description: Optional. Pagination settings.
+          allOf:
+          - $ref: '#/components/schemas/s12.search.v1.StructureSearchParams.Page'
+        include_matches:
+          type: boolean
+          description: 'Optional. If true, each result includes the field key/value pairs
+
+            that matched the query (useful for highlighting). Off by default.'
+        include_fields:
+          type: boolean
+          description: 'Optional. If true, each result is returned with its fully-populated
+
+            field values (see StructureSearchResult.fields). Off by default, as it
+
+            adds field-name resolution on top of the search. Independent of
+
+            include_matches, which only reports the fields that matched the query.'
+      description: Inputs to SearchStructures.
+    s12.structures.membership.v1.StructureMembership:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user.
+          readOnly: true
+        structure_id:
+          type: string
+          description: The unique identifier of the structure.
+          readOnly: true
+        role_id:
+          type: string
+          description: The unique identifier of the role assigned to the user within the structure.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the user was added to the structure.
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          description: The timestamp when the membership was last modified.
+          readOnly: true
+        assignment_type:
+          description: 'How this membership was assigned: explicitly by a user, or computed by a
+
+            dynamic-structure rule.'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership.AssignmentType'
+      description: StructureMembership represents a user's membership within a structure, including their assigned role.
+    s12.structures.v1.GetStructureProfileResponse:
+      type: object
+      properties:
+        structure:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.Structure'
+          description: The retrieved structure
+      title: Response message containing the retrieved structure
+    s12.structures.v1.StructuresService.MoveStructureBody:
+      type: object
+      properties:
+        new_parent_id:
+          type: string
+      title: 'Request to move a structure to a new parent
+
+        or orphan it by setting new_parent_id to uuid.Nil'
+    s12.structures.v1.SearchStructuresRequest:
+      type: object
+      properties:
+        params:
+          description: Search inputs.
+          allOf:
+          - $ref: '#/components/schemas/s12.search.v1.StructureSearchParams'
+        structure_type:
+          description: 'Required. Restricts the search to structures of this type. Either a
+
+            built-in system type or an org-defined structure type UUID.'
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.types.v1.StructureTypeIdentifier'
+      description: Request for SearchStructures. Organization is taken from the caller's auth.
+      required:
+      - structure_type
+    s12.structures.membership.v1.UserStructurePairs:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user to assign.
+        structure_ids:
+          type: array
+          items:
+            type: string
+          description: 'The unique identifiers of the structures to assign the role on for this
+
+            user. Limited to 10 structures per entry.'
+      description: A single user paired with the structures to assign the role on.
+      required:
+      - user_id
+      - structure_ids
+    s12.structures.types.v1.StructureFieldValue:
+      type: object
+      properties:
+        field_id:
+          type: string
+          description: The unique identifier of the field type definition.
+        field_name:
+          type: string
+          description: 'The field''s display name. Producers that read from a denormalized store
+
+            (e.g. a search index) should resolve this to its current value, as the
+
+            stored copy may be stale. May be empty if the field can no longer be
+
+            resolved.'
+        value_type:
+          description: The type of value stored in this field.
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
+        value:
+          description: The typed value stored for the field.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.types.v1.FieldValueData'
+        is_default_value:
+          type: boolean
+          description: 'True if this value is the field''s default value rather than one set
+
+            explicitly on the structure.'
+        is_field_required:
+          type: boolean
+          description: True if this field is required for the structure's type.
+      description: 'StructureFieldValue is one fully-populated field on a structure, pairing the
+
+        field''s metadata (id, display name, value type) with its typed value. It is
+
+        the canonical metadata-carrying counterpart to FieldValueData (which holds the
+
+        value only).'
+    s12.structures.membership.v1.StructureMembershipService.RemoveUsersFromStructureBody:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: The unique identifiers of the users to remove. Limited to 100 users per request.
+      description: Request message to remove one or more users from a structure.
+      required:
+      - user_ids
+    s12.structures.membership.v1.RemoveUserAssignmentsError:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user that could not be removed.
+        structure_id:
+          type: string
+          description: The unique identifier of the structure the removal targeted.
+        code:
+          type: integer
+          format: int32
+          description: The gRPC status code (google.rpc.Code) describing the failure.
+        message:
+          type: string
+          description: A human-readable, actionable description of why the removal failed.
+        user_name:
+          type: string
+          description: 'The display name of the user that could not be removed, for surfacing the
+
+            failure in the UI without a separate lookup. Best-effort: may be empty if
+
+            the name could not be resolved.'
+      description: A single failed user removal within a RemoveUsersFromStructure request.
+    s12.structures.membership.v1.ListUsersByRoleResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.RoleUserEntry'
+          description: List of users assigned to the role, one entry per distinct user.
+        total_count:
+          type: integer
+          format: int32
+          description: The total count of distinct users assigned to the role.
+        offset:
+          type: integer
+          format: int32
+          description: The offset for the requested page.
+      description: Response message containing a list of users assigned to a role.
+    s12.structures.membership.v1.AddUsersToStructureResponse:
+      type: object
+      properties:
+        structure_memberships:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership'
+          description: The created structure memberships.
+        errors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.AddUserAssignmentsError'
+          description: 'The (user, structure) assignments that failed, each with a reason. Empty
+
+            when every assignment succeeded.'
+      description: Response message containing the created structure memberships.
+    s12.structures.v1.CreateStructureResponse:
+      type: object
+      properties:
+        structure:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.Structure'
+          description: The created structure
+      title: Response message containing the created structure
+    s12.structures.v1.Field:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the field.
+        field_value_type:
+          description: 'The type of value the field holds. A structure''s value for this field must
+
+            match this type.'
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
+        name:
+          type: string
+          description: The display name of the field.
+        description:
+          type: string
+          description: The description of the field.
+        category:
+          description: 'Whether the field is a system field that exists in every organization, or a
+
+            custom field this organization defined.'
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
+        select_options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: 'The options that a value for this field can be chosen from. Populated only
+
+            for the select and multi-select field value types.'
+        structure_settings:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.v1.FieldStructureTypeSettings'
+          description: 'The structure types this field applies to, and how it behaves on each —
+
+            whether it is required and whether it displays on that type''s profile.'
+        created_by:
+          type: string
+          description: The ID of the user who created the field.
+        status:
+          description: Whether the field is active or archived.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.FieldStatus'
+      description: A reusable attribute definition owned by the organization, such as "Region" or "Opening date". A field is defined once and then mapped to the structure types it applies to; a structure holds one value per field that applies to its type.
+      title: Field
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.structures.membership.v1.StructureMembership.AssignmentType:
+      type: string
+      enum:
+      - ASSIGNMENT_TYPE_UNSPECIFIED
+      - ASSIGNMENT_TYPE_MANUAL
+      - ASSIGNMENT_TYPE_RULE_BASED
+      default: ASSIGNMENT_TYPE_UNSPECIFIED
+      description: "AssignmentType classifies how this membership was assigned: explicitly\nby a user, or computed by a dynamic-structure rule.\n\n - ASSIGNMENT_TYPE_UNSPECIFIED: Unspecified assignment type value.\n - ASSIGNMENT_TYPE_MANUAL: The membership was explicitly assigned by a user.\n - ASSIGNMENT_TYPE_RULE_BASED: The membership was computed by a dynamic-structure rule."
+    s12.structures.types.v1.StructureTypeIdentifier:
+      type: object
+      description: 'Identifies a single structure type, either by built-in system type or
+
+        by org-defined UUID. Use in place of a bare structure_type_id string
+
+        when callers may want to reference well-known types without resolving
+
+        the org''s UUID.'
+      oneOf:
+      - type: object
+        title: System Structure Type
+        properties:
+          system_structure_type:
+            description: 'Built-in system type — convenient shorthand so clients don''t need
+
+              to resolve the org''s UUID for well-known types.'
+            allOf:
+            - $ref: '#/components/schemas/s12.structures.types.v1.SystemStructureType'
+        required:
+        - system_structure_type
+      - type: object
+        title: Structure Type ID
+        properties:
+          structure_type_id:
+            type: string
+            description: UUID of an org-defined structure type.
+        required:
+        - structure_type_id
+    s12.structures.v1.GetStructureMetadataResponse:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/s12.structures.v1.StructureMetadata'
+      title: Response message containing the retrieved structure metadata
+    s12.search.v1.StructureSearchParams.Page:
+      type: object
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: Results per page. Default 20. Maximum 100.
+        page_token:
+          type: string
+          description: Token for retrieving the next page of results. Absent on the first page.
+      description: Page controls result pagination.
+    s12.typefield.v1.FieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of a field select option.
+        label:
+          type: string
+          description: The label of a field select option.
+        order:
+          type: integer
+          format: int32
+          description: 'The display order of this option, 0-indexed.
+
+            Options should be displayed in ascending order of this field,
+
+            matching the order they were defined in the field settings.'
+    s12.structures.v1.ListFieldsRequest:
+      type: object
+      properties:
+        filter:
+          description: 'Optional. Filters to apply against the list of fields. Omit to return every
+
+            field in the organization.'
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.ListFieldsRequest.FieldsFilter'
+        page_token:
+          type: string
+          description: 'Optional. The `next_page_token` returned by a previous call, to fetch the
+
+            following page of results. Omit it to fetch the first page.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'Optional. The number of fields to return per page, between 1 and 100.
+
+            Defaults to 25.'
+      title: Request message to list the fields in an organization
+    s12.common.SubscriptionSeatTypes:
+      type: string
+      enum:
+      - SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      - SUBSCRIPTION_SEAT_TYPE_PREMIUM
+      - SUBSCRIPTION_SEAT_TYPE_COLLABORATOR
+      - SUBSCRIPTION_SEAT_TYPE_LITE
+      - SUBSCRIPTION_SEAT_TYPE_SERVICE_USER
+      - SUBSCRIPTION_SEAT_TYPE_SUPPORT
+      default: SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      title: SubscriptionSeatTypes is a list of potential subscription seat types
+    s12.structures.membership.v1.StructureMembershipService.ListDirectUsersInStructureBody:
+      type: object
+      properties:
+        filter:
+          description: Filters to apply against the list of users.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.ListDirectUsersInStructureRequest.Filter'
+        page_size:
+          type: integer
+          format: int32
+          description: 'Optional. The maximum number of users to return. Default of 1000.
+
+            You can specify a value between 1 to 1000.'
+        sort_direction:
+          description: Optional. The sort direction for query results (ascending or descending).
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+        offset:
+          type: integer
+          format: int32
+          description: Optional. The number of results to offset by.
+      description: Request message to list users directly assigned to a structure.
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

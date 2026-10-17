@@ -1,0 +1,2820 @@
+openapi: 3.2.0
+info:
+  title: Mitti Training API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Training
+paths:
+  /training/analytics/v1/courses/statistics:
+    get:
+      summary: Get Course Statistics
+      description: Retrieves all course statistics for courses in your organization.
+      operationId: TrainingAnalyticsService_GetCourseStatistics
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetCourseStatisticsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: courseId
+        description: '[Optional] Course ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/analytics/v1/lessons/attempts:
+    get:
+      summary: Get Lesson Attempts
+      description: Retrieves all lesson attempts for users in your organization.
+      operationId: TrainingAnalyticsService_GetLessonAttempts
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetLessonAttemptsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: userId
+        description: '[Optional] User ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: courseId
+        description: '[Optional] Course ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: courseExternalId
+        description: '[Optional] Course external ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: lessonId
+        description: '[Optional] Lesson ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: lessonExternalId
+        description: '[Optional] Lesson external ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: startedDatetime
+        description: '[Optional] The minimum date of the record to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: completedDatetime
+        description: '[Optional] The maximum date of the record to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Training
+  /training/analytics/v1/lessons/progress/events:
+    get:
+      summary: Get Lesson Progress Events
+      description: Retrieves all lesson progress events for users in your organization.
+      operationId: TrainingAnalyticsService_GetLessonProgressEvents
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetLessonProgressEventsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: courseId
+        description: '[Optional] Course ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: maxEventDatetime
+        description: '[Optional] The max date of the event. Defaults to current date. Cannot be more than 7 days after MinEventDateTime. Expects UTC date.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: minEventDatetime
+        description: '[Optional] The min date of the event. Defaults to 7 days ago. Expects UTC date.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Training
+  /training/analytics/v1/lessons/statistics:
+    get:
+      summary: Get Lesson Statistics
+      description: Retrieves all lesson statistics for lessons in your organization.
+      operationId: TrainingAnalyticsService_GetLessonStatistics
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetLessonStatisticsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: courseId
+        description: '[Optional] Course ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/analytics/v1/rapidRefresh/answers:
+    get:
+      summary: Get Rapid Refresh Answers
+      description: Retrieves all rapid refresh slide answers from users in your organization.
+      operationId: TrainingAnalyticsService_GetRapidRefreshAnswers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetRapidRefreshAnswersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: rapidRefreshId
+        description: '[Optional] Rapid refresh ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: userId
+        description: '[Optional] User ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: questionId
+        description: '[Optional] Rapid refresh question ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/analytics/v1/slides/statistics:
+    get:
+      summary: Get Slide Statistics
+      description: Retrieves all slide statistics for slides in your organization.
+      operationId: TrainingAnalyticsService_GetSlideStatistics
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetSlideStatisticsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: onlyActive
+        description: '[Optional] Only show current, active, published slide data. Defaults to false'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Training
+  /training/analytics/v1/surveys/answers:
+    get:
+      summary: Get Survey Answers
+      description: Retrieves all survey answers from users in your organization.
+      operationId: TrainingAnalyticsService_GetSurveyAnswers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetSurveyAnswersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: courseId
+        description: '[Optional] Course ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: courseExternalId
+        description: '[Optional] Course external ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: lessonId
+        description: '[Optional] Lesson ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: lessonExternalId
+        description: '[Optional] Lesson external ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: userId
+        description: '[Optional] User ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: userExternalId
+        description: '[Optional] User external ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: startDatetime
+        description: '[Optional] The minimum date of the record to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: endDatetime
+        description: '[Optional] The maximum date of the record to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Training
+  /training/analytics/v1/surveys/questionDefinitions:
+    get:
+      summary: Get Survey Question Definitions
+      description: Retrieves all survey question definitions in your organization.
+      operationId: TrainingAnalyticsService_GetSurveyQuestionDefinitions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetSurveyQuestionDefinitionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: courseId
+        description: '[Optional] Course ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: courseExternalId
+        description: '[Optional] Course external ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: lessonId
+        description: '[Optional] Lesson ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: lessonExternalId
+        description: '[Optional] Lesson external ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/analytics/v1/users/{userId}/lessons/progress:
+    get:
+      summary: Get User Lesson Progress
+      description: Retrieves lesson progress for a specific user.
+      operationId: TrainingAnalyticsService_GetUserLessonProgress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetUserLessonProgressResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: userId
+        description: User ID to filter by
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: courseId
+        description: '[Optional] Course ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: minModifiedDatetime
+        description: '[Optional] The minimum modified date of the lesson progress. Expects UTC date eg. 2019-12-31T06:30:00.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: maxModifiedDatetime
+        description: '[Optional] The maximum modified date of the lesson progress. Expects UTC date eg. 2019-12-31T06:30:00.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Training
+  /training/analytics/v1/users/{userId}/lessons/progress/events:
+    get:
+      summary: Get User Lesson Progress Events
+      description: Retrieves lesson progress events for a specific user.
+      operationId: TrainingAnalyticsService_GetUserLessonProgressEvents
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetUserLessonProgressEventsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: userId
+        description: User ID to filter by
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: courseId
+        description: '[Optional] Course ID to filter by'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: maxEventDatetime
+        description: '[Optional] The min date of the event. Expects UTC date eg. 2019-12-31T06:30:00.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: minEventDatetime
+        description: '[Optional] The max date of the event. Expects UTC date eg. 2019-12-31T06:30:00.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Training
+  /training/analytics/v1/users/{userId}/slides/statistics:
+    get:
+      summary: Get Slide User Statistics
+      description: Retrieves all slide statistics for users in your organization.
+      operationId: TrainingAnalyticsService_GetSlideUserStatistics
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.analytics.v1.GetSlideUserStatisticsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: userId
+        description: User ID to filter by
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: onlyActive
+        description: '[Optional] Only show current, active, published slide data. Defaults to false'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Training
+  /training/collections/v1:
+    get:
+      summary: Get collections
+      description: Retrieves all collections in your organization.
+      operationId: TrainingCollectionsService_GetCourseCollections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.collections.v1.GetCourseCollectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: modifiedSince
+        description: '[Optional] The minimum modified date of the collection.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Training
+  /training/collections/v1/{courseCollectionId}/courses:
+    get:
+      summary: Get courses by collection
+      description: Retrieves all courses in a collection.
+      operationId: TrainingCollectionsService_GetCoursesByCourseCollectionId
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.collections.v1.GetCoursesByCourseCollectionIdResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: courseCollectionId
+        description: ID of the collection
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: coursewareVersionType
+        description: Version type of the courses (1 = Published, 2 = Latest)
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: includeDraft
+        description: Include draft courses
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Training
+  /training/courseprogress/v1/reset:
+    post:
+      summary: Reset course progress
+      description: Resets course progress for one or more users.
+      operationId: TrainingCourseProgressService_ResetCourseProgress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.courseprogress.v1.ResetCourseProgressResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.training.courseprogress.v1.ResetCourseProgressRequest'
+        required: true
+      tags:
+      - Training
+  /training/courses/v1:
+    get:
+      summary: Get courses
+      description: Retrieves all courses in your organization.
+      operationId: TrainingCoursesService_GetCourses
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.courses.v1.GetCoursesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: modifiedSince
+        description: '[Optional] The The minimum modified date of the course.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: publicationStatus
+        description: "[Optional] The publication status of the course.\n\n - PUBLICATION_STATUS_UNKNOWN: Unknown publication status\n - PUBLICATION_STATUS_PUBLISHED: course is published"
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - PUBLICATION_STATUS_UNKNOWN
+          - PUBLICATION_STATUS_PUBLISHED
+          default: PUBLICATION_STATUS_UNKNOWN
+      - name: courseIds
+        description: '[Optional] Filter by specific course IDs. If empty, all courses matching other filters will be returned.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: locale
+        description: '[Optional] The preferred locale of the course.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: searchTerm
+        description: '[Optional] The search term to filter out courses'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: groupIds
+        description: '[Optional] Filter by assigned group IDs. If empty, all courses matching other filters will be returned.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: siteIds
+        description: '[Optional] Filter by assigned site IDs. If empty, all courses matching other filters will be returned.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: userId
+        description: '[Optional] Filter by a users enrolled Courses. If empty, all courses matching other filters will be returned.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/courses/v1/{courseId}/assignments:
+    put:
+      summary: Update course assignments
+      description: Updates assignments for users, groups, and sites for a specific course.
+      operationId: TrainingCoursesService_UpdateCourseAssignments
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.courses.v1.UpdateCourseAssignmentsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: courseId
+        description: Id of the course that the assignments belongs to
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.training.courses.v1.TrainingCoursesService.UpdateCourseAssignmentsBody'
+        required: true
+      tags:
+      - Training
+  /training/courses/v1/{courseId}/lessons:
+    get:
+      summary: Get lessons by course ID
+      description: Retrieves all lessons for a given course.
+      operationId: TrainingCoursesService_GetLessonsByCourseId
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.courses.v1.GetLessonsByCourseIdResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: courseId
+        description: ID of the course
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/individualleaderboards/v1:
+    get:
+      summary: Get individual leaderboards
+      description: Retrieves all individual leaderboards in your organization.
+      operationId: TrainingIndividualleaderboardsService_GetIndividualLeaderboards
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.individualleaderboards.v1.GetIndividualLeaderboardsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of individual leaderboards to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - Training
+  /training/individualleaderboards/v1/rankings:
+    get:
+      summary: Get individual leaderboard rankings
+      description: Retrieves rankings for a specific individual leaderboard.
+      operationId: TrainingIndividualleaderboardsService_GetIndividualLeaderboardRankings
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.individualleaderboards.v1.GetIndividualLeaderboardRankingsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: leaderboardId
+        description: ID of the individual leaderboard
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/lessons/v1/{id}:
+    get:
+      summary: Get lesson by ID
+      description: Retrieves details for a specific lesson.
+      operationId: TrainingLessonsService_GetLessonById
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.lessons.v1.GetLessonByIdResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: ID of the lesson
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: locale
+        description: '[Optional] The preferred locale of the lesson'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/paths/v1:
+    get:
+      summary: Get paths
+      description: Retrieves a list of learning paths in your organization.
+      operationId: TrainingPathsService_GetPaths
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.paths.v1.GetPathsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - Training
+  /training/paths/v1/{pathId}:
+    get:
+      summary: Get path by ID
+      description: Retrieves details for a specific learning path.
+      operationId: TrainingPathsService_GetPathById
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.paths.v1.GetPathByIdResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pathId
+        description: ID of the path
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/rapid-refresh/v1:
+    get:
+      summary: Get rapid refresh
+      description: Retrieves all rapid refreshes in your organization.
+      operationId: TrainingRapidRefreshService_GetRapidRefresh
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.rapidrefresh.v1.GetRapidRefreshResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: pageSize
+        description: '[Optional] The number of items to return. Defaults to 25. You can specify a value between 1 to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        description: '[Optional] The current page number. Default to 1. Must be at least 1.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: title
+        description: '[Optional] Filter where matching Title'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: startDate
+        description: '[Optional] Filter where matching start date. To search by range add both start date and end date'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        description: '[Optional] Filter where matching end date. To search by range add both start date and end date'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: status
+        description: '[Optional] Filter where matching status. Available values : all, draft, scheduled, in-progress, ended'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: schedule
+        description: '[Optional] Filter where matching schedule. Available values : NotSpecified, Once, Daily, Weekly'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Training
+  /training/rapid-refresh/v1/{id}:
+    get:
+      summary: Get rapid refresh by ID
+      description: Retrieves details for a specific rapid refresh.
+      operationId: TrainingRapidRefreshService_GetRapidRefreshById
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.rapidrefresh.v1.GetRapidRefreshByIdResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: ID of the rapid refresh
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Training
+components:
+  schemas:
+    s12.training.rapidrefresh.v1.GetRapidRefreshResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of rapid refreshes matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.rapidrefresh.v1.RapidRefreshSummary'
+          description: List of rapid refreshes
+      title: Response to GetRapidRefresh
+    s12.training.analytics.v1.GetRapidRefreshAnswersResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of rapid refresh answers matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.RapidRefreshAnswer'
+          description: List of rapid refresh answers
+      title: Response to GetRapidRefreshAnswers
+    s12.training.lessons.v1.GetLessonByIdResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the lesson
+        title:
+          type: string
+          description: Title of the lesson
+        description:
+          type: string
+          description: Description of the lesson
+        createdDatetime:
+          type: string
+          format: date-time
+          description: Created date of the lesson
+        modifiedDatetime:
+          type: string
+          format: date-time
+          description: Modified date of the lesson
+        externalId:
+          type: string
+          description: External ID of the lesson
+      title: Response to GetLessonById
+    s12.training.analytics.v1.GetCourseStatisticsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of course statistics matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.CourseStatistics'
+          description: List of course statistics
+      title: Response to GetCourseStatistics
+    s12.training.analytics.v1.CourseStatistics:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: ID of the course
+        totalUsers:
+          type: integer
+          format: int32
+          description: Total users assigned to the course
+        completedCount:
+          type: integer
+          format: int32
+          description: Total completions of the course
+        openedCount:
+          type: integer
+          format: int32
+          description: Total opens of the course
+      title: Response type within GetCourseStatisticsResponse
+    s12.training.collections.v1.GetCoursesByCourseCollectionIdResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of courses matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.collections.v1.Course'
+          description: List of courses
+      title: Response to GetCoursesByCourseCollectionId
+    s12.training.courseprogress.v1.ResetCourseProgressRequest:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: The course Id to reset the course progress for
+        userIds:
+          type: array
+          items:
+            type: string
+          description: The user Ids to reset the course progress for
+        allUsers:
+          type: boolean
+          description: If true, resets course progress for all users who have started the course
+      title: Reset Course Progress by User Ids
+    s12.training.courses.v1.GetLessonsByCourseIdResponse:
+      type: object
+      properties:
+        lessons:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.courses.v1.Lesson'
+          description: List of lessons
+      title: Response to GetLessonsByCourseId
+    s12.training.analytics.v1.GetUserLessonProgressEventsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of user lesson progress events matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonProgressEvent'
+          description: List of user lesson progress events
+      title: Response to GetUserLessonProgressEvents
+    s12.training.collections.v1.GetCourseCollectionsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of collections matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.collections.v1.CourseCollection'
+          description: List of collections
+      title: Response to GetCourseCollections
+    s12.training.individualleaderboards.v1.IndividualLeaderboard:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the individual leaderboard
+        name:
+          type: string
+          description: Name of the individual leaderboard
+        learnerAccess:
+          type: boolean
+          description: Flag to indicate if the leaderboard is accessible to learners
+        startDate:
+          type: string
+          format: date-time
+          description: Start date of the individual leaderboard
+        endDate:
+          type: string
+          format: date-time
+          description: End date of the individual leaderboard
+        participantGroupId:
+          type: string
+          description: The ID of the participant group
+      title: Response type within GetIndividualLeaderboardRankingsResponse
+    s12.training.courses.v1.UpdateCourseAssignmentsRequest.AssignmentType:
+      type: string
+      enum:
+      - ASSIGNMENT_TYPE_UNSPECIFIED
+      - ASSIGNMENT_TYPE_USER
+      - ASSIGNMENT_TYPE_GROUP
+      - ASSIGNMENT_TYPE_SITE
+      default: ASSIGNMENT_TYPE_UNSPECIFIED
+      title: "- ASSIGNMENT_TYPE_UNSPECIFIED: Invalid default assignment type\n - ASSIGNMENT_TYPE_USER: The assignment should reflect a user being assigned the course\n - ASSIGNMENT_TYPE_GROUP: The assignment should reflect a group being assigned the course\n - ASSIGNMENT_TYPE_SITE: The assignment should reflect a site being assigned the course"
+    s12.training.analytics.v1.GetSlideUserStatisticsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of slide user statistics matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.SlideUserStatistics'
+          description: List of slide user statistics
+      title: Response to GetSlideUserStatistics
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.training.collections.v1.CourseCollection:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the collection
+        createdDatetime:
+          type: string
+          format: date-time
+          description: Date the collection was created
+        modifiedDatetime:
+          type: string
+          format: date-time
+          description: Date the collection was last modified
+        title:
+          type: string
+          description: Title of the collection
+        description:
+          type: string
+          description: Description of the collection
+        thumbnailUrl:
+          type: string
+          description: URL of the thumbnail image for the collection
+        externalId:
+          type: string
+          description: External ID of the collection
+        numberOfCourses:
+          type: integer
+          format: int32
+          description: The number of courses in the collection
+        status:
+          type: string
+          description: The status of the collection (published, draft)
+      title: Response type within GetCourseCollectionsResponse
+    s12.training.paths.v1.Path:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the path
+        title:
+          type: string
+          description: Title of the path
+        isPublished:
+          type: boolean
+          description: Publication status of the path
+        pathType:
+          type: string
+          description: Type of path (Free, Sequential)
+        userGroups:
+          type: array
+          items:
+            type: string
+          description: Group IDs assigned to path
+      title: Response type within GetPathByIdResponse
+    s12.training.analytics.v1.GetLessonStatisticsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of lesson statistics matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonStatistics'
+          description: List of lesson statistics
+      title: Response to GetLessonStatistics
+    s12.training.analytics.v1.LessonProgress:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: ID of the user
+        userEmail:
+          type: string
+          description: Email of the user
+        userFirstname:
+          type: string
+          description: First name of the user
+        userLastname:
+          type: string
+          description: Last name of the user
+        courseId:
+          type: string
+          description: ID of the course
+        courseTitle:
+          type: string
+          description: Title of the course
+        courseExternalId:
+          type: string
+          description: External ID of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        lessonTitle:
+          type: string
+          description: Title of the lesson
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson
+        lessonOpened:
+          type: boolean
+          description: Flag indicating if the user has opened the lesson
+        lessonOpenedAt:
+          type: string
+          format: date-time
+          description: Date time in which the user opened the lesson
+        lessonCompleted:
+          type: boolean
+          description: Flag indicating if the user has completed the lesson
+        lessonCompletedAt:
+          type: string
+          format: date-time
+          description: Date time in which the user completed the lesson
+        lessonScore:
+          type: number
+          format: double
+          description: Score achieved by the user during lesson
+      title: Response type within GetUserLessonProgressResponse
+    s12.training.collections.v1.TranslationOriginalCourse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the original course
+        externalId:
+          type: string
+          description: External ID of the original course
+      title: Response type within GetCoursesByCourseCollectionIdResponse
+    s12.training.paths.v1.GetPathsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of paths matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.paths.v1.PathSummary'
+          description: List of paths
+      title: Response to GetPaths
+    s12.training.analytics.v1.RapidRefreshAnswer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the answer
+        rapidRefreshId:
+          type: string
+          description: ID of the rapid refresh
+        userId:
+          type: string
+          description: ID of the user
+        questionId:
+          type: string
+          description: ID of the question
+        eventDatetime:
+          type: string
+          format: date-time
+          description: Date time the user answered
+        correct:
+          type: boolean
+          description: Flag indicating the answer was correct
+        timeSpentMs:
+          type: integer
+          format: int32
+          description: Time spent in milliseconds for the user to answer
+        scoreWeight:
+          type: number
+          format: double
+          description: Weighting of the answer
+        totalAttempts:
+          type: integer
+          format: int32
+          description: Total attempts to answer
+        selectedOptions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.RapidRefreshAnswerOption'
+          description: Options within the answer
+      title: Response type within GetRapidRefreshAnswersResponse
+    s12.training.paths.v1.PathSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the path
+        title:
+          type: string
+          description: Title of the path
+        isPublished:
+          type: boolean
+          description: Flag indicating of the path is published
+      title: Response type within GetPathsResponse
+    s12.training.analytics.v1.SurveyQuestionDefinition:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: ID of the course
+        courseExternalId:
+          type: string
+          description: External ID of the course
+        courseTitle:
+          type: string
+          description: Title of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson
+        lessonTitle:
+          type: string
+          description: Title of the lesson
+        slideId:
+          type: string
+          description: ID of the slide
+        questionId:
+          type: string
+          description: ID of the question
+        questionContent:
+          type: string
+          description: Content within the question
+        answerDefinitions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.AnswerDefinition'
+          description: Answers to the question
+      title: Response type within GetSurveyQuestionDefinitionsResponse
+    s12.training.courses.v1.TrainingCoursesService.UpdateCourseAssignmentsBody:
+      type: object
+      properties:
+        assignments:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.courses.v1.UpdateCourseAssignmentsRequest.Assignment'
+          description: List of assignment changes for the course
+        universalAccess:
+          type: boolean
+          description: Assign course to all Training users within the orginzation
+        clearAllUsers:
+          type: boolean
+          description: Remove all course user assignments
+        clearAllGroups:
+          type: boolean
+          description: Remove all course group assignments
+        clearAllSites:
+          type: boolean
+          description: Remove all course site assignments
+      title: Unified request for saving assignments for a course
+    s12.training.analytics.v1.GetSlideStatisticsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of slide statistics matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.SlideStatistics'
+          description: List of slide statistics
+      title: Response to GetSlideStatistics
+    s12.training.individualleaderboards.v1.Ranking:
+      type: object
+      properties:
+        rank:
+          type: integer
+          format: int32
+          description: Ranking number
+        participantId:
+          type: string
+          description: ID of the participant/user
+        participantName:
+          type: string
+          description: Name of the participant/user
+        participantAvatarUrl:
+          type: string
+          description: URL of the participant/user's avatar
+        totalScore:
+          type: integer
+          format: int32
+          description: Total score of the participant/user
+        isNotAttempted:
+          type: boolean
+          description: Flag to indicate if the participant/user has not attempted the individual leaderboard
+      title: Response type within GetIndividualLeaderboardRankingsResponse
+    s12.training.rapidrefresh.v1.RapidRefresh:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the rapid refresh
+        title:
+          type: string
+          description: Title of the rapid refresh
+        description:
+          type: string
+          description: Description of the rapid refresh
+        startDate:
+          type: string
+          format: date-time
+          description: Start date of the rapid refresh
+        endDate:
+          type: string
+          format: date-time
+          description: End date of the rapid refresh
+        status:
+          type: string
+          description: Status of the rapid refresh (all, draft, scheduled, in-progress, ended)
+        schedule:
+          type: string
+          description: Schedule of the rapid refresh (NotSpecified, Once, Daily, Weekly)
+        language:
+          type: string
+          description: Language of the rapid refresh
+        leaderboardEnabled:
+          type: boolean
+          description: Flag indicating leaderboards are enabled
+        retriesEnabled:
+          type: boolean
+          description: Flag indicating retries are enabled
+        questions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.rapidrefresh.v1.Question'
+          description: List of questions in the rapid refresh
+      title: Response type within GetRapidRefreshByIdResponse
+    s12.training.courses.v1.TranslationOriginalCourse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the original course
+        externalId:
+          type: string
+          description: External ID of the original course
+      title: Response type within Course type
+    s12.training.courses.v1.UpdateCourseAssignmentsResponse:
+      type: object
+      properties:
+        usersUpdated:
+          type: integer
+          format: int32
+          description: How many user assignment were updated in the request
+        groupsUpdated:
+          type: integer
+          format: int32
+          description: How many group assignments were updated in the request
+        sitesUpdated:
+          type: integer
+          format: int32
+          description: How man site assignments were updated in the request
+      title: Response from the unified update request
+    s12.training.analytics.v1.GetSurveyQuestionDefinitionsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of survey question definitions matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.SurveyQuestionDefinition'
+          description: List of survey question definitions
+      title: Response to GetSurveyQuestionDefinitions
+    s12.training.courses.v1.GetCoursesResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of courses matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.courses.v1.Course'
+          description: List of courses
+      title: Response to GetCourses
+    s12.training.courses.v1.Course:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the course
+        externalId:
+          type: string
+          description: External ID of the course
+        title:
+          type: string
+          description: Title of the course
+        description:
+          type: string
+          description: Description of the course
+        status:
+          type: string
+          description: Status of the course (Draft, Scheduled, Published, Archived)
+        locale:
+          type: string
+          description: Locale of the course
+        isMandatory:
+          type: boolean
+          description: Flag to indicate if the course is mandatory to take for users
+        dueBy:
+          type: string
+          description: Due by type of the course (notSpecified, static, relative)
+        duration:
+          type: integer
+          format: int32
+          description: Duration of the course in seconds
+        thumbnailUrl:
+          type: string
+          description: URL of the thumbnail image for the course
+        createdDatetime:
+          type: string
+          format: date-time
+          description: Created date of the course
+        modifiedDatetime:
+          type: string
+          format: date-time
+          description: Modified date of the course
+        translationOriginalCourse:
+          allOf:
+          - $ref: '#/components/schemas/s12.training.courses.v1.TranslationOriginalCourse'
+          description: Original course if this is a linked translation
+        logoUrl:
+          type: string
+          description: Logo URL of the course
+        brandingImageUrl:
+          type: string
+          description: Branding image URL of the course
+        isPublished:
+          type: boolean
+          description: Flag indicating if the course is published
+        lessonCount:
+          type: integer
+          format: int32
+          description: Number of lessons in the course
+        publishedDatetime:
+          type: string
+          format: date-time
+          description: 'Date and time the latest published version was published.
+
+            Unset if the course has never been published.'
+        publishedVersionNumber:
+          type: integer
+          format: int32
+          description: 'The latest published version number that published_datetime belongs to.
+
+            0 if the course has never been published.'
+      title: Response type with GetCoursesResponse
+    s12.training.individualleaderboards.v1.GetIndividualLeaderboardsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: Total number of individual leaderboards matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.individualleaderboards.v1.IndividualLeaderboard'
+          description: List of individual leaderboards
+      title: Response for GetIndividualLeaderboards
+    s12.training.individualleaderboards.v1.GetIndividualLeaderboardRankingsResponse:
+      type: object
+      properties:
+        leaderboardId:
+          type: string
+          description: ID of the individual leaderboard
+        leaderboardName:
+          type: string
+          description: Name of the individual leaderboard
+        leaderboardStartDate:
+          type: string
+          format: date-time
+          description: Start date of the individual leaderboard
+        leaderboardEndDate:
+          type: string
+          format: date-time
+          description: End date of the individual leaderboard
+        rankings:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.individualleaderboards.v1.Ranking'
+          description: Rankings for the individual leaderboard
+      title: Response for GetIndividualLeaderboardRankings
+    s12.training.rapidrefresh.v1.GetRapidRefreshByIdResponse:
+      type: object
+      properties:
+        rapidRefresh:
+          allOf:
+          - $ref: '#/components/schemas/s12.training.rapidrefresh.v1.RapidRefresh'
+          description: The rapid refresh
+      title: Response to GetRapidRefreshById
+    s12.training.analytics.v1.SlideUserStatistics:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: ID of the user
+        courseId:
+          type: string
+          description: ID of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        slideId:
+          type: string
+          description: ID of the slide
+        lessonTitle:
+          type: string
+          description: Title of the lesson
+        question:
+          type: string
+          description: Question in the slide
+        totalDurationMs:
+          type: integer
+          format: int32
+          description: Total duration in milliseconds taken to attempt slide
+        attemptCount:
+          type: integer
+          format: int32
+          description: Number of times the slide was attempted
+        attemptCorrectCount:
+          type: integer
+          format: int32
+          description: Number of times the slide was successfully attempted
+        totalCorrect:
+          type: integer
+          format: int32
+          description: Total correct
+        attemptIncorrectCount:
+          type: integer
+          format: int32
+          description: Total incorrect attempts
+        slideType:
+          type: string
+          description: Type of the slide
+        firstAnswer:
+          type: string
+          description: Users first answer to the slide
+        latestAnswer:
+          type: string
+          description: Users latest answer to the slide
+        courseStatus:
+          type: string
+          description: Status of the course
+        courseExternalId:
+          type: string
+          description: External ID of the course
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson
+      title: Response type within GetSlideUserStatisticsResponse
+    s12.training.analytics.v1.LessonStatistics:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: ID of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        openedCount:
+          type: integer
+          format: int32
+          description: Total opens of lesson
+        completedCount:
+          type: integer
+          format: int32
+          description: Total completions of lesson
+      title: Response type within GetLessonStatisticsResponse
+    s12.training.collections.v1.Course:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the course
+        externalId:
+          type: string
+          description: External ID of the course
+        title:
+          type: string
+          description: Title of the course
+        description:
+          type: string
+          description: Description of the course
+        status:
+          type: string
+          description: Status of the course (published, draft)
+        locale:
+          type: string
+          description: Locale of the course
+        isMandatory:
+          type: boolean
+          description: Flag indicating if the course is mandatory
+        dueBy:
+          type: string
+          description: Due by type of the course (notSpecified, static, relative)
+        duration:
+          type: integer
+          format: int32
+          description: Duration of the course in seconds
+        thumbnailUrl:
+          type: string
+          description: URL of the thumbnail image for the course
+        createdDatetime:
+          type: string
+          format: date-time
+          description: Date the course was created
+        modifiedDatetime:
+          type: string
+          format: date-time
+          description: Date the course was last modified
+        translationOriginalCourse:
+          allOf:
+          - $ref: '#/components/schemas/s12.training.collections.v1.TranslationOriginalCourse'
+          description: Original course if this is a linked translation
+      title: Response type within GetCoursesByCourseCollectionIdResponse
+    s12.training.rapidrefresh.v1.RapidRefreshSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the rapid refresh
+        title:
+          type: string
+          description: Title of the rapid refresh
+        description:
+          type: string
+          description: Description of the rapid refresh
+        startDate:
+          type: string
+          format: date-time
+          description: Start date of the rapid refresh
+        endDate:
+          type: string
+          format: date-time
+          description: End date of the rapid refresh
+        status:
+          type: string
+          description: Status of the rapid refresh (all, draft, scheduled, in-progress, ended)
+        schedule:
+          type: string
+          description: Schedule of the rapid refresh (NotSpecified, Once, Daily, Weekly)
+      title: Response type within GetRapidRefreshResponse
+    s12.training.analytics.v1.RapidRefreshAnswerOption:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the answer
+        answerNumber:
+          type: integer
+          format: int32
+          description: Number of the answer
+        answerText:
+          type: string
+          description: Text of the answer
+        correct:
+          type: boolean
+          description: Flag indicating the answer was correct
+      title: Response type within RapidRefreshAnswer
+    s12.training.rapidrefresh.v1.Option:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the question
+        answerNumber:
+          type: integer
+          format: int32
+          description: Answer number
+        answerText:
+          type: string
+          description: Answer text
+        correct:
+          type: boolean
+          description: Flag indicating correct option
+      title: Response type within Question
+    s12.training.analytics.v1.GetLessonAttemptsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of lesson attempts matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonAttempt'
+          description: List of lesson attempts
+      title: Response to GetLessonAttempts
+    s12.training.courseprogress.v1.ResetCourseProgressResponse:
+      type: object
+    s12.training.analytics.v1.GetLessonProgressEventsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of lesson progress events matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonProgressEvent'
+          description: List of lesson progress events
+      title: Response to GetLessonProgressEvents
+    s12.training.analytics.v1.SurveyAnswer:
+      type: object
+      properties:
+        userExternalId:
+          type: string
+          description: External ID of the user
+        attemptId:
+          type: string
+          description: ID of the attempt
+        questionId:
+          type: string
+          description: ID of the question
+        questionContent:
+          type: string
+          description: Content within the question
+        answerDefinitionId:
+          type: string
+          description: ID of the answer definition
+        answerContent:
+          type: string
+          description: Content within the answer
+        answerDatetime:
+          type: string
+          format: date-time
+          description: Date time the user answered
+      title: Response type within GetSurveyAnswersResponse
+    s12.training.analytics.v1.SlideStatistics:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: ID of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        slideId:
+          type: string
+          description: ID of the slide
+        lessonTitle:
+          type: string
+          description: Title of the lesson
+        question:
+          type: string
+          description: Question in the slide
+        averageDurationMs:
+          type: number
+          format: double
+          description: Average duration in milliseconds taken to attempt the slide
+        averageAttempts:
+          type: number
+          format: double
+          description: Average number of slide attempts
+        totalAttempts:
+          type: integer
+          format: int32
+          description: Total number of slide attempts
+        totalCorrect:
+          type: integer
+          format: int32
+          description: Total number of correct attempts
+        totalIncorrect:
+          type: integer
+          format: int32
+          description: Total number of incorrect attempts
+        slideType:
+          type: string
+          description: Type of slide
+        slideAnswers:
+          type: string
+          description: Answers within slide
+        courseStatus:
+          type: string
+          description: Status of the course
+        courseExternalId:
+          type: string
+          description: External ID of the course
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson
+      title: Response type within GetSlideStatisticsResponse
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.training.paths.v1.GetPathByIdResponse:
+      type: object
+      properties:
+        path:
+          allOf:
+          - $ref: '#/components/schemas/s12.training.paths.v1.Path'
+          description: path details
+      title: Response to GetPathById
+    s12.training.analytics.v1.LessonAttempt:
+      type: object
+      properties:
+        attemptId:
+          type: string
+          description: Unique identifier of the lesson attempt
+        userId:
+          type: string
+          description: ID of the attempting user
+        courseId:
+          type: string
+          description: ID of the course attempted
+        courseExternalId:
+          type: string
+          description: External ID of the course attempted
+        lessonId:
+          type: string
+          description: ID of the lesson attempted
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson attempted
+        startedDatetime:
+          type: string
+          format: date-time
+          description: Start date time of the attempt
+        completedDatetime:
+          type: string
+          format: date-time
+          description: End date time of the attempt
+        score:
+          type: number
+          format: double
+          description: Score achieved within attempt
+        success:
+          type: boolean
+          description: Flag indicating if the attempt was successful
+      title: Response type within GetLessonAttemptsResponse
+    s12.training.analytics.v1.GetUserLessonProgressResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of user lesson progress matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonProgress'
+          description: List of user lesson progress
+      title: Response to GetUserLessonProgress
+    s12.training.analytics.v1.AnswerDefinition:
+      type: object
+      properties:
+        answerDefinitionId:
+          type: string
+          description: ID of the answer definition
+        answerContent:
+          type: string
+          description: Content within the answer
+      title: Response type within SurveyQuestionDefinition
+    s12.training.courses.v1.UpdateCourseAssignmentsRequest.Assignment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Id of the type getting assigned.
+
+            (ie. if type=ASSIGNMENT_TYPE_USER then id should be a user Id)'
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.training.courses.v1.UpdateCourseAssignmentsRequest.AssignmentType'
+          description: The type of assignment type
+        isAssigned:
+          type: boolean
+          description: The assignment state of the entity
+      title: An assignment change for an entity to a course
+    s12.training.courses.v1.Lesson:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the lesson
+        externalId:
+          type: string
+          description: External ID of the lesson
+        title:
+          type: string
+          description: Title of the lesson
+        description:
+          type: string
+          description: Description of the lesson
+        status:
+          type: string
+          description: Status of the lesson (published, draft)
+        minimumScore:
+          type: integer
+          format: int32
+          description: Minimum score required to pass the lesson
+      title: Response type within GetLessonsByCourseIdResponse
+    s12.training.rapidrefresh.v1.Question:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the question
+        questionNumber:
+          type: integer
+          format: int32
+          description: Number of the question
+        questionText:
+          type: string
+          description: Text of the question
+        followupText:
+          type: string
+          description: Follow-up text of the question
+        options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.rapidrefresh.v1.Option'
+          description: List of question options
+      title: Response type within RapidRefresh
+    s12.training.analytics.v1.GetSurveyAnswersResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of survey answers matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.SurveyAnswer'
+          description: List of survey answers
+      title: Response to GetSurveyAnswers
+    s12.training.analytics.v1.LessonProgressEvent:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: ID of the user
+        userEmail:
+          type: string
+          description: Email of the user
+        userFirstname:
+          type: string
+          description: First name of the user
+        userLastname:
+          type: string
+          description: Last name of the user
+        courseId:
+          type: string
+          description: ID of the course
+        courseTitle:
+          type: string
+          description: Title of the course
+        courseExternalId:
+          type: string
+          description: External ID of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        lessonTitle:
+          type: string
+          description: Title of the lesson
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson
+        eventName:
+          type: string
+          description: Lesson progress event name (LessonAttempted, LessonCompleted, LessonOpened, LessonUnlocked, LessonReset)
+        eventDateTime:
+          type: string
+          format: date-time
+          description: Date when event occurred
+        lessonScore:
+          type: number
+          format: double
+          description: Score achieved within event
+      title: Response type within GetLessonProgressEventsResponse
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

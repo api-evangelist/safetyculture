@@ -1,0 +1,2543 @@
+openapi: 3.2.0
+info:
+  title: Mitti Templates API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Templates
+paths:
+  /templates/integration/v1/templates/{template_id}/definition:
+    get:
+      summary: Get template definition
+      description: 'Retrieve the structural definition of a template, including its item hierarchy, item types, and response sets. Use this endpoint to discover column IDs for table operations: for each TableItem, the child items define the table columns, and each child item_id is the field_id required by AddTableLine and UpdateTableLine in the Inspections API.'
+      operationId: TemplateService_GetTemplateDefinition
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.pub.integration.v1.GetTemplateDefinitionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: The unique identifier for the template whose definition should be retrieved.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Templates
+  /templates/integration/v1/templates/{template_id}/draft:
+    get:
+      summary: Get template draft
+      description: Retrieve the template's unpublished draft content and its concurrency token. Requires edit permission on the template.
+      operationId: TemplateService_GetTemplateDraft
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.pub.integration.v1.GetTemplateDraftResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: The unique identifier for the template whose draft should be retrieved.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Templates
+    delete:
+      summary: Discard a template draft
+      description: Delete the template's draft. The published template is untouched. Requires edit permission on the template and the draft's current revision token.
+      operationId: TemplateService_DiscardTemplateDraft
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.pub.integration.v1.DiscardTemplateDraftResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: The unique identifier for the template whose draft should be discarded.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: if_draft_revision_is
+        description: 'Discard only if the draft is exactly at this revision, taken from a prior
+
+          read or mutation. Otherwise ABORTED / STALE_DRAFT_REVISION, with the
+
+          current token in the ErrorInfo metadata under `current_draft_revision`,
+
+          which is empty when the draft no longer exists.
+
+
+          Required, unlike on UpdateTemplateDraft, because a discard destroys work
+
+          and cannot be undone. The draft may hold someone else''s unpublished edits,
+
+          so only a draft you have read can be discarded.'
+        in: query
+        required: true
+        schema:
+          type: string
+      tags:
+      - Templates
+    post:
+      summary: Open a template draft
+      description: Open the published template for editing and return the draft's concurrency token. Returns the draft already open when there is one, so the call is safe to retry. Requires edit permission on the template.
+      operationId: TemplateService_CreateTemplateDraft
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.pub.integration.v1.CreateTemplateDraftResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: The unique identifier for the template to open for editing.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateService.CreateTemplateDraftBody'
+        required: true
+      tags:
+      - Templates
+    put:
+      summary: Update a template draft
+      description: Apply an ordered list of operations to the template's draft, atomically. Later operations see the effects of earlier ones, and if any operation fails none are applied. Changes are not visible to end users until the template is published. Requires edit permission on the template.
+      operationId: TemplateService_UpdateTemplateDraft
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.pub.integration.v1.UpdateTemplateDraftResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: The unique identifier for the template whose draft should be updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateService.UpdateTemplateDraftBody'
+        required: true
+      tags:
+      - Templates
+  /templates/integration/v1/templates/{template_id}/publish:
+    post:
+      summary: Publish a template draft
+      description: Make the template's draft live to end users as one new version. The draft is consumed by the publish. Requires edit permission on the template and the draft's current revision token.
+      operationId: TemplateService_PublishTemplate
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.pub.integration.v1.PublishTemplateResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: The unique identifier for the template to publish.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateService.PublishTemplateBody'
+        required: true
+      tags:
+      - Templates
+  /templates/search:
+    get:
+      summary: Search modified templates
+      operationId: ThePubService_SearchTemplates
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.SearchTemplatesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Limit the number of results returned. Default is `1000`.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: field
+        description: "The fields to return. Defaults to just `audit_id`.\n\n - template_id: Include `template_id` in the response.\n - name: Include `name` in the response.\n - modified_at: Include `modified_at` in the response.\n - created_at: Include `modified_at` in the response."
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - template_id
+            - name
+            - modified_at
+            - created_at
+      - name: order
+        description: "The order to return results in.\n\n - asc: Order by `modified_at` in ascending order.\n - desc: Order by `modified_at` in descending order."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+      - name: modified_after
+        description: Filter results modified after this date time.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        description: Filter results modified before this date time.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: archived
+        description: "Filter results by archived status.\n\n - false: Only include unarchived templates.\n - true: Only include archived templates.\n - both: Include both archived and unarchived templates."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'false'
+          - 'true'
+          - both
+          default: 'false'
+      - name: owner
+        description: "Filter results by owner.\n\n - all: Include all templates.\n - me: Only include templates owned by the requesting user.\n - other: Only include templates owned by other users."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - all
+          - me
+          - other
+          default: all
+      tags:
+      - Templates
+  /templates/v1/templates/inspections/{inspection_id}:
+    get:
+      summary: Get template (by inspection)
+      operationId: TemplatesService_GetTemplateByInspectionID
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.v1.GetTemplateByInspectionIDResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The ID for the inspection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: locale
+        description: The preferred locale of the template.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Templates
+  /templates/v1/templates/{template_id}:
+    get:
+      summary: Get a template
+      operationId: TemplatesService_GetTemplateByID
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.v1.GetTemplateByIDResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: Unique template id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: locale
+        description: The preferred locale of the template.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Templates
+    delete:
+      summary: Delete a template by template ID
+      operationId: TemplatesService_DeleteTemplateByID
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.v1.DeleteTemplateByIDResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: The unique identifier for the template
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Templates
+  /templates/v1/templates/{template_id}/archive:
+    delete:
+      summary: Restore an archived template
+      operationId: TemplatesService_RestoreArchivedTemplate
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.v1.RestoreArchivedTemplateResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: The unique identifier for the template
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Templates
+    post:
+      summary: Archive a template
+      operationId: TemplatesService_ArchiveTemplate
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.templates.v1.ArchiveTemplateResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: template_id
+        description: The unique identifier for the template
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.templates.v1.TemplatesService.ArchiveTemplateBody'
+        required: true
+      tags:
+      - Templates
+components:
+  schemas:
+    s12.templates.pub.integration.v1.SideEffects.Change:
+      type: object
+      properties:
+        kind:
+          description: Which kind of change this is.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.SideEffects.SideEffectKind'
+        item_ids:
+          type: array
+          items:
+            type: string
+          description: The items affected by this change.
+        message:
+          type: string
+          description: 'Human-readable explanation, suitable for showing to an end user. Always
+
+            populated.'
+      description: Change describes one change the server made.
+    s12.templates.v1.TemplateSettings:
+      type: object
+      properties:
+        is_add_note_disabled:
+          type: boolean
+          description: 'Whether or not you can add notes to a template.
+
+            By default, notes can be added.
+
+            When disabled via this setting, notes can still be added via logic.'
+        is_attach_media_disabled:
+          type: boolean
+          description: 'Whether or not you can attach media to a template.
+
+            By default, media can be attached.
+
+            When disabled via this setting, media can still be attached via logic.'
+        is_create_action_disabled:
+          type: boolean
+          description: 'Whether or not you can create actions to a template.
+
+            By default, actions can be created.
+
+            When disabled via this setting, actions can still be created via logic.'
+        is_inspection_completion_dialog_confirmation_disabled:
+          type: boolean
+          description: 'Whether or not the inspection completion dialog confirmation is disabled.
+
+            By default, the inspection completion dialog confirmation is enabled.
+
+            When enabled via this setting, the inspection completion dialog confirmation
+
+            will be closed automatically in two seconds after completing an inspection.'
+      title: Settings related to the template
+    s12.templates.v1.QuestionTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+        failed_responses:
+          type: array
+          items:
+            type: string
+          description: 'failed responses store list of ID''s of list values engine will use to mark
+
+            question as failed'
+        response_set_id:
+          type: string
+          description: 'response set ID is uuid value used to reference response set from response
+
+            set''s collection (Template.response_sets or Template.global_response_sets)'
+        calculation_data:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.CalculationData'
+          description: optional. Defines calculation data used to identify the calculation type of item
+      title: 'Question items define template items with pre-defined list of values
+
+        This type does not support multiple answers'
+    s12.templates.pub.integration.v1.TemplateService.UpdateTemplateDraftBody:
+      type: object
+      properties:
+        operations:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateOperation'
+          description: 'The operations to apply, in order and atomically. Later operations see the
+
+            effects of earlier ones, and if any operation fails none are applied. The
+
+            draft is created from the published content when it does not exist.'
+        if_draft_revision_is:
+          type: string
+          description: 'Apply only if the draft is exactly at this revision, taken from a prior
+
+            read or mutation. Otherwise ABORTED / STALE_DRAFT_REVISION, with the
+
+            current token in the ErrorInfo metadata under `current_draft_revision`,
+
+            which is empty when the draft no longer exists.
+
+
+            Omit to apply to the draft as it stands. Use this when the change must not
+
+            land on top of edits you have not seen.'
+      description: UpdateTemplateDraftRequest parameters for `rpc UpdateTemplateDraft`.
+    s12.templates.v1.Template.Owner:
+      type: object
+      properties:
+        id:
+          type: string
+          description: user id of the owner
+        name:
+          type: string
+          description: name of the author
+    s12.templates.v1.InvalidTemplateItem:
+      type: object
+      title: Invalid items define template items that are corrupted
+    s12.templates.v1.LogicfieldTemplateItem.Text:
+      type: object
+      properties:
+        value:
+          type: string
+      description: TextLogicField holds the value to compare against.
+    s12.templates.pub.integration.v1.SideEffects:
+      type: object
+      properties:
+        changes:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.pub.integration.v1.SideEffects.Change'
+          description: The changes the server made.
+      description: SideEffects reports changes the server made beyond what the caller asked for.
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.RepeatedSection:
+      type: object
+    s12.templates.pub.integration.v1.UpdateTemplateDraftResponse:
+      type: object
+      properties:
+        revision:
+          type: string
+          description: Opaque concurrency token for the draft as it stands after this change.
+        previous_revision:
+          type: string
+          description: 'The revision these operations were applied on top of. Empty when this call
+
+            created the draft.
+
+
+            A template can be edited from more than one place at once. A person may be
+
+            in the web editor while an integration calls the API. When this differs
+
+            from the revision you last saw, another editor changed the draft in between
+
+            and your local copy is behind; refetch it. This is advisory and reported
+
+            after the fact. To refuse the write instead, send if_draft_revision_is.'
+        side_effects:
+          description: Changes the server made beyond what was asked for.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.SideEffects'
+      description: UpdateTemplateDraftResponse response for `rpc UpdateTemplateDraft`.
+    s12.templates.pub.integration.v1.TemplateOperation.SetTemplateSettingOperation:
+      type: object
+      properties:
+        skip_completion_confirmation:
+          type: boolean
+          description: Whether the completion confirmation dialog is skipped.
+      description: 'SetTemplateSettingOperation changes one named template setting, leaving
+
+        every other setting untouched. Change several settings by sending several
+
+        operations; the request is atomic regardless. Repeated assignments to the
+
+        same setting apply in order, so the last one wins.'
+    s12.templates.pub.integration.v1.TemplateOperation:
+      type: object
+      properties:
+        set_template_name:
+          description: Sets the template's display name.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateOperation.SetTemplateNameOperation'
+        set_template_description:
+          description: Sets the template's description.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateOperation.SetTemplateDescriptionOperation'
+        set_template_setting:
+          description: Changes one named template setting.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateOperation.SetTemplateSettingOperation'
+        set_item_label:
+          description: Sets the label of one item.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateOperation.SetItemLabelOperation'
+      description: 'TemplateOperation is one mutation against a template draft. Exactly one field
+
+        must be set. Each field names the thing it changes.'
+    s12.templates.v1.LogicfieldTemplateItem.Checkbox:
+      type: object
+      description: 'CheckboxLogicField has information about whether the field was evaluated
+
+        as true/false.'
+    s12.templates.v1.TemplateItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: id of given item
+        label:
+          type: string
+          description: label of given item
+        children:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.TemplateItem'
+          description: child items of given field
+        section:
+          $ref: '#/components/schemas/s12.templates.v1.SectionTemplateItem'
+        text:
+          $ref: '#/components/schemas/s12.templates.v1.TextTemplateItem'
+        list:
+          $ref: '#/components/schemas/s12.templates.v1.ListTemplateItem'
+        question:
+          $ref: '#/components/schemas/s12.templates.v1.QuestionTemplateItem'
+        checkbox:
+          $ref: '#/components/schemas/s12.templates.v1.CheckboxTemplateItem'
+        logicfield:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem'
+        dynamicfield:
+          $ref: '#/components/schemas/s12.templates.v1.DynamicTemplateItem'
+        media:
+          $ref: '#/components/schemas/s12.templates.v1.MediaTemplateItem'
+        address:
+          $ref: '#/components/schemas/s12.templates.v1.AddressTemplateItem'
+        datetime:
+          $ref: '#/components/schemas/s12.templates.v1.DateTimeTemplateItem'
+        textsingle:
+          $ref: '#/components/schemas/s12.templates.v1.TextSingleTemplateItem'
+        drawing:
+          $ref: '#/components/schemas/s12.templates.v1.DrawingTemplateItem'
+        signature:
+          $ref: '#/components/schemas/s12.templates.v1.SignatureTemplateItem'
+        category:
+          $ref: '#/components/schemas/s12.templates.v1.CategoryTemplateItem'
+        temperature:
+          $ref: '#/components/schemas/s12.templates.v1.TemperatureTemplateItem'
+        slider:
+          $ref: '#/components/schemas/s12.templates.v1.SliderTemplateItem'
+        instruction:
+          $ref: '#/components/schemas/s12.templates.v1.InstructionTemplateItem'
+        switch:
+          $ref: '#/components/schemas/s12.templates.v1.SwitchTemplateItem'
+        scanner:
+          $ref: '#/components/schemas/s12.templates.v1.ScannerTemplateItem'
+        asset:
+          $ref: '#/components/schemas/s12.templates.v1.AssetTemplateItem'
+        site:
+          $ref: '#/components/schemas/s12.templates.v1.SiteTemplateItem'
+        company:
+          $ref: '#/components/schemas/s12.templates.v1.CompanyTemplateItem'
+        table:
+          $ref: '#/components/schemas/s12.templates.v1.TemplateItem.TableDefinition'
+        tablesection:
+          $ref: '#/components/schemas/s12.templates.v1.TableSection'
+        unsupported:
+          $ref: '#/components/schemas/s12.templates.v1.UnsupportedTemplateItem'
+        invalid:
+          $ref: '#/components/schemas/s12.templates.v1.InvalidTemplateItem'
+      title: Wrapper for template items collection
+    s12.templates.v1.ScannerTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+      title: 'Scanner items are legacy item which define question with text answer value
+
+        type -'
+    s12.templates.pub.integration.v1.TemplateOperation.SetTemplateDescriptionOperation:
+      type: object
+      properties:
+        description:
+          type: string
+          description: 'The new description. An empty string clears it. Leading and trailing
+
+            whitespace is trimmed. Counts characters, not bytes.'
+      description: SetTemplateDescriptionOperation sets the template's description.
+    s12.templates.v1.TableSection:
+      type: object
+      title: 'TableSection defines a section within a template which can only contain
+
+        a TableDefinition item'
+    s12.templates.pub.integration.v1.TemplateDefinition.GlobalResponseSet:
+      type: object
+      properties:
+        response_set_id:
+          type: string
+          description: The unique identifier for the global response set.
+      description: 'GlobalResponseSet references a shared response set by ID.
+
+        The full response list for a global response set is not included inline;
+
+        use the response sets API to retrieve it.'
+    s12.templates.v1.TemplatePermission.Type:
+      type: string
+      enum:
+      - USER
+      - ROLE
+      default: USER
+      description: "- USER: `USER` types for user based permissions\n - ROLE: `ROLE` types for role based permissions"
+      title: Type of templates permission
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.SectionItem:
+      type: object
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.CompanyItem:
+      type: object
+    s12.templates.v1.TemplatePermissions:
+      type: object
+      properties:
+        edit:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.TemplatePermission'
+        view:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.TemplatePermission'
+        owner:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.TemplatePermission'
+        delete:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.TemplatePermission'
+        context:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.TemplatePermission'
+      title: 'Template permissions represent a set''s of user/role ID''s in desired
+
+        permission set''s'
+    s12.templates.pub.integration.v1.TemplateIdentity:
+      type: object
+      properties:
+        template_id:
+          type: string
+          description: The unique identifier for the template
+        organization_id:
+          type: string
+          description: The organization ID that the template belongs to
+      title: TemplateIdentity data for identifying a template
+    s12.templates.v1.LogicfieldTemplateItem.SkipTo.Category:
+      type: string
+      enum:
+      - CATEGORY_UNSPECIFIED
+      - CATEGORY_QUESTION
+      - CATEGORY_PAGE
+      - CATEGORY_SECTION
+      default: CATEGORY_UNSPECIFIED
+      title: 'The category of target item to skip to. Note: this is not used for skipping to complete the inspection
+
+        CATEGORY_QUESTION includes all question items that currently support logic such as question, text, checkbox, signature, temperature, slider'
+    s12.templates.v1.Template.OriginInformation:
+      type: object
+      properties:
+        origin:
+          type: string
+          description: where the template originated from
+        origin_id:
+          type: string
+          description: the ID of the original template
+    s12.templates.v1.SignatureTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+      title: Signature items represent an input with image containing user signature
+    s12.templates.pub.integration.v1.TemplateOperation.SetTemplateNameOperation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'The new display name. Leading and trailing whitespace is trimmed.
+
+            Newlines are not accepted. Counts characters, not bytes.'
+      description: SetTemplateNameOperation sets the template's display name.
+      required:
+      - name
+    s12.templates.v1.CompanyType:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the company type
+      title: CompanyType represents the type of a company
+    s12.templates.v1.AssetTemplateItem.ReadingConfig:
+      type: object
+      properties:
+        item_id:
+          type: string
+          description: ID of the number format item linked to the reading config
+        reading_config_id:
+          type: string
+          description: ID of the reading config
+    s12.templates.v1.DrawingTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Media stores background image used for annotation
+      title: Drawing define template items with user annotated images
+    s12.templates.v1.Template:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID is unique alphanumeric value
+        revision_id:
+          type: string
+          description: 'Revisions are unique between templates with same ID and identify templates
+
+            state'
+        name:
+          type: string
+          description: Custom defined template name
+        permissions:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplatePermissions'
+          description: A set of permissions for given template
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.TemplateItem'
+          description: List of root level sections defined for given template revision
+        response_sets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.ResponseSet'
+          description: List of response sets defined for given template revision
+        global_response_sets:
+          type: array
+          items:
+            type: string
+          description: List of global response set ids linked to list items in given template
+        title_rules:
+          type: array
+          items:
+            type: string
+          description: 'List of item ids, the values of which are combined to generate the
+
+            inspection title'
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.Media'
+          description: '/ All the media linked to the template. this information is repeated in
+
+            individual items.'
+        mandatory_mark_as_complete:
+          type: boolean
+          description: Should the inspections be mandatory to mark as complete
+        description:
+          type: string
+          description: Custom defined template description
+        created_at:
+          type: string
+          format: date-time
+          description: template creation timestamp
+        modified_at:
+          type: string
+          format: date-time
+          description: template last modification timestamp
+        author:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.Template.Author'
+          description: template author details
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.Template.Owner'
+          description: template owner details
+        archived:
+          type: boolean
+          description: whether or not the template is archived
+        metadata_image:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: main template image/logo
+        access_level:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.Template.AccessLevel'
+          description: Returns the access (highest permission) the user has to this template
+        last_used:
+          type: string
+          format: date-time
+          description: Date this template was last used to create an inspection
+        added_at:
+          type: string
+          format: date-time
+          description: 'Date the template was added to the users account. If its from the public
+
+            library this will be download date otherwise it will be the created date'
+        revision_key:
+          type: string
+          description: Revision key from the template document
+        support_site_as_question_type:
+          type: boolean
+        date_draft_modified:
+          type: string
+          format: date-time
+          description: Datetime when the draft version was last modified
+        draft_author_name:
+          type: string
+          description: Author who last modified the draft
+        origin_information:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.Template.OriginInformation'
+          description: Origin information of the template
+        translation_id:
+          type: string
+          description: Translation set ID
+        is_locked_from_shared_library:
+          type: boolean
+          description: Whether or not the template is restricted from the shared library
+        settings:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateSettings'
+          description: Settings related to the template
+        document_links:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.DocumentLink'
+          description: List of document links
+        procurement_order_settings:
+          description: 'Pointer to the Marketplace-owned procurement config version for this template.
+
+            Resolve settings, triggers, and products via Marketplace using config_identity.'
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.Template.ProcurementOrderSettings'
+      title: Template message define Template instance
+    s12.templates.v1.TemplateItemOptions:
+      type: object
+      properties:
+        is_mandatory:
+          type: boolean
+          description: is_mandatory defines if user required to provide field value
+        weighting:
+          type: number
+          format: double
+          description: weighting represents value used to calculate inspection score
+      title: Common template item options
+    s12.templates.v1.LogicfieldTemplateItem.Signature:
+      type: object
+      description: 'SignatureLogicField has information about whether the field was evaluated
+
+        as true/false.'
+    s12.templates.v1.DocumentLink:
+      type: object
+      properties:
+        link_id:
+          type: string
+          description: ID of the link
+        node_id:
+          type: string
+          description: ID of the document node that the link points to
+        name:
+          type: string
+          description: Name of the linked document
+        version_number:
+          type: integer
+          format: int32
+          description: Version number of the linked document
+        expiry_date:
+          type: string
+          format: date-time
+          description: Expiry date of the linked document
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Media for the linked document
+      title: DocumentLink represents a link to a document
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.DateTimeItem:
+      type: object
+    s12.templates.v1.InstructionTemplateItem.DocumentLinkInstruction:
+      type: object
+      properties:
+        link_id:
+          type: string
+          description: ID of the document link associated with this instruction item
+        document_node_id:
+          type: string
+          description: ID of the document node that the link points to
+    s12.templates.v1.SiteTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+      title: Site item represents item for a site
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.ParagraphItem:
+      type: object
+    s12.templates.v1.DateTimeTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+        enable_date:
+          type: boolean
+          description: Enable date turns on input for date values
+        enable_time:
+          type: boolean
+          description: Enable date turns on input for time values
+      title: Date Time define template items with date and(or) time
+    s12.templates.v1.InstructionTemplateItem.TextInstruction:
+      type: object
+    s12.templates.v1.Template.AccessLevel:
+      type: string
+      enum:
+      - ACCESS_LEVEL_UNKNOWN
+      - ACCESS_LEVEL_VIEW
+      - ACCESS_LEVEL_EDIT
+      - ACCESS_LEVEL_DELETE
+      default: ACCESS_LEVEL_UNKNOWN
+    s12.templates.v1.ResponseSet:
+      type: object
+      properties:
+        id:
+          type: string
+        responses:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.ResponseSet.Response'
+        is_grs:
+          type: boolean
+          description: is_grs is true if this responset set is global response set
+      title: 'Response sets represent a collection of values used across template fields
+
+        (list items, question items...)'
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.SignatureItem:
+      type: object
+    s12.templates.v1.TemplatePermission:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/s12.templates.v1.TemplatePermission.Type'
+      title: Template permission represent permission entity - user or role
+    s12.templates.v1.RangeComparison:
+      type: object
+      properties:
+        lower:
+          type: number
+          format: double
+          description: Represents the lower value of the range.
+        upper:
+          type: number
+          format: double
+          description: Represents the upper value of the range.
+      description: Used to compare values within a range.
+    s12.templates.v1.Template.ProcurementOrderSettings:
+      type: object
+      properties:
+        config_identity:
+          $ref: '#/components/schemas/s12.templates.v1.Template.ProcurementConfigIdentity'
+        procurement_portable_import:
+          type: boolean
+          description: Set after portable export/import when the author must review reset order settings.
+      description: Pointer to the Marketplace-owned procurement config version for this template.
+    s12.templates.v1.LogicfieldTemplateItem.Temperature:
+      type: object
+      title: 'TemperatureLogicField has information about whether
+
+        the recorded temperature passes or fails compared to the criteria'
+    s12.templates.v1.TemplatesService.ArchiveTemplateBody:
+      type: object
+      title: The parameter body to `ArchiveTemplate`
+    s12.templates.v1.GetTemplateByIDResponse:
+      type: object
+      properties:
+        template:
+          $ref: '#/components/schemas/s12.templates.v1.Template'
+      title: Result of `GetTemplateByID` method
+    s12.templates.v1.SectionTemplateItem.Approvers:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: string
+          description: IDs of individual users who can edit the approval page
+        groups:
+          type: array
+          items:
+            type: string
+          description: IDs of the groups which can edit the approval page
+        site_intersection_groups:
+          type: array
+          items:
+            type: string
+          description: IDs of the groups which will be used to create the intersection with the selected site
+      title: IDs of the users/groups/site_intersections that can approve the Approval Page
+    s12.templates.pub.integration.v1.TemplateDefinition:
+      type: object
+      properties:
+        template_identity:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateIdentity'
+          description: The template identity containing template ID and organisation ID
+        template_name:
+          type: string
+          description: The display name of the template.
+        description:
+          type: string
+          description: A description of the template.
+        version:
+          type: string
+          description: 'The version identifier for this template revision.
+
+            Deprecated: use GetTemplateDefinitionResponse.version. Still populated on
+
+            the published read.'
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem'
+          description: 'A flat list of all items in the template.
+
+            Use parent_id on each item to reconstruct the item hierarchy.'
+        response_sets:
+          description: The response sets associated with this template.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.ResponseSets'
+        settings:
+          description: The template's behavior settings.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateSettings'
+      title: TemplateDefinition represents the template structure and metadata for a template, including its items and response sets
+    s12.templates.pub.integration.v1.PublishTemplateResponse:
+      type: object
+      properties:
+        version:
+          type: string
+          description: 'The published revision created by this publish, the same value
+
+            GetTemplateDefinitionResponse.version returns.'
+      description: PublishTemplateResponse response for `rpc PublishTemplate`.
+    s12.templates.pub.integration.v1.CreateTemplateDraftResponse:
+      type: object
+      properties:
+        revision:
+          type: string
+          description: 'Opaque concurrency token for the draft, the same value
+
+            GetTemplateDraftResponse.revision returns. Pass it back when mutating or
+
+            publishing the draft.'
+        created:
+          type: boolean
+          description: False when a draft was already open and has been returned instead.
+      description: CreateTemplateDraftResponse response for `rpc CreateTemplateDraft`.
+    s12.templates.v1.TemperatureTemplateItem:
+      type: object
+      properties:
+        options:
+          $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+        display_unit:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.TemperatureUnit'
+          description: Represents the temperature unit type
+        between:
+          $ref: '#/components/schemas/s12.templates.v1.RangeComparison'
+        above:
+          $ref: '#/components/schemas/s12.templates.v1.NumberComparison'
+        below:
+          $ref: '#/components/schemas/s12.templates.v1.NumberComparison'
+      title: 'Temperature items represent a number item,
+
+        that can have the option to be connected to a bluetooth thermometer'
+    s12.templates.pub.integration.v1.TemplateSettings:
+      type: object
+      properties:
+        skip_completion_confirmation:
+          type: boolean
+          description: Whether the completion confirmation dialog is skipped.
+      description: 'TemplateSettings holds a template''s behavior settings. Every field is
+
+        populated on reads. This message appears in responses only.'
+    s12.templates.v1.Template.Author:
+      type: object
+      properties:
+        id:
+          type: string
+          description: user id of the author
+        name:
+          type: string
+          description: name of the author
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.SliderItem:
+      type: object
+    s12.templates.v1.SectionTemplateItem:
+      type: object
+      properties:
+        approvers:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.SectionTemplateItem.Approvers'
+          description: Approvers of the Approval Page
+        user_defined_approvers:
+          type: boolean
+          description: Whether the approvers are user defined
+      title: Section items define template items used to wrap other item types
+    s12.templates.v1.ListTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+        failed_responses:
+          type: array
+          items:
+            type: string
+          description: 'failed responses store list of ID''s of list values engine will use to mark
+
+            question as failed'
+        response_set_id:
+          type: string
+          description: 'response set ID is uuid value used to reference response set from response
+
+            set''s collection (Template.response_sets or Template.global_response_sets)'
+        multiple_selection:
+          type: boolean
+          description: 'multiple selection defines if question supports multiple values to be
+
+            selected or not (false by default)'
+        calculation_data:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.CalculationData'
+          description: optional. Defines calculation data used to identify the calculation type of item
+      title: 'List items define template items with pre-defined list of values
+
+        This type supports multiple values as an answer'
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem:
+      type: object
+      properties:
+        text_item:
+          description: Single-line text input.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.TextItem'
+        number_item:
+          description: Numeric input.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.NumberItem'
+        paragraph_item:
+          description: Multi-line text input.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.ParagraphItem'
+        datetime_item:
+          description: Date and/or time input.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.DateTimeItem'
+        location_item:
+          description: Location input.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.LocationItem'
+        checkbox_item:
+          description: Checkbox input.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.CheckboxItem'
+        question_item:
+          description: Question with a response set.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.QuestionItem'
+        media_item:
+          description: Media attachment (photo/video).
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.MediaItem'
+        drawing_item:
+          description: Drawing annotation.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.DrawingItem'
+        signature_item:
+          description: Signature capture.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.SignatureItem'
+        temperature_item:
+          description: Temperature reading.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.TemperatureItem'
+        slider_item:
+          description: Slider input.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.SliderItem'
+        asset_item:
+          description: Asset reference.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.AssetItem'
+        site_item:
+          description: Site reference.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.SiteItem'
+        page_item:
+          description: Page container.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.PageItem'
+        approval_page_item:
+          description: Approval page container.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.ApprovalPageItem'
+        section_item:
+          description: Section container.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.SectionItem'
+        repeated_section:
+          description: Repeatable section container.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.RepeatedSection'
+        logic_item:
+          description: Conditional logic item.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.LogicItem'
+        company_item:
+          description: Company reference.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.CompanyItem'
+        table_item:
+          description: Table container with column definitions.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.TableItem'
+        information_item:
+          description: Informational/read-only content.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.InformationItem'
+        table_page_item:
+          description: Table page container.
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.TablePageItem'
+        item_id:
+          type: string
+          description: 'The unique identifier for the template item.
+
+            For items inside a TableItem, this item_id is used as the field_id
+
+            in table line operations (AddTableLine, UpdateTableLine, etc.)
+
+            within the InspectionService integration API.'
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.ItemType'
+          description: The type of the template item
+        label:
+          type: string
+          description: The label for the template item
+        parent_id:
+          type: string
+          description: 'The item ID of the parent item.
+
+            Use this field to reconstruct the item hierarchy.'
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.LogicItem:
+      type: object
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.CheckboxItem:
+      type: object
+    s12.templates.v1.InstructionTemplateItem.LinkInstruction:
+      type: object
+      properties:
+        link:
+          type: string
+          description: Weblink for the link instruction item
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.TablePageItem:
+      type: object
+    s12.thepub.v1.SearchTemplatesResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+          description: The number of results returned.
+        total:
+          type: integer
+          format: int32
+          description: The total number of results available.
+        templates:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.SearchTemplatesResponse.SearchTemplatesTemplate'
+          description: The results returned.
+      description: Result returned from `SearchTemplates`
+      title: SearchTemplatesResponse
+    s12.thepub.v1.SearchTemplatesResponse.SearchTemplatesTemplate:
+      type: object
+      properties:
+        template_id:
+          type: string
+          description: The ID of the template.
+        name:
+          type: string
+          description: The name of the template.
+        modified_at:
+          type: string
+          format: date-time
+          description: The date and time the template was last modified.
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the template was created.
+      description: The template returned from `SearchTemplates`
+      title: SearchTemplatesTemplate
+    s12.templates.v1.NumberComparison:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+      description: Used to compare values against a single number.
+    s12.templates.v1.TextTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+      title: Text items define template items used as multiline text input
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.templates.v1.CalculationData:
+      type: object
+      properties:
+        formula:
+          type: string
+          description: the calculation expression
+        autofill_item_id:
+          type: string
+          description: 'optional. Used only for autofill UI
+
+            UUID of item that is the source of the autofill'
+      title: CalculationData has information of the formula which will be using in
+    s12.templates.pub.integration.v1.TemplateService.CreateTemplateDraftBody:
+      type: object
+      description: CreateTemplateDraftRequest parameters for `rpc CreateTemplateDraft`.
+    s12.templates.v1.ArchiveTemplateResponse:
+      type: object
+      title: Result returned from ArchiveTemplate
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.TableItem:
+      type: object
+      properties:
+        max_lines:
+          type: integer
+          format: int32
+          description: The maximum number of rows (lines) allowed in this table.
+      description: Contains metadata for a tabular item.
+    s12.templates.v1.LogicfieldTemplateItem.Response:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            type: string
+      description: 'ListField/QuestionField holds the responses to compare against.
+
+        Even when only one response can be selected for the field (Question),
+
+        We still convert that into an array when comparing in order to
+
+        reuse the same comparing logic.'
+    s12.templates.pub.integration.v1.SideEffects.SideEffectKind:
+      type: string
+      enum:
+      - SIDE_EFFECT_KIND_WEIGHTING_ZEROED
+      description: "SideEffectKind identifies what was changed. New kinds are added as new\nvalues; a caller that does not recognize one still receives `message`.\n\n - SIDE_EFFECT_KIND_WEIGHTING_ZEROED: Item weightings were zeroed because scoring was turned off."
+    s12.templates.pub.integration.v1.DiscardTemplateDraftResponse:
+      type: object
+      description: DiscardTemplateDraftResponse response for `rpc DiscardTemplateDraft`.
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.PageItem:
+      type: object
+    s12.templates.pub.integration.v1.TemplateOperation.SetItemLabelOperation:
+      type: object
+      properties:
+        item_id:
+          type: string
+          description: 'The unique identifier for the item whose label changes. An item_id the
+
+            draft does not contain returns `INVALID_ARGUMENT`.'
+        label:
+          type: string
+          description: 'The new label. An empty string clears it. Leading and trailing whitespace
+
+            is trimmed.'
+      description: 'SetItemLabelOperation sets the label of one item in the draft.
+
+
+        The maximum length depends on the item''s type. Exceeding it returns
+
+        `INVALID_ARGUMENT` naming the limit that applied. Limits count characters,
+
+        not bytes.'
+      required:
+      - item_id
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.TemperatureItem:
+      type: object
+    s12.templates.v1.DeleteTemplateByIDResponse:
+      type: object
+      title: Result returned from DeleteTemplate
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.QuestionItem:
+      type: object
+      properties:
+        response_set_id:
+          type: string
+          description: ID of the response set
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.SiteItem:
+      type: object
+    s12.templates.v1.TemplateItem.TableDefinition:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+        max_lines:
+          type: integer
+          format: int32
+          description: Maximum number of lines allowed in the table
+      title: 'Table item define template items to collect information in a
+
+        tabular format'
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.AssetItem:
+      type: object
+    s12.common.MediaType:
+      type: string
+      enum:
+      - MEDIA_TYPE_IMAGE
+      - MEDIA_TYPE_VIDEO
+      - MEDIA_TYPE_PDF
+      - MEDIA_TYPE_DOCX
+      - MEDIA_TYPE_XLSX
+      - MEDIA_TYPE_PPTX
+      - MEDIA_TYPE_CSV
+      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.InformationItem:
+      type: object
+    s12.templates.v1.AssetTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+        asset_type_ids:
+          type: array
+          items:
+            type: string
+          description: List of asset types selected for this item
+        reading_configs:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.AssetTemplateItem.ReadingConfig'
+          description: List of reading configs mapped to number format items
+      title: Asset item represents item for an asset
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateResponseSet:
+      type: object
+      properties:
+        response_set_id:
+          type: string
+          description: The unique identifier for this response set.
+        responses:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateResponseSet.Response'
+          description: The list of response options available in this response set.
+      description: TemplateResponseSet contains a response set defined within this template.
+    s12.common.TemperatureUnit:
+      type: string
+      enum:
+      - KELVIN
+      - CELSIUS
+      - FAHRENHEIT
+      default: UNKNOWN_TEMPERATURE_UNIT
+      description: "- KELVIN: Represents Kelvin temperature unit\n - CELSIUS: Represents Celsius temperature unit\n - FAHRENHEIT: Represents Fahrenheit temperature unit"
+      title: Represents different units to measure temperature
+    s12.templates.v1.RestoreArchivedTemplateResponse:
+      type: object
+      title: Result returned from RestoreArchivedTemplate
+    s12.templates.v1.LogicfieldTemplateItem.Switch:
+      type: object
+      description: 'SwitchLogicField has information about whether the field was evaluated
+
+        as true/false.'
+    s12.templates.v1.CategoryTemplateItem:
+      type: object
+      title: 'Category item is a container that can contain other item types
+
+        Categories are always found within a section and there can be
+
+        multiple category items within a section'
+    s12.templates.v1.LogicfieldTemplateItem:
+      type: object
+      properties:
+        text_equal:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Text'
+        text_not_equal:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Text'
+        checkbox_checked:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Checkbox'
+        checkbox_unchecked:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Checkbox'
+        response_is_selected:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Response'
+        response_is_not_selected:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Response'
+        response_is:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Response'
+        response_is_not:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Response'
+        response_is_in:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Response'
+        response_is_not_in:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Response'
+        temperature_passes:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Temperature'
+        temperature_fails:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Temperature'
+        response_is_less_than:
+          $ref: '#/components/schemas/s12.templates.v1.NumberComparison'
+        response_is_less_than_or_equal_to:
+          $ref: '#/components/schemas/s12.templates.v1.NumberComparison'
+        response_is_equal_to:
+          $ref: '#/components/schemas/s12.templates.v1.NumberComparison'
+        response_is_not_equal_to:
+          $ref: '#/components/schemas/s12.templates.v1.NumberComparison'
+        response_is_greater_than:
+          $ref: '#/components/schemas/s12.templates.v1.NumberComparison'
+        response_is_greater_than_or_equal_to:
+          $ref: '#/components/schemas/s12.templates.v1.NumberComparison'
+        response_is_between:
+          $ref: '#/components/schemas/s12.templates.v1.RangeComparison'
+        response_is_not_between:
+          $ref: '#/components/schemas/s12.templates.v1.RangeComparison'
+        switch_is_on:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Switch'
+        switch_is_off:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Switch'
+        signature_exist:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Signature'
+        signature_not_exist:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.Signature'
+        require_note:
+          type: boolean
+        require_media:
+          type: boolean
+        require_action:
+          type: boolean
+        skip_to:
+          $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.SkipTo'
+        preset_action_type_ids:
+          type: array
+          items:
+            type: string
+          description: Action type UUIDs to pre-select when this item has a Require Action logic trigger.
+        procurement_trigger:
+          type: boolean
+          description: Marks this logic field as a procurement trigger.
+      title: Logicfield items
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.NumberItem:
+      type: object
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.LocationItem:
+      type: object
+    s12.templates.v1.CheckboxTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+      title: 'Checkbox items define question with boolean answer value type - Yes/No
+
+        (True/False)'
+    s12.templates.v1.LogicfieldTemplateItem.SkipTo.TargetItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'ID of the item to skip to: this can be a question, page or section ID'
+        category:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.SkipTo.Category'
+          description: The category of item to skip to
+      title: Item represents skipping to a specific item
+    s12.templates.v1.ResponseSet.Response:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Response ID in format of UUID or a legacy long id. For ex.:
+
+            ''060ace00-1f61-468e-9c42-918fa93badcf'' or
+
+            ''56341C6E-35A7-4C97-9C5E-7AC79673EAB2-539-000001F95B327819'''
+        label:
+          type: string
+          description: Label of given response option
+        score:
+          type: number
+          format: double
+          description: 'Score represents a value added to inspection score when given response
+
+            selected from the response set'
+        color:
+          type: string
+          description: 'Color represents a color representation of given option and is decimal
+
+            representation of RGB. For example ''red'' would be ''(204,0,0)'''
+        score_enabled:
+          type: boolean
+          description: 'Score enabled represents a boolean value, whether the response score
+
+            should count towards the total score of the inspection'
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.ItemType:
+      type: string
+      enum:
+      - ITEM_TYPE_TEXT
+      - ITEM_TYPE_NUMBER
+      - ITEM_TYPE_PARAGRAPH
+      - ITEM_TYPE_DATETIME
+      - ITEM_TYPE_LOCATION
+      - ITEM_TYPE_CHECKBOX
+      - ITEM_TYPE_QUESTION
+      - ITEM_TYPE_MEDIA
+      - ITEM_TYPE_DRAWING
+      - ITEM_TYPE_SIGNATURE
+      - ITEM_TYPE_TEMPERATURE
+      - ITEM_TYPE_SLIDER
+      - ITEM_TYPE_ASSET
+      - ITEM_TYPE_SITE
+      - ITEM_TYPE_PAGE
+      - ITEM_TYPE_APPROVAL_PAGE
+      - ITEM_TYPE_SECTION
+      - ITEM_TYPE_REPEATED_SECTION
+      - ITEM_TYPE_LOGIC
+      - ITEM_TYPE_COMPANY
+      - ITEM_TYPE_TABLE_PAGE
+      - ITEM_TYPE_TABLE
+      - ITEM_TYPE_INFORMATION
+    s12.templates.v1.DynamicTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+      title: 'Dynamic item (repeated section) define template items used to wrap other item
+
+        types with ability to multiply the inner item'
+    s12.templates.v1.Template.ProcurementConfigIdentity:
+      type: object
+      properties:
+        config_id:
+          type: string
+        version:
+          type: integer
+          format: int32
+      description: Identifies an immutable Marketplace procurement config version.
+    s12.templates.v1.LogicfieldTemplateItem.SkipTo:
+      type: object
+      properties:
+        target_item:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.SkipTo.TargetItem'
+          description: Skip to a specific item in the inspection
+        complete:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.LogicfieldTemplateItem.SkipTo.Complete'
+          description: Skip to complete the inspection
+      title: SkipTo defines the target to skip to when logic conditions are met
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.MediaItem:
+      type: object
+    s12.templates.v1.TextSingleTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+        text_format:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TextSingleTemplateItem.TextFormat'
+          description: Defines text format used to validate the item value
+        calculation_data:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.CalculationData'
+          description: Defines calculation data used to identify the calculation type of item
+        reading_config_id:
+          type: string
+          description: ID of the reading config linked to this item
+      title: Text Single items define template items used as single line text input
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.TextItem:
+      type: object
+    s12.templates.v1.LogicfieldTemplateItem.SkipTo.Complete:
+      type: object
+      title: Complete represents skipping to the end to complete the inspection
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateResponseSet.Response:
+      type: object
+      properties:
+        response_id:
+          type: string
+          description: The unique identifier for the response option.
+        label:
+          type: string
+          description: The display label for the response option.
+      description: Response represents a single selectable option within a response set.
+    s12.templates.pub.integration.v1.GetTemplateDefinitionResponse:
+      type: object
+      properties:
+        template:
+          description: 'The structural definition of the template, including its item hierarchy,
+
+            item types, and response sets.'
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition'
+        version:
+          type: string
+          description: 'The published revision. Replaces TemplateDefinition.version, which is
+
+            deprecated but stays populated.'
+      description: GetTemplateDefinitionResponse response for `rpc GetTemplateDefinition`.
+    s12.templates.v1.CompanyTemplateItem.CompanyTypes:
+      type: object
+      properties:
+        all:
+          type: boolean
+          description: Include all company types within this org
+        company_types:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.v1.CompanyType'
+      title: Represents a collection of company types
+    s12.templates.v1.SwitchTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+      title: 'Switch items are legacy item which define question with boolean answer value
+
+        type - Yes/No, data structure is same as checkbox (True/False)'
+    s12.templates.v1.CompanyTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+        allowed_company_type:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.CompanyTemplateItem.CompanyTypes'
+          description: Restricted list of company types allowed to be selected for this item
+      title: Company item represents the template item for a company
+    s12.templates.pub.integration.v1.GetTemplateDraftResponse:
+      type: object
+      properties:
+        template:
+          description: 'The draft content, in the same shape the published read returns.
+
+            TemplateDefinition.version is always empty here — it is a property of the
+
+            published state. Use GetTemplateDefinition for the published version.'
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition'
+        revision:
+          type: string
+          description: 'Opaque concurrency token identifying the exact state of this draft. Pass
+
+            it back when mutating or publishing the draft to act only if nothing has
+
+            changed since this read.
+
+
+            Treat the value as opaque and compare it only for equality. It is not
+
+            comparable to `GetTemplateDefinitionResponse.version`.
+
+            Publishing or discarding the draft destroys it and invalidates the token.
+
+            Re-read the draft to get a current token.'
+      description: GetTemplateDraftResponse response for `rpc GetTemplateDraft`.
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.ApprovalPageItem:
+      type: object
+    s12.templates.v1.GetTemplateByInspectionIDResponse:
+      type: object
+      properties:
+        template:
+          $ref: '#/components/schemas/s12.templates.v1.Template'
+      title: Result of `GetTemplateByInspectionID` method
+    s12.templates.v1.SliderTemplateItem:
+      type: object
+      properties:
+        options:
+          $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+        max:
+          type: number
+          format: double
+          description: 'A double representing the maximum value allowed for this item. Negatives
+
+            are allowed.'
+        min:
+          type: number
+          format: double
+          description: 'A double representing the minimum value allowed for this item. Negatives
+
+            are allowed.'
+        increment:
+          type: number
+          format: double
+          description: 'A double representing how much a value can jump in either direction.
+
+            This is always a positive value.'
+      description: 'Slider item represents a number item that is bounded by an upper (max) and
+
+        lower (min) value.'
+    s12.templates.v1.AddressTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+      title: Address define template items with location data
+    s12.templates.pub.integration.v1.TemplateDefinition.ResponseSets:
+      type: object
+      properties:
+        template_response_sets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.TemplateResponseSet'
+          description: Response sets defined within this template.
+        global_response_sets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.templates.pub.integration.v1.TemplateDefinition.GlobalResponseSet'
+          description: References to shared global response sets used by this template.
+      description: ResponseSets contains all response sets associated with this template.
+    s12.templates.v1.InstructionTemplateItem:
+      type: object
+      properties:
+        text:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.InstructionTemplateItem.TextInstruction'
+          description: Represents a Text instruction item type
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Represents a Media instruction item type
+        link:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.InstructionTemplateItem.LinkInstruction'
+          description: Represents a Link instruction item type
+        document_link:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.InstructionTemplateItem.DocumentLinkInstruction'
+          description: Represents a Link to a document instruction item type
+    s12.templates.pub.integration.v1.TemplateDefinition.TemplateItem.DrawingItem:
+      type: object
+    s12.templates.v1.UnsupportedTemplateItem:
+      type: object
+      title: 'Unsupported items define template items that are not supported in the
+
+        inspections experience'
+    s12.common.Media:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        filename:
+          type: string
+          description: full file name, including file extension
+        media_type:
+          $ref: '#/components/schemas/s12.common.MediaType'
+      title: Represents an image or video
+    s12.templates.v1.TextSingleTemplateItem.TextFormat:
+      type: string
+      enum:
+      - TEXT
+      - NUMBER
+      - EMAIL
+      - PHONENUMBER
+      - PEOPLE
+      default: TEXT
+    s12.templates.pub.integration.v1.TemplateService.PublishTemplateBody:
+      type: object
+      properties:
+        if_draft_revision_is:
+          type: string
+          description: 'Publish only if the draft is exactly at this revision, taken from a prior
+
+            read or mutation. Otherwise ABORTED / STALE_DRAFT_REVISION, with the
+
+            current token in the ErrorInfo metadata under `current_draft_revision`,
+
+            which is empty when the draft no longer exists.
+
+
+            Required, unlike on UpdateTemplateDraft, so that draft content the caller
+
+            has not read cannot go live to end users.'
+      description: PublishTemplateRequest parameters for `rpc PublishTemplate`.
+      required:
+      - if_draft_revision_is
+    s12.templates.v1.MediaTemplateItem:
+      type: object
+      properties:
+        options:
+          allOf:
+          - $ref: '#/components/schemas/s12.templates.v1.TemplateItemOptions'
+          description: Common template item options
+      title: Media items define template items that give user ability to attach images
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

@@ -1,0 +1,2123 @@
+openapi: 3.2.0
+info:
+  title: Mitti Companies API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Companies
+paths:
+  /companies/v1/companies:
+    post:
+      summary: List companies
+      description: Lists contractor companies based on applied filters, with support for sorting and pagination.
+      operationId: ContractorsService_ListContractorCompanies
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.ListContractorCompaniesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.contractors.v1.ListContractorCompaniesRequest'
+        required: true
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about Companies
+        url: https://help.safetyculture.com/en-US/004114/
+  /companies/v1/company:
+    post:
+      summary: Create a company
+      description: 'Creates a new contractor company in your SafetyCulture organization. Requires the ''Companies: Manage'' permission.'
+      operationId: ContractorsService_CreateContractorCompany
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.CreateContractorCompanyResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.contractors.v1.CreateContractorCompanyRequest'
+        required: true
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about Companies
+        url: https://help.safetyculture.com/en-US/004114/
+    get:
+      summary: Get a company
+      description: Retrieves a contractor company by its ID, including compliance statistics.
+      operationId: ContractorsService_GetContractorCompany
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.GetContractorCompanyResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: company_type_id
+        description: Optional. The ID of the contractor company type.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: company_id
+        description: Required. The ID of the contractor company.
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: include_compliance_stats
+        description: Deprecated. This does nothing. Compliance statistics are now always included in the response.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: include_user_credential_compliance_stats
+        description: Temporary migration flag. When true, includes user credential compliance statistics in the response. Defaults to false.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about Companies
+        url: https://help.safetyculture.com/en-US/004114/
+    put:
+      summary: Update a company
+      description: Updates an existing contractor company by providing its ID and a field mask of attributes to change.
+      operationId: ContractorsService_UpdateContractorCompany
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.UpdateContractorCompanyResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.contractors.v1.UpdateContractorCompanyRequest'
+        required: true
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about Companies
+        url: https://help.safetyculture.com/en-US/004114/
+    delete:
+      summary: Delete a company
+      description: 'Deletes a contractor company. Requires the ''Companies: Manage'' permission.'
+      operationId: ContractorsService_DeleteContractorCompany
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.DeleteContractorCompanyResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: company_type_id
+        description: Deprecated. This does nothing.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: company_id
+        description: Required. The ID of the contractor company.
+        in: query
+        required: true
+        schema:
+          type: string
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about Companies
+        url: https://help.safetyculture.com/en-US/004114/
+  /companies/v1/documents:
+    post:
+      summary: List company documents
+      description: Lists documents for a company based on applied filters, with support for sorting and pagination.
+      operationId: CompanyDocumentsService_ListCompanyDocuments
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.ListCompanyDocumentsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.contractors.v1.ListCompanyDocumentsRequest'
+        required: true
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about company documents
+        url: https://help.safetyculture.com/en-US/005046/
+  /companies/v1/documents/type:
+    delete:
+      summary: Delete a company document type
+      description: 'Deletes a company document type. Requires the ''Companies: Manage'' permission.'
+      operationId: CompanyDocumentsService_DeleteCompanyDocumentType
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.DeleteCompanyDocumentTypeResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: type_id
+        description: Required. The ID of the document type.
+        in: query
+        required: true
+        schema:
+          type: string
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about company documents
+        url: https://help.safetyculture.com/en-US/005046/
+  /companies/v1/documents/types:
+    post:
+      summary: List company document types
+      description: Lists all company document types available in the organization.
+      operationId: CompanyDocumentsService_ListCompanyDocumentTypes
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.ListCompanyDocumentTypesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.contractors.v1.ListCompanyDocumentTypesRequest'
+        required: true
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about company documents
+        url: https://help.safetyculture.com/en-US/005046/
+  /companies/v1/type-metrics:
+    post:
+      summary: List company type metrics
+      description: Lists company types with a breakdown of status metrics for each type.
+      operationId: ContractorCompanyTypesService_ListCompanyTypesMetrics
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.ListCompanyTypesMetricsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.contractors.v1.ListCompanyTypesMetricsRequest'
+        required: true
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about company types
+        url: https://help.safetyculture.com/en-US/005043/
+  /companies/v1/type/{id}:
+    get:
+      summary: Get a company type
+      description: Retrieves a company type by its ID.
+      operationId: ContractorCompanyTypesService_GetCompanyType
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.GetCompanyTypeResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the field.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about company types
+        url: https://help.safetyculture.com/en-US/005043/
+  /companies/v1/types:
+    post:
+      summary: List company types
+      description: Lists company types based on applied filters.
+      operationId: ContractorCompanyTypesService_ListCompanyTypes
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.ListCompanyTypesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.contractors.v1.ListCompanyTypesRequest'
+        required: true
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about company types
+        url: https://help.safetyculture.com/en-US/005043/
+  /companies/v1/users:
+    post:
+      summary: List company users
+      description: Lists users in a company along with their roles and metadata.
+      operationId: ContractorsService_ListCompanyUserMetadata
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.v1.ListCompanyUserMetadataResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.contractors.v1.ListCompanyUserMetadataRequest'
+        required: true
+      tags:
+      - Companies
+      externalDocs:
+        description: Learn more about Companies
+        url: https://help.safetyculture.com/en-US/004114/
+components:
+  schemas:
+    s12.contractors.v1.CompanyDocument:
+      type: object
+      properties:
+        id:
+          type: string
+        resource_version_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+        version_number:
+          type: integer
+          format: int32
+        source_id:
+          type: string
+        file_size:
+          type: integer
+          format: int32
+        created_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+          description: '@deprecated. Use created_by_user instead.'
+        archived:
+          type: boolean
+        archived_at:
+          type: string
+          format: date-time
+        archived_by:
+          type: string
+        company_document_type:
+          $ref: '#/components/schemas/s12.contractors.v1.CompanyDocumentType'
+        issue_date:
+          $ref: '#/components/schemas/google.type.Date'
+        expiration_date:
+          $ref: '#/components/schemas/google.type.Date'
+        parent_id:
+          type: string
+        approval_status:
+          $ref: '#/components/schemas/s12.documents.v1.ApprovalStatus'
+        created_by_user:
+          $ref: '#/components/schemas/s12.common.UserDocument'
+        media:
+          $ref: '#/components/schemas/s12.common.Media'
+        doc_expiry_status:
+          $ref: '#/components/schemas/s12.common.ExpiryStatus'
+        modified_by_user:
+          $ref: '#/components/schemas/s12.common.UserDocument'
+        fulfills:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.v1.FulfilledRequirementRef'
+          description: 'Output-only. References to CompanyRequirements (scoped to the requesting
+
+            org) that this document currently fulfils. A document fulfils a
+
+            requirement when it is recorded as the fulfilling_entity on that
+
+            requirement row.
+
+
+            Today, only the caller-org''s requirements are surfaced — even though the
+
+            same document may transitively fulfil requirements held by other buyer
+
+            orgs that track the same contractor. May be empty.'
+        ai_compliance_audit:
+          description: 'Output-only. The result of running AI compliance review against the rule
+
+            configured for this document''s type, for this specific version. Unset
+
+            when no rule is configured for the type, or when no audit has been
+
+            scheduled yet for this version.'
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.AiDocumentComplianceAudit'
+    s12.contractors.v1.ListCompanyUserMetadataRequest:
+      type: object
+      properties:
+        company_id:
+          type: string
+          description: Required. The ID of the contractor company.
+        filter:
+          description: Additional filters to apply to the request.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyUserFilter'
+        sort_field:
+          description: The field to sort by.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyUserSortField'
+        page_size:
+          type: integer
+          format: int32
+          description: The number of users to return in a single request.
+        page_token:
+          type: string
+          description: If present, will fetch the next page of results. This must be the value of `next_page_token` from the response.
+        sort_direction:
+          description: Optional. The sort order to apply. Defaults to ascending when unspecified.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+      required:
+      - company_id
+    s12.contractors.v1.DeleteCompanyDocumentTypeResponse:
+      type: object
+    s12.contractors.v1.ListCompanyDocumentTypesFilter:
+      type: object
+      properties:
+        document_type_ids:
+          type: array
+          items:
+            type: string
+          description: Filter by the document type id of the document. If not provided, all types are returned.
+    s12.contractors.v1.CompanyDocumentsFilter:
+      type: object
+      properties:
+        is_archived:
+          type: boolean
+          description: Filter by archived status. Default is unarchived only.
+        type_ids:
+          type: array
+          items:
+            type: string
+          description: Filter by document type. If not provided, all types are returned.
+        approval_statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.documents.v1.ApprovalStatus'
+          description: Filter by the approval status of the document. If not provided, all statuses are returned.
+        doc_expiry_statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.common.ExpiryStatus'
+          description: Filter by the expiry status of the document. If not provided, all statuses are returned.
+        modified_at:
+          description: Filter by the modified at timestamp of the document. If not provided, all documents are returned.
+          allOf:
+          - $ref: '#/components/schemas/s12.documents.v1.Duration'
+    s12.contractors.v1.ListCompanyDocumentsResponse:
+      type: object
+      properties:
+        company_document_list:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.v1.CompanyDocument'
+          description: The list of documents in the company.
+        next_page_token:
+          type: string
+          description: The next page token.
+        total_count:
+          type: integer
+          format: int32
+          description: 'The total number of documents that match the filter (in the current
+
+            archived scope — active or archived, whichever was requested).'
+        total_archived_count:
+          type: integer
+          format: int32
+          description: 'The total number of archived documents that match the same filters as
+
+            this request, regardless of which archived scope was requested. Used by
+
+            clients to populate a "Show archived (N)" badge without firing a second
+
+            request, so the count always respects the user''s active filters.'
+    s12.contractors.v1.ContractorCompanyAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the company.
+        contact_details:
+          description: The contact details of the company.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.CompanyContactDetails'
+        image:
+          description: Image to be associated with the company.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+        external_reference_id:
+          type: string
+          description: An optional external reference ID for the company that is used in external systems. Enforces uniqueness.
+        status:
+          description: The status of the company.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyStatus'
+        compliance_statistics:
+          description: The compliance statistics of the company.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.CompanyComplianceStatistics'
+        user_credential_compliance_statistics:
+          description: 'The user credential compliance statistics of the company.
+
+            Only populated for users with credential management permissions.'
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.CompanyUserCredentialComplianceStatistics'
+        notes:
+          type: string
+          description: An internal note about the company, visible only to users with admin:companies permission.
+        site_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the sites to associate with this company.
+
+            On create: links all provided sites to the new company.
+
+            On update: replaces the full set of site associations (include in update_mask to apply).'
+        linked_sites:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyLinkedSite'
+          description: 'The sites currently linked to this company, including resolved site names.
+
+            Populated on read responses only; to modify the site associations use site_ids.'
+          readOnly: true
+        outstanding_document_request_count:
+          type: integer
+          format: int32
+          description: 'The number of document requests made to this company that are still outstanding.
+
+            A request is outstanding when the company has not uploaded a document against it,
+
+            or when the document they uploaded was rejected.
+
+
+            Populated on list responses only. Endpoints that return a single company leave it at 0,
+
+            so do not read it from those; call the list endpoint if you need this count.'
+          readOnly: true
+      description: Intrinsic attributes associated with a contractor company.
+    s12.contractors.v1.CreateContractorCompanyResponse:
+      type: object
+    s12.common.ExpiryStatus:
+      type: string
+      enum:
+      - EXPIRY_STATUS_VALID
+      - EXPIRY_STATUS_EXPIRED
+      - EXPIRY_STATUS_EXPIRING_SOON
+      description: The expiry status of an object based on its validity period.
+    s12.contractors.v1.FulfilledRequirementRef:
+      type: object
+      properties:
+        reference_id:
+          type: string
+          description: 'The reference_id of the fulfilled CompanyRequirement. For
+
+            requirement_type = DOCUMENT_TYPE this is the document type ID and matches
+
+            CompanyDocument.company_document_type.id.'
+      description: 'FulfilledRequirementRef is a lightweight reference from a document to a
+
+        CompanyRequirement it fulfils. Kept minimal because the document already
+
+        carries display context (document type id + name) — callers can correlate
+
+        reference_id against CompanyDocument.company_document_type.id without
+
+        additional lookups.'
+    s12.contractors.v1.AiDocumentComplianceAuditStatus:
+      type: string
+      enum:
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_UNSPECIFIED
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_NOT_YET_QUEUED
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_QUEUED
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_RUNNING
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_COMPLETED
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_FAILED
+      default: AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_UNSPECIFIED
+      description: "AiDocumentComplianceAuditStatus is the lifecycle of an audit run.\n\n - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_NOT_YET_QUEUED: A rule is configured for the document's type but this version was\nnever audited — typically because the rule was created after the\nversion was uploaded. The frontend should surface a \"Run audit\"\naffordance rather than a verdict.\n - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_QUEUED: Scheduled but not yet started.\n - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_RUNNING: Currently being evaluated by the AI.\n - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_COMPLETED: Evaluation finished — see result + summary_prose.\n - AI_DOCUMENT_COMPLIANCE_AUDIT_STATUS_FAILED: The evaluator errored out (e.g. unsupported media, AI gateway failure).\nSee summary_prose for a brief reason."
+    s12.contractors.v1.ContractorCompanySortField:
+      type: string
+      enum:
+      - COMPANY_SORT_FIELD_COMPANY_TYPE_NAME
+      - COMPANY_SORT_FIELD_COMPANY_NAME
+      - COMPANY_SORT_FIELD_COMPANY_STATUS
+      - COMPANY_SORT_FIELD_OUTSTANDING_DOCUMENT_REQUESTS
+      description: "ContractorCompanySortField is used to define the sorting criteria of contractor companies.\n\n - COMPANY_SORT_FIELD_COMPANY_TYPE_NAME: Sort by company type name.\n - COMPANY_SORT_FIELD_COMPANY_NAME: Sort by company name.\n - COMPANY_SORT_FIELD_COMPANY_STATUS: Sort by company status.\n - COMPANY_SORT_FIELD_OUTSTANDING_DOCUMENT_REQUESTS: Sort by the number of outstanding document requests."
+    s12.contractors.v1.AiDocumentComplianceAuditResult:
+      type: string
+      enum:
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_RESULT_UNSPECIFIED
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_RESULT_COMPLIANT
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_RESULT_NON_COMPLIANT
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_RESULT_UNCERTAIN
+      default: AI_DOCUMENT_COMPLIANCE_AUDIT_RESULT_UNSPECIFIED
+      description: "AiDocumentComplianceAuditResult is the AI's verdict on a completed audit.\n\n - AI_DOCUMENT_COMPLIANCE_AUDIT_RESULT_COMPLIANT: Document satisfies the rule's criteria.\n - AI_DOCUMENT_COMPLIANCE_AUDIT_RESULT_NON_COMPLIANT: Document fails one or more parts of the rule's criteria.\n - AI_DOCUMENT_COMPLIANCE_AUDIT_RESULT_UNCERTAIN: The AI could not form a confident verdict (e.g. illegible scan, missing\npages). Falls back to manual review regardless of action_mode."
+    s12.contractors.v1.ContractorCompanyStatus:
+      type: string
+      enum:
+      - CONTRACTOR_COMPANY_STATUS_ACTIVE
+      - CONTRACTOR_COMPANY_STATUS_PENDING
+      - CONTRACTOR_COMPANY_STATUS_DEACTIVATED
+      description: "The status of a contractor company.\n\n - CONTRACTOR_COMPANY_STATUS_ACTIVE: The company is active.\n - CONTRACTOR_COMPANY_STATUS_PENDING: The company is pending approval.\n - CONTRACTOR_COMPANY_STATUS_DEACTIVATED: The company is deactivated."
+    s12.contractors.v1.AiDocumentComplianceAuditCompletedOutcome:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/s12.contractors.v1.AiDocumentComplianceAuditResult'
+        summary_prose:
+          type: string
+          description: 'Plain-English explanation of the verdict, produced by the AI.
+
+            Always set.'
+      description: 'AiDocumentComplianceAuditCompletedOutcome is the payload when the AI produced a
+
+        verdict (status = COMPLETED). Includes UNCERTAIN — that''s still a
+
+        completed run, just one that fell back to manual review.'
+    s12.contractors.v1.CompanyDocumentTypeForm:
+      type: object
+      properties:
+        media:
+          description: The form file. media.token provides the signed download URL.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+        added_by_user_id:
+          type: string
+          description: The user that attached the current form.
+        added_at:
+          type: string
+          format: date-time
+          description: When the current form was attached.
+      description: 'CompanyDocumentTypeForm is a reusable blank form that lives on a document
+
+        type. Key contacts download, fill out, and return it; it is reused on every
+
+        request for that type instead of being re-uploaded per request.'
+    s12.common.SubscriptionSeatTypes:
+      type: string
+      enum:
+      - SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      - SUBSCRIPTION_SEAT_TYPE_PREMIUM
+      - SUBSCRIPTION_SEAT_TYPE_COLLABORATOR
+      - SUBSCRIPTION_SEAT_TYPE_LITE
+      - SUBSCRIPTION_SEAT_TYPE_SERVICE_USER
+      - SUBSCRIPTION_SEAT_TYPE_SUPPORT
+      default: SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      title: SubscriptionSeatTypes is a list of potential subscription seat types
+    s12.contractors.v1.ListCompanyDocumentsRequest:
+      type: object
+      properties:
+        company_id:
+          type: string
+          description: Required. The ID of the contractor company.
+        filter:
+          $ref: '#/components/schemas/s12.contractors.v1.CompanyDocumentsFilter'
+        sort_field:
+          description: The field to sort by.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.CompanyDocumentSortField'
+        sort_direction:
+          description: The sort order.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+        page_size:
+          type: integer
+          format: int32
+          description: The number of results to return in a single request.
+        page_token:
+          type: string
+          description: If present, will fetch the next page of results. This must be the value of `next_page_token` from the response.
+        search:
+          $ref: '#/components/schemas/s12.contractors.v1.Search'
+      required:
+      - company_id
+    s12.contractors.v1.ContractorCompanyUserFilter.UserStatus:
+      type: string
+      enum:
+      - USER_STATUS_ACTIVE
+      - USER_STATUS_DEACTIVATED
+      description: " - USER_STATUS_ACTIVE: Include only active users.\n - USER_STATUS_DEACTIVATED: Include only deactivated users."
+    s12.contractors.v1.AddressDirectoryFilter:
+      type: object
+      properties:
+        country_codes:
+          type: array
+          items:
+            type: string
+          description: 'Filter by specific country codes (ISO 3166-1 alpha-2).
+
+            Case-insensitive. Multiple values use OR logic (returns companies matching ANY code).
+
+            Example: ["US", "AU"] returns companies in US OR Australia.'
+        administrative_areas:
+          type: array
+          items:
+            type: string
+          description: 'Filter by specific administrative area names (administrative_area_level_1).
+
+            Case-insensitive. Multiple values use OR logic (returns companies matching ANY area).
+
+            Examples: US states ("CA", "NY"), Canadian provinces ("ON", "BC"),
+
+            UK counties, Australian states ("NSW", "VIC").
+
+            When combined with country_codes, uses AND logic
+
+            (e.g., country_codes=["US"] AND administrative_areas=["CA"] returns only US companies in California).'
+      description: 'Filter options for address directory queries.
+
+        All filtering is case-insensitive (e.g., "US", "us", "Us" all match "US").'
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.contractors.v1.ListCompanyTypesMetricsResponse:
+      type: object
+      properties:
+        types_metrics_list:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.v1.ListCompanyTypesMetricsResponse.CompanyTypeWithMetrics'
+          description: List of types that satisfy filters under current organization.
+        next_page_token:
+          type: string
+          description: 'If there might be more results than those appearing in this response, then
+
+            `next_page_token` is included. If empty then there are no more results.
+
+            To get the next set of results, call this method again using the value of
+
+            `next_page_token` as `page_token`.'
+    s12.contractors.v1.ListCompanyTypesRequest:
+      type: object
+      properties:
+        type_criteria:
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.ListTypesCriteria'
+          description: The search criteria for company types
+    s12.typefield.v1.ListTypesCriteria.Filter:
+      type: object
+      properties:
+        search:
+          type: string
+          description: Search on a Type's name
+        category:
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.TypeCategory'
+          description: Search on type's category
+        type_ids:
+          type: array
+          items:
+            type: string
+          description: Search on type's ids
+        exclude_type_ids:
+          type: array
+          items:
+            type: string
+          description: Type ids to exclude for the response
+    s12.documents.v1.ApprovalStatus:
+      type: string
+      enum:
+      - APPROVAL_STATUS_UNSPECIFIED
+      - APPROVAL_STATUS_PENDING
+      - APPROVAL_STATUS_APPROVED
+      - APPROVAL_STATUS_REJECTED
+      default: APPROVAL_STATUS_UNSPECIFIED
+    s12.contractors.v1.ListCompanyTypesMetricsResponse.CompanyTypeWithMetrics:
+      type: object
+      properties:
+        type:
+          description: The company type.
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.Type'
+        metrics:
+          description: The metrics association with the company type.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ListCompanyTypesMetricsResponse.CompanyTypeMetrics'
+    s12.contractors.v1.CompanyDocumentType:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        form:
+          description: 'Optional. The reusable pre-qualification form attached to this document
+
+            type. Pre-loads into every request for the type. Unset when the type has
+
+            no form.'
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.CompanyDocumentTypeForm'
+        open_request_count:
+          type: string
+          format: int64
+          description: 'Output-only. Number of open (sent-but-unfulfilled) requests for this type,
+
+            org-wide. Drives the "updating the form applies to N open requests" banner.'
+    s12.contractors.v1.ContractorCompanyFilter:
+      type: object
+      properties:
+        search:
+          type: string
+          description: Optional. The search string to filter by. If not provided, all unfiltered results will be returned.
+        company_type_ids:
+          type: array
+          items:
+            type: string
+          description: Optional. The company type IDs to filter by. If not provided, all company types will be returned.
+        contractor_company_statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyStatus'
+          description: Optional. The contractor company statuses to filter by. If not provided, all statuses will be returned.
+        needs_attention:
+          type: boolean
+          description: 'Deprecated. Will currently override compliance_filters if set.
+
+            Whether to include only companies that need attention due to non-compliance.'
+        compliance_filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.contractors.v1.ComplianceFilterType'
+          description: 'Optional. Filter by specific compliance issues (OR logic between selected types).
+
+            If empty, no compliance filtering is applied.
+
+            Companies will be returned if they match ANY of the selected compliance filter types.'
+        address_filter:
+          description: 'Optional. Filter by address-related criteria (country and/or administrative area).
+
+            Filtering is case-insensitive. Multiple values within the same filter type use OR logic.
+
+            Country and administrative area filters combine with AND logic.'
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.AddressDirectoryFilter'
+        site_ids:
+          type: array
+          items:
+            type: string
+          description: 'Optional. The site IDs to filter by. If provided, only companies linked to at
+
+            least one of the given (non-archived) sites are returned. If empty, no site
+
+            filtering is applied. Multiple site IDs use OR logic.'
+      description: ContractorCompanyFilter is used to filter contractor companies.
+    s12.typefield.v1.ListTypesCriteria:
+      type: object
+      properties:
+        filter:
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.ListTypesCriteria.Filter'
+          description: Optional. Filters for the types listed
+        page_size:
+          type: integer
+          format: int32
+          description: Optional. The number of asset types to return. Default of 50.
+        page_token:
+          type: string
+          description: 'Optional. If present, then retrieve the next batch of results from the
+
+            preceding call to this method. `page_token` must be the value of
+
+            `next_page_token` from the previous response.  The values of other method
+
+            parameters should be identical to those in the previous call.
+
+            For example: ''ODFBMzQ3MDYtNzQxNy00RDZGLThDNjE1MEFDMkM4MTQ3NDQ=''.'
+        sort_field:
+          description: Optional. The field to use for sorting.
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.ListTypesCriteria.SortField'
+        sort_direction:
+          description: Optional. The direction to sort types in.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+        include_stats:
+          type: boolean
+          description: Include stats associated with a type.
+      title: Criteria defines the common criteria to list generic types. This criteria should be domain agnostic
+    s12.common.SortDirection:
+      type: string
+      enum:
+      - SORT_DIRECTION_UNSPECIFIED
+      - SORT_DIRECTION_ASC
+      - SORT_DIRECTION_DESC
+      default: SORT_DIRECTION_UNSPECIFIED
+      title: Common set of sorting directions as used by lists
+    s12.common.Language:
+      type: string
+      enum:
+      - LANGUAGE_UNSPECIFIED
+      - LANGUAGE_EN_US
+      - LANGUAGE_EN_GB
+      - LANGUAGE_DE_DE
+      - LANGUAGE_ES_ES
+      - LANGUAGE_FR_FR
+      - LANGUAGE_PT_BR
+      - LANGUAGE_NL_NL
+      default: LANGUAGE_UNSPECIFIED
+      description: "- LANGUAGE_UNSPECIFIED: Language unspecified\n - LANGUAGE_EN_US: Language en-US\n - LANGUAGE_EN_GB: Language en-GB\n - LANGUAGE_DE_DE: Language de-DE\n - LANGUAGE_ES_ES: Language es-ES\n - LANGUAGE_FR_FR: Language fr-FR\n - LANGUAGE_PT_BR: Language pt-BR\n - LANGUAGE_NL_NL: Language nl-NL"
+      title: Language represents the languages offered in SafetyCulture
+    s12.contractors.v1.ListCompanyTypesResponse:
+      type: object
+      properties:
+        types_list:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.Type'
+          description: List of types that satisfy filters under current organization.
+        next_page_token:
+          type: string
+          description: 'If there might be more results than those appearing in this response, then
+
+            `next_page_token` is included. If empty then there are no more results.
+
+            To get the next set of results, call this method again using the value of
+
+            `next_page_token` as `page_token`.'
+    s12.contractors.v1.ContractorCompanyUserFilter:
+      type: object
+      properties:
+        search:
+          type: string
+          description: Optional. The search string to filter by. If not provided, all unfiltered results will be returned.
+        user_status:
+          description: Optional. The user status to filter by. If not provided, all statuses will be returned.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyUserFilter.UserStatus'
+      description: ContractorCompanyUserFilter is used to filter contractor company users.
+    s12.contractors.v1.ListCompanyDocumentTypesRequest:
+      type: object
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: The number of results to return in a single request.
+        page_token:
+          type: string
+          description: If present, will fetch the next page of results. This must be the value of `next_page_token` from the response.
+        filter:
+          $ref: '#/components/schemas/s12.contractors.v1.ListCompanyDocumentTypesFilter'
+    s12.contractors.v1.CompanyUserCredentialComplianceStatistics:
+      type: object
+      properties:
+        expired_user_credential_count:
+          type: integer
+          format: int32
+          description: The number of user credentials that have expired.
+        expiring_soon_user_credential_count:
+          type: integer
+          format: int32
+          description: The number of user credentials that are expiring soon.
+        pending_approval_user_credential_count:
+          type: integer
+          format: int32
+          description: The number of user credentials that are pending approval.
+        total_user_credential_count:
+          type: integer
+          format: int32
+          description: The total number of user credentials.
+      description: CompanyUserCredentialComplianceStatistics is a message that contains statistics about a contractor company's users' credential compliance.
+    s12.contractors.v1.ContractorCompany:
+      type: object
+      properties:
+        company_id:
+          type: string
+          description: The ID of the company.
+        attributes:
+          description: Any intrinsic attributes associated with a company.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyAttributes'
+        metadata:
+          description: Any metadata associated with a company.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyMetadata'
+        company_type:
+          description: The type of the company.
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.Type'
+      description: A contractor company.
+    s12.typefield.v1.TypeStats:
+      type: object
+      properties:
+        mapping_count:
+          type: integer
+          format: int32
+          description: The total number of mappings associated with a type.
+      description: Stats associated with a type.
+    s12.contractors.v1.ContractorCompanyLinkedSite:
+      type: object
+      properties:
+        site_id:
+          type: string
+          description: The ID of the linked site.
+        site_name:
+          type: string
+          description: The display name of the linked site.
+      description: A site linked to a contractor company, including its resolved name.
+    s12.common.UserDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID of the user
+        email:
+          type: string
+          description: Email of the user
+        first_name:
+          type: string
+          description: First name of the user
+        last_name:
+          type: string
+          description: Last name of the user
+        timezone:
+          type: string
+          description: What timezone the user is in
+        profile_picture:
+          type: string
+          description: URL of the profile picture of the user
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
+          description: Status of the user's account
+        external_mappings:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserDocument.UserExternalMappings'
+          description: External systems related to this user (e.g. EddApp connections, etc.)
+        seat_type:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
+          description: Type of seat the user is associated with, based on their subscription
+        profile_image:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Profile token and image of user
+        last_seen:
+          type: string
+          format: date-time
+          description: Timestamp of when the user last interacted with the system. May be empty.
+        email_confirmed:
+          type: boolean
+          description: Whether or not the user has confirmed their email.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp of when the user was created.
+        language:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Language'
+          description: Language of the user
+        phone_number:
+          type: string
+          description: Phone number of the user
+      title: UserDocument contains all information about a user
+    s12.contractors.v1.Address:
+      type: object
+      properties:
+        sub_premise:
+          type: string
+          description: 'A first-order entity below a named location
+
+            eg. Building, floor level, or suite'
+        street_number:
+          type: string
+          description: Street number
+        street:
+          type: string
+          description: Street name
+        city:
+          type: string
+          description: City or locality
+        administrative_area_level_2:
+          type: string
+          description: deprecated. For output, this will return the value of administrative_area_level for backward compatibility.
+        administrative_area_level_1:
+          type: string
+          description: 'A first-order civil entity below the country level. These do not exist in all countries.
+
+            eg. within the United States: state or province, within the UK: county, within Australia: state'
+        postal_code:
+          type: string
+          description: Postal code
+        country_code:
+          type: string
+          description: Country code (ISO 3166-1 alpha-2)
+    s12.typefield.v1.Domain:
+      type: string
+      enum:
+      - DOMAIN_UNSPECIFIED
+      - DOMAIN_GLOBAL
+      - DOMAIN_ASSETS
+      - DOMAIN_CONTRACTORS
+      - DOMAIN_LICENSES_AND_CREDENTIALS
+      - DOMAIN_TASKS
+      - DOMAIN_USERS
+      - DOMAIN_INVESTIGATIONS
+      - DOMAIN_STRUCTURES
+      - DOMAIN_INTEGRATIONS_HRIS_STAGING
+      default: DOMAIN_UNSPECIFIED
+      description: "The domain is used to specify which domain the data is coming from.\nThis allows the shared generic type field service to keep track of which domain owns the data,\nand enforce any domain-specific access control rules.\n\n - DOMAIN_UNSPECIFIED: Domain Unspecified.\n - DOMAIN_GLOBAL: Owned and managed by system can be used by multiple domains\n - DOMAIN_ASSETS: Owned and created from Assets domain\n - DOMAIN_CONTRACTORS: Owned and created from Contractor Management domain\n - DOMAIN_LICENSES_AND_CREDENTIALS: Owned and created from the Licenses and Credentials domain\n - DOMAIN_TASKS: Owned and created from the Tasks domain\n - DOMAIN_USERS: Owned and created from the Users domain\n - DOMAIN_INVESTIGATIONS: Owned and created from the Investigations domain\n - DOMAIN_STRUCTURES: Owned and created from the Organisational Structures domain\n - DOMAIN_INTEGRATIONS_HRIS_STAGING: Owned and created from the Integrations domain"
+    s12.common.UserActiveStatus:
+      type: string
+      enum:
+      - USER_ACTIVE_STATUS_UNSPECIFIED
+      - USER_ACTIVE_STATUS_ACTIVE
+      - USER_ACTIVE_STATUS_DEACTIVATED
+      default: USER_ACTIVE_STATUS_UNSPECIFIED
+      description: "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated"
+      title: UserActiveStatus enumerates possible states of 'status' a user may be in
+    s12.contractors.v1.ComplianceFilterType:
+      type: string
+      enum:
+      - COMPLIANCE_FILTER_TYPE_HAS_EXPIRED_DOCUMENTS
+      - COMPLIANCE_FILTER_TYPE_HAS_EXPIRING_SOON_DOCUMENTS
+      - COMPLIANCE_FILTER_TYPE_HAS_PENDING_APPROVAL_DOCUMENTS
+      - COMPLIANCE_FILTER_TYPE_HAS_INCOMPLETE_REQUIREMENTS
+      - COMPLIANCE_FILTER_TYPE_HAS_EXPIRED_USER_CREDENTIALS
+      - COMPLIANCE_FILTER_TYPE_HAS_EXPIRING_SOON_USER_CREDENTIALS
+      - COMPLIANCE_FILTER_TYPE_HAS_PENDING_APPROVAL_USER_CREDENTIALS
+      description: "ComplianceFilterType specifies the type of document compliance issue to filter by.\n\n - COMPLIANCE_FILTER_TYPE_HAS_EXPIRED_DOCUMENTS: Filter for companies with expired documents.\n - COMPLIANCE_FILTER_TYPE_HAS_EXPIRING_SOON_DOCUMENTS: Filter for companies with documents expiring soon.\n - COMPLIANCE_FILTER_TYPE_HAS_PENDING_APPROVAL_DOCUMENTS: Filter for companies with documents pending approval.\n - COMPLIANCE_FILTER_TYPE_HAS_INCOMPLETE_REQUIREMENTS: Filter for companies with incomplete requirements.\n - COMPLIANCE_FILTER_TYPE_HAS_EXPIRED_USER_CREDENTIALS: Filter for companies with expired user credentials.\n - COMPLIANCE_FILTER_TYPE_HAS_EXPIRING_SOON_USER_CREDENTIALS: Filter for companies with user credentials expiring soon.\n - COMPLIANCE_FILTER_TYPE_HAS_PENDING_APPROVAL_USER_CREDENTIALS: Filter for companies with user credentials pending approval."
+    s12.contractors.v1.CompanyComplianceStatistics:
+      type: object
+      properties:
+        expired_document_count:
+          type: integer
+          format: int32
+          description: The number of company documents that have expired.
+        expiring_soon_document_count:
+          type: integer
+          format: int32
+          description: 'The number of company documents that are expiring soon.
+
+            The service hard-codes "expiring soon" as documents that are expiring within the next 30 days.'
+        pending_approval_document_count:
+          type: integer
+          format: int32
+          description: The number of company documents that are pending approval.
+      description: CompanyComplianceStatistics is a message that contains statistics about a contractor company's compliance.
+    s12.contractors.v1.ContractorCompanyRole:
+      type: string
+      enum:
+      - CONTRACTOR_COMPANY_ROLE_UNSPECIFIED
+      - CONTRACTOR_COMPANY_ROLE_MEMBER
+      - CONTRACTOR_COMPANY_ROLE_DELEGATED_MANAGER
+      default: CONTRACTOR_COMPANY_ROLE_UNSPECIFIED
+      description: "The role of a user within a contractor company.\n\n - CONTRACTOR_COMPANY_ROLE_MEMBER: The default role - member.\n - CONTRACTOR_COMPANY_ROLE_DELEGATED_MANAGER: The user is a key contact (previously known as delegated company manager)."
+    s12.contractors.v1.User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the user.
+        first_name:
+          type: string
+          description: The first name of the user.
+        last_name:
+          type: string
+          description: The last name of the user.
+      description: Information about a SafetyCulture user.
+    s12.typefield.v1.ListTypesCriteria.SortField:
+      type: string
+      enum:
+      - SORT_FIELD_UNSPECIFIED
+      - SORT_FIELD_NAME
+      - SORT_FIELD_CREATED_AT
+      default: SORT_FIELD_UNSPECIFIED
+      description: "The options available to sort returned types by.\n\n - SORT_FIELD_UNSPECIFIED: `SORT_FIELD_UNSPECIFIED` returns the default sort order.\n - SORT_FIELD_NAME: `SORT_FIELD_NAME` sorts document types by name.\n - SORT_FIELD_CREATED_AT: `SORT_FIELD_CREATED_AT` sorts document types by creation time."
+    s12.contractors.v1.ListCompanyTypesMetricsRequest:
+      type: object
+      properties:
+        type_criteria:
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.ListTypesCriteria'
+          description: The search criteria for company types
+    s12.contractors.v1.ListContractorCompaniesResponse:
+      type: object
+      properties:
+        contractor_company_list:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.v1.ContractorCompany'
+          description: The contractor companies that were retrieved.
+        next_page_token:
+          type: string
+          description: The next page token.
+        total_count:
+          type: integer
+          format: int32
+          description: The total number of contractor companies that match the filter.
+        total_count_needs_attention:
+          type: integer
+          format: int32
+          description: The total number of contractor companies that match the filter + need attention.
+    s12.common.UserDocument.UserExternalMappings:
+      type: object
+      properties:
+        edapp_id:
+          type: string
+      title: UserExternalMappings defines third-party details associated with a user's account
+    s12.contractors.v1.UpdateContractorCompanyResponse:
+      type: object
+    s12.contractors.v1.GetContractorCompanyResponse:
+      type: object
+      properties:
+        contractor_company:
+          description: The contractor company that was retrieved.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompany'
+    s12.documents.v1.Duration:
+      type: object
+      properties:
+        from:
+          type: string
+          format: date-time
+          description: optional. represents the time should be after the time provided
+        to:
+          type: string
+          format: date-time
+          description: optional. represents the time should be before the time provided
+    s12.contractors.v1.CompanyDocumentSortField:
+      type: string
+      enum:
+      - DOCUMENT_SORT_FIELD_CREATED_AT
+      - DOCUMENT_SORT_FIELD_MODIFIED_AT
+      - DOCUMENT_SORT_FIELD_TITLE
+      - DOCUMENT_SORT_FIELD_FILE_NAME
+      - DOCUMENT_SORT_FIELD_TYPE
+      - DOCUMENT_SORT_FIELD_ISSUE_DATE
+      - DOCUMENT_SORT_FIELD_EXPIRATION_DATE
+      - DOCUMENT_SORT_FIELD_EXPIRY_STATUS
+      title: "- DOCUMENT_SORT_FIELD_CREATED_AT: The time the document was created at\n - DOCUMENT_SORT_FIELD_MODIFIED_AT: The time the document was modified at\n - DOCUMENT_SORT_FIELD_TITLE: The title of the document\n - DOCUMENT_SORT_FIELD_FILE_NAME: The file name of the document\n - DOCUMENT_SORT_FIELD_TYPE: The type of the document\n - DOCUMENT_SORT_FIELD_ISSUE_DATE: The issue date of the document\n - DOCUMENT_SORT_FIELD_EXPIRATION_DATE: The expiration date of the document\n - DOCUMENT_SORT_FIELD_EXPIRY_STATUS: The expiry status of the document"
+    s12.contractors.v1.Search:
+      type: object
+      properties:
+        value:
+          type: string
+      title: Search on a Company Document's name
+    s12.contractors.v1.UpdateContractorCompanyRequest:
+      type: object
+      properties:
+        company_type_id:
+          type: string
+          description: Required. The ID of the contractor company type.
+        company_id:
+          type: string
+          description: Required. The ID of the contractor company.
+        contractor_company_attributes:
+          description: The attributes of the contractor company.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyAttributes'
+        update_mask:
+          type: string
+          description: 'Required. The attributes (such as name etc.) you want to update for the contractor company. The contents should reference fields of the ContractorCompanyAttributes message.
+
+            For example, ''update_mask=name,contact_details.address'' indicates that only the name and contact_details.address fields of the ContractorCompanyAttributes message should be updated. Any other attributes provided in the ContractorCompanyAttributes body will be ignored.'
+      required:
+      - company_type_id
+      - company_id
+      - update_mask
+    s12.contractors.v1.CompanyUserMetadata:
+      type: object
+      properties:
+        user_doc:
+          description: The user.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserDocument'
+        role:
+          description: The role of the user in the company.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyRole'
+      description: CompanyUserMetadata is used to represent a user in a company, along with any additional metadata.
+    s12.contractors.v1.DeleteContractorCompanyResponse:
+      type: object
+    s12.contractors.v1.ContractorCompanyUserSortField:
+      type: string
+      enum:
+      - USER_SORT_FIELD_USER_NAME
+      description: "ContractorCompanyUserSortField is used to define the sorting criteria of contractor company users.\n\n - USER_SORT_FIELD_USER_NAME: Sort by user name."
+    s12.contractors.v1.ListCompanyTypesMetricsResponse.CompanyTypeMetrics:
+      type: object
+      properties:
+        deactivated_count:
+          type: integer
+          format: int32
+          description: The number of company types that are deactivated.
+        pending_count:
+          type: integer
+          format: int32
+          description: The number of company types that are pending.
+        active_count:
+          type: integer
+          format: int32
+          description: The number of company types that are active.
+        total_count:
+          type: integer
+          format: int32
+          description: The total number of company types.
+    s12.common.MediaType:
+      type: string
+      enum:
+      - MEDIA_TYPE_IMAGE
+      - MEDIA_TYPE_VIDEO
+      - MEDIA_TYPE_PDF
+      - MEDIA_TYPE_DOCX
+      - MEDIA_TYPE_XLSX
+      - MEDIA_TYPE_PPTX
+      - MEDIA_TYPE_CSV
+      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    google.type.Date:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          description: 'Year of the date. Must be from 1 to 9999, or 0 to specify a date without
+
+            a year.'
+        month:
+          type: integer
+          format: int32
+          description: 'Month of a year. Must be from 1 to 12, or 0 to specify a year without a
+
+            month and day.'
+        day:
+          type: integer
+          format: int32
+          description: 'Day of a month. Must be from 1 to 31 and valid for the year and month, or 0
+
+            to specify a year by itself or a year and month where the day isn''t
+
+            significant.'
+      description: '* A full date, with non-zero year, month, and day values
+
+        * A month and day value, with a zero year, such as an anniversary
+
+        * A year on its own, with zero month and day values
+
+        * A year and month value, with a zero day, such as a credit card expiration
+
+        date
+
+
+        Related types are [google.type.TimeOfDay][google.type.TimeOfDay] and
+
+        `google.protobuf.Timestamp`.'
+      title: 'Represents a whole or partial calendar date, such as a birthday. The time of
+
+        day and time zone are either specified elsewhere or are insignificant. The
+
+        date is relative to the Gregorian Calendar. This can represent one of the
+
+        following:'
+    s12.contractors.v1.CompanyContactDetails:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email address of the company.
+        phone_number:
+          type: string
+          description: The phone number of the company.
+        address:
+          description: The address of the company.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.Address'
+      description: Contact details associated with a contractor company.
+    s12.contractors.v1.ListCompanyUserMetadataResponse:
+      type: object
+      properties:
+        company_user_metadata_list:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.v1.CompanyUserMetadata'
+          description: The list of users in the company.
+        next_page_token:
+          type: string
+          description: The next page token.
+    s12.contractors.v1.GetCompanyTypeResponse:
+      type: object
+      properties:
+        company_type:
+          description: The type of the company.
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.Type'
+    s12.typefield.v1.TypeCategory:
+      type: string
+      enum:
+      - TYPE_CATEGORY_UNSPECIFIED
+      - TYPE_CATEGORY_SYSTEM
+      - TYPE_CATEGORY_CUSTOM
+      default: TYPE_CATEGORY_UNSPECIFIED
+      description: "- TYPE_CATEGORY_UNSPECIFIED: Type Unspecified.\n - TYPE_CATEGORY_SYSTEM: Type pre-defined.\n - TYPE_CATEGORY_CUSTOM: Type custom."
+      title: TypeCategory defines if it's system or user created type
+    s12.contractors.v1.CreateContractorCompanyRequest:
+      type: object
+      properties:
+        company_type_id:
+          type: string
+          description: Required. The ID of the contractor company type.
+        company_id:
+          type: string
+          description: Optional. The ID of the new contractor company. This field must be provided if creating a company with an image. This is required to link the media to the company entity.
+        contractor_company_attributes:
+          description: Required. The attributes of the contractor company.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyAttributes'
+      required:
+      - company_type_id
+      - contractor_company_attributes
+    s12.contractors.v1.ContractorCompanyMetadata:
+      type: object
+      properties:
+        created_by_user:
+          description: '@deprecated. Use created_by_user_doc.'
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.User'
+        created_at:
+          type: string
+          format: date-time
+          description: The creation date of the company
+        last_modified_by_user:
+          description: '@deprecated. Use last_modified_by_user_doc.'
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.User'
+        last_modified:
+          type: string
+          format: date-time
+          description: The last modified date of the company
+        created_by_user_doc:
+          description: The creator of a credential version.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserDocument'
+        last_modified_by_user_doc:
+          description: The user who last edited a credential version.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserDocument'
+        notes_updated_by:
+          type: string
+          description: The user ID of the last person who edited the internal notes.
+        notes_updated_at:
+          type: string
+          format: date-time
+          description: The timestamp of when the internal notes were last updated.
+      description: Metadata associated with a contractor company.
+    s12.contractors.v1.AiDocumentComplianceAuditFailedOutcome:
+      type: object
+      properties:
+        reason:
+          description: Coarse, user-meaningful failure category.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.AiDocumentComplianceAuditFailureReason'
+        details:
+          type: string
+          description: 'Optional extra context — upstream error codes, file format details,
+
+            etc. Not intended for verbatim end-user display.'
+      description: 'AiDocumentComplianceAuditFailedOutcome is the payload when the evaluator could
+
+        not run to completion (status = FAILED).'
+    s12.common.Media:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        filename:
+          type: string
+          description: full file name, including file extension
+        media_type:
+          $ref: '#/components/schemas/s12.common.MediaType'
+      title: Represents an image or video
+    s12.contractors.v1.ListContractorCompaniesRequest:
+      type: object
+      properties:
+        filter:
+          description: Additional filters to apply to the request.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanyFilter'
+        sort_field:
+          description: The field to sort by.
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.ContractorCompanySortField'
+        sort_direction:
+          description: The sort order.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+        page_size:
+          type: integer
+          format: int32
+          description: The number of companies to return in a single request.
+        page_token:
+          type: string
+          description: If present, will fetch the next page of results. This must be the value of `next_page_token` from the response.
+        include_compliance_stats:
+          type: boolean
+          description: Deprecated. This does nothing. Compliance statistics are now always included in the response.
+        include_user_credential_compliance_stats:
+          type: boolean
+          description: Temporary migration flag. When true, includes user credential compliance statistics in the response. Defaults to false.
+    s12.contractors.v1.AiDocumentComplianceAudit:
+      type: object
+      properties:
+        status:
+          description: 'Coarse lifecycle state. For terminal states (COMPLETED, FAILED),
+
+            the full result payload lives in `outcome`.'
+          allOf:
+          - $ref: '#/components/schemas/s12.contractors.v1.AiDocumentComplianceAuditStatus'
+        finished_at:
+          type: string
+          format: date-time
+          description: 'When the audit reached a terminal state. Unset for
+
+            QUEUED / RUNNING / NOT_YET_QUEUED.'
+        completed:
+          $ref: '#/components/schemas/s12.contractors.v1.AiDocumentComplianceAuditCompletedOutcome'
+        failed:
+          $ref: '#/components/schemas/s12.contractors.v1.AiDocumentComplianceAuditFailedOutcome'
+      description: 'AiDocumentComplianceAudit is the per-document-version result of running AI
+
+        compliance review against the rule for that document''s type. Carried on a
+
+        CompanyDocument when there is a rule configured for its type.'
+    s12.contractors.v1.AiDocumentComplianceAuditFailureReason:
+      type: string
+      enum:
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_UNSPECIFIED
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_INTERNAL_ERROR
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_UNSUPPORTED_MEDIA_TYPE
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_TIMEOUT
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_RULE_OWNER_REMOVED
+      - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_FILE_TOO_LARGE
+      default: AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_UNSPECIFIED
+      description: "AiDocumentComplianceAuditFailureReason is a coarse categorization of why an audit run failed to complete.\n\n - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_INTERNAL_ERROR: Unclassified internal error.\n - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_UNSUPPORTED_MEDIA_TYPE: File format not supported by the evaluator (e.g. .dwg, .zip).\n - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_TIMEOUT: Evaluator timed out.\n - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_RULE_OWNER_REMOVED: The rule's current_actor_user_id could not be resolved.\n - AI_DOCUMENT_COMPLIANCE_AUDIT_FAILURE_REASON_FILE_TOO_LARGE: The document's file is too large for the evaluator to process (e.g. an\nimage exceeding the model's per-image byte limit)."
+    s12.contractors.v1.ListCompanyDocumentTypesResponse:
+      type: object
+      properties:
+        company_document_type_list:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.v1.CompanyDocumentType'
+          description: The list of document types.
+        next_page_token:
+          type: string
+          description: The next page token.
+    s12.typefield.v1.Type:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A global unique identifier for a type.
+        name:
+          type: string
+          description: Name of the type.
+        description:
+          type: string
+          description: Description of the type.
+        type_category:
+          description: Type category. Cannot be updated.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.TypeCategory'
+        domain:
+          description: The domain of type. Cannot be updated.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.Domain'
+        stats:
+          description: Additional stats associated with a type.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.TypeStats'
+      description: Describes the values of a type.
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

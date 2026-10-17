@@ -1,0 +1,4491 @@
+openapi: 3.2.0
+info:
+  title: Mitti Data Feeds API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Data Feeds
+paths:
+  /assets/v1/feed/assets_maintenance:
+    get:
+      summary: Data feed for assets maintenance details
+      operationId: FeedService_FeedAssetsMaintenance
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.feed.v1.FeedAssetsMaintenanceResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: next_page_token
+        description: Page token to retrieve next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /assets/v1/feed/maintenance_plans:
+    get:
+      summary: Data feed for maintenance plans
+      operationId: FeedService_FeedMaintenancePlans
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.feed.v1.FeedMaintenancePlansResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: next_page_token
+        description: Page token to retrieve next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /assets/v1/feed/maintenance_programs:
+    get:
+      summary: Data feed for maintenance programs
+      operationId: FeedService_FeedMaintenancePrograms
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.feed.v1.FeedMaintenanceProgramsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: next_page_token
+        description: Page token to retrieve next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /companies/v1/feed/companies:
+    get:
+      summary: Data feed for contractor companies
+      description: Provides a data feed of contractor companies across your organization. Use this to sync company data to external systems. Supports incremental sync via the modified_after parameter.
+      operationId: FeedService_FeedContractorCompanies
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.feed.v1.FeedContractorCompaniesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: next_page_token
+        description: Page token to retrieve next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: modified_after
+        description: Set this field to only return entries last modified after this date and time in ISO8601 format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Data Feeds
+      externalDocs:
+        description: Learn more about Companies
+        url: https://help.safetyculture.com/en-US/004114/
+  /companies/v1/feed/companies/documents:
+    get:
+      summary: Data feed for contractor company documents
+      description: Provides a data feed of documents associated with contractor companies. Use this to sync company document data to external systems. Supports incremental sync via the modified_after parameter.
+      operationId: FeedService_FeedContractorCompanyDocuments
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.feed.v1.FeedContractorCompanyDocumentsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: next_page_token
+        description: Page token to retrieve next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: modified_after
+        description: Set this field to only return entries last modified after this date and time in ISO8601 format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Data Feeds
+      externalDocs:
+        description: Learn more about Companies
+        url: https://help.safetyculture.com/en-US/004114/
+  /companies/v1/feed/companies/members:
+    get:
+      summary: Data feed for contractor company members
+      description: Provides a data feed of user memberships within contractor companies. Use this to sync company member data to external systems.
+      operationId: FeedService_FeedContractorCompanyUserMemberships
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.contractors.feed.v1.FeedContractorCompanyUserMembershipsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: next_page_token
+        description: Page token to retrieve next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+      externalDocs:
+        description: Learn more about Companies
+        url: https://help.safetyculture.com/en-US/004114/
+  /credentials/v1/feed/credential-types:
+    get:
+      summary: Data feed for credential types
+      description: Provides a data feed of credential types configured in your organization. Use this to sync credential type definitions to external systems.
+      operationId: FeedService_CredentialTypes
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.userdocuments.feed.v1.FeedDocumentTypesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: next_page_token
+        description: Page token to retrieve next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+      externalDocs:
+        description: Learn more about Credentials
+        url: https://help.safetyculture.com/en-US/003828/
+  /credentials/v1/feed/credentials:
+    get:
+      summary: Data feed for credentials
+      description: Provides a data feed of credentials across your organization. Use this to sync credential data to external systems. Supports incremental sync via the modified_after parameter.
+      operationId: FeedService_Credentials
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.userdocuments.feed.v1.FeedUserDocumentsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: next_page_token
+        description: Page token to retrieve next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: modified_after
+        description: Set this field to only return entries last modified after this date and time in ISO8601 format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Data Feeds
+      externalDocs:
+        description: Learn more about Credentials
+        url: https://help.safetyculture.com/en-US/003828/
+  /feed/action_assignees:
+    get:
+      summary: Data feed for action assignees
+      operationId: ThePubService_FeedActionAssignees
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedActionAssigneesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        description: 'Number of entries to offset the results from the beginning of the queried
+
+          result set.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: modified_after
+        description: Actions should be last modified after this date and time in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        description: Actions should be last modified before this date and time in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Data Feeds
+  /feed/action_fields:
+    get:
+      summary: Data feed for action fields
+      operationId: FeedService_FeedActionFields
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.feed.v1.FeedActionFieldsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: next_page_token
+        description: 'Optional. If present, then retrieve the next batch of results from the
+
+          preceding call to this method. `page_token` must be the value of
+
+          `next_page_token` from the previous response.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /feed/action_timeline_items:
+    get:
+      summary: Data feed for action timeline items
+      operationId: ThePubService_FeedActionTimelineItems
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedActionTimelineItemsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: offset
+        description: 'Number of entries to offset the results from the beginning of the queried
+
+          result set'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: modified_after
+        description: Actions should be last modified after this date and time in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        description: Actions should be last modified before this date and time in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Data Feeds
+  /feed/actions:
+    get:
+      summary: Data feed for actions
+      operationId: ThePubService_FeedActions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedActionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: offset
+        description: 'Number of entries to offset the results from the beginning of the queried
+
+          result set'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: modified_after
+        description: Actions should be last modified after this date and time in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        description: Actions should be last modified before this date and time in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Data Feeds
+  /feed/activity_log_events:
+    get:
+      summary: Data feed for activity log events
+      operationId: ThePubService_FeedActivityLogEvents
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedActivityLogEventsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return. Capped at 250
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        description: Offset used for pagination.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: triggered_after
+        description: 'Time from when organisation activities were triggered.
+
+
+          isoDate ex: 2020-08-31T22:40:47.512Z'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: next_page_token
+        description: optional. The page cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /feed/assets:
+    get:
+      summary: Data feed for assets
+      operationId: ThePubService_FeedAssets
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedAssetsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      tags:
+      - Data Feeds
+  /feed/group_users:
+    get:
+      summary: Data feed for group users
+      operationId: ThePubService_FeedGroupUsers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedGroupUsersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      tags:
+      - Data Feeds
+  /feed/groups:
+    get:
+      summary: Data feed for groups
+      operationId: ThePubService_FeedGroups
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedGroupsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      tags:
+      - Data Feeds
+  /feed/inspection_items:
+    get:
+      summary: Data feed for inspection items
+      operationId: ThePubService_FeedInspectionItems
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedInspectionItemsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: modified_after
+        description: Filter inspections modified after this date in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        description: Filter inspections modified before this date in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: template
+        description: Filter inspections conducted from these templates.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: archived
+        description: "Filter inspections that are archived.\n\n - false: Only include unarchived inspections.\n - true: Only include archived inspections.\n - both: Include both unarchived and archived inspections."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'false'
+          - 'true'
+          - both
+          default: 'false'
+      - name: completed
+        description: "Filter inspections that are complete.\n\n - true: Only include complete inspections.\n - false: Only include incomplete inspections.\n - both: Include both completed and incomplete inspections."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          - both
+          default: 'true'
+      - name: include_inactive
+        description: Filter to only active items (visible when conducting inspections).
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Data Feeds
+  /feed/inspections:
+    get:
+      summary: Data feed for inspections
+      operationId: ThePubService_FeedInspections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedInspectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: modified_after
+        description: Filter inspections modified after this date in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        description: Filter inspections modified before this date in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: template
+        description: Filter inspections conducted from these template IDs.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: archived
+        description: "Filter inspections that are archived.\n\n - false: Only include unarchived inspections.\n - true: Only include archived inspections.\n - both: Include both unarchived and archived inspections."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'false'
+          - 'true'
+          - both
+          default: 'false'
+      - name: completed
+        description: "Filter inspections that are complete.\n\n - true: Only include complete inspections.\n - false: Only include incomplete inspections.\n - both: Include both completed and incomplete inspections."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          - both
+          default: 'true'
+      - name: web_report_link
+        description: "The format for web report links returned.\n\n - private: Return private web report links that require login.\n - public: Return public web report links."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - private
+          - public
+          default: private
+      tags:
+      - Data Feeds
+  /feed/issue_assignees:
+    get:
+      summary: Data feed for issue assignees
+      operationId: ThePubService_FeedIssueAssignees
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedIssueAssigneesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: next_page_token
+        description: 'Optional. If present, then retrieve the next batch of results from the
+
+          preceding call to this method. `page_token` must be the value of
+
+          `next_page_token` from the previous response.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /feed/issue_relations:
+    get:
+      summary: Data feed for issue relations items
+      operationId: ThePubService_FeedIssueRelationships
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedIssueRelationshipsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Optional. Number of results to return. Maximum is 100.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: created_after
+        description: 'Return items created after the specified timestamp only.
+
+          For example: 2020-08-31T22:40:47.512Z.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_before
+        description: 'Return items created before the specified timestamp only.
+
+          For example: 2020-08-31T22:40:47.512Z.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: next_page_token
+        description: Optional. Used for pagination to retrieve the next set of results
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /feed/issue_timeline_items:
+    get:
+      summary: Data feed for issue timeline items
+      operationId: ThePubService_FeedIssueTimelineItems
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedIssueTimelineItemsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      tags:
+      - Data Feeds
+  /feed/issues:
+    get:
+      summary: Data feed for issues
+      operationId: ThePubService_FeedIssues
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedIssuesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      tags:
+      - Data Feeds
+  /feed/schedule_assignees:
+    get:
+      summary: Data feed for schedule assignees (legacy)
+      operationId: ThePubService_FeedScheduleAssignees
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedScheduleAssigneesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of schedules to consider (max 500)
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        description: 'Number of entries to offset the results from the beginning of the queried
+
+          result set'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: show_active
+        description: "Flag indicating should include active schedules, or not\n\n - true: Only include inactive schedules.\n - false: Only include active schedules."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          default: 'true'
+      - name: show_finished
+        description: "Flag indicating should include finished schedules, or not\n\n - true: Only include not finished schedules.\n - false: Only include finished schedules."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          default: 'true'
+      - name: show_paused
+        description: "Flag indicating should include paused schedules, or not\n\n - true: Only include not paused schedules.\n - false: Only include paused schedules."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          default: 'true'
+      - name: template
+        description: Filter inspections conducted from these templates.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - Data Feeds
+  /feed/schedule_occurrences:
+    get:
+      summary: Data feed for schedule occurrences (legacy)
+      operationId: ThePubService_FeedScheduleOccurrences
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedScheduleOccurrencesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of schedules to consider (max 500)
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        description: The number of entries to offset from the beginning of the queried result set.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: start_date
+        description: 'Filter by schedule occurrences that are due after this date and time in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`. Default: NOW - 5 months'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: end_date
+        description: 'Schedule occurrences that are due before this time, default: now + 1 month.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: template
+        description: 'Filter by schedule occurrences that are due before this date and time in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`. Default: NOW + 1 months'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - Data Feeds
+  /feed/schedules:
+    get:
+      summary: Data feed for Schedules (legacy)
+      operationId: ThePubService_FeedSchedules
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedSchedulesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of schedules to consider (max 500)
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        description: 'Number of entries to offset the results from the beginning of the queried
+
+          result set'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: show_active
+        description: "Flag indicating should include active schedules, or not\n\n - true: Only include inactive schedules.\n - false: Only include active schedules."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          default: 'true'
+      - name: show_finished
+        description: "Flag indicating should include finished schedules, or not\n\n - true: Only include not finished schedules.\n - false: Only include finished schedules."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          default: 'true'
+      - name: show_paused
+        description: "Flag indicating should include paused schedules, or not\n\n - true: Only include not paused schedules.\n - false: Only include paused schedules."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          default: 'true'
+      - name: template
+        description: Filter schedules created for these template IDs.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - Data Feeds
+  /feed/site_members:
+    get:
+      summary: Data feed for site members
+      operationId: ThePubService_FeedSiteMembers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedSiteMembersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      tags:
+      - Data Feeds
+  /feed/sites:
+    get:
+      summary: Data feed for sites
+      operationId: ThePubService_FeedSites
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedSitesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: offset
+        description: 'Number of entries to offset the results from the beginning of the queried
+
+          result set.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: include_deleted
+        description: Filter sites that are deleted.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: show_only_leaf_nodes
+        description: Filter only the leaf nodes be included, set to false for the full site tree, e.g. site, area, region, etc.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          default: 'true'
+      tags:
+      - Data Feeds
+  /feed/template_permissions:
+    get:
+      summary: Data feed for template permissions
+      operationId: ThePubService_FeedTemplatePermissions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedTemplatePermissionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: modified_after
+        description: Filter templates modified after this date in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        description: Filter templates modified before this date in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: archived
+        description: "Filter inspections that are archived.\n\n - false: Only include unarchived template permissions.\n - true: Only include archived template permissions.\n - both: Include both unarchived and archived template permissions."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'false'
+          - 'true'
+          - both
+          default: 'false'
+      tags:
+      - Data Feeds
+  /feed/templates:
+    get:
+      summary: Data feed for templates
+      operationId: ThePubService_FeedTemplates
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedTemplatesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: modified_after
+        description: Filter templates modified after this date in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        description: Filter templates modified before this date in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: archived
+        description: "Filter inspections that are archived.\n\n - false: Only include unarchived templates.\n - true: Only include archived templates.\n - both: Include both unarchived and archived templates."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'false'
+          - 'true'
+          - both
+          default: 'false'
+      tags:
+      - Data Feeds
+  /feed/users:
+    get:
+      summary: Data feed for users
+      operationId: ThePubService_FeedUsers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.FeedUsersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      tags:
+      - Data Feeds
+  /incidents/v1/feed/investigation_detail_fields:
+    get:
+      summary: Data feed for investigation detail fields
+      operationId: FeedService_FeedInvestigationDetailFields
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.incidents.feed.v1.FeedInvestigationDetailFieldsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: next_page_token
+        description: 'Optional. If present, then retrieve the next batch of results from the
+
+          preceding call to this method. `page_token` must be the value of
+
+          `next_page_token` from the previous response.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /incidents/v1/feed/investigation_fields:
+    get:
+      summary: Data feed for investigation fields
+      operationId: FeedService_FeedInvestigationFields
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.incidents.feed.v1.FeedInvestigationFieldsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: next_page_token
+        description: 'Optional. If present, then retrieve the next batch of results from the
+
+          preceding call to this method. `page_token` must be the value of
+
+          `next_page_token` from the previous response.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /incidents/v1/feed/investigation_relationships:
+    get:
+      summary: Data feed for investigation relationships
+      operationId: FeedService_FeedInvestigationRelationships
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.incidents.feed.v1.FeedInvestigationRelationshipsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: next_page_token
+        description: 'Optional. If present, then retrieve the next batch of results from the
+
+          preceding call to this method. `page_token` must be the value of
+
+          `next_page_token` from the previous response.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /incidents/v1/feed/investigations:
+    get:
+      summary: Data feed for investigations
+      operationId: FeedService_FeedInvestigations
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.incidents.feed.v1.FeedInvestigationsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: next_page_token
+        description: 'Optional. If present, then retrieve the next batch of results from the
+
+          preceding call to this method. `page_token` must be the value of
+
+          `next_page_token` from the previous response.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /scheduling/v1/feed/schedule_assignees:
+    get:
+      summary: Data feed for schedule assignees
+      operationId: SchedulingFeedService_FeedScheduleAssignees
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.scheduling.feed.v1.FeedScheduleAssigneesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: 'Maximum number of schedule occurrence records to scan (1-1000).
+
+          • Default: 50 records
+
+          • Maximum: 1000 records
+
+          Please note that the number of records returned might be higher than the limit because a schedule occurrence might have multiple assignees.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: show_active
+        description: 'Include assignees from active schedules.
+
+          • true: Include assignees from active schedules
+
+          • false: Exclude assignees from active schedules
+
+          • default: true'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: show_finished
+        description: 'Include assignees from finished schedules.
+
+          • true: Include assignees from finished schedules
+
+          • false: Exclude assignees from finished schedules
+
+          • default: true'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: show_paused
+        description: 'Include assignees from paused schedules.
+
+          • true: Include assignees from paused schedules
+
+          • false: Exclude assignees from paused schedules
+
+          • default: true'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: template
+        description: 'Filter assignees by template IDs used to create the schedules.
+
+          Provide template IDs to return assignees from schedules using those templates. Omit to return assignees from all templates. For example, ["template_xxx", "template_yyy"].'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: next_page_token
+        description: 'Page token to retrieve next page. This token is returned in the metadata
+
+          of previous responses when more data is available.
+
+
+          PAGINATION USAGE:
+
+          - For the first page, omit `next_page_token` or provide an empty string.
+
+          - For subsequent pages, use `next_page_token` from previous response metadata.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /scheduling/v1/feed/schedule_occurrences:
+    get:
+      summary: Data feed for schedule occurrences
+      operationId: SchedulingFeedService_FeedScheduleOccurrences
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.scheduling.feed.v1.FeedScheduleOccurrencesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: 'Maximum number of schedule occurrence records to scan (1-1000).
+
+          • Default: 50 records
+
+          • Maximum: 1000 records
+
+          Please note that the number of records returned might be higher than the limit because a schedule occurrence might have multiple assignees.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: template
+        description: 'Filter occurrences by template IDs used to create the schedules.
+
+          • Provide template IDs to only return occurrences from schedules using those templates. Omit to return occurrences from all templates. For example, ["template_xxx", "template_yyy"].'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: start_date
+        description: 'Return occurrences due on or after this timestamp.
+
+          • Use ISO 8601 format with timezone. For example, `2024-01-28T23:14:23.000Z`.
+
+          • Default: now - 5 months'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: end_date
+        description: 'Return occurrences due on or before this timestamp.
+
+          • Use ISO 8601 format with timezone For example, `2024-12-31T23:59:59.000Z`.
+
+          • Default: now + 1 month'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: next_page_token
+        description: 'Page token to retrieve next page. This token is returned in the metadata
+
+          of previous responses when more data is available.
+
+
+          PAGINATION USAGE:
+
+          - For the first page, omit `next_page_token` or provide an empty string.
+
+          - For subsequent pages, use `next_page_token` from previous response metadata.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /scheduling/v1/feed/schedules:
+    get:
+      summary: Data feed for schedules
+      operationId: SchedulingFeedService_FeedSchedules
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.scheduling.feed.v1.FeedSchedulesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: 'Maximum number of schedule records to return (1-1000).
+
+          • Default: 50 records
+
+          • Maximum: 1000 records'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: show_active
+        description: 'Include active schedules in results.
+
+          • true: Include active schedules
+
+          • false: Exclude active schedules
+
+          • default: true'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: show_finished
+        description: 'Include finished schedules in results.
+
+          • true: Include finished schedules
+
+          • false: Exclude finished schedules
+
+          • default: true'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: show_paused
+        description: 'Include paused schedules in results.
+
+          • true: Include paused schedules
+
+          • false: Exclude paused schedules
+
+          • default: true'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: template
+        description: 'Filter schedules by template IDs.
+
+          Provide template IDs to return schedules created from those templates. Omit to return assignees from all templates. For example, ["template_xxx", "template_yyy"].'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: next_page_token
+        description: 'Page token to retrieve next page. This token is returned in the metadata
+
+          of previous responses when more data is available.
+
+
+          PAGINATION USAGE:
+
+          - For the first page: omit next_page_token (or provide empty string)
+
+          - For subsequent pages: use next_page_token from previous response metadata'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /tasks/v1/feed/action_fields:
+    get:
+      summary: Data feed for action fields
+      operationId: FeedService_FeedActionFields2
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.feed.v1.FeedActionFieldsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: limit
+        description: Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: next_page_token
+        description: 'Optional. If present, then retrieve the next batch of results from the
+
+          preceding call to this method. `page_token` must be the value of
+
+          `next_page_token` from the previous response.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Data Feeds
+  /training/v1/feed/training-course-progress:
+    get:
+      summary: Data feed for Course Progress
+      operationId: FeedService_FeedTrainingCourseProgress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.training.feed.v1.FeedTrainingCourseProgressResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: courseId
+        description: (optional) Specifies a filter by a specific course id.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: courseExternalId
+        description: (optional) Specifies a filter by a specific external course id.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: userId
+        description: (optional) Specifies a filter by a specific user id.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: userExternalId
+        description: (optional) Specifies a filter by a specific external user id.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: modifiedAfter
+        description: (optional) Specifies a filter by a specific timestamp in the Internet Date-Time format. For example, `2014-01-28T23:14:23.000Z`. When provided, returns only entries that were modified after the timestamp.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: (optional) Maximum number of entries to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        description: (optional) Offset used for pagination
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: completionStatus
+        description: (optional) Specifies a filter by a specific completion status. For example, return only completed entries.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - COMPLETION_STATUS_UNSPECIFIED
+          - COMPLETION_STATUS_ALL
+          - COMPLETION_STATUS_COMPLETED
+          - COMPLETION_STATUS_NON_COMPLETED
+          default: COMPLETION_STATUS_UNSPECIFIED
+      tags:
+      - Data Feeds
+components:
+  schemas:
+    s12.assets.feed.v1.FeedMaintenanceProgram:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the maintenance program.
+        name:
+          type: string
+          description: Name of the maintenance program.
+        description:
+          type: string
+          description: Description of the maintenance program.
+        assets_count:
+          type: integer
+          format: int32
+          description: Number of assets assigned to the maintenance program.
+        plans_count:
+          type: integer
+          format: int32
+          description: Number of plans in the maintenance program.
+    s12.assets.feed.v1.FeedAssetsMaintenanceResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.feed.v1.FeedAssetMaintenance'
+          description: The assets maintenance items.
+      title: Response for getting assets maintenance feed
+    s12.thepub.v1.FeedIssueAssigneesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedIssueAssigneesResponse.FeedIssueAssignee'
+          description: The actions returned
+      description: The parameters for `FeedIssueAssigneesResponse`
+      title: FeedIssueAssigneesResponse
+    s12.thepub.v1.FeedActionAssigneesResponse.FeedActionAssignee:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique action assignee ID.
+        action_id:
+          type: string
+          description: ID of the action.
+        assignee_id:
+          type: string
+          description: ID of the assignee.
+        name:
+          type: string
+          description: Name of the assignee.
+        organisation_id:
+          type: string
+          description: Organisation that owns this action.
+        type:
+          type: string
+          description: Type of assignee.
+      description: An action assignee returned from `FeedActionAssignees`
+      title: FeedActionAssignee
+    s12.thepub.v1.FeedActionsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedActionsResponse.FeedAction'
+          description: The actions returned.
+      description: The response for `FeedActions`
+      title: FeedActionsResponse
+    s12.thepub.v1.FeedIssueTimelineItemsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedIssueTimelineItemsResponse.FeedIssueTimelineItem'
+          description: The issue timeline items.
+      description: The response for `FeedIssueTimelineItemsResponse`
+      title: FeedIssueTimelineItemsResponse
+    s12.thepub.v1.FeedScheduleAssigneesResponse.FeedScheduleAssignee.AssigneeType:
+      type: string
+      enum:
+      - unknown
+      - user
+      - email
+      default: unknown
+      title: "- unknown: Unknown\n - user: User\n - email: Email"
+    s12.thepub.v1.FeedTemplatePermissionsResponse.FeedTemplatePermission.AssigneeType:
+      type: string
+      enum:
+      - user
+      - role
+      default: user
+      title: "- user: User\n - role: Role"
+    s12.contractors.feed.v1.FeedContractorCompany:
+      type: object
+      properties:
+        company_id:
+          type: string
+          description: ID of the company.
+        company_name:
+          type: string
+          description: Name of the company.
+        company_type_id:
+          type: string
+          description: Type ID of the company.
+        company_type_name:
+          type: string
+          description: Type name of the company.
+        email:
+          type: string
+          description: Email address of the company.
+        phone_number:
+          type: string
+          description: Phone number of the company.
+        address_sub_premise:
+          type: string
+          description: Sub-premise of the company.
+        address_street_number:
+          type: string
+          description: Street number of the company.
+        address_street:
+          type: string
+          description: Street address of the company.
+        address_city:
+          type: string
+          description: City of the company.
+        address_administrative_area:
+          type: string
+          description: Administrative area of the company.
+        address_postal_code:
+          type: string
+          description: Postal code of the company.
+        address_country_code:
+          type: string
+          description: Country code of the company.
+        external_reference_id:
+          type: string
+          description: External reference ID of the company.
+        status:
+          type: string
+          description: Status of the company.
+        created_at:
+          type: string
+          description: Date and time the company was created in ISO8601 format.
+        modified_at:
+          type: string
+          description: Date and time the company was last modified in ISO8601 format.
+      description: A contractor company in the feed.
+    s12.thepub.v1.FeedActionTimelineItemsResponse.FeedActionTimelineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the timeline item.
+        task_id:
+          type: string
+          description: ID of the action.
+        organisation_id:
+          type: string
+          description: ID of the SafetyCulture organization.
+        task_creator_id:
+          type: string
+          description: ID of the timeline item's action creator.
+        task_creator_name:
+          type: string
+          description: Name of the timeline item's action creator.
+        timestamp:
+          type: string
+          format: date-time
+          description: Date and time a timeline item was created in Coordinated Universal Time (UTC).
+        creator_id:
+          type: string
+          description: ID of the timeline item's creator.
+        creator_name:
+          type: string
+          description: Name of the timeline item's creator.
+        item_type:
+          type: string
+          description: Type of a timeline item.
+        item_data:
+          type: string
+          description: Data of a timeline item.
+      description: An action timeline item returned from `FeedActionTimelineItems`
+      title: FeedActionTimelineItem
+    s12.incidents.feed.v1.FeedInvestigationRelationshipsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.feed.v1.FeedInvestigationRelationship'
+          description: The investigations returned.
+      title: Response for getting investigation relationships feed
+    s12.incidents.feed.v1.FeedInvestigationField:
+      type: object
+      properties:
+        investigation_id:
+          type: string
+          description: ID of the investigation.
+        field_id:
+          type: string
+          description: ID of the field which is shared across all investigations with the field
+        field_instance_id:
+          type: string
+          description: ID of the field, unique per field/investigation
+        title:
+          type: string
+          description: Title of the field.
+        content:
+          type: string
+          description: Markdown content of the investigation.
+        created_at:
+          type: string
+          description: Date and time the field was created in Coordinated Universal Time (UTC).
+        modified_at:
+          type: string
+          description: Date and time the field was last modified in Coordinated Universal Time (UTC).
+      title: Feed representation of an investigation field
+    s12.userdocuments.feed.v1.FeedUserDocument:
+      type: object
+      properties:
+        document_id:
+          type: string
+          description: ID of the document.
+        document_version_id:
+          type: string
+          description: ID of the document version.
+        document_type_id:
+          type: string
+          description: ID of the credential type.
+        document_type_name:
+          type: string
+          description: Name of the credential type.
+        subject_user_id:
+          type: string
+          description: ID of the user the document belongs to.
+        subject_user_first_name:
+          type: string
+          description: First name of the user the document belongs to.
+        subject_user_last_name:
+          type: string
+          description: Last name of the user the document belongs to.
+        issue_date:
+          type: string
+          description: Issue date of the document in ISO8601 date format (YYYY-MM-DD). Empty if no issue date.
+        expiry_date:
+          type: string
+          description: Expiry date of the document in ISO8601 date format (YYYY-MM-DD). Empty if no expiry date.
+        expiry_status:
+          type: string
+          description: 'Expiry status of the document. One of: EXPIRY_STATUS_VALID, EXPIRY_STATUS_EXPIRED, EXPIRY_STATUS_EXPIRING_SOON.'
+        approval_status:
+          type: string
+          description: 'Approval status of the document. One of: PENDING, PENDING_RESUBMISSION, APPROVED.'
+        created_at:
+          type: string
+          description: Date and time the document was created in RFC3339 format.
+        modified_at:
+          type: string
+          description: Date and time the document was last modified in RFC3339 format.
+        deleted:
+          type: boolean
+          description: 'Whether this document has been deleted. Deleted documents appear in incremental sync
+
+            (via modified_after) so that consumers can remove them from external systems.'
+      description: A credential in the feed.
+    s12.assets.feed.v1.FeedMaintenancePlansResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.feed.v1.FeedMaintenancePlan'
+          description: The maintenance plan items.
+      title: Response for getting maintenance plans feed
+    s12.incidents.feed.v1.FeedInvestigationDetailField:
+      type: object
+      properties:
+        investigation_id:
+          type: string
+          description: ID of the investigation.
+        detail_field_id:
+          type: string
+          description: ID of the detail field which is shared across all investigations with the field
+        detail_field_instance_id:
+          type: string
+          description: ID of the detail field, unique per field/investigation
+        detail_field_type:
+          type: string
+          description: Type of detail field. (single_select, multi_select, date_time, site, multi_site)
+        title:
+          type: string
+          description: Title of the field.
+        single_select_content:
+          type: string
+          description: Single select option selected (if type is single select)
+        multi_select_content:
+          type: string
+          description: Multiple selected options selected (if type is multi select.) - JSON array.
+        date_time_content:
+          type: string
+          description: Date time select option entered (if type is date time)
+        site_content:
+          type: string
+          description: Site id selected (if type is site)
+        multi_site_content:
+          type: string
+          description: Site IDs selected (if type is multi site) - JSON array.
+        select_options:
+          type: string
+          description: Options available at time of investigation creation (if type is single or multi select) - JSON array.
+        created_at:
+          type: string
+          description: Date and time the field was created in Coordinated Universal Time (UTC).
+        modified_at:
+          type: string
+          description: Date and time the field was last modified in Coordinated Universal Time (UTC).
+      title: Feed representation of an investigation detail field
+    s12.thepub.v1.FeedAssetsResponse.FeedAsset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the asset.
+        code:
+          type: string
+          description: User-defined ID of the asset.
+        type_id:
+          type: string
+          description: Type ID of the asset.
+        type_name:
+          type: string
+          description: Type name of the asset.
+        fields:
+          type: string
+          description: Fields associated to the asset type.
+        created_at:
+          type: string
+          format: date-time
+          description: Date and time the asset was created in Coordinated Universal Time (UTC).
+        modified_at:
+          type: string
+          format: date-time
+          description: Date and time the asset was modified in Coordinated Universal Time (UTC).
+        site_id:
+          type: string
+          description: ID of the site associated with the asset.
+        state:
+          type: string
+          description: Current state of the asset.
+      description: An asset returned from `FeedAssets`
+      title: FeedAsset
+    s12.thepub.v1.FeedActionsResponse.FeedAction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the action.
+        title:
+          type: string
+          description: Title of the action.
+        site_id:
+          type: string
+          description: Site ID associated with the action.
+        description:
+          type: string
+          description: Description of the action.
+        priority:
+          type: string
+          description: Priority of the action.
+        status:
+          type: string
+          description: Status of the action.
+        due_date:
+          type: string
+          format: date-time
+          description: Due date of the action.
+        creator_user_id:
+          type: string
+          description: User ID of the user who created this action.
+        creator_user_name:
+          type: string
+          description: Name of the user who created this action.
+        created_at:
+          type: string
+          format: date-time
+          description: Date this action was created.
+        modified_at:
+          type: string
+          format: date-time
+          description: Date this action was last modified.
+        template_id:
+          type: string
+          description: ID of the template this action was created against.
+        organisation_id:
+          type: string
+          description: ID of the organisation that owns this action.
+        audit_id:
+          type: string
+          description: ID of the inspection this action was created against.
+        audit_title:
+          type: string
+          description: Title of the inspection this action was created against.
+        audit_item_id:
+          type: string
+          description: ID of the item this action was created against.
+        audit_item_label:
+          type: string
+          description: Label of the item this action was created against.
+        completed_at:
+          type: string
+          format: date-time
+          description: Date this action was completed.
+        action_label:
+          type: string
+          description: 'Action labels associated with the action in pipe-delimited format.
+
+            For example, `{\"label_id\":\"e92f6081-f150-4610-af22-a15022bed97b\"|\"label_name\":\"label three\"}|{\"label_id\":\"943cb02e-ce47-4eca-b2df-af503d1d5ceb\"|\"label_name\":\"label one\"}|{\"label_id\":\"10d2139a-e981-487f-b982-37f3bad251a9\"|\"label_name\":\"label two\"}`.'
+        unique_id:
+          type: string
+          description: Action Unique ID
+        type_id:
+          type: string
+          description: Action type Unique ID
+        type_name:
+          type: string
+          description: Action type name
+      description: An action returned from `FeedActions`
+      title: FeedAction
+    s12.thepub.v1.FeedSchedulesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedSchedulesResponse.FeedSchedule'
+          description: The schedules returned.
+      description: The response for `FeedSchedules`
+      title: FeedSchedulesResponse
+    s12.tasks.feed.v1.FeedActionFieldsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.feed.v1.FeedActionFieldItem'
+          description: The actions returned
+      description: Response for FeedActionFields.
+    s12.thepub.v1.FeedGroupsResponse.FeedGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the group.
+        organisation_id:
+          type: string
+          description: ID of the organisation.
+        name:
+          type: string
+          description: Name of group.
+      description: A group returned from `FeedGroups`
+      title: FeedGroup
+    s12.thepub.v1.FeedGroupUsersResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedGroupUsersResponse.FeedGroupUser'
+          description: The group users returned.
+      description: The response for `FeedGroupUsers`
+      title: FeedGroupUsersResponse
+    s12.thepub.v1.FeedTemplatePermissionsResponse.FeedTemplatePermission.Permission:
+      type: string
+      enum:
+      - unknown
+      - view
+      - edit
+      - delete
+      default: unknown
+      description: " - unknown: Unknown\n - view: Can View.\n - edit: Can Edit.\n - delete: Can Delete."
+    s12.userdocuments.feed.v1.FeedDocumentTypesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.userdocuments.feed.v1.FeedDocumentType'
+          description: The credential types.
+      title: Response for getting credential types feed
+    s12.thepub.v1.FeedTemplatesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedTemplatesResponse.FeedTemplate'
+          description: The templates returned.
+      description: The response for `FeedTemplates`
+      title: FeedTemplatesResponse
+    s12.thepub.v1.FeedScheduleAssigneesResponse.FeedScheduleAssignee:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the schedule and assignee
+        schedule_id:
+          type: string
+          description: ID of the schedule.
+        assignee_id:
+          type: string
+          description: ID of the assignee.
+        type:
+          description: Assignee type.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedScheduleAssigneesResponse.FeedScheduleAssignee.AssigneeType'
+        name:
+          type: string
+          description: Assignee name.
+        organisation_id:
+          type: string
+          description: ID of the organisation.
+      description: A schedule assignee returned from `FeedScheduleAssignees`
+      title: FeedScheduleAssignee
+    s12.thepub.v1.FeedInspectionsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedInspectionsResponse.FeedInspection'
+          description: The inspections returned.
+      description: The response for `FeedInspections`
+      title: FeedInspectionsResponse
+    s12.thepub.v1.FeedScheduleOccurrencesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedScheduleOccurrencesResponse.FeedScheduleOccurrence'
+          description: The schedule occurrences returned.
+      description: The response for `FeedScheduleOccurrences`
+      title: FeedScheduleOccurrencesResponse
+    s12.thepub.v1.FeedActionTimelineItemsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedActionTimelineItemsResponse.FeedActionTimelineItem'
+          description: The action timeline items.
+      description: The response for `FeedActionTimelineItems`
+      title: FeedActionTimelineItemsResponse
+    s12.thepub.v1.FeedActionAssigneesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedActionAssigneesResponse.FeedActionAssignee'
+          description: The action assignees.
+      description: The response for `FeedActionAssignees`
+      title: FeedActionAssigneesResponse
+    s12.thepub.v1.FeedSiteMembersResponse.FeedSiteMember:
+      type: object
+      properties:
+        site_id:
+          type: string
+          description: ID of the Site.
+        member_id:
+          type: string
+          description: ID of the member.
+      description: A site returned from `FeedSiteMembers`
+      title: FeedSiteMember
+    s12.thepub.v1.FeedSiteMembersResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedSiteMembersResponse.FeedSiteMember'
+          description: The site members returned.
+      description: The response for `FeedSiteMembers`
+      title: FeedSiteMembersResponse
+    s12.thepub.v1.FeedTemplatePermissionsResponse.FeedTemplatePermission:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of template permission.
+        template_id:
+          type: string
+          description: ID of template.
+        permission:
+          description: Permission.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedTemplatePermissionsResponse.FeedTemplatePermission.Permission'
+        assignee_type:
+          description: Type of assignee.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedTemplatePermissionsResponse.FeedTemplatePermission.AssigneeType'
+        assignee_id:
+          type: string
+          description: ID of the assignee.
+        organisation_id:
+          type: string
+          description: ID of the organisation.
+      description: A template permission returned from `FeedTemplatePermissions`
+      title: FeedTemplatePermission
+    s12.training.feed.v1.FeedCourseProgress:
+      type: object
+      properties:
+        openedAt:
+          type: string
+        completedAt:
+          type: string
+        totalLessons:
+          type: integer
+          format: int32
+        completedLessons:
+          type: integer
+          format: int32
+        courseId:
+          type: string
+        courseExternalId:
+          type: string
+        courseTitle:
+          type: string
+        userEmail:
+          type: string
+        userFirstName:
+          type: string
+        userLastName:
+          type: string
+        userId:
+          type: string
+        userExternalId:
+          type: string
+        progressPercent:
+          type: number
+          format: float
+        score:
+          type: integer
+          format: int32
+        dueAt:
+          type: string
+        completionExpiryDate:
+          type: string
+        timeSpentSeconds:
+          type: integer
+          format: int32
+          description: Total time spent on the course in seconds.
+      title: The progress of a course for a user
+    s12.thepub.v1.FeedUsersResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedUsersResponse.FeedUser'
+          description: The users returned.
+      description: The response for `FeedUsers`
+      title: FeedUsersResponse
+    s12.thepub.v1.FeedTemplatesResponse.FeedTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Template ID.
+        archived:
+          type: boolean
+          description: Indicates if the template is archived or not
+        name:
+          type: string
+          description: Template name.
+        owner_name:
+          type: string
+          description: Owner name.
+        owner_id:
+          type: string
+          description: ID of the owner.
+        author_name:
+          type: string
+          description: Author name.
+        author_id:
+          type: string
+          description: ID of the author.
+        organisation_id:
+          type: string
+          description: ID of the organisation.
+        created_at:
+          type: string
+          format: date-time
+          description: Date Time when was created.
+        modified_at:
+          type: string
+          format: date-time
+          description: Date Time when was modified.
+      description: A template returned from `FeedTemplates`
+      title: FeedTemplate
+    s12.contractors.feed.v1.FeedContractorCompanyDocument:
+      type: object
+      properties:
+        company_id:
+          type: string
+          description: ID of the company.
+        company_name:
+          type: string
+          description: Name of the company.
+        document_id:
+          type: string
+          description: ID of the document.
+        document_version:
+          type: string
+          description: Version of the document.
+        document_type_id:
+          type: string
+          description: ID of the document type.
+        document_type_name:
+          type: string
+          description: ID of the document name.
+        document_status:
+          type: string
+          description: Current status of the document.
+        document_issue_date:
+          type: string
+          description: Issue date of the document in "year:2006 month:1 day:3" format. No issue date if blank.
+        document_expiry_date:
+          type: string
+          description: Expiry date of the document in "year:2006 month:1 day:3"  format. No expiry date if blank.
+        document_name:
+          type: string
+          description: Name of the document.
+      description: A contractor company document in the feed.
+    s12.scheduling.v1.ScheduleType:
+      type: string
+      enum:
+      - SCHEDULE_TYPE_UNSPECIFIED
+      - SCHEDULE_TYPE_USERS
+      - SCHEDULE_TYPE_SITES
+      - SCHEDULE_TYPE_ASSETS
+      default: SCHEDULE_TYPE_UNSPECIFIED
+      description: "- SCHEDULE_TYPE_UNSPECIFIED: Unspecified schedule type\n - SCHEDULE_TYPE_USERS: User-based schedule\n - SCHEDULE_TYPE_SITES: Site-based schedule\n - SCHEDULE_TYPE_ASSETS: Asset-based schedule"
+      title: ScheduleType is the type of schedule
+    s12.incidents.feed.v1.FeedInvestigationFieldsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.feed.v1.FeedInvestigationField'
+          description: The investigation fields returned.
+      title: Response for getting investigation fields feed
+    s12.contractors.feed.v1.FeedContractorCompanyUserMembership:
+      type: object
+      properties:
+        company_id:
+          type: string
+          description: ID of the company.
+        company_name:
+          type: string
+          description: Name of the company.
+        user_id:
+          type: string
+          description: ID of the user.
+        user_username:
+          type: string
+          description: Username of the user.
+        user_role:
+          type: string
+          description: Role that the user has in the company (member, delegated company manager).
+      description: A contractor company user membership in the feed.
+    s12.thepub.v1.FeedIssueAssigneesResponse.FeedIssueAssignee:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique Issue assignee ID.
+        issue_id:
+          type: string
+          description: ID of the issue.
+        assignee_id:
+          type: string
+          description: ID of the assignee.
+        name:
+          type: string
+          description: Name of the assignee.
+        organisation_id:
+          type: string
+          description: Organisation that owns this action.
+        modified_at:
+          type: string
+          format: date-time
+          description: The date this assignee was modified.
+        type:
+          type: string
+          description: Type of assignee.
+      description: An issue assignee returned from `FeedIssueAssignee`
+      title: FeedIssueAssignee
+    s12.thepub.v1.FeedScheduleAssigneesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedScheduleAssigneesResponse.FeedScheduleAssignee'
+          description: The schedule assgineees returned.
+      description: The response for `FeedScheduleAssignees`
+      title: FeedScheduleAssigneesResponse
+    s12.scheduling.feed.v1.FeedSchedulesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.scheduling.feed.v1.FeedScheduleRecord'
+          description: The flat list of schedule records.
+        total_records:
+          type: integer
+          format: int32
+          description: Total number of records.
+      description: The response for `FeedSchedules` V2
+      title: FeedSchedulesResponse
+    s12.scheduling.feed.v1.FeedScheduleOccurrence:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Unique identifier for this schedule occurrence.
+
+            Format: `{schedule_id}_{occurrence_id}_{assignee_id}`
+
+            Example: `schedule_123_occ_456_assignee_789`.'
+        schedule_id:
+          type: string
+          description: 'ID of the schedule that generated this occurrence.
+
+            References a schedule from the FeedSchedules endpoint.'
+        occurrence_id:
+          type: string
+          description: 'ID of the specific occurrence within the schedule''s recurrence pattern.
+
+            Each occurrence represents one instance of the scheduled inspection.'
+        template_id:
+          type: string
+          description: 'ID of the template used for inspections created from this occurrence.
+
+            References the inspection template that will be used.'
+        start_time:
+          type: string
+          description: When the occurrence becomes available for inspection (ISO 8601 timestamp format; for example, `2024-01-15T09:00:00Z`).
+        due_time:
+          type: string
+          description: Final deadline (ISO 8601 timestamp format; for example, `2024-01-15T17:00:00Z`). After this time, the occurrence is missed and cannot be completed. For schedules with an overdue period, this comes after `miss_time`.
+        miss_time:
+          type: string
+          description: 'When this occurrence becomes overdue (ISO 8601 timestamp format).
+
+            • Present only if an overdue period configured; otherwise omitted.
+
+            • Between `miss_time` and `due_time`, unfinished occurrences are `OVERDUE`.
+
+            • It is `null` if an overdue period is not configured.'
+        occurrence_status:
+          type: string
+          description: 'Current status of this scheduled occurrence.
+
+            • `TODO`: Not started.
+
+            • `IN_PROGRESS`: Inspection has been started but not completed.
+
+            • `COMPLETED`: Inspection has been finished on time.
+
+            • `LATE`: Inspection has been finished after the `miss_time` but before `due_time`.
+
+            • `OVERDUE`: Past `miss_time` but before `due_time`; not started.
+
+            • `MISSED`: Past `due_time` and has not been completed.
+
+            • `WONT_DO`: Intentionally skipped; `wont_do_note` is mandatory for this status.'
+        audit_id:
+          type: string
+          description: 'ID of the inspection created from this occurrence.
+
+            • Present when the `occurrence_status` is `IN_PROGRESS` or `COMPLETED`.
+
+            • It is `null` for occurrences that haven''t been started yet.
+
+            • Use this ID to fetch full inspection details from inspection APIs.'
+        completed_at:
+          type: string
+          description: 'When this occurrence was marked as completed (ISO 8601 timestamp format).
+
+            • Present only when `occurrence_status` is `COMPLETED`.
+
+            • It is `null` for incomplete occurrences.'
+        completion_rule:
+          type: string
+          description: 'Completion requirement for the occurrence. One of: `any` (at least one assignee must complete) or `all` (every assignee must complete).'
+        organisation_id:
+          type: string
+          description: ID of the organization that owns the occurrence.
+        wont_do_note:
+          type: string
+          description: 'Reason provided when marking occurrence as `won''t do`.
+
+            • Only populated when `occurrence_status` is `WONT_DO`.
+
+            • Contains the explanation for why the occurrence was skipped.'
+        assignee_id:
+          type: string
+          description: 'ID of the specific entity assigned to complete this occurrence.
+
+            • It could be a user ID, role ID, or location ID, depending on assignment type.
+
+            • Use with FeedScheduleAssignees to get assignee details.'
+        assignee_from:
+          type: string
+          description: 'Original assignment source that generated this individual occurrence.
+
+            • Format: `{type}_{id}` where type is user, group, role, or location.
+
+            • Examples: `user_xxx`, `role_yyy`, `location_zzz`
+
+            • Shows how this specific assignee was determined from the schedule''s assignment rules.'
+      description: A schedule occurrence record returned from `FeedScheduleOccurrences` V2
+      title: FeedScheduleOccurrence
+    s12.contractors.feed.v1.FeedContractorCompaniesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.feed.v1.FeedContractorCompany'
+          description: The contractor companies.
+      title: Response for getting contractor companies feed
+    s12.thepub.v1.FeedGroupUsersResponse.FeedGroupUser:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: ID of the user.
+        group_id:
+          type: string
+          description: ID of the group.
+        organisation_id:
+          type: string
+          description: ID of the organisation.
+      description: A group user returned from `FeedGroupUsers`
+      title: FeedGroupUser
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.incidents.feed.v1.FeedInvestigation:
+      type: object
+      properties:
+        investigation_id:
+          type: string
+          description: ID of the investigation.
+        title:
+          type: string
+          description: Title of the investigation.
+        description:
+          type: string
+          description: Description of the investigation.
+        created_at:
+          type: string
+          description: Date and time the investigation was created in Coordinated Universal Time (UTC).
+        modified_at:
+          type: string
+          description: Date and time the investigation was last modified in Coordinated Universal Time (UTC).
+        status_id:
+          type: string
+          description: ID of the status.
+        status_title:
+          type: string
+          description: Title of the status.
+        status_badge_color:
+          type: integer
+          format: int32
+          description: Badge color of the status.
+        identifier_prefix:
+          type: string
+          description: Prefix for the unique identifier (e.g. IM).
+        identifier_sequence:
+          type: integer
+          format: int32
+          description: Sequence number for the unique identifier (e.g. 100).
+        identifier_for_display:
+          type: string
+          description: Identifier formatted for display (e.g. IM-100).
+        creator_id:
+          type: string
+          description: ID of the user who created the investigation.
+        owner_id:
+          type: string
+          description: ID of the user who owns the investigation.
+        modified_by_id:
+          type: string
+          description: ID of the user who last modified the investigation.
+        category_id:
+          type: string
+          description: ID of the category.
+        category_title:
+          type: string
+          description: Title of the category.
+        category_description:
+          type: string
+          description: Description of the category.
+        category_title_at_creation:
+          type: string
+          description: Original category title at creation time.
+      title: Feed representation of an investigation
+    s12.scheduling.feed.v1.FeedScheduleRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Unique identifier for this schedule.
+
+            Format: `scheduleitem_{schedule_id}`
+
+            Example: `scheduleitem_123`.'
+        title:
+          type: string
+          description: Display name of the schedule. For example, `Weekly Safety Inspection` or `Monthly Equipment Check`.
+        recurrence:
+          type: string
+          description: 'Schedule recurrence pattern in RFC 5545 RRule format.
+
+            For example, `FREQ=DAILY`, `FREQ=WEEKLY;BYDAY=MO,WE,FR`, `FREQ=MONTHLY;BYMONTHDAY=1`
+
+            See: https://tools.ietf.org/html/rfc5545#section-3.3.10.'
+        duration:
+          type: string
+          description: Expected inspection duration (ISO 8601 duration format; for example, `PT30M` (30 minutes), `PT2H` (2 hours), `PT1H30M` (1.5 hours).
+        modified_at:
+          type: string
+          format: date-time
+          description: Last updated timestamp (UTC format).
+        organisation_id:
+          type: string
+          description: ID of the organization that owns this schedule.
+        created_at:
+          type: string
+          format: date-time
+          description: Created timestamp (UTC format).
+        completion_rule:
+          type: string
+          description: 'Completion requirement for the scheduled inspection. One of: `any` (at least one assignee must complete) or `all` (every assignee must complete).'
+        status:
+          type: string
+          description: 'Current operational status of the schedule.
+
+            • `ACTIVE`: Schedule is running and creating occurrences.
+
+            • `PAUSED`: Schedule is temporarily stopped.
+
+            • `FINISHED`: Schedule has ended (past end date or max occurrences).'
+        timezone:
+          type: string
+          description: Timezone for schedule execution (IANA timezone identifier). For example, `America/New_York`, `Europe/London` or `UTC`.
+        timezone_type:
+          type: string
+          description: 'How the schedule''s timezone is determined.
+
+            • `CUSTOM_TIMEZONE`: Uses the timezone specified in the ''timezone'' field.
+
+            • `SITE_TIMEZONE`: Uses the timezone of the site where inspection occurs.'
+        is_late_submit_allowed:
+          type: boolean
+          description: Whether inspections can be started after the due date.
+        site_ids:
+          type: array
+          items:
+            type: string
+          description: Site IDs where the schedule is performed. May be empty for non-site-based schedules.
+        template_id:
+          type: string
+          description: Template ID associated with the schedule.
+        created_by:
+          type: string
+          description: ID of the user who created the schedule.
+        grace_period_duration:
+          type: string
+          description: Grace period duration in ISO 8601 format. For example, `PT1H`.
+        site_based_assignment_enabled:
+          type: boolean
+          description: Whether to use site-based assignees.
+        ending_rule_type:
+          type: string
+          description: 'How the schedule ends: `never`, `end_date`, or `end_after_repeats`.'
+        ending_rule_end_date:
+          type: string
+          description: 'End date when ending_rule_type is `end_date` (ISO datetime string).
+
+            • Only populated when `ending_rule_type` = `end_date`.'
+        ending_rule_end_after_repeats:
+          type: integer
+          format: int32
+          description: 'Number of repeats when `ending_rule_type` is `end_after_repeats`.
+
+            • Only populated when `ending_rule_type` = `end_after_repeats`.'
+        assignees:
+          type: array
+          items:
+            type: string
+          description: Assignee IDs.
+        intersections:
+          type: array
+          items:
+            type: string
+          description: Intersection group IDs (if schedule is using site+group intersection-based assignment).
+        schedule_type:
+          description: The type of schedule.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleType'
+        asset_ids:
+          type: array
+          items:
+            type: string
+          description: 'The assets assigned to this schedule item.
+
+            It is empty if asset IDs are not used for assignment.'
+      description: A schedule record returned from `FeedSchedules` V2
+      title: FeedScheduleRecord
+    s12.common.v1.FeedMetadata:
+      type: object
+      properties:
+        next_page:
+          type: string
+          description: The path to fetch the next page on.
+        next_page_token:
+          type: string
+          description: 'The value you can use to retrieve additional results. If a value exists, it
+
+            means there are more results than listed. Use the value in your request
+
+            body as a page_token field to view more results.'
+        remaining_records:
+          type: integer
+          format: int32
+          description: Estimated remaining records.
+      description: FeedMetadata for a feed.
+    s12.thepub.v1.FeedSitesResponse.FeedSite:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Site.
+        site_uuid:
+          type: string
+          description: UUID of the Site.
+        name:
+          type: string
+          description: Site name.
+        creator_id:
+          type: string
+          description: ID of the site creator.
+        organisation_id:
+          type: string
+          description: ID of the organisation.
+        deleted:
+          type: boolean
+          description: Indicates if the site is deleted or not.
+        meta_label:
+          type: string
+          description: Type of site (location, area, region, state, country).
+        parent_id:
+          type: string
+          description: ID of the parent of this site.
+      description: A site returned from `FeedSites`
+      title: FeedSite
+    s12.common.v1.FeedMetadataSimple:
+      type: object
+      properties:
+        next_page:
+          type: string
+          description: Full path to retrieve the next page of results, including the next_page_token.
+        next_page_token:
+          type: string
+          description: 'The value you can use to retrieve additional results.
+
+            If a value exists, it means there are more results than listed.
+
+            Use the value in your request body as a page_token to view more results.'
+      description: FeedMetadataSimple for a feed.
+    s12.userdocuments.feed.v1.FeedUserDocumentsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.userdocuments.feed.v1.FeedUserDocument'
+          description: The credentials.
+      title: Response for getting credentials feed
+    s12.thepub.v1.FeedSchedulesResponse.FeedSchedule:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the schedule.
+        description:
+          type: string
+          description: Description.
+        recurrence:
+          type: string
+          description: Recurrence pattern.
+        duration:
+          type: string
+          description: Duration of the schedule.
+        organisation_id:
+          type: string
+          description: ID of the organisation.
+        from_date:
+          type: string
+          format: date-time
+          description: Start date.
+        to_date:
+          type: string
+          format: date-time
+          description: 'End date.
+
+
+            Optional'
+        modified_at:
+          type: string
+          format: date-time
+          description: Last modified date.
+        start_time_hour:
+          type: integer
+          format: int32
+          description: Schedule start hour.
+        start_time_minute:
+          type: integer
+          format: int32
+          description: Schedule start minute.
+        all_must_complete:
+          type: boolean
+          description: All must complete.
+        status:
+          description: Schedule status.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedSchedulesResponse.FeedSchedule.ScheduleStatus'
+        timezone:
+          type: string
+          description: Timezone.
+        can_late_submit:
+          type: boolean
+          description: Allow inspections to be submitted after the due date.
+        site_id:
+          type: string
+          description: ID of the site.
+        template_id:
+          type: string
+          description: ID of the template.
+        creator_user_id:
+          type: string
+          description: ID of the creator user.
+      description: A schedule returned from `FeedSchedules`
+      title: FeedSchedule
+    s12.thepub.v1.FeedActivityLogEventsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedActivityLogEventsResponse.FeedActivityLogEvent'
+          description: The activity log event.
+    s12.thepub.v1.FeedInspectionItemsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedInspectionItemsResponse.FeedInspectionItem'
+          description: The inspection items returned.
+      description: The response for `FeedInspectionItems`
+      title: FeedInspectionItemsResponse
+    s12.thepub.v1.FeedIssuesResponse.FeedIssue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the issue.
+        title:
+          type: string
+          description: Title of the issue.
+        description:
+          type: string
+          description: Description of the issue.
+        creator_id:
+          type: string
+          description: User ID of the user who created this issue.
+        creator_user_name:
+          type: string
+          description: Name of the user who created this issue.
+        created_at:
+          type: string
+          format: date-time
+          description: Date this issue was created.
+        due_at:
+          type: string
+          format: date-time
+          description: Due date of the issue.
+        priority:
+          type: string
+          description: Priority of the issue.
+        status:
+          type: string
+          description: Status of the issue.
+        template_id:
+          type: string
+          description: ID of the template this issue was created against.
+        inspection_id:
+          type: string
+          description: ID of the inspection this issue was created against.
+        inspection_name:
+          type: string
+          description: Title of the inspection this issue was created against.
+        site_id:
+          type: string
+          description: Site ID associated with the issue.
+        site_name:
+          type: string
+          description: Site Name associated with the issue.
+        location_name:
+          type: string
+        category_id:
+          type: string
+          description: Issue category ID.
+        category_label:
+          type: string
+          description: Issue category label.
+        category_description:
+          type: string
+          description: Issue category description.
+        modified_at:
+          type: string
+          format: date-time
+          description: Date this issue was last modified.
+        completed_at:
+          type: string
+          format: date-time
+          description: Date this issue was completed.
+        unique_id:
+          type: string
+          description: Unique ID for the Issue.
+        occurred_at:
+          type: string
+          format: date-time
+          description: The configurable date that indicates when the issue occurred.
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.thepub.v1.FeedIssueRelationshipsResponse.FeedIssueRelationshipsResponseItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the issue relationship item.
+        from_id:
+          type: string
+          description: Issue ID which is the source object here in the relationship.
+        rel_type:
+          type: string
+          description: 'Type of relation. Possible values may include: "ISSUE-INSPECTION" , "ISSUE-ACTION"'
+        rel_created_at:
+          type: string
+          description: Timestamp of when the relationship was created.
+        to_id:
+          type: string
+          description: ID of the target object that the issue is linked with, such as inspection, asset, or action.
+    s12.thepub.v1.FeedSitesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedSitesResponse.FeedSite'
+          description: The sites returned.
+      description: The response for `FeedSites`
+      title: FeedSitesResponse
+    s12.scheduling.feed.v1.FeedScheduleAssigneeRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Unique identifier for this schedule-assignee relationship.
+
+            Format: "scheduleitem_{schedule_id}_assignee_{assignee_id}"
+
+            Example: "scheduleitem_123_assignee_456".'
+        schedule_id:
+          type: string
+          description: 'ID of the schedule this assignee belongs to.
+
+            References a schedule from the FeedSchedules endpoint.'
+        assignee_id:
+          type: string
+          description: 'ID of the individual or entity assigned to the schedule.
+
+            Could be a user ID, group ID (role), location ID (site), or location/group intersection.'
+        type:
+          type: string
+          description: 'Type of entity assigned to this schedule.
+
+            • `user`: Individual user assigned
+
+            • `role`: Group-based assignment
+
+            • `location`: Location-based assignment (site)
+
+            • `location_intersection`: Group assignment based on location and role intersection.'
+        name:
+          type: string
+          description: Display name of the assignee.
+        organisation_id:
+          type: string
+          description: ID of the organization that owns the assignment.
+        completion_rule:
+          type: string
+          description: 'Completion requirement for the occurrence. One of: `any` (at least one assignee must complete) or `all` (every assignee must complete).'
+      description: A schedule assignee record returned from `FeedScheduleAssignees` V2
+      title: FeedScheduleAssigneeRecord
+    s12.training.feed.v1.FeedTrainingCourseProgressResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.feed.v1.FeedCourseProgress'
+      title: Response of Feed for Course Progress
+    s12.incidents.feed.v1.FeedInvestigationDetailFieldsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.feed.v1.FeedInvestigationDetailField'
+          description: The investigation detail fields returned.
+      title: Response for getting investigation detail fields feed
+    s12.userdocuments.feed.v1.FeedDocumentType:
+      type: object
+      properties:
+        document_type_id:
+          type: string
+          description: ID of the credential type.
+        document_type_name:
+          type: string
+          description: Name of the credential type.
+      description: A credential type in the feed.
+    s12.assets.feed.v1.FeedMaintenanceProgramsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.feed.v1.FeedMaintenanceProgram'
+          description: The maintenance program items.
+      title: Response for getting maintenance programs feed
+    s12.scheduling.feed.v1.FeedScheduleAssigneesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.scheduling.feed.v1.FeedScheduleAssigneeRecord'
+          description: The flat list of schedule assignee records.
+      description: The response for `FeedScheduleAssignees` V2
+      title: FeedScheduleAssigneesResponse
+    s12.contractors.feed.v1.FeedContractorCompanyDocumentsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.feed.v1.FeedContractorCompanyDocument'
+          description: The contractor company documents.
+      title: Response for getting contractor company documents feed
+    s12.thepub.v1.FeedTemplatePermissionsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedTemplatePermissionsResponse.FeedTemplatePermission'
+          description: The template permissions returned.
+      description: The response for `FeedTemplatePermissions`
+      title: FeedTemplatePermissionsResponse
+    s12.assets.feed.v1.FeedMaintenancePlan:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the maintenance plan.
+        program_id:
+          type: string
+          description: ID of the parent maintenance program.
+        name:
+          type: string
+          description: Name of the maintenance plan.
+        description:
+          type: string
+          description: Description of the maintenance plan.
+        interval_type:
+          type: string
+          description: Interval type of the maintenance plan.
+        interval_value:
+          type: string
+          description: The interval value as a string.
+        interval_unit:
+          type: string
+          description: The unit of the interval.
+    s12.thepub.v1.FeedActivityLogEventsResponse.FeedActivityLogEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique event ID.
+        event_at:
+          type: string
+          format: date-time
+          description: Date this event was captured.
+        type:
+          type: string
+          description: Type of event.
+        user_id:
+          type: string
+          description: User who initiated the event.
+        organisation_id:
+          type: string
+          description: Organisation where this event took place.
+        client_class:
+          type: string
+          description: Type of client that initiated this event (web, mobile, etc).
+        agent:
+          type: string
+          description: User agent that initiated this event.
+        metadata:
+          type: string
+          description: Associated event metadata.
+        remote_ip:
+          type: string
+          description: IP that this event originated from if available.
+        initiator:
+          type: string
+          description: Type of event, user, system, etc.
+    s12.thepub.v1.FeedInspectionsResponse.FeedInspection:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of this inspection.
+        name:
+          type: string
+          description: The name of this inspection.
+        archived:
+          type: boolean
+          description: If this inspection is archived.
+        organisation_id:
+          type: string
+          description: The organisation this inspection belongs to.
+        owner_name:
+          type: string
+          description: The name of the user who created this inspection.
+        owner_id:
+          type: string
+          description: The ID of the user who created this inspection.
+        author_name:
+          type: string
+          description: The name of the user who last updated this inspection.
+        author_id:
+          type: string
+          description: The ID of the user who last updated this inspection.
+        score:
+          type: number
+          format: double
+          description: The score of this inspection.
+        max_score:
+          type: number
+          format: double
+          description: The maximum score of this inspection.
+        score_percentage:
+          type: number
+          format: double
+          description: The percentage of the inspection score.
+        duration:
+          type: integer
+          format: int64
+          description: The duration of this inspection.
+        site_id:
+          type: string
+          description: The site this inspection was conducted at.
+        template_id:
+          type: string
+          description: The ID of the template this inspection was conducted from.
+        template_name:
+          type: string
+          description: The name of the template this inspection was conducted from.
+        template_author:
+          type: string
+          description: The author of the template.
+        date_started:
+          type: string
+          format: date-time
+          description: The date this inspection was started.
+        date_completed:
+          type: string
+          format: date-time
+          description: The date this inspection was completed.
+        date_modified:
+          type: string
+          format: date-time
+          description: The date this inspection was last updated.
+        created_at:
+          type: string
+          format: date-time
+          description: The date this inspection was created on the server.
+        modified_at:
+          type: string
+          format: date-time
+          description: The date this inspection was last updated on the server.
+        latitude:
+          type: number
+          format: double
+          description: The latitude this inspection was conducted at.
+        longitude:
+          type: number
+          format: double
+          description: The longitude this inspection was conducted at.
+        document_no:
+          type: string
+          description: The document number of this inspection.
+        prepared_by:
+          type: string
+          description: The user who created this inspection.
+        location:
+          type: string
+          description: The location this inspection was conducted at.
+        conducted_on:
+          type: string
+          description: The date this inspection was conducted.
+        personnel:
+          type: string
+          description: The people involved in this inspection.
+        client_site:
+          type: string
+          description: The site this inspection was conducted at.
+        web_report_link:
+          type: string
+          description: The URL to the web report for this inspection.
+      description: A inspection returned from `FeedInspections`
+      title: FeedInspection
+    s12.thepub.v1.FeedUsersResponse.FeedUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the user.
+        organisation_id:
+          type: string
+          description: ID of the organisation.
+        email:
+          type: string
+          description: Email of the user.
+        firstname:
+          type: string
+          description: First name of the user.
+        lastname:
+          type: string
+          description: Last name of the user.
+        active:
+          type: boolean
+          description: Indicates if the user is active or not.
+        last_seen_at:
+          type: string
+          format: date-time
+          description: Date when user was last seen.
+        seat_type:
+          type: string
+          description: Seat type.
+        created_at:
+          type: string
+          description: Created date for the user.
+      description: A user returned from `FeedUsers`
+      title: FeedUser
+    s12.incidents.feed.v1.FeedInvestigationRelationship:
+      type: object
+      properties:
+        investigation_id:
+          type: string
+          description: ID of the investigation.
+        linked_at:
+          type: string
+          description: Date and time the investigation was created in Coordinated Universal Time (UTC).
+        resource_type:
+          type: string
+          description: The type of resource which has been linked
+        resource_id:
+          type: string
+          description: The id of the resource which has been linked
+      title: Feed representation of an investigation
+    s12.incidents.feed.v1.FeedInvestigationsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.feed.v1.FeedInvestigation'
+          description: The investigations returned.
+      title: Response for getting investigations feed
+    s12.thepub.v1.FeedMetadata:
+      type: object
+      properties:
+        next_page:
+          type: string
+          description: The path to fetch the next page on.
+        remaining_records:
+          type: integer
+          format: int32
+          description: Estimated remaining records.
+      description: The metadata returned on a feed
+      title: FeedMetadata
+    s12.scheduling.feed.v1.FeedScheduleOccurrencesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.scheduling.feed.v1.FeedScheduleOccurrence'
+          description: The flat list of schedule occurrence records.
+      description: The response for `FeedScheduleOccurrences` V2
+      title: FeedScheduleOccurrencesResponse
+    s12.thepub.v1.FeedIssuesResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedIssuesResponse.FeedIssue'
+          description: The issues returned.
+    s12.thepub.v1.FeedInspectionItemsResponse.FeedInspectionItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Combined inspection item ID.
+        item_id:
+          type: string
+          description: Item ID.
+        audit_id:
+          type: string
+          description: Inspection ID.
+        item_index:
+          type: integer
+          format: int64
+          description: Index of item in the inspection.
+        template_id:
+          type: string
+          description: Template ID.
+        parent_id:
+          type: string
+          description: Parent Item ID.
+        organisation_id:
+          type: string
+          description: Organization that owns this inspection.
+        created_at:
+          type: string
+          format: date-time
+          description: Created date for the inspection.
+        modified_at:
+          type: string
+          format: date-time
+          description: Created date for the inspection.
+        type:
+          type: string
+          description: Type of question.
+        category:
+          type: string
+          description: Name of the section this falls under.
+        category_id:
+          type: string
+          description: ID of the section this falls under.
+        parent_ids:
+          type: string
+          description: All parent IDs for this item.
+        label:
+          type: string
+          description: Label of the item.
+        response:
+          type: string
+          description: Response for the item.
+        response_id:
+          type: string
+          description: ID of the response in the response set.
+        response_set_id:
+          type: string
+          description: ID of the response set used for this item.
+        is_failed_response:
+          type: boolean
+          description: If the response indicates a failure.
+        comment:
+          type: string
+          description: Notes for the item.
+        media_files:
+          type: string
+          description: Names of media files associated with this item.
+        media_ids:
+          type: string
+          description: IDs of media files associated with this item.
+        media_hypertext_reference:
+          type: string
+          description: URLs of media files associated with this item.
+        score:
+          type: number
+          format: double
+          description: Score for this item, where this item has children it will be the combined score of those children.
+        max_score:
+          type: number
+          format: double
+          description: Max score for this item, where this item has children it will be the combined score of those children.
+        score_percentage:
+          type: number
+          format: double
+          description: Score perscentrage for this item, where this item has children it will be the combined score of those children.
+        combined_score:
+          type: number
+          format: double
+          description: Where this item has children it will be the combined score of those children, otherwise null.
+        combined_max_score:
+          type: number
+          format: double
+          description: Where this item has children it will be the combined max score of those children, otherwise null.
+        combined_score_percentage:
+          type: number
+          format: double
+          description: Where this item has children it will be the combined score percentage of those children, otherwise null.
+        mandatory:
+          type: boolean
+          description: Item mandatory requirement.
+        inactive:
+          type: boolean
+          description: Item visibility.
+        location_latitude:
+          type: number
+          format: double
+          description: The latitude this inspection was conducted at.
+        location_longitude:
+          type: number
+          format: double
+          description: The longitude this inspection was conducted at.
+        primeelement_id:
+          type: string
+          description: For repeated sections/dynamic fields. This ID will be consistent for every item under a repeated section.
+        primeelement_index:
+          type: integer
+          format: int64
+          description: For repeated sections/dynamic fields. This will be the element count indexed from 0.
+      description: An inspection item returned from `FeedInspectionItems`
+      title: FeedInspectionItem
+    s12.thepub.v1.FeedIssueTimelineItemsResponse.FeedIssueTimelineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the timeline item.
+        task_id:
+          type: string
+          description: ID of the issue.
+        organisation_id:
+          type: string
+          description: ID of the SafetyCulture organization.
+        task_creator_id:
+          type: string
+          description: ID of the timeline item's issue creator.
+        task_creator_name:
+          type: string
+          description: Name of the timeline item's issue creator.
+        timestamp:
+          type: string
+          format: date-time
+          description: Date and time a timeline item was created in Coordinated Universal Time (UTC).
+        creator_id:
+          type: string
+          description: ID of the timeline item's creator.
+        creator_name:
+          type: string
+          description: Name of the timeline item's creator.
+        item_type:
+          type: string
+          description: Type of a timeline item.
+        item_data:
+          type: string
+          description: Data of a timeline item.
+      description: An issue timeline item returned from `FeedIssueTimelineItems`
+      title: FeedIssueTimelineItem
+    s12.assets.feed.v1.FeedAssetMaintenance:
+      type: object
+      properties:
+        asset_id:
+          type: string
+          description: ID of the asset.
+        asset_code:
+          type: string
+          description: User-defined code of the asset.
+        program_id:
+          type: string
+          description: ID of the maintenance program.
+        program_name:
+          type: string
+          description: Name of the maintenance program.
+        plan_id:
+          type: string
+          description: ID of the maintenance plan.
+        plan_name:
+          type: string
+          description: Name of the maintenance plan.
+        interval_type:
+          type: string
+          description: Interval type of the maintenance plan.
+        service_status:
+          type: string
+          description: Service status of the asset for this plan.
+        last_service_value:
+          type: string
+          description: The last service value as a string.
+        next_service_value:
+          type: string
+          description: The next service value as a string.
+        current_reading_value:
+          type: string
+          description: The current reading value as a string.
+        due_in_value:
+          type: string
+          description: The due-in value as a string.
+        last_service_timestamp:
+          type: string
+          description: Date and time of the last service in Coordinated Universal Time (UTC).
+        current_reading_timestamp:
+          type: string
+          description: Date and time of the current reading in Coordinated Universal Time (UTC).
+        current_reading_source:
+          type: string
+          description: The source of the current reading.
+        interval_value:
+          type: string
+          description: The interval value as a string.
+        interval_unit:
+          type: string
+          description: The unit of the interval.
+    s12.thepub.v1.FeedGroupsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedGroupsResponse.FeedGroup'
+          description: The groups returned.
+      description: The response for `FeedGroups`
+      title: FeedGroupsResponse
+    s12.contractors.feed.v1.FeedContractorCompanyUserMembershipsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.contractors.feed.v1.FeedContractorCompanyUserMembership'
+          description: The contractor company user memberships.
+      title: Response for getting contractor company user memberships feed
+    s12.tasks.feed.v1.FeedActionFieldItem:
+      type: object
+      properties:
+        action_id:
+          type: string
+          description: ID of the action.
+        field_id:
+          type: string
+          description: ID of the field
+        field_type:
+          type: string
+          description: Type of the field
+        field_value:
+          type: string
+          description: Value of the field
+    s12.thepub.v1.FeedScheduleOccurrencesResponse.FeedScheduleOccurrence:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique schedule occurrence ID.
+        schedule_id:
+          type: string
+          description: Schedule ID.
+        occurrence_id:
+          type: string
+          description: Occurrence ID.
+        template_id:
+          type: string
+          description: Template ID.
+        start_time:
+          type: string
+          format: date-time
+          description: Start time of the occurrence.
+        miss_time:
+          type: string
+          format: date-time
+          description: Miss time of the occurrence.
+        due_time:
+          type: string
+          format: date-time
+          description: Due time of the occurrence.
+        occurrence_status:
+          type: string
+          description: Status of the occurrence.
+        audit_id:
+          type: string
+          description: Inspection ID associated with the occurrence.
+        completed_at:
+          type: string
+          format: date-time
+          description: Time the occurrence was completed.
+        user_id:
+          type: string
+          description: User ID assigned to this occurrence.
+        assignee_status:
+          type: string
+          description: Status of the user assigned to this occurrence.
+        organisation_id:
+          type: string
+          description: Organisation ID that owns this occurrence.
+        note:
+          type: string
+          description: Notes for the occurrence.
+      description: A schedule occurrence returned from `FeedScheduleOccurrences`
+      title: FeedScheduleOccurrence
+    s12.thepub.v1.FeedAssetsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the feed.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.FeedMetadata'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedAssetsResponse.FeedAsset'
+          description: The issue timeline items.
+      description: The response for `FeedAssets`
+      title: FeedAssetsResponse
+    s12.thepub.v1.FeedSchedulesResponse.FeedSchedule.ScheduleStatus:
+      type: string
+      enum:
+      - UNKNOWN
+      - ACTIVE
+      - PAUSED
+      - FINISHED
+      default: UNKNOWN
+    s12.thepub.v1.FeedIssueRelationshipsResponse:
+      type: object
+      properties:
+        metadata:
+          description: FeedMetadataSimple. Feed metadata including organization ID, request time, and query time range.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.FeedMetadataSimple'
+        data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.FeedIssueRelationshipsResponse.FeedIssueRelationshipsResponseItem'
+          description: List of issue relation items returned.
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

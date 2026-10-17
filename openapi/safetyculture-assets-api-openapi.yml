@@ -1,0 +1,4219 @@
+openapi: 3.2.0
+info:
+  title: Mitti Assets API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Assets
+paths:
+  /assets/v1/assets:
+    post:
+      summary: Create an asset
+      operationId: AssetsService_CreateAsset
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.CreateAssetResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.CreateAssetRequest'
+        description: The parameters for `CreateAsset`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/assets/bulk:
+    post:
+      summary: Create multiple assets
+      operationId: AssetsService_BulkCreateAssets
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.BulkCreateAssetsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.BulkCreateAssetsRequest'
+        description: The parameters for `BulkCreateAssets`
+        required: true
+      tags:
+      - Assets
+    put:
+      summary: Update multiple assets
+      operationId: AssetsService_BulkUpdateAssets
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.BulkUpdateAssetsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.BulkUpdateAssetsRequest'
+        description: The parameters for `BulkUpdateAssets`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/assets/list:
+    post:
+      summary: List assets
+      operationId: AssetsService_ListAssets
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ListAssetsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.ListAssetsRequest'
+        description: The parameters for `ListAssets`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/assets/{asset_id}/fields:
+    patch:
+      summary: Set field values of an asset
+      operationId: AssetsService_SetAssetFieldValues
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.SetAssetFieldValuesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: asset_id
+        description: Unique identifier of the asset.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.AssetsService.SetAssetFieldValuesBody'
+        required: true
+      tags:
+      - Assets
+  /assets/v1/assets/{id}:
+    get:
+      summary: Get full detail information of an asset
+      operationId: AssetsService_GetAsset
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.GetAssetResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Identifier of asset to retrieve.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+    patch:
+      summary: Update an asset
+      operationId: AssetsService_UpdateAsset
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.UpdateAssetResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The unique identifier of an asset. This ID is system-generated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: The user-defined unique identifier of an asset. This ID is user-generated.
+                type:
+                  $ref: '#/components/schemas/s12.assets.v1.AssetType'
+                  description: The asset type of an asset.
+                fields:
+                  type: array
+                  items:
+                    type: object
+                    $ref: '#/components/schemas/s12.assets.v1.AssetField'
+                  description: 'The associated fields of an asset contained in an array. Each asset''s
+
+                    fields are based on its asset type. Please make sure the asset fields you
+
+                    use associated with the specified asset type. You can retrieve the
+
+                    associated fields using the list type and field association endpoint.'
+                media:
+                  type: array
+                  items:
+                    type: object
+                    $ref: '#/components/schemas/s12.common.Media'
+                  description: All the media directly uploaded to an asset.
+                  readOnly: true
+                created_at:
+                  type: string
+                  format: date-time
+                  description: The date created timestamp of an asset.
+                  readOnly: true
+                modified_at:
+                  type: string
+                  format: date-time
+                  description: The date last modified timetstamp of an asset.
+                  readOnly: true
+                site:
+                  $ref: '#/components/schemas/s12.assets.v1.AssetSite'
+                  description: 'The assigned site of an asset as object. If an asset is not assigned to a
+
+                    site, the API will return nil.'
+                profile_image:
+                  $ref: '#/components/schemas/s12.common.Media'
+                  description: 'The profile image for an asset. If an asset doesn''t have a profile picture,
+
+                    the API will return nil.'
+                  readOnly: true
+                state:
+                  $ref: '#/components/schemas/s12.assets.v1.AssetState'
+                  description: The indicator for whether an asset is active or archived.
+                inspected_at:
+                  type: string
+                  format: date-time
+                  description: The date last modified inspection of an asset.
+                  readOnly: true
+                sourced_from_external_system:
+                  type: boolean
+                  description: '@deprecated. Use GetAsset API to get the sourced_from_external_system
+
+                    Indicates if an asset is sourced from an external system.'
+                  readOnly: true
+                statuses:
+                  type: array
+                  items:
+                    type: object
+                    $ref: '#/components/schemas/s12.assets.v1.AssetStatus'
+                  description: The status assigned to the asset. Although this is a repeated field, only one entry is currently supported. Each entry must belong to the status group associated with the asset type.
+              title: Asset which replaces the one with matching identifier on the server.
+        description: Asset which replaces the one with matching identifier on the server.
+        required: true
+      tags:
+      - Assets
+    delete:
+      summary: Delete an asset
+      operationId: AssetsService_DeleteAsset
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.DeleteAssetResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Identifier of an asset to be deleted.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+  /assets/v1/assets/{id}/archive:
+    patch:
+      summary: Archive an asset
+      operationId: AssetsService_ArchiveAsset
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ArchiveAssetResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Identifier of asset to be archived.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.AssetsService.ArchiveAssetBody'
+        required: true
+      tags:
+      - Assets
+    delete:
+      summary: Restore an archived asset
+      operationId: AssetsService_RestoreArchivedAsset
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.RestoreArchivedAssetResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Identifier of an archived asset to be restored.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+  /assets/v1/assets/{id}/location:
+    patch:
+      summary: Update asset location
+      operationId: AssetsService_UpdateAssetLocation
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.UpdateAssetLocationResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Unique identifier of the asset.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.AssetsService.UpdateAssetLocationBody'
+        required: true
+      tags:
+      - Assets
+  /assets/v1/assets:GetAssetByCode:
+    get:
+      summary: Get asset by code
+      operationId: AssetsService_GetAssetByCode
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.GetAssetByCodeResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: code
+        description: The user-defined unique ID of the asset to retrieve. This ID is user-generated.
+        in: query
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+  /assets/v1/assets:LookupAssetsByField:
+    post:
+      summary: Lookup assets by a field
+      operationId: AssetsService_LookupAssetsByField
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.LookupAssetsByFieldResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.LookupAssetsByFieldRequest'
+        description: The parameters for `LookupAssetsByField`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/fields:
+    post:
+      summary: Create an asset field
+      operationId: FieldsService_CreateField
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.CreateFieldResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.CreateFieldRequest'
+        description: The parameters for `CreateField`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/fields/list:
+    post:
+      summary: List asset fields
+      operationId: FieldsService_ListFields
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ListFieldsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.ListFieldsRequest'
+        description: The parameters for `ListFields`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/fields/{id}:
+    patch:
+      summary: Update an asset field
+      operationId: FieldsService_UpdateField
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.UpdateFieldResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: A global unique identifier for a field.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.FieldsService.UpdateFieldBody'
+        required: true
+      tags:
+      - Assets
+    delete:
+      summary: Delete an asset field
+      operationId: FieldsService_DeleteField
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.DeleteFieldResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Identifier of the field to be deleted.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+  /assets/v1/maintenance/asset/{asset_id}/service:
+    post:
+      summary: Add maintenance last service information to an asset
+      operationId: MaintenanceService_AddAssetLastService
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.AddAssetLastServiceResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: asset_id
+        description: The identifier of the asset.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.MaintenanceService.AddAssetLastServiceBody'
+        required: true
+      tags:
+      - Assets
+  /assets/v1/maintenance/asset/{asset_id}/service-history:
+    post:
+      summary: List asset service history
+      operationId: MaintenanceService_ListAssetServiceHistory
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ListAssetServiceHistoryResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: asset_id
+        description: The identifier of the asset.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.MaintenanceService.ListAssetServiceHistoryBody'
+        required: true
+      tags:
+      - Assets
+  /assets/v1/maintenance/assets/details:
+    post:
+      summary: List assets maintenance details
+      operationId: MaintenanceService_ListAssetsMaintenanceDetails
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ListAssetsMaintenanceDetailsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.ListAssetsMaintenanceDetailsRequest'
+        description: The parameters for `ListAssetsMaintenanceDetails`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/maintenance/assets/status-counts:
+    post:
+      summary: Return the count of assets in each maintenance status
+      operationId: MaintenanceService_ListAssetsMaintenanceStatusCounts
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ListAssetsMaintenanceStatusCountsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.ListAssetsMaintenanceStatusCountsRequest'
+        description: The parameters for `ListAssetsMaintenanceStatusCounts`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/maintenance/plan/{id}:
+    delete:
+      summary: Delete a maintenance plan
+      operationId: MaintenanceService_DeletePlan
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.DeletePlanResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the maintenance plan.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+  /assets/v1/maintenance/plan/{plan.id}:
+    put:
+      summary: Update a maintenance plan
+      operationId: MaintenanceService_UpdatePlan
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.UpdatePlanResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: plan.id
+        description: The identifier of the maintenance plan.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.MaintenanceService.UpdatePlanBody'
+        required: true
+      tags:
+      - Assets
+  /assets/v1/maintenance/program:
+    post:
+      summary: Create a maintenance program
+      operationId: MaintenanceService_CreateProgram
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.CreateProgramResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.CreateProgramRequest'
+        description: The parameters for `CreateProgram`
+        required: true
+      tags:
+      - Assets
+    get:
+      summary: Get a maintenance program
+      operationId: MaintenanceService_GetProgram
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.GetProgramResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the maintenance program.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Assets
+  /assets/v1/maintenance/program/details:
+    post:
+      summary: List maintenance program details
+      operationId: MaintenanceService_ListProgramsDetails
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ListProgramsDetailsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.ListProgramsDetailsRequest'
+        description: The parameters for `ListProgramsDetails`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/maintenance/program/{id}:
+    delete:
+      summary: Delete a maintenance program
+      operationId: MaintenanceService_DeleteProgram
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.DeleteProgramResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the maintenance program.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+  /assets/v1/maintenance/program/{id}/assets:
+    post:
+      summary: Add assets to a maintenance program
+      operationId: MaintenanceService_AddAssetsToProgram
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.AddAssetsToProgramResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the maintenance program.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.MaintenanceService.AddAssetsToProgramBody'
+        required: true
+      tags:
+      - Assets
+    delete:
+      summary: Remove assets from a maintenance program
+      operationId: MaintenanceService_RemoveAssetsFromProgram
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.RemoveAssetsFromProgramResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the maintenance program.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: asset_ids
+        description: '@deprecated Use `filter_options` instead.
+
+          The identifiers of the assets to remove from the maintenance program.
+
+          The maximum number of assets that can be removed is 100 per request.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: filter_options.search
+        description: OPTIONAL. The key words to search for in your request.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        description: Number of assets to be removed.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      tags:
+      - Assets
+  /assets/v1/maintenance/program/{program.id}:
+    put:
+      summary: Update a maintenance program
+      operationId: MaintenanceService_UpdateProgram
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.UpdateProgramResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: program.id
+        description: The identifier of the maintenance program.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.MaintenanceService.UpdateProgramBody'
+        required: true
+      tags:
+      - Assets
+  /assets/v1/maintenance/program/{program_id}/plan:
+    post:
+      summary: Create a maintenance plan
+      operationId: MaintenanceService_CreatePlan
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.CreatePlanResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: program_id
+        description: The identifier of the maintenance program.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.MaintenanceService.CreatePlanBody'
+        required: true
+      tags:
+      - Assets
+  /assets/v1/status-groups:
+    post:
+      summary: Create a status group
+      description: Creates a status group with its initial status options.
+      operationId: StatusGroupsService_CreateStatusGroup
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.CreateStatusGroupResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.CreateStatusGroupRequest'
+        description: The parameters for `CreateStatusGroup`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/status-groups/list:
+    post:
+      summary: List status groups
+      description: Lists the status groups in your organization, including each group's status options and the asset types it is assigned to.
+      operationId: StatusGroupsService_ListStatusGroups
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ListStatusGroupsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.ListStatusGroupsRequest'
+        description: The parameters for `ListStatusGroups`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/status-groups/{id}:
+    get:
+      summary: Get a status group
+      description: Returns a status group by ID, including its status options and the asset types it is assigned to.
+      operationId: StatusGroupsService_GetStatusGroup
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.GetStatusGroupResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the status group.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+    delete:
+      summary: Delete a status group
+      description: Deletes a status group and clears the status from any assets using it.
+      operationId: StatusGroupsService_DeleteStatusGroup
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.DeleteStatusGroupResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the status group.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+  /assets/v1/status-groups/{id}/types:
+    post:
+      summary: Add a status group to asset types
+      description: Assigns a status group to one or more asset types.
+      operationId: StatusGroupsService_AddStatusGroupToAssetTypes
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.AddStatusGroupToAssetTypesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the status group.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.StatusGroupsService.AddStatusGroupToAssetTypesBody'
+        required: true
+      tags:
+      - Assets
+    delete:
+      summary: Remove a status group from asset types
+      description: Removes a status group from one or more asset types.
+      operationId: StatusGroupsService_RemoveStatusGroupFromAssetTypes
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.RemoveStatusGroupFromAssetTypesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The identifier of the status group.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: type_ids
+        description: The identifiers of the asset types to remove the status group from.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - Assets
+  /assets/v1/status-groups/{status_group.id}:
+    patch:
+      summary: Update a status group
+      description: Updates a status group's name, description, and status options. Removing an option reassigns or clears the assets currently using it.
+      operationId: StatusGroupsService_UpdateStatusGroup
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.UpdateStatusGroupResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: status_group.id
+        description: The identifier of the status group.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.StatusGroupsService.UpdateStatusGroupBody'
+        required: true
+      tags:
+      - Assets
+  /assets/v1/types:
+    post:
+      summary: Create an asset type
+      operationId: TypesService_CreateType
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.CreateTypeResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.CreateTypeRequest'
+        description: The parameters for `CreateType`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/types/list:
+    post:
+      summary: List asset types
+      operationId: TypesService_ListTypes
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ListTypesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.ListTypesRequest'
+        description: The parameters for `ListTypes`
+        required: true
+      tags:
+      - Assets
+  /assets/v1/types/{id}:
+    get:
+      summary: Get an asset type
+      operationId: TypesService_GetType
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.GetTypeResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Identifier of an asset type to retrieve.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+    patch:
+      summary: Update an asset type
+      operationId: TypesService_UpdateType
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.UpdateTypeResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The global unique identifier of the type.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.TypesService.UpdateTypeBody'
+        required: true
+      tags:
+      - Assets
+    delete:
+      summary: Delete an asset type
+      operationId: TypesService_DeleteType
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.DeleteTypeResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: Identifier of the type to be deleted.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Assets
+  /assets/v1/types/{type_id}/fields:
+    put:
+      summary: Update an asset type's asset field associations
+      operationId: TypesService_UpdateTypeFields
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.UpdateTypeFieldsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: type_id
+        description: Unique ID of the asset type.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.TypesService.UpdateTypeFieldsBody'
+        required: true
+      tags:
+      - Assets
+  /assets/v1/types/{type_id}/fields/list:
+    post:
+      summary: List an asset type's asset field associations
+      operationId: TypesService_ListTypeFields
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.assets.v1.ListTypeFieldsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: type_id
+        description: Unique ID of the asset type.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.assets.v1.TypesService.ListTypeFieldsBody'
+        required: true
+      tags:
+      - Assets
+components:
+  schemas:
+    s12.assets.v1.UpdateTypeResponse:
+      type: object
+      properties:
+        type:
+          description: The updated type.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.Type'
+      description: Result returned from `UpdateType`
+      title: UpdateTypeResponse
+    s12.assets.v1.ListFieldsResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.Field'
+          description: List of all fields under current organisation.
+      description: Result returned from `ListFields`
+      title: ListFieldsResponse
+    s12.assets.v1.AssetsOrderBy:
+      type: object
+      properties:
+        sort_field:
+          description: The field to sort by.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetsOrderBy.SortField'
+        sort_direction:
+          description: The order to sort by.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+        field_id:
+          type: string
+          description: 'Field_id is required while sorting by an asset-field
+
+            i.e., When SortField = SORT_FIELD_ASSET_FIELD.'
+      description: 'Describes the sorting options for the list assets endpoint. By default,
+
+        assets are sorted by creation date from the most recent to the least recent.'
+    s12.assets.v1.UpdateAssetResponse:
+      type: object
+      properties:
+        asset:
+          description: The updated asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.Asset'
+        operation_id:
+          type: string
+          description: 'Identifier of the asset hierarchy operation processing this change
+
+            asynchronously. Set when the update changes `site` or `code`, or when
+
+            this asset is the parent of other assets, since propagating the change
+
+            through the hierarchy happens in a background job. Absent when the
+
+            update applies synchronously and `asset` already reflects it. Use
+
+            `ListAssetHierarchyOperations` or `SubscribeAssetHierarchyOperations` to
+
+            track completion.'
+          readOnly: true
+      description: Result returned from `UpdateAsset`
+      title: UpdateAssetResponse
+    s12.assets.v1.StatusGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the status group.
+        name:
+          type: string
+          description: The name of the status group.
+        description:
+          type: string
+          description: The description of the status group.
+        options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.StatusOption'
+          description: 'The status options belonging to this group, ordered by position ascending.
+
+            Maximum 10 options per group.'
+        created_at:
+          type: string
+          format: date-time
+          description: Time when the status group was created.
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          description: Time when the status group was last modified.
+          readOnly: true
+        types:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.Type'
+          description: The asset types assigned to this status group.
+          readOnly: true
+      description: A status group defines a set of status options that can be assigned to an asset type.
+    s12.assets.v1.AssetsService.UpdateAssetLocationBody:
+      type: object
+      properties:
+        location:
+          description: The geometry of the location.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.Location'
+      description: The request parameters from `UpdateAssetLocation`
+      title: UpdateAssetLocationRequest
+      required:
+      - location
+    s12.assets.v1.AssetSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of an asset. This ID is system-generated.
+        label:
+          type: string
+          description: The label of an asset.
+        description:
+          type: string
+          description: 'The description of an asset.
+
+            @deprecated Use type and display_name instead.'
+        metadata:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetSummary.Metadata'
+          description: Other information about this asset
+        state:
+          description: The indicator for whether an asset is active or archived.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetState'
+        type:
+          description: The asset type of the asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetType'
+        site:
+          description: The assigned site of an asset as object.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetSite'
+        display_name:
+          type: string
+          description: Display name of the asset.
+        profile_image:
+          description: 'The profile image for an asset. If an asset doesn''t have a profile picture,
+
+            the API will return nil.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+        user_has_access:
+          type: boolean
+          description: Indicates if the user has access to this asset
+      title: Describe an asset in short summary
+    s12.assets.v1.BulkUpdateAssetsResponse:
+      type: object
+      properties:
+        updated_assets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.BulkUpdateAssetsResponse.UpdatedAsset'
+          description: List of assets successfully updated.
+        failed_assets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.BulkUpdateAssetsResponse.FailedAsset'
+          description: List of assets failed to update.
+        operation_id:
+          type: string
+          description: 'Deprecated: only a subset of `updated_assets` triggers an asynchronous
+
+            hierarchy operation (any `site` or `code` change, or where an updated
+
+            asset is the parent of other assets), so a single identifier cannot
+
+            represent every operation this request created. Reflects only the last
+
+            such asset''s operation id when more than one is triggered. Use
+
+            `hierarchy_operations` instead.'
+          readOnly: true
+        hierarchy_operations:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.BulkUpdateAssetsResponse.HierarchyOperation'
+          description: 'Assets from `updated_assets` whose change was hierarchy-affecting and
+
+            triggered an asynchronous operation, each paired with that operation''s
+
+            identifier. Empty if no asset in the request triggered one.'
+      description: Result returned from `BulkUpdateAssets`
+      title: BulkUpdateAssetsResponse
+    s12.assets.v1.MotionStatus:
+      type: string
+      enum:
+      - LOCATION_MOTION_STATUS_UNSPECIFIED
+      - LOCATION_MOTION_STATUS_PARKED
+      - LOCATION_MOTION_STATUS_IDLING
+      - LOCATION_MOTION_STATUS_MOVING
+      - LOCATION_MOTION_STATUS_OFFLINE
+      default: LOCATION_MOTION_STATUS_UNSPECIFIED
+      description: "Status of the motion.\n\n - LOCATION_MOTION_STATUS_UNSPECIFIED: Indicates the status of the motion is unspecified.\n - LOCATION_MOTION_STATUS_PARKED: Indicates the status of the motion is parked.\n - LOCATION_MOTION_STATUS_IDLING: Indicates the status of the motion is idling.\n - LOCATION_MOTION_STATUS_MOVING: Indicates the status of the motion is moving.\n - LOCATION_MOTION_STATUS_OFFLINE: Indicates the offline status of the telematic device"
+    s12.assets.v1.GetProgramResponse:
+      type: object
+      properties:
+        program:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceProgram'
+          description: The maintenance program
+        plans:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.MaintenancePlan'
+          description: The plans associated with the program
+      description: Result returned from `GetProgram`
+      title: GetProgramResponse
+    s12.common.SortDirection:
+      type: string
+      enum:
+      - SORT_DIRECTION_UNSPECIFIED
+      - SORT_DIRECTION_ASC
+      - SORT_DIRECTION_DESC
+      default: SORT_DIRECTION_UNSPECIFIED
+      title: Common set of sorting directions as used by lists
+    s12.assets.v1.LookupAssetsByFieldRequest:
+      type: object
+      properties:
+        page_token:
+          type: string
+          description: 'OPTIONAL. The value of next_page_token from a previous response. If
+
+            specified, the API will return the next batch of results following the
+
+            previous list assets request.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'OPTIONAL. The number of assets to return. By default, each request
+
+            returns 50 assets. You can specify a page_size value between 1 to 100.'
+        asset_filters:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetFilter'
+          description: 'OPTIONAL. The array of asset filters to apply in your request. You can
+
+            apply multiple filters in a single request.'
+        order_by:
+          description: 'OPTIONAL. The sorting order for the assets in the response. By default,
+
+            assets are sorted by creation date from the most recent to the least
+
+            recent.'
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetsOrderBy'
+        field_name:
+          type: string
+          description: REQUIRED. The name of the asset field to match.
+        string_value:
+          type: string
+          description: REQUIRED. The string value of the asset field to match.
+      description: The parameters for `LookupAssetsByField`
+      title: LookupAssetsByFieldRequest
+      required:
+      - field_name
+    s12.assets.v1.DeleteStatusGroupResponse:
+      type: object
+      description: Result returned from `DeleteStatusGroup`
+      title: DeleteStatusGroupResponse
+    s12.assets.v1.DeleteTypeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the deleted type.
+      description: Result returned from `DeleteType`
+      title: DeleteTypeResponse
+    s12.assets.v1.GetTypeResponse:
+      type: object
+      properties:
+        type:
+          description: Type with identifier matching the one provided in the request.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.Type'
+      description: Result returned from `GetType`
+      title: GetTypeResponse
+    s12.assets.v1.CreateProgramResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the created maintenance program.
+      description: Result returned from `CreateProgram`
+      title: CreateProgramResponse
+    s12.assets.v1.TypeFilter:
+      type: object
+      properties:
+        not:
+          type: boolean
+          description: 'Whether to include or exclude the specified value. `not=true` will exclude the
+
+            filter value from the result set.
+
+            Deprecated. Support for this field will be removed in future. Use inclusive filtering only.'
+        type_id:
+          type: string
+          description: Filter by asset type ID.
+      description: A filter that can be applied when listing asset types.
+    s12.assets.v1.BulkCreateAssetsResponse:
+      type: object
+      properties:
+        created_assets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.BulkCreateAssetsResponse.CreatedAsset'
+          description: List of assets created.
+        failed_assets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.BulkCreateAssetsResponse.FailedAsset'
+          description: List of assets failed to create.
+      description: Result returned from `BulkCreateAssets`
+      title: BulkCreateAssetsResponse
+    s12.assets.v1.UpdateProgramResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the updated maintenance program.
+      description: Result returned from `UpdateProgram`
+      title: UpdateProgramResponse
+    s12.assets.v1.User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the user.
+        name:
+          type: string
+          description: Name of the user.
+      description: Information about a SafetyCulture user.
+    s12.assets.v1.BulkUpdateAssetsResponse.FailedAsset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the updated asset.
+        code:
+          type: string
+          description: The user-defined unique identifier of an asset. This ID is user-generated.
+        status:
+          description: 'Status contains three pieces of data: error code, error message and
+
+            error details.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Status'
+      description: The asset that has failed to update.
+    s12.assets.v1.ListTypesResponse:
+      type: object
+      properties:
+        next_page_token:
+          type: string
+          description: The value you can use to retrieve additional assets. If a value exists, it means there are more results than listed. Use the value in your request body as a page_token field to view more results.
+        type_list:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.Type'
+          description: The asset types found from your request contained in an array as objects.
+      description: Result returned from `ListTypes`
+      title: ListTypesResponse
+    s12.assets.v1.TypesService.ListTypeFieldsBody:
+      type: object
+      description: The parameters for `ListTypeFields`
+      title: ListTypeFieldsRequest
+    s12.assets.v1.TypesService.UpdateTypeBody:
+      type: object
+      properties:
+        type:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Name of the type.
+            type:
+              $ref: '#/components/schemas/s12.assets.v1.TypeCategory'
+              readOnly: true
+              description: The categery of type, either predefined or custom
+          description: Type which replaces the one with matching identifier on the server.
+          title: Type which replaces the one with matching identifier on the server.
+        update_mask:
+          type: string
+          description: 'REQUIRED. The attributes (such as name etc.) you want to update for the type,
+
+            specified in the parameters. For example, the update_mask=name parameter
+
+            indicates that only the name will be updated in a request, any other
+
+            attributes provided in your request body will be ignored.'
+      description: The parameters for `UpdateType`
+      title: UpdateType
+      required:
+      - update_mask
+    s12.assets.v1.AssetSite:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of a site. This ID is system-generated.
+        name:
+          type: string
+          description: The name of a site.
+      description: Describes the values of a site that's assigned to an asset.
+    s12.assets.v1.AssetsService.ArchiveAssetBody:
+      type: object
+      description: The parameters for `ArchiveAsset`
+      title: ArchiveAssetRequest
+    s12.assets.v1.Type:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The global unique identifier of the type.
+        name:
+          type: string
+          description: Name of the type.
+        type:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.TypeCategory'
+          description: The categery of type, either predefined or custom
+    s12.assets.v1.MaintenanceProgramDetails:
+      type: object
+      properties:
+        program:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceProgram'
+          description: The maintenance program
+        assets_count:
+          type: integer
+          format: int32
+          description: Total number of assets assigned to the program.
+        plans_count:
+          type: integer
+          format: int32
+          description: Total number of plans associated with the program.
+      description: The details of the maintenance program.
+    s12.assets.v1.Asset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of an asset. This ID is system-generated.
+          readOnly: true
+        code:
+          type: string
+          description: The user-defined unique identifier of an asset. This ID is user-generated.
+        type:
+          description: The asset type of an asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetType'
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetField'
+          description: 'The associated fields of an asset contained in an array. Each asset''s
+
+            fields are based on its asset type. Please make sure the asset fields you
+
+            use associated with the specified asset type. You can retrieve the
+
+            associated fields using the list type and field association endpoint.'
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.Media'
+          description: All the media directly uploaded to an asset.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: The date created timestamp of an asset.
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          description: The date last modified timetstamp of an asset.
+          readOnly: true
+        site:
+          description: 'The assigned site of an asset as object. If an asset is not assigned to a
+
+            site, the API will return nil.'
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetSite'
+        profile_image:
+          description: 'The profile image for an asset. If an asset doesn''t have a profile picture,
+
+            the API will return nil.'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+        state:
+          description: The indicator for whether an asset is active or archived.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetState'
+        inspected_at:
+          type: string
+          format: date-time
+          description: The date last modified inspection of an asset.
+          readOnly: true
+        sourced_from_external_system:
+          type: boolean
+          description: '@deprecated. Use GetAsset API to get the sourced_from_external_system
+
+            Indicates if an asset is sourced from an external system.'
+          readOnly: true
+        statuses:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetStatus'
+          description: The status assigned to the asset. Although this is a repeated field, only one entry is currently supported. Each entry must belong to the status group associated with the asset type.
+      description: Asset entity.
+      required:
+      - id
+    s12.assets.v1.AssetsService.SetAssetFieldValuesBody:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetField'
+          description: List of fields being updated on the asset.
+      description: The parameters for `SetAssetFieldValues`
+      title: SetAssetFieldValuesRequest
+    s12.assets.v1.CreateAssetRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Customer specified identifier for the asset. Unique per org.
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetField'
+          description: List of fields based on the type of asset.
+        site:
+          type: string
+          description: Unique ID of site to be associated with asset.
+        profile_image:
+          description: 'An image to be set as profile image. The value of `media_type` must be
+
+            MEDIA_TYPE_IMAGE.'
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetMedia'
+        type_id:
+          type: string
+          description: Global unique identifier of the asset type.
+        status_option_ids:
+          type: array
+          items:
+            type: string
+          description: ID of the status option to assign. Each entry must belong to the status group associated with the asset type. You can only add one entry.
+      description: The parameters for `CreateAsset`
+      title: CreateAssetRequest
+      required:
+      - code
+      - type_id
+    s12.assets.v1.AssetMaintenanceDetailsOrderBy:
+      type: object
+      properties:
+        sort_field:
+          description: The field to sort by.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetMaintenanceDetailsOrderBy.SortField'
+        sort_direction:
+          description: The order to sort by.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+      description: 'Describes the sorting options for the list assets maintenance details endpoint.
+
+        By default, details are sorted by asset code in ascending order.'
+    s12.assets.v1.AddAssetLastServiceResponse:
+      type: object
+      properties:
+        next_service:
+          description: Next service value for an asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+      description: Result returned from `AddAssetLastService`
+      title: AddAssetLastServiceResponse
+    s12.assets.v1.AddStatusGroupToAssetTypesResponse:
+      type: object
+      description: Result returned from `AddStatusGroupToAssetTypes`
+      title: AddStatusGroupToAssetTypesResponse
+    s12.assets.v1.LookupAssetsByFieldResponse:
+      type: object
+      properties:
+        assets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.Asset'
+          description: The assets found from your request contained in an array as objects.
+        next_page_token:
+          type: string
+          description: 'The value you can use to retrieve additional assets. If a value exists, it
+
+            means there are more results than listed. Use the value in your request
+
+            body as a page_token field to view more results.'
+      description: Result returned from `LookupAssetsByField`
+      title: LookupAssetsByFieldResponse
+    s12.typefield.v1.FieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of a field select option.
+        label:
+          type: string
+          description: The label of a field select option.
+        order:
+          type: integer
+          format: int32
+          description: 'The display order of this option, 0-indexed.
+
+            Options should be displayed in ascending order of this field,
+
+            matching the order they were defined in the field settings.'
+    s12.assets.v1.BulkCreateAssetsRequest.Asset:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Customer specified identifier for the asset. Unique per org.
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetField'
+          description: List of fields based on the type of asset.
+        type_id:
+          type: string
+          description: Global unique identifier of the asset type.
+        site_id:
+          type: string
+          description: ID of site to be assigned to the asset.
+        status_option_ids:
+          type: array
+          items:
+            type: string
+          description: ID of the status option to assign. Each entry must belong to the status group associated with the asset type. You can only add one entry.
+      description: Individual Asset definition.
+      required:
+      - code
+    s12.assets.v1.Location:
+      type: object
+      properties:
+        geo_position:
+          description: The geometry of the location.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+        address:
+          type: string
+          description: 'The address geocoded from the latitude/longitude.
+
+            Defaults to empty value if not provided.'
+        last_updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the location was last updated.
+        status:
+          description: Status of the location.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.LocationStatus'
+        motion_status_updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of when the motion status was updated
+      description: The location of an object.
+      required:
+      - geo_position
+      - last_updated_at
+    s12.assets.v1.CreateTypeRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: REQUIRED. The name you want to set for the asset type.
+      description: The parameters for `CreateType`
+      title: CreateTypeRequest
+    s12.assets.v1.BulkUpdateAssetsResponse.UpdatedAsset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the updated asset.
+        code:
+          type: string
+          description: The user-defined unique identifier of an asset. This ID is user-generated.
+      description: The asset that has been successfully updated.
+    s12.assets.v1.StatusGroupsService.AddStatusGroupToAssetTypesBody:
+      type: object
+      properties:
+        type_ids:
+          type: array
+          items:
+            type: string
+          description: The identifiers of the asset types to assign the status group to.
+      description: The parameters for `AddStatusGroupToAssetTypes`
+      title: AddStatusGroupToAssetTypesRequest
+    s12.assets.v1.ListAssetsMaintenanceDetailsResponse:
+      type: object
+      properties:
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetsMaintenanceDetails'
+          description: 'The assets maintenance details found from your request
+
+            contained in an array as objects.'
+        next_page_token:
+          type: string
+          description: 'The value you can use to retrieve additional assets maintenance details.
+
+            If a value exists, it means there are more results than listed.
+
+            Use the value in your request body as a page_token field to view more results.'
+      description: Result returned from `ListAssetsMaintenanceDetails`
+      title: ListAssetsMaintenanceDetailsResponse
+    s12.assets.v1.LocationStatus:
+      type: string
+      enum:
+      - LOCATION_STATUS_UNSPECIFIED
+      - LOCATION_STATUS_ONLINE
+      - LOCATION_STATUS_OFFLINE
+      default: LOCATION_STATUS_UNSPECIFIED
+      description: "Status of the location.\n\n - LOCATION_STATUS_UNSPECIFIED: Indicates the status of the location is unspecified.\n - LOCATION_STATUS_ONLINE: Indicates the status of the location is online.\n - LOCATION_STATUS_OFFLINE: Indicates the status of the location is offline."
+    s12.assets.v1.AssetState:
+      type: string
+      enum:
+      - ASSET_STATE_UNSPECIFIED
+      - ASSET_STATE_ACTIVE
+      - ASSET_STATE_ARCHIVED
+      default: ASSET_STATE_UNSPECIFIED
+      description: "Describes the state of an asset. Either active or archived.\n\n - ASSET_STATE_UNSPECIFIED: Indicates that an asset state is unspecified.\n - ASSET_STATE_ACTIVE: Indicates that an asset is active.\n - ASSET_STATE_ARCHIVED: Indicates that an asset is archived."
+    s12.assets.v1.MaintenanceInterval:
+      type: object
+      properties:
+        interval:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+          description: Maintenance metric value
+        is_recurring:
+          type: boolean
+          description: Defines if interval is recurring (e.g. every 10000km if repeating or at 10000km if not)
+        due_soon:
+          description: Due-soon specifies when the status of the plan-asset should be changed to due-soon.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+        type:
+          description: The type of the maintenance interval.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceIntervalType'
+    s12.assets.v1.ListStatusGroupsResponse:
+      type: object
+      properties:
+        status_groups:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.StatusGroup'
+          description: The list of status groups.
+      description: Result returned from `ListStatusGroups`
+      title: ListStatusGroupsResponse
+    s12.assets.v1.ListTypeFieldsResponse:
+      type: object
+      properties:
+        type_fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.TypeField'
+          description: The asset fields found from your request contained in an array as objects.
+      description: Result returned from `ListTypeFields`
+      title: ListTypeFieldsResponse
+    s12.assets.v1.GetAssetByCodeResponse:
+      type: object
+      properties:
+        asset:
+          description: The asset found from your request.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.Asset'
+      description: Result returned from `GetAssetByCode`
+      title: GetAssetByCodeResponse
+    s12.assets.v1.AssetsMaintenanceDetails:
+      type: object
+      properties:
+        asset_summary:
+          description: Summary of asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetSummary'
+        program_summary:
+          description: Summary of maintenance program.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceProgramSummary'
+        plan_summary:
+          description: Summary of maintenance plan.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenancePlanSummary'
+        last_service:
+          description: The last service value of the asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+        next_service:
+          description: The next service value of the asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+        current_reading:
+          description: The current reading value of the asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+        due_in_value:
+          description: The due-in represents the value where the asset is due for service.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+        service_status:
+          description: The status of the service.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetServiceStatus'
+        last_service_timestamp:
+          type: string
+          format: date-time
+          description: The timestamp of the last service.
+        current_reading_timestamp:
+          type: string
+          format: date-time
+          description: The timestamp of the current reading.
+        current_reading_source:
+          description: The source of the current reading.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceReadingSource'
+        open_action_count:
+          type: integer
+          format: int32
+          description: The count of open actions for the maintenance plan
+      title: Assets maintenance details
+    s12.assets.v1.UpdatePlanResponse:
+      type: object
+      properties:
+        plan:
+          description: The updated maintenance plan.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenancePlan'
+      description: Result returned from `UpdatePlan`
+      title: UpdatePlanResponse
+    s12.assets.v1.AssetFilter:
+      type: object
+      properties:
+        site_id:
+          type: string
+          description: The unique identifier of the assigned site to filter by.
+        state:
+          description: The asset state to filter by. Either active or archived.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetState'
+        type_id:
+          type: string
+          description: The unique identifier of the asset type to filter by.
+        asset_id:
+          type: string
+          description: The unique identifier of the asset to filter by.
+        asset_code:
+          type: string
+          description: The user-defined unique identifier id of the asset to filter by.
+        motion_status:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MotionStatus'
+          description: The motion status filter used for filtering connected assets
+        location_source:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetLocationSource'
+          description: The location source filter used for filtering where the location was updated
+        status_option:
+          description: 'Filter by status option id, or by "not set" (assets with no active
+
+            status option).'
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetStatusOptionFilter'
+      description: Describes the filter options for the list assets endpoint..
+    s12.assets.v1.MaintenancePlan:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the maintenance plan.
+        name:
+          type: string
+          description: The name of the maintenance plan.
+        intervals:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.MaintenanceInterval'
+          description: The interval of the maintenance plan.
+          readOnly: true
+        description:
+          type: string
+          description: Description and extra information for a maintenance plan
+        update_status:
+          description: The status of the maintenance plan update operation.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenancePlanUpdateStatus'
+        triggers:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.MaintenanceTrigger'
+          description: The list of maintenance triggers of a plan.
+          readOnly: true
+      title: The maintenance plan
+    s12.assets.v1.ListAssetsRequest:
+      type: object
+      properties:
+        page_token:
+          type: string
+          description: 'OPTIONAL. The value of next_page_token from a previous response. If
+
+            specified, the API will return the next batch of results following the
+
+            previous list assets request.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'OPTIONAL. The number of assets to return. By default, each request
+
+            returns 50 assets. You can specify a page_size value between 1 to 100.'
+        search:
+          type: string
+          description: OPTIONAL. The key words to search for in your request.
+        asset_filters:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetFilter'
+          description: 'OPTIONAL. The array of asset filters to apply in your request. You can
+
+            apply multiple filters in a single request.'
+        order_by:
+          description: 'OPTIONAL. The sorting order for the assets in the response. By default,
+
+            assets are sorted by creation date from the most recent to the least
+
+            recent.'
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetsOrderBy'
+      description: The parameters for `ListAssets`
+      title: ListAssetsRequest
+    s12.common.Money:
+      type: object
+      properties:
+        currency_code:
+          type: string
+          description: The 3-letter currency code defined in ISO 4217.
+        units:
+          type: string
+          format: int64
+          description: 'The whole units of the amount.
+
+            For example if `currencyCode` is `"USD"`, then 1 unit is one US dollar.'
+        nanos:
+          type: integer
+          format: int32
+          description: 'Number of nano (10^-9) units of the amount.
+
+            The value must be between -999,999,999 and +999,999,999 inclusive.
+
+            If `units` is positive, `nanos` must be positive or zero.
+
+            If `units` is zero, `nanos` can be positive, zero, or negative.
+
+            If `units` is negative, `nanos` must be negative or zero.
+
+            For example £-1.75 is represented as `units`=-1 and `nanos`=-750,000,000.'
+      description: Represents an amount of money with its currency type.
+    s12.assets.v1.MaintenancePlanUpdateStatus:
+      type: string
+      enum:
+      - MAINTENANCE_PLAN_UPDATE_STATUS_UNSPECIFIED
+      - MAINTENANCE_PLAN_UPDATE_STATUS_IN_PROGRESS
+      - MAINTENANCE_PLAN_UPDATE_STATUS_COMPLETED
+      - MAINTENANCE_PLAN_UPDATE_STATUS_FAILED
+      default: MAINTENANCE_PLAN_UPDATE_STATUS_UNSPECIFIED
+      description: "MaintenancePlanUpdateStatus represents the status of a maintenance plan update operation.\n\n - MAINTENANCE_PLAN_UPDATE_STATUS_UNSPECIFIED: MAINTENANCE_PLAN_UPDATE_STATUS_UNSPECIFIED is an unknown maintenance plan update status.\n - MAINTENANCE_PLAN_UPDATE_STATUS_IN_PROGRESS: MAINTENANCE_PLAN_UPDATE_STATUS_IN_PROGRESS indicates a plan update is currently in progress.\n - MAINTENANCE_PLAN_UPDATE_STATUS_COMPLETED: MAINTENANCE_PLAN_UPDATE_STATUS_COMPLETED indicates a plan update has been completed successfully.\n - MAINTENANCE_PLAN_UPDATE_STATUS_FAILED: MAINTENANCE_PLAN_UPDATE_STATUS_FAILED indicates a plan update has failed."
+    s12.assets.v1.AssetMaintenanceDetailsOrderBy.SortField:
+      type: string
+      enum:
+      - SORT_FIELD_UNSPECIFIED
+      - SORT_FIELD_ASSET_CODE
+      - SORT_FIELD_NEXT_SERVICE_ODOMETER_VALUE
+      - SORT_FIELD_NEXT_SERVICE_RUNTIME_VALUE
+      - SORT_FIELD_DUE_IN_ODOMETER_VALUE
+      - SORT_FIELD_DUE_IN_RUNTIME_VALUE
+      - SORT_FIELD_DUE_IN_TIME_VALUE
+      default: SORT_FIELD_UNSPECIFIED
+      description: "Defaults to SORT_FIELD_ASSET_CODE.\n\n - SORT_FIELD_UNSPECIFIED: The sort field is unspecified.\n - SORT_FIELD_ASSET_CODE: Sort assets maintenance details by `asset_code`.\n - SORT_FIELD_NEXT_SERVICE_ODOMETER_VALUE: Sort assets maintenance details by `next_service_odometer_value`.\n - SORT_FIELD_NEXT_SERVICE_RUNTIME_VALUE: Sort assets maintenance details by `next_service_runtime_value`.\n - SORT_FIELD_DUE_IN_ODOMETER_VALUE: Sort assets maintenance details by `due_in_odometer_value`.\n - SORT_FIELD_DUE_IN_RUNTIME_VALUE: Sort assets maintenance details by `due_in_runtime_value`.\n - SORT_FIELD_DUE_IN_TIME_VALUE: Sort assets maintenance details by `due_in_time_value`."
+    s12.assets.v1.TypeField:
+      type: object
+      properties:
+        field_id:
+          type: string
+          description: The unique identifier of an asset field. This ID is system-generated.
+        name:
+          type: string
+          description: The name of an asset field.
+          readOnly: true
+        visible:
+          type: boolean
+          description: 'The indicator for whether an asset field is visible for an asset type. A true value indicates that an asset field is associated with the retrieved asset type. A false value indicates otherwise.
+
+            @deprecated. APIs using this will return only visible fields in the future'
+        value_type:
+          description: Type of field value.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.FieldValueType'
+        select_options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: The options of a field select.
+          readOnly: true
+      description: Describes the association between an asset type and an asset field.
+      required:
+      - field_id
+    s12.assets.v1.ListAssetsResponse:
+      type: object
+      properties:
+        assets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.Asset'
+          description: The assets found from your request contained in an array as objects.
+        next_page_token:
+          type: string
+          description: 'The value you can use to retrieve additional assets. If a value exists, it
+
+            means there are more results than listed. Use the value in your request
+
+            body as a page_token field to view more results.'
+      description: Result returned from `ListAssets`
+      title: ListAssetsResponse
+    s12.assets.v1.UpdateTypeFieldsResponse:
+      type: object
+      properties:
+        type_fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.TypeField'
+          description: List of the fields associated with the given type.
+      description: Result returned from `UpdateTypeFields`
+      title: UpdateTypeFieldsResponse
+    s12.assets.v1.SetAssetFieldValuesResponse:
+      type: object
+      properties:
+        asset:
+          description: The updated Asset object.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.Asset'
+      description: Result returned from `SetAssetFieldValues`
+      title: SetAssetFieldValuesResponse
+    s12.assets.v1.MaintenanceProgram:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the maintenance program.
+        name:
+          type: string
+          description: The name of the maintenance program.
+        description:
+          type: string
+          description: Description and extra information for a maintenance program
+    s12.assets.v1.ListAssetsMaintenanceStatusCountsResponse:
+      type: object
+      properties:
+        scheduled_count:
+          type: integer
+          format: int32
+        due_soon_count:
+          type: integer
+          format: int32
+        overdue_count:
+          type: integer
+          format: int32
+        data_missing_count:
+          type: integer
+          format: int32
+      description: Result returned from `ListAssetsMaintenanceStatusCounts`
+      title: ListAssetsMaintenanceStatusCountsResponse
+    s12.assets.v1.CreatePlanResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the created maintenance program.
+      description: Result returned from `CreatePlan`
+      title: CreatePlanResponse
+    s12.assets.v1.AssetLocationSource:
+      type: string
+      enum:
+      - ASSET_LOCATION_SOURCE_UNSPECIFIED
+      - ASSET_LOCATION_SOURCE_INSPECTION
+      - ASSET_LOCATION_SOURCE_GEO
+      - ASSET_LOCATION_SOURCE_MOBILE_DEVICE
+      default: ASSET_LOCATION_SOURCE_UNSPECIFIED
+      description: "Describes the source of asset location.\n\n - ASSET_LOCATION_SOURCE_UNSPECIFIED: Indicates that the source of asset location is unspecified.\n - ASSET_LOCATION_SOURCE_INSPECTION: Indicates that the source of asset location is inspection.\n - ASSET_LOCATION_SOURCE_GEO: Indicates that the source is GEO location.\n - ASSET_LOCATION_SOURCE_MOBILE_DEVICE: Indicates that the source is mobile device location."
+    s12.assets.v1.ListFieldsRequest:
+      type: object
+      properties:
+        search:
+          type: string
+          description: Optional. Filter asset fields by this search term.
+      description: The parameters for `ListFields`
+      title: ListFieldsRequest
+    s12.assets.v1.AssetSummary.Metadata:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key of metadata
+        value:
+          type: string
+          description: The value of metadata
+    s12.assets.v1.AssetMedia:
+      type: object
+      properties:
+        media_id:
+          type: string
+          description: ID of media.
+        media_type:
+          description: 'Type of media specified by `media_id`.
+
+            The only supported types are MEDIA_TYPE_IMAGE and MEDIA_TYPE_PDF.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.MediaType'
+        filename:
+          type: string
+          description: Full file name including extension.
+      description: 'This object is used to define media object associated with an asset,
+
+        including profile image, photos and documents.'
+    s12.assets.v1.MaintenanceTriggerNotification:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: A list of user IDs that will receive the notification.
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: A list of group IDs that will receive the notification.
+        before:
+          description: Notification will be triggered when reading value reaches (LastService + Interval - before).
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+      description: The notification maintenance trigger.
+    s12.assets.v1.CreateStatusGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the status group.
+        description:
+          type: string
+          description: The description of the status group.
+        options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.StatusOption'
+          description: The initial status options for the group.
+      description: The parameters for `CreateStatusGroup`
+      title: CreateStatusGroupRequest
+    s12.assets.v1.MaintenanceService.ListAssetServiceHistoryBody:
+      type: object
+      properties:
+        plan_id:
+          type: string
+          description: The identifier of the maintenance plan.
+        page_token:
+          type: string
+          description: 'OPTIONAL. The value of next_page_token from a previous response. If
+
+            specified, the API will return the next batch of results following the
+
+            previous list asset service history request.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'OPTIONAL. The number of asset service history to return. By default, each request
+
+            returns 50 assets service history. You can specify a
+
+            page_size value between 1 to 100.'
+      description: The parameters for `ListAssetServiceHistory`
+      title: ListAssetServiceHistory
+    s12.assets.v1.BulkCreateAssetsResponse.CreatedAsset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the created asset.
+        code:
+          type: string
+          description: Code of the asset.
+      description: The asset that has been created.
+      required:
+      - code
+    s12.assets.v1.DeleteFieldResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the deleted field.
+      description: Result returned from `DeleteField`
+      title: DeleteFieldResponse
+    s12.assets.v1.TypeCategory:
+      type: string
+      enum:
+      - TYPE_CATEGORY_UNSPECIFIED
+      - TYPE_CATEGORY_PREDEFINED
+      - TYPE_CATEGORY_CUSTOM
+      default: TYPE_CATEGORY_UNSPECIFIED
+      description: "Category of Type.\n\n - TYPE_CATEGORY_UNSPECIFIED: Type Category Unspecified.\n - TYPE_CATEGORY_PREDEFINED: Predefined Type defined by system.\n - TYPE_CATEGORY_CUSTOM: Custom type defined by organisation."
+    s12.assets.v1.MaintenanceMetricValue:
+      type: object
+      properties:
+        unit_value:
+          $ref: '#/components/schemas/s12.assets.v1.UnitValue'
+        timestamp:
+          type: string
+          format: date-time
+      title: The maintenance metric value (e.g. odometer, running time)
+    s12.assets.v1.MaintenanceIntervalType:
+      type: string
+      enum:
+      - MAINTENANCE_INTERVAL_TYPE_UNSPECIFIED
+      - MAINTENANCE_INTERVAL_TYPE_ODOMETER
+      - MAINTENANCE_INTERVAL_TYPE_RUNTIME
+      - MAINTENANCE_INTERVAL_TYPE_TIME
+      default: MAINTENANCE_INTERVAL_TYPE_UNSPECIFIED
+      description: "MaintenanceIntervalType represents the type of maintenance interval.\n\n - MAINTENANCE_INTERVAL_TYPE_UNSPECIFIED: MAINTENANCE_INTERVAL_TYPE_UNSPECIFIED is an unknown maintenance interval type.\n - MAINTENANCE_INTERVAL_TYPE_ODOMETER: MAINTENANCE_INTERVAL_TYPE_ODOMETER is a maintenance interval type that is odometer based.\n - MAINTENANCE_INTERVAL_TYPE_RUNTIME: MAINTENANCE_INTERVAL_TYPE_RUNTIME is a maintenance interval type that is runtime based.\n - MAINTENANCE_INTERVAL_TYPE_TIME: MAINTENANCE_INTERVAL_TYPE_TIME is a maintenance interval type that is time based."
+    s12.assets.v1.UpdateFieldResponse:
+      type: object
+      properties:
+        field:
+          description: The updated field.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.Field'
+      description: Result returned from `UpdateField`
+      title: UpdateFieldResponse
+    s12.assets.v1.DeleteProgramResponse:
+      type: object
+      description: Result returned from `DeleteProgram`
+      title: RemoveProgramResponse
+    s12.assets.v1.BulkCreateAssetsResponse.FailedAsset:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code of the asset.
+        status:
+          description: 'Status contains three pieces of data: error code, error message and
+
+            error details.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Status'
+      description: The asset that has failed to create.
+      required:
+      - code
+    s12.assets.v1.CreateFieldResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the created field.
+        select_options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: The select options of the field, if any were created.
+      description: Result returned from `CreateField`
+      title: CreateFieldResponse
+    s12.assets.v1.AssetMaintenanceDetailsFilter:
+      type: object
+      properties:
+        site_ids:
+          type: array
+          items:
+            type: string
+          description: The unique identifier of the assigned site to filter by.
+        asset_ids:
+          type: array
+          items:
+            type: string
+          description: The unique identifier of the asset to filter by.
+        program_ids:
+          type: array
+          items:
+            type: string
+          description: The unique identifier of the maintenance program to filter by.
+        plan_ids:
+          type: array
+          items:
+            type: string
+          description: The unique identifier of the maintenance plan to filter by.
+        type_ids:
+          type: array
+          items:
+            type: string
+          description: The unique identifier of the asset type to filter by.
+        service_statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.assets.v1.AssetServiceStatus'
+          description: The statuses for the maintenance service associated with assets to filter by.
+      description: Describes the filter options for the list assets maintenance details endpoint.
+    s12.assets.v1.RemoveStatusGroupFromAssetTypesResponse:
+      type: object
+      description: Result returned from `RemoveStatusGroupFromAssetTypes`
+      title: RemoveStatusGroupFromAssetTypesResponse
+    s12.assets.v1.CreateStatusGroupResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the created status group.
+      description: Result returned from `CreateStatusGroup`
+      title: CreateStatusGroupResponse
+    s12.assets.v1.GetStatusGroupResponse:
+      type: object
+      properties:
+        status_group:
+          description: The status group.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.StatusGroup'
+      description: Result returned from `GetStatusGroup`
+      title: GetStatusGroupResponse
+    s12.assets.v1.AssetFilterOptions:
+      type: object
+      properties:
+        search:
+          type: string
+          description: OPTIONAL. The key words to search for in your request.
+        asset_filters:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetFilter'
+          description: 'OPTIONAL. The array of asset filters to apply in your request. You can
+
+            apply multiple filters in a single request.'
+      title: 'Describes parameters in filtering asset list queries. Not providing filters
+
+        would widen the search results'
+    s12.assets.v1.ListProgramsDetailsRequest:
+      type: object
+      properties:
+        page_token:
+          type: string
+          description: 'OPTIONAL. The value of next_page_token from a previous response. If
+
+            specified, the API will return the next batch of results following the
+
+            previous list maintenance programs request.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'OPTIONAL. The number of assets to return. By default, each request
+
+            returns 50 program details. You can specify a page_size value between 1 to 100.'
+      description: The parameters for `ListProgramsDetails`
+      title: ListProgramsDetailsRequest
+    s12.assets.v1.ListTypesRequest:
+      type: object
+      properties:
+        page_token:
+          type: string
+          description: OPTIONAL. The value of next_page_token from a previous response. If specified, the API will return the next batch of results following the previous list asset types request.
+        page_size:
+          type: integer
+          format: int32
+          description: OPTIONAL. The number of asset types to return. By default, each request returns 50 asset types. You can specify a page_size value between 1 to 100.
+        search:
+          type: string
+          description: OPTIONAL. The key words to search for in your request.
+        type_filters:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.TypeFilter'
+          description: OPTIONAL. The array of asset type filters to apply in your request. You can apply multiple filters in a single request.
+      description: The parameters for `ListTypes`
+      title: ListTypesRequest
+    s12.assets.v1.MaintenanceProgramSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the maintenance program.
+        name:
+          type: string
+          description: The name of the maintenance program.
+        state:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceProgramState'
+          description: 'State of the maintenance program (e.g MAINTENANCE_PROGRAM_STATE_ACTIVE,
+
+            MAINTENANCE_PROGRAM_STATE_DELETED)'
+      title: Summary of maintenance program
+    s12.assets.v1.MaintenancePlanState:
+      type: string
+      enum:
+      - MAINTENANCE_PLAN_STATE_UNSPECIFIED
+      - MAINTENANCE_PLAN_STATE_ACTIVE
+      - MAINTENANCE_PLAN_STATE_DELETED
+      default: MAINTENANCE_PLAN_STATE_UNSPECIFIED
+      description: "MaintenancePlanState represents the state of a maintenance plan.\n\n - MAINTENANCE_PLAN_STATE_UNSPECIFIED: MAINTENANCE_PLAN_STATE_UNSPECIFIED is an unknown maintenance plan state.\n - MAINTENANCE_PLAN_STATE_ACTIVE: MAINTENANCE_PLAN_STATE_ACTIVE is a maintenance plan state that is active.\n - MAINTENANCE_PLAN_STATE_DELETED: MAINTENANCE_PLAN_STATE_DELETED is a maintenance plan state that is deleted."
+    s12.assets.v1.AssetStatus:
+      type: object
+      properties:
+        status_option_id:
+          type: string
+          description: ID of the assigned status option.
+        name:
+          type: string
+          description: Name of the status option.
+          readOnly: true
+        status_group_id:
+          type: string
+          description: ID of the status group the option belongs to.
+          readOnly: true
+        color:
+          description: The color of the status badge.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.StatusBadgeColor'
+        status_group_name:
+          type: string
+          description: Name of the status group the option belongs to.
+          readOnly: true
+      description: A status option assigned to an asset.
+    s12.common.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: 'The status code, which should be an enum value of the predefined codes in
+
+            https://github.com/grpc/grpc/blob/master/doc/statuscodes.md'
+        message:
+          type: string
+          description: A developer-facing error message, which should be in English.
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+          description: A list of messages that carry the error details.
+      description: 'The `Status` type defines a logical error model and is based on the richer
+
+        error model as described in the guide - https://grpc.io/docs/guides/error/ A
+
+        `Status` message contains three pieces of data: error code, error message and
+
+        error details. The `Status.details` can be a collection of `Any` proto
+
+        message. Each proto message can describe an error type.'
+    s12.common.v1.StatusBadgeColor:
+      type: string
+      enum:
+      - STATUS_BADGE_COLOR_ACCENT
+      - STATUS_BADGE_COLOR_INFO
+      - STATUS_BADGE_COLOR_NEGATIVE
+      - STATUS_BADGE_COLOR_POSITIVE
+      - STATUS_BADGE_COLOR_WARNING
+      - STATUS_BADGE_COLOR_SURFACE
+      description: "StatusBadgeColor defines the semantic color palette for status badges.\n\n - STATUS_BADGE_COLOR_ACCENT: Color is accent\n - STATUS_BADGE_COLOR_INFO: Color is info\n - STATUS_BADGE_COLOR_NEGATIVE: Color is negative\n - STATUS_BADGE_COLOR_POSITIVE: Color is positive\n - STATUS_BADGE_COLOR_WARNING: Color is warning\n - STATUS_BADGE_COLOR_SURFACE: Color is surface"
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.assets.v1.FieldsService.UpdateFieldBody:
+      type: object
+      properties:
+        field:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Name of the field.
+            field_type:
+              $ref: '#/components/schemas/s12.assets.v1.FieldType'
+              description: Type of field.
+              readOnly: true
+            value_type:
+              $ref: '#/components/schemas/s12.assets.v1.FieldValueType'
+              description: Type of field value.
+              readOnly: true
+            select_options:
+              type: array
+              items:
+                type: object
+                $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+              description: 'The options of a field select.
+
+                100 limit enforced in typefield, but to lower the feedback loop, we enforce it here too.'
+          description: Field which replaces the one with matching identifier on the server.
+          title: Field which replaces the one with matching identifier on the server.
+        update_mask:
+          type: string
+          description: 'REQUIRED. The attributes (such as name etc.) you want to update for the field,
+
+            specified in the parameters. For example, the update_mask=name parameter
+
+            indicates that only the name will be updated in a request, any other
+
+            attributes provided in your request body will be ignored.'
+      description: The parameters for `UpdateField`
+      title: UpdateField
+      required:
+      - update_mask
+    s12.assets.v1.BulkUpdateAssetsResponse.HierarchyOperation:
+      type: object
+      properties:
+        asset_id:
+          type: string
+          description: Identifier of the updated asset that triggered this operation.
+        operation_id:
+          type: string
+          description: 'Identifier of the asset hierarchy operation processing this asset''s
+
+            hierarchy-affecting change. Use `ListAssetHierarchyOperations` or
+
+            `SubscribeAssetHierarchyOperations` to track completion.'
+          readOnly: true
+      description: 'An updated asset whose change was hierarchy-affecting and triggered an
+
+        asynchronous hierarchy operation.'
+    s12.assets.v1.AssetLocation:
+      type: object
+      properties:
+        asset_id:
+          type: string
+          description: Unique identifier of the asset.
+        location:
+          description: Location of the asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.Location'
+        source:
+          description: Source of the asset location.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetLocationSource'
+    s12.assets.v1.Field:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A global unique identifier for a field.
+        name:
+          type: string
+          description: Name of the field.
+        field_type:
+          description: Type of field.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.FieldType'
+        value_type:
+          description: Type of field value.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.FieldValueType'
+        select_options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: 'The options of a field select.
+
+            100 limit enforced in typefield, but to lower the feedback loop, we enforce it here too.'
+      description: Field entity.
+      required:
+      - id
+    s12.assets.v1.AssetField:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of an asset field.
+          readOnly: true
+        string_value:
+          type: string
+          description: The string value of an asset field. This attribute is only used for asset fields using the FIELD_VALUE_TYPE_STRING type.
+        money_value:
+          description: The money value of an asset field. This attribute is only used for asset fields using the FIELD_VALUE_TYPE_MONEY type.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Money'
+        timestamp_value:
+          type: string
+          format: date-time
+          description: The timestamp value of an asset field. This attribute is only used for asset fields using the FIELD_VALUE_TYPE_TIMESTAMP type.
+        field_id:
+          type: string
+          description: The unique identifier of an asset field. This ID is system-generated.
+      description: Describes the values of an asset field.
+    s12.assets.v1.UpdateStatusGroupResponse:
+      type: object
+      properties:
+        status_group:
+          description: The updated status group.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.StatusGroup'
+      description: Result returned from `UpdateStatusGroup`
+      title: UpdateStatusGroupResponse
+    s12.assets.v1.UpdateAssetLocationResponse:
+      type: object
+      properties:
+        location:
+          description: Updated location of the asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetLocation'
+      description: The result returned from `ListAssetsLocations`
+      title: UpdateAssetLocation
+    s12.assets.v1.TypesService.UpdateTypeFieldsBody:
+      type: object
+      properties:
+        replace_all:
+          type: boolean
+          description: 'Determines whether to replace all existing field associations for the asset type.
+
+            When true, all existing field associations for the asset type are replaced with the specified `field_ids`.
+
+            When false, the specified `field_ids` are merged with the existing field associations for the asset type.'
+        field_ids:
+          type: array
+          items:
+            type: string
+          description: List of field IDs to associate with the asset type.
+      description: The parameters for `UpdateTypeFields`
+      title: UpdateTypeFieldsRequest
+    s12.assets.v1.MaintenanceService.AddAssetsToProgramBody:
+      type: object
+      properties:
+        asset_ids:
+          type: array
+          items:
+            type: string
+          description: '@deprecated Use `filter_options` instead.
+
+            The identifiers of the assets to add to the maintenance program.
+
+            The maximum number of assets that can be added is 100 per request.'
+        filter_options:
+          description: Asset filters to apply in your request.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetFilterOptions'
+        limit:
+          type: integer
+          format: int64
+          description: Number of assets to be added.
+      description: The parameters for `AddAssetsToProgram`
+      title: AddAssetsToProgramRequest
+    s12.assets.v1.AssetsOrderBy.SortField:
+      type: string
+      enum:
+      - SORT_FIELD_UNSPECIFIED
+      - SORT_FIELD_CREATED_AT
+      - SORT_FIELD_MODIFIED_AT
+      - SORT_FIELD_CODE
+      - SORT_FIELD_ASSET_FIELD
+      - SORT_FIELD_INSPECTED_AT
+      - SORT_FIELD_STATUS_OPTION_NAME
+      default: SORT_FIELD_UNSPECIFIED
+      description: "Defaults to SORT_FIELD_CODE.\n\n - SORT_FIELD_UNSPECIFIED: The sort field is unspecified.\n - SORT_FIELD_CREATED_AT: Sort assets by `created_at`.\n - SORT_FIELD_MODIFIED_AT: Sort assets by `modified_at`.\n - SORT_FIELD_CODE: Sort assets by `code`.\n - SORT_FIELD_ASSET_FIELD: Sort assets by an asset-field.\n - SORT_FIELD_INSPECTED_AT: Sort assets by `inspected_at`.\n - SORT_FIELD_STATUS_OPTION_NAME: Sort assets by status option name (alphabetical)."
+    s12.assets.v1.ListStatusGroupsRequest:
+      type: object
+      description: The parameters for `ListStatusGroups`
+      title: ListStatusGroupsRequest
+    s12.assets.v1.ListProgramsDetailsResponse:
+      type: object
+      properties:
+        program_details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.MaintenanceProgramDetails'
+          description: The maintenance program details found from your request contained in an array as objects.
+        next_page_token:
+          type: string
+          description: 'The value you can use to retrieve additional maintenance . If a value exists, it
+
+            means there are more results than listed. Use the value in your request
+
+            body as a page_token field to view more results.'
+      description: Result returned from `ListProgramsDetails`
+      title: ListProgramsDetailsResponse
+    s12.assets.v1.CreateProgramRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the maintenance program.
+        description:
+          type: string
+          description: Description and extra information for a maintenance program
+      description: The parameters for `CreateProgram`
+      title: CreateProgramRequest
+    s12.assets.v1.AssetServiceStatus:
+      type: string
+      enum:
+      - ASSET_SERVICE_STATUS_UNSPECIFIED
+      - ASSET_SERVICE_STATUS_OVERDUE
+      - ASSET_SERVICE_STATUS_DUE_SOON
+      - ASSET_SERVICE_STATUS_SCHEDULED
+      - ASSET_SERVICE_STATUS_DATA_MISSING
+      default: ASSET_SERVICE_STATUS_UNSPECIFIED
+      description: "AssetServiceStatus enumerates possible values for maintenance_plan_service_status.\n\n - ASSET_SERVICE_STATUS_UNSPECIFIED: ASSET_SERVICE_STATUS_UNSPECIFIED is an unknown asset service status.\n - ASSET_SERVICE_STATUS_OVERDUE: ASSET_SERVICE_STATUS_OVERDUE is asset service status that is overdue.\n - ASSET_SERVICE_STATUS_DUE_SOON: ASSET_SERVICE_STATUS_DUE_SOON is asset service status that is duesoon.\n - ASSET_SERVICE_STATUS_SCHEDULED: ASSET_SERVICE_STATUS_SCHEDULED is asset service status that is scheduled.\n - ASSET_SERVICE_STATUS_DATA_MISSING: ASSET_SERVICE_STATUS_DATA_MISSING is asset service status that is data\nmissing."
+    s12.assets.v1.MaintenanceService.AddAssetLastServiceBody:
+      type: object
+      properties:
+        plan_id:
+          type: string
+          description: The identifier of the maintenance plan.
+        last_service:
+          description: The last service value of the asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+        last_service_date:
+          type: string
+          format: date-time
+          description: The date of the last service.
+      description: The parameters for `AddAssetLastServiceRequest`
+      title: AddAssetLastServiceRequest
+    s12.assets.v1.RemoveAssetsFromProgramResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+          description: Count of assets that have been removed.
+      description: Result returned from `RemoveAssetsFromProgram`
+      title: RemoveAssetsFromProgramResponse
+    s12.assets.v1.MaintenanceProgramState:
+      type: string
+      enum:
+      - MAINTENANCE_PROGRAM_STATE_UNSPECIFIED
+      - MAINTENANCE_PROGRAM_STATE_ACTIVE
+      - MAINTENANCE_PROGRAM_STATE_DELETED
+      default: MAINTENANCE_PROGRAM_STATE_UNSPECIFIED
+      description: "MaintenanceProgramState represents the state of a maintenance program.\n\n - MAINTENANCE_PROGRAM_STATE_UNSPECIFIED: MAINTENANCE_PROGRAM_STATE_UNSPECIFIED is an unknown maintenance program state.\n - MAINTENANCE_PROGRAM_STATE_ACTIVE: MAINTENANCE_PROGRAM_STATE_ACTIVE is a maintenance program state that is active.\n - MAINTENANCE_PROGRAM_STATE_DELETED: MAINTENANCE_PROGRAM_STATE_DELETED is a maintenance program state that is deleted."
+    s12.assets.v1.AssetType:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the type.
+          readOnly: true
+        type_id:
+          type: string
+          description: The global unique identifier of the type.
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.TypeCategory'
+          description: The categery of type, either predefined or custom
+      description: Asset type entity.
+    s12.assets.v1.AddAssetsToProgramResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+          description: Count of assets that have been added.
+      description: Result returned from `AddAssetsToProgram`
+      title: AddAssetsToProgramResponse
+    s12.assets.v1.MaintenanceReadingSource:
+      type: string
+      enum:
+      - MAINTENANCE_READING_SOURCE_UNSPECIFIED
+      - MAINTENANCE_READING_SOURCE_INTEGRATION
+      - MAINTENANCE_READING_SOURCE_INSPECTION
+      default: MAINTENANCE_READING_SOURCE_UNSPECIFIED
+      description: " - MAINTENANCE_READING_SOURCE_UNSPECIFIED: The reading source is unspecified.\n - MAINTENANCE_READING_SOURCE_INTEGRATION: The reading source is from an integration.\n - MAINTENANCE_READING_SOURCE_INSPECTION: The reading source is the inspection."
+    s12.common.MediaType:
+      type: string
+      enum:
+      - MEDIA_TYPE_IMAGE
+      - MEDIA_TYPE_VIDEO
+      - MEDIA_TYPE_PDF
+      - MEDIA_TYPE_DOCX
+      - MEDIA_TYPE_XLSX
+      - MEDIA_TYPE_PPTX
+      - MEDIA_TYPE_CSV
+      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.assets.v1.MaintenancePlanSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the maintenance plan.
+        name:
+          type: string
+          description: The name of the maintenance plan.
+        interval:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceInterval'
+          description: Interval information for the plan
+        state:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenancePlanState'
+          description: 'State of the maintenance plan (e.g MAINTENANCE_PLAN_STATE_ACTIVE,
+
+            MAINTENANCE_PLAN_STATE_DELETED)'
+        description:
+          type: string
+          description: Description and extra information for a maintenance plan
+      title: Summary of maintenance plan
+    s12.assets.v1.UnitValue:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        unit:
+          $ref: '#/components/schemas/s12.common.MeasurementUnitSymbol'
+      description: 'The unit value represents a measurement value with a unit symbol.
+
+        It is used to represent a value with a unit symbol, such as 10 km or 5 hours.'
+    s12.assets.v1.AssetService:
+      type: object
+      properties:
+        user:
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.User'
+          description: Information of the user added the last-service
+        service_value:
+          description: The value of the service.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceMetricValue'
+        created_at:
+          type: string
+          format: date-time
+          description: The date when the last service has been added on the asset.
+          readOnly: true
+        asset_id:
+          type: string
+          description: The identifier of the asset.
+        plan_id:
+          type: string
+          description: The identifier of the maintenance plan.
+        service_date:
+          type: string
+          format: date-time
+          description: The date when the service was done.
+      description: Service information of an asset.
+    s12.assets.v1.BulkUpdateAssetsRequest:
+      type: object
+      properties:
+        assets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.Asset'
+          description: Assets to be updated.
+        update_mask:
+          type: string
+          description: 'REQUIRED. The attributes (such as unique ID, site, asset fields, etc.) you
+
+            want to update for the asset, specified in the parameters. For example, the
+
+            update_mask=code parameter indicates that only the unique ID will be
+
+            updated in a request, any other attributes provided in your request body
+
+            will be ignored.'
+      description: The parameters for `BulkUpdateAssets`
+      title: BulkUpdateAssetsRequest
+      required:
+      - assets
+      - update_mask
+    s12.assets.v1.StatusOption:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the status option.
+        name:
+          type: string
+          description: The name of the status option.
+        color:
+          description: The color of the status option.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.StatusBadgeColor'
+        position:
+          type: integer
+          format: int32
+          description: The display position of the status option within the group.
+        created_at:
+          type: string
+          format: date-time
+          description: Time when the status option was created.
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          description: Time when the status option was last modified.
+          readOnly: true
+      description: A status option within a status group.
+    s12.assets.v1.StatusGroupsService.UpdateStatusGroupBody:
+      type: object
+      properties:
+        status_group:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the status group.
+            description:
+              type: string
+              description: The description of the status group.
+            options:
+              type: array
+              items:
+                type: object
+                $ref: '#/components/schemas/s12.assets.v1.StatusOption'
+              description: 'The status options belonging to this group, ordered by position ascending.
+
+                Maximum 10 options per group.'
+            created_at:
+              type: string
+              format: date-time
+              description: Time when the status group was created.
+              readOnly: true
+            modified_at:
+              type: string
+              format: date-time
+              description: Time when the status group was last modified.
+              readOnly: true
+            types:
+              type: array
+              items:
+                type: object
+                $ref: '#/components/schemas/s12.assets.v1.Type'
+              description: The asset types assigned to this status group.
+              readOnly: true
+          description: The status group to update.
+          title: The status group to update.
+        update_mask:
+          type: string
+          description: REQUIRED. The fields to update.
+        reassign_to_option_id:
+          type: string
+          description: 'The identifier of the status option to reassign assets to when options are removed.
+
+            If omitted, assets assigned to removed options are cleared.'
+      description: The parameters for `UpdateStatusGroup`
+      title: UpdateStatusGroupRequest
+      required:
+      - update_mask
+    s12.assets.v1.CreateAssetResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the created asset.
+      description: Result returned from `CreateAsset`
+      title: CreateAssetResponse
+    s12.common.GeoPosition:
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+          description: The geographical longitude
+        latitude:
+          type: number
+          format: double
+          description: The geographical latitude
+        accuracy:
+          type: integer
+          format: int32
+          description: The accuracy in meters
+      description: A position is the fundamental geographical geometry construct.
+    s12.assets.v1.DeleteAssetResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the deleted asset.
+      description: Result returned from `DeleteAssetRequest`
+      title: DeleteAssetResponse
+    s12.assets.v1.GetAssetResponse:
+      type: object
+      properties:
+        asset:
+          description: Asset with identifier matching the one provided in the request.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.Asset'
+        sourced_from_external_system:
+          type: boolean
+          description: Indicates if an asset is sourced from an external system.
+      description: Result returned from `GetAsset`
+      title: GetAssetResponse
+    s12.assets.v1.ListAssetsMaintenanceStatusCountsRequest:
+      type: object
+      properties:
+        filter:
+          description: 'OPTIONAL. The array of filters to apply in your request. You can
+
+            apply multiple filters in a single request.'
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetMaintenanceDetailsFilter'
+        search:
+          type: string
+          description: OPTIONAL. The key words to search for in your request
+      description: The parameters for `ListAssetsMaintenanceStatusCounts`
+      title: ListAssetsMaintenanceStatusCountsRequest
+    s12.assets.v1.DeletePlanResponse:
+      type: object
+      description: Result returned from `DeletePlan`
+      title: DeletePlanResponse
+    s12.assets.v1.ListAssetServiceHistoryResponse:
+      type: object
+      properties:
+        history:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.AssetService'
+          description: 'The asset service history found from your request
+
+            contained in an array as objects.'
+        next_page_token:
+          type: string
+          description: 'The value you can use to retrieve additional asset service history.
+
+            If a value exists, it means there are more results than listed.
+
+            Use the value in your request body as a page_token field to view more results.'
+      description: Result returned from `ListAssetServiceHistory`
+      title: ListAssetServiceHistoryResponse
+    s12.assets.v1.CreateFieldRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the field.
+        value_type:
+          description: ValueType of the field.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.FieldValueType'
+        select_options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: 'Optional. The options of a field select.
+
+            100 limit enforced in typefield, but to lower the feedback loop, we enforce it here too.'
+      description: The parameters for `CreateField`
+      title: CreateField
+    s12.assets.v1.MaintenanceService.CreatePlanBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the maintenance plan.
+        intervals:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.MaintenanceInterval'
+          description: The interval of the maintenance plan.
+        description:
+          type: string
+          description: Description and extra information for a maintenance plan
+        trigger_notifications:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.MaintenanceTriggerNotification'
+          description: An array of trigger notifications.
+      description: The parameters for `CreatePlan`
+      title: CreatePlanRequest
+    s12.assets.v1.FieldValueType:
+      type: string
+      enum:
+      - FIELD_VALUE_TYPE_UNSPECIFIED
+      - FIELD_VALUE_TYPE_STRING
+      - FIELD_VALUE_TYPE_MONEY
+      - FIELD_VALUE_TYPE_TIMESTAMP
+      - FIELD_VALUE_TYPE_SELECT
+      default: FIELD_VALUE_TYPE_UNSPECIFIED
+      description: "Describes each type of asset field.\n\n - FIELD_VALUE_TYPE_UNSPECIFIED: Field value type unspecified.\n - FIELD_VALUE_TYPE_STRING: This type accepts plain text values.\n - FIELD_VALUE_TYPE_MONEY: This type accepts numerical values with currency codes. For example, \"99.99\" numerical value with \"AUD\" as the currency code.\n - FIELD_VALUE_TYPE_TIMESTAMP: This type accepts timestamp values in the Internet Date-Time format.\n - FIELD_VALUE_TYPE_SELECT: This type accepts select values."
+    s12.assets.v1.AssetStatusOptionFilter:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Match assets whose active status option is this id.
+        not_set:
+          type: boolean
+          description: Match assets that have no active status option set.
+      description: 'Describes a status option filter matching either a specific status option
+
+        or assets with no status set.'
+    s12.assets.v1.MaintenanceTrigger:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the maintenance trigger.
+        created_at:
+          type: string
+          format: date-time
+          description: Time when maintenance trigger was created.
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          description: Time when maintenance trigger was last modified.
+          readOnly: true
+        notification:
+          description: Notification trigger.
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.MaintenanceTriggerNotification'
+      description: The maintenance trigger associated with a plan.
+    s12.assets.v1.RestoreArchivedAssetResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the restored asset.
+      description: Result returned from `RestoreArchivedAssetRequest`
+      title: RestoreArchivedAssetRequest
+    s12.assets.v1.MaintenanceService.UpdatePlanBody:
+      type: object
+      properties:
+        plan:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the maintenance plan.
+            intervals:
+              type: array
+              items:
+                type: object
+                $ref: '#/components/schemas/s12.assets.v1.MaintenanceInterval'
+              description: The interval of the maintenance plan.
+              readOnly: true
+            description:
+              type: string
+              description: Description and extra information for a maintenance plan
+            update_status:
+              $ref: '#/components/schemas/s12.assets.v1.MaintenancePlanUpdateStatus'
+              description: The status of the maintenance plan update operation.
+              readOnly: true
+            triggers:
+              type: array
+              items:
+                type: object
+                $ref: '#/components/schemas/s12.assets.v1.MaintenanceTrigger'
+              description: The list of maintenance triggers of a plan.
+              readOnly: true
+          description: MaintenancePlan which replaces the one with matching identifier on the server.
+          title: MaintenancePlan which replaces the one with matching identifier on the server.
+        update_mask:
+          type: string
+          description: 'REQUIRED. The attributes (such as name, etc.) you
+
+            want to update for the plan, specified in the parameters. For example, the
+
+            update_mask=name parameter indicates that only the name will be
+
+            updated in a request, any other attributes provided in your request body
+
+            will be ignored.'
+      description: The parameters for `UpdatePlan`
+      title: UpdatePlanRequest
+      required:
+      - update_mask
+    s12.assets.v1.ListAssetsMaintenanceDetailsRequest:
+      type: object
+      properties:
+        page_token:
+          type: string
+          description: 'OPTIONAL. The value of next_page_token from a previous response. If
+
+            specified, the API will return the next batch of results following the
+
+            previous list assets maintenance details request.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'OPTIONAL. The number of assets to return. By default, each request
+
+            returns 50 assets maintenance details. You can specify a
+
+            page_size value between 1 to 100.'
+        filter:
+          description: 'OPTIONAL. The array of filters to apply in your request. You can
+
+            apply multiple filters in a single request.'
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetMaintenanceDetailsFilter'
+        order_by:
+          description: 'OPTIONAL. The sorting order for the assets maintenance details in the response.
+
+            By default, details are sorted by asset code in ascending order.'
+          allOf:
+          - $ref: '#/components/schemas/s12.assets.v1.AssetMaintenanceDetailsOrderBy'
+        search:
+          type: string
+          description: OPTIONAL. The key words to search for in your request
+        use_plan_unit:
+          type: boolean
+          description: 'OPTIONAL. Specifies whether to return unit values using the maintenance plan''s unit system.
+
+            If false or unset, values will default to the user''s preferred unit system (as configured in their profile settings)'
+      description: The parameters for `ListAssetsMaintenanceDetails`
+      title: ListAssetsMaintenanceDetailsRequest
+    s12.assets.v1.CreateTypeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the created asset type.
+      description: Result returned from `CreateType`
+      title: CreateTypeResponse
+    s12.common.MeasurementUnitSymbol:
+      type: string
+      enum:
+      - MEASUREMENT_UNIT_SYMBOL_KILOMETERS
+      - MEASUREMENT_UNIT_SYMBOL_MILES
+      - MEASUREMENT_UNIT_SYMBOL_HOURS
+      - MEASUREMENT_UNIT_SYMBOL_MINUTES
+      - MEASUREMENT_UNIT_SYMBOL_INCHES
+      - MEASUREMENT_UNIT_SYMBOL_FOOT
+      - MEASUREMENT_UNIT_SYMBOL_MILLIMETERS
+      - MEASUREMENT_UNIT_SYMBOL_CENTIMETERS
+      - MEASUREMENT_UNIT_SYMBOL_METERS
+      - MEASUREMENT_UNIT_SYMBOL_MILLILITRES
+      - MEASUREMENT_UNIT_SYMBOL_LITRES
+      - MEASUREMENT_UNIT_SYMBOL_GALLONS
+      - MEASUREMENT_UNIT_SYMBOL_CUBIC_METERS
+      - MEASUREMENT_UNIT_SYMBOL_SECONDS
+      - MEASUREMENT_UNIT_SYMBOL_FAHRENHEIT
+      - MEASUREMENT_UNIT_SYMBOL_CELSIUS
+      - MEASUREMENT_UNIT_SYMBOL_KELVIN
+      - MEASUREMENT_UNIT_SYMBOL_OUNCE
+      - MEASUREMENT_UNIT_SYMBOL_POUNDS
+      - MEASUREMENT_UNIT_SYMBOL_TONNES
+      - MEASUREMENT_UNIT_SYMBOL_GRAMS
+      - MEASUREMENT_UNIT_SYMBOL_KILOGRAMS
+      - MEASUREMENT_UNIT_SYMBOL_AMPERES
+      - MEASUREMENT_UNIT_SYMBOL_HERTZ
+      - MEASUREMENT_UNIT_SYMBOL_OHM
+      - MEASUREMENT_UNIT_SYMBOL_VOLTS
+      - MEASUREMENT_UNIT_SYMBOL_WATTS
+      - MEASUREMENT_UNIT_SYMBOL_CANDELA
+      - MEASUREMENT_UNIT_SYMBOL_CYCLES
+      - MEASUREMENT_UNIT_SYMBOL_PERCENT
+      - MEASUREMENT_UNIT_SYMBOL_POUNDS_PER_SQUARE_INCH
+      - MEASUREMENT_UNIT_SYMBOL_MOLE
+      - MEASUREMENT_UNIT_SYMBOL_DAYS
+      - MEASUREMENT_UNIT_SYMBOL_WEEKS
+      - MEASUREMENT_UNIT_SYMBOL_MONTHS
+      description: "Collection of symbols (km, mi, hr, etc) used in units of measurement.\n\n - MEASUREMENT_UNIT_SYMBOL_KILOMETERS: Measurement unit symbol for kilometers.\n - MEASUREMENT_UNIT_SYMBOL_MILES: Measurement unit symbol for miles.\n - MEASUREMENT_UNIT_SYMBOL_HOURS: Measurement unit symbol for hours.\n - MEASUREMENT_UNIT_SYMBOL_MINUTES: Measurement unit symbol for minutes.\n - MEASUREMENT_UNIT_SYMBOL_INCHES: Measurement unit symbol for inches.\n - MEASUREMENT_UNIT_SYMBOL_FOOT: Measurement unit symbol for foot.\n - MEASUREMENT_UNIT_SYMBOL_MILLIMETERS: Measurement unit symbol for Millimeters.\n - MEASUREMENT_UNIT_SYMBOL_CENTIMETERS: Measurement unit symbol for Centimeters.\n - MEASUREMENT_UNIT_SYMBOL_METERS: Measurement unit symbol for meters.\n - MEASUREMENT_UNIT_SYMBOL_MILLILITRES: Measurement unit symbol for millilitres.\n - MEASUREMENT_UNIT_SYMBOL_LITRES: Measurement unit symbol for litres.\n - MEASUREMENT_UNIT_SYMBOL_GALLONS: Measurement unit symbol for gallons.\n - MEASUREMENT_UNIT_SYMBOL_CUBIC_METERS: Measurement unit symbol for cubic meters.\n - MEASUREMENT_UNIT_SYMBOL_SECONDS: Measurement unit symbol for seconds.\n - MEASUREMENT_UNIT_SYMBOL_FAHRENHEIT: Measurement unit symbol for fahrenheit.\n - MEASUREMENT_UNIT_SYMBOL_CELSIUS: Measurement unit symbol for celsius.\n - MEASUREMENT_UNIT_SYMBOL_KELVIN: Measurement unit symbol for kelvin.\n - MEASUREMENT_UNIT_SYMBOL_OUNCE: Measurement unit symbol for ounce.\n - MEASUREMENT_UNIT_SYMBOL_POUNDS: Measurement unit symbol for pounds.\n - MEASUREMENT_UNIT_SYMBOL_TONNES: Measurement unit symbol for tonnes.\n - MEASUREMENT_UNIT_SYMBOL_GRAMS: Measurement unit symbol for grams.\n - MEASUREMENT_UNIT_SYMBOL_KILOGRAMS: Measurement unit symbol for kilograms.\n - MEASUREMENT_UNIT_SYMBOL_AMPERES: Measurement unit symbol for amperes.\n - MEASUREMENT_UNIT_SYMBOL_HERTZ: Measurement unit symbol for hertz.\n - MEASUREMENT_UNIT_SYMBOL_OHM: Measurement unit symbol for ohm.\n - MEASUREMENT_UNIT_SYMBOL_VOLTS: Measurement unit symbol for volts.\n - MEASUREMENT_UNIT_SYMBOL_WATTS: Measurement unit symbol for watts.\n - MEASUREMENT_UNIT_SYMBOL_CANDELA: Measurement unit symbol for candela.\n - MEASUREMENT_UNIT_SYMBOL_CYCLES: Measurement unit symbol for cycles.\n - MEASUREMENT_UNIT_SYMBOL_PERCENT: Measurement unit symbol for percent.\n - MEASUREMENT_UNIT_SYMBOL_POUNDS_PER_SQUARE_INCH: Measurement unit symbol for pounds per square inch.\n - MEASUREMENT_UNIT_SYMBOL_MOLE: Measurement unit symbol for mole.\n - MEASUREMENT_UNIT_SYMBOL_DAYS: Measurement unit symbol for days.\n - MEASUREMENT_UNIT_SYMBOL_WEEKS: Measurement unit symbol for weeks.\n - MEASUREMENT_UNIT_SYMBOL_MONTHS: Measurement unit symbol for months."
+    s12.assets.v1.BulkCreateAssetsRequest:
+      type: object
+      properties:
+        assets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.assets.v1.BulkCreateAssetsRequest.Asset'
+          description: Assets to be created.
+      description: The parameters for `BulkCreateAssets`
+      title: BulkCreateAssetsRequest
+      required:
+      - assets
+    s12.assets.v1.ArchiveAssetResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the archived asset.
+        operation_id:
+          type: string
+          description: 'Identifier of the asset hierarchy operation processing this archive
+
+            asynchronously. Set when this asset is part of a hierarchy large enough
+
+            to be cascaded in a background job. Absent when the archive applies
+
+            synchronously. Use `ListAssetHierarchyOperations` or
+
+            `SubscribeAssetHierarchyOperations` to track completion.'
+          readOnly: true
+      description: Result returned from `ArchiveAsset`
+      title: ArchiveAssetResponse
+    s12.assets.v1.FieldType:
+      type: string
+      enum:
+      - FIELD_TYPE_UNSPECIFIED
+      - FIELD_TYPE_PREDEFINED
+      - FIELD_TYPE_CUSTOM
+      default: FIELD_TYPE_UNSPECIFIED
+      description: "Type of Field.\n\n - FIELD_TYPE_UNSPECIFIED: Field type Unspecified.\n - FIELD_TYPE_PREDEFINED: Field type pre-defined.\n - FIELD_TYPE_CUSTOM: Field type custom."
+    s12.assets.v1.MaintenanceService.UpdateProgramBody:
+      type: object
+      properties:
+        program:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the maintenance program.
+            description:
+              type: string
+              description: Description and extra information for a maintenance program
+          description: The maintenance program
+        update_mask:
+          type: string
+          description: 'REQUIRED. The attributes (such as name etc.) you want to update for the field,
+
+            specified in the parameters. For example, the update_mask=name parameter
+
+            indicates that only the name will be updated in a request, any other
+
+            attributes provided in your request body will be ignored.'
+      description: The parameters for `UpdateProgram`
+      title: UpdateProgramRequest
+      required:
+      - update_mask
+    s12.common.Media:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        filename:
+          type: string
+          description: full file name, including file extension
+        media_type:
+          $ref: '#/components/schemas/s12.common.MediaType'
+      title: Represents an image or video
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

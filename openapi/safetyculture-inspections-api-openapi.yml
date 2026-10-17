@@ -1,0 +1,4452 @@
+openapi: 3.2.0
+info:
+  title: Mitti Inspections API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Inspections
+paths:
+  /audits:
+    post:
+      summary: Start an inspection
+      operationId: ThePubService_StartInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.Inspection'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.thepub.v1.StartInspectionRequest'
+        description: The parameters for `StartInspection`
+        required: true
+      tags:
+      - Inspections
+  /audits/search:
+    get:
+      summary: Search modified inspections
+      operationId: ThePubService_SearchInspections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.SearchInspectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: field
+        description: "The fields to return. Defaults to just `audit_id`.\n\n - audit_id: Include `audit_id` in the response.\n - modified_at: Include `modified_at` in the response.\n - template_id: Include `template_id` in the response."
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - audit_id
+            - modified_at
+            - template_id
+      - name: order
+        description: "The order to return results in.\n\n - asc: Ascending order.\n - desc: Descending order."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+      - name: modified_after
+        description: Filter inspections modified after this date time.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        description: Filter inspections modified before this date time.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: template
+        description: Filter to inspections conducted from these templates.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: archived
+        description: "Filter results by archived status. Default is `false`.\n\n - false: Only unarchived inspections.\n - true: Only archived inspections.\n - both: Both unarchived and archived inspections."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'false'
+          - 'true'
+          - both
+          default: 'false'
+      - name: completed
+        description: "Filter results by completed status. Default is `both`.\n\n - both: Both complete and incomplete inspections.\n - false: Only incomplete inspections.\n - true: Only complete inspections."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - both
+          - 'false'
+          - 'true'
+          default: both
+      - name: owner
+        description: "Filter results by owner. Default is `all`.\n\n - all: Owned by anyone.\n - me: Only owned by the requesting user\n - other: Only owned by other users."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - all
+          - me
+          - other
+          default: all
+      - name: limit
+        description: Limit the number of results returned. Default is `100`.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - Inspections
+  /audits/{audit_id}:
+    get:
+      summary: Get an inspection (legacy)
+      operationId: ThePubService_GetInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.Inspection'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: audit_id
+        description: The ID of the inspection to retrieve.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+      deprecated: true
+    put:
+      summary: Update an inspection
+      operationId: ThePubService_UpdateInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.Inspection'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: audit_id
+        description: The ID of the inspection to update.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.thepub.v1.ThePubService.UpdateInspectionBody'
+        required: true
+      tags:
+      - Inspections
+  /audits/{audit_id}/deep_link:
+    post:
+      summary: Generate an inspection deep link
+      description: Generate a URL to the specified inspection. The link opens in the SafetyCulture mobile app if clicked on a mobile device with the app installed. Otherwise it opens in the SafetyCulture web app.
+      operationId: ThePubService_GetInspectionDeepLink
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.GetInspectionDeepLinkResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: audit_id
+        description: The id of the inspection to retrieve a deep link for.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+  /audits/{audit_id}/media/{media_id}:
+    get:
+      summary: Retrieve the selected media for a given inspection
+      operationId: ThePubService_GetInspectionMedia
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.GetInspectionMediaResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: audit_id
+        description: The id of the inspection to retrieve media from.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: media_id
+        description: The id of the media to retrieve.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+  /audits/{audit_id}/share:
+    post:
+      summary: Share an inspection
+      operationId: ThePubService_ShareInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.Inspection'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: audit_id
+        description: The id of the inspection to share.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.thepub.v1.ThePubService.ShareInspectionBody'
+        required: true
+      tags:
+      - Inspections
+  /audits/{audit_id}/web_report_link:
+    get:
+      summary: Get inspection web report link
+      description: 'Retrieve the web report link for the specified inspection. This will return the existing link if one has been generated before, or generate a new one if one does not exist already.
+
+
+        This link does not expire, it is valid until deleted.'
+      operationId: ThePubService_GetInspectionWebReportLink
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.GetInspectionWebReportLinkResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: audit_id
+        description: The id of the inspection to retrieve a web report link for.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+      externalDocs:
+        url: https://help.safetyculture.com/en-US/000687/
+    delete:
+      summary: Delete inspection web report link
+      operationId: ThePubService_DeleteInspectionWebReportLink
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.thepub.v1.DeleteInspectionWebReportLinkResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: audit_id
+        description: The id of the inspection to delete a web report link for.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+      externalDocs:
+        url: https://help.safetyculture.com/en-US/000687/
+  /inspection/v1/export:
+    post:
+      summary: Export inspection to PDF or Word
+      operationId: ReportsService_StartInspectionExport
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.reports.v1.StartInspectionExportResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.reports.v1.StartInspectionExportRequest'
+        required: true
+      tags:
+      - Inspections
+  /inspections/integration/v1/inspections:
+    post:
+      summary: Create inspection
+      description: Create a new inspection from a template and optionally pre-fill item values. Items are matched to the template by item_id. See InspectionItem.ItemType for the list of supported item types. For tables, include pre-filled lines with cell values keyed by column field_id, which you can obtain via GetTemplateDefinition. Items not listed in the request are left empty.
+      operationId: InspectionService_CreateInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.pub.integration.v1.CreateInspectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.pub.integration.v1.CreateInspectionRequest'
+        description: Request message for CreateInspection.
+        required: true
+      tags:
+      - Inspections
+  /inspections/integration/v1/inspections/{inspection_id}:
+    put:
+      summary: Update inspection
+      description: Update item values on an existing inspection. Only items listed in the request are changed; omitted items are left untouched. See InspectionItem.ItemType for the list of supported item types.
+      operationId: InspectionService_UpdateInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.pub.integration.v1.UpdateInspectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier of the inspection to update.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionService.UpdateInspectionBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/integration/v1/inspections/{inspection_id}/access:
+    get:
+      summary: Get inspection access
+      description: Retrieve the complete access configuration for an inspection, including owner, permissions, and site access levels.
+      operationId: InspectionService_GetInspectionAccess
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.pub.integration.v1.GetInspectionAccessResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+    put:
+      summary: Set inspection access
+      description: Replace the access configuration for an inspection.
+      operationId: InspectionService_SetInspectionAccess
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.pub.integration.v1.SetInspectionAccessResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/s12.inspections.pub.integration.v1.InspectionService.SetInspectionAccessBody'
+      tags:
+      - Inspections
+  /inspections/integration/v1/inspections/{inspection_id}/complete:
+    post:
+      summary: Complete inspection
+      description: Mark an inspection as complete.
+      operationId: InspectionService_CompleteInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.pub.integration.v1.CompleteInspectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection to complete.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionService.CompleteInspectionBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/integration/v1/inspections/{inspection_id}/tables/{item_id}/lines:
+    post:
+      summary: Add table line
+      description: Add a new line to a table in an inspection. Returns a server-generated line_id for the newly created line. Each cell is identified by a field_id corresponding to a table column; use GetTemplateDefinition to obtain column field_ids. Cells not listed are left empty. Returns FAILED_PRECONDITION if the table has reached its maximum line limit.
+      operationId: InspectionService_AddTableLine
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.pub.integration.v1.AddTableLineResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: inspection_id is the unique identifier of the inspection containing the table.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: item_id
+        description: item_id is the item ID of the table within the inspection.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionService.AddTableLineBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/integration/v1/inspections/{inspection_id}/tables/{item_id}/lines/{line_id}:
+    delete:
+      summary: Delete table line
+      description: Remove an existing line and all its cell values from an inspection table. The line_id must belong to the table identified by item_id.
+      operationId: InspectionService_DeleteTableLine
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.pub.integration.v1.DeleteTableLineResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: inspection_id is the unique identifier of the inspection containing the table.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: item_id
+        description: item_id is the item ID of the table within the inspection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: line_id
+        description: The id of the line to delete.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+    put:
+      summary: Update table line
+      description: Update cell values on an existing line in an inspection table. Only cells listed in the request are changed; omitted cells are left untouched. Each cell is identified by a field_id corresponding to a table column; use GetTemplateDefinition to obtain column field_ids.
+      operationId: InspectionService_UpdateTableLine
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.pub.integration.v1.UpdateTableLineResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: inspection_id is the unique identifier of the inspection containing the table.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: item_id
+        description: item_id is the item ID of the table within the inspection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: line_id
+        description: The id of the line to update.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionService.UpdateTableLineBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/v1/answers/{id}:
+    get:
+      summary: Get answers from an inspection
+      description: 'This endpoint is a streaming API that returns answers/responses from an inspection in real-time.
+
+
+        A stream API pushes data to the client when it becomes available and there is no need for the client to poll the requests to the server for new data.
+
+
+        Please note that if you''re using a classic REST client, you may find that the data returned in the stream API are individual JSON structures that are not separated by `,` (comma) or encapsulated in a collection `[...]`.'
+      operationId: AnswerService_GetAnswersForInspection
+      responses:
+        '200':
+          description: A successful response.(streaming responses)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    $ref: '#/components/schemas/s12.inspections.v1.Answer'
+                  error:
+                    $ref: '#/components/schemas/google.rpc.Status'
+                title: Stream result of s12.inspections.v1.Answer
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The unique identifier for the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{id}:
+    get:
+      summary: Get an inspection
+      operationId: InspectionService_GetInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.GetInspectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The ID for the inspection.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+    delete:
+      summary: Delete an inspection
+      operationId: InspectionService_DeleteInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.DeleteInspectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The unique identifier for the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{id}/details:
+    get:
+      summary: Get details of an inspection
+      operationId: ExternalInspectionService_GetInspectionDetails
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.GetInspectionDetailsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: The ID for the inspection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: include_media_url
+        description: 'Whether to include media URLs (and metadata) in the response payload.
+
+          Optional. Defaults to false.'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{inspection_id}/archive:
+    delete:
+      summary: Restore an archived inspection
+      description: Restores an archived inspection by removing its archived status.
+      operationId: InspectionService_RestoreArchivedInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.RestoreArchivedInspectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Inspections
+    post:
+      summary: Archive an inspection
+      operationId: InspectionService_ArchiveInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.ArchiveInspectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.v1.InspectionService.ArchiveInspectionBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{inspection_id}/clone:
+    post:
+      summary: Clone an inspection
+      operationId: InspectionService_CloneInspection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.CloneInspectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: Required. Inspection ID to copy from
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.v1.InspectionService.CloneInspectionBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{inspection_id}/location:
+    put:
+      summary: Set an inspections start or finish location
+      operationId: InspectionService_SetInspectionLocation
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.SetInspectionLocationResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: Required. The unique identifier for the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.v1.InspectionService.SetInspectionLocationBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{inspection_id}/owner:
+    put:
+      summary: Set inspection owner
+      operationId: InspectionService_SetOwner
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.SetOwnerResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.v1.InspectionService.SetOwnerBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{inspection_id}/questions/{question_id}/asset:
+    put:
+      summary: Answer an asset field question
+      operationId: AnswerService_AnswerAsset
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.AnswerSubmissionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: question_id
+        description: The unique identifier for the question.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.v1.AnswerService.AnswerAssetBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{inspection_id}/questions/{question_id}/checkbox:
+    put:
+      summary: Answer a check box question
+      operationId: AnswerService_AnswerCheckbox
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.AnswerSubmissionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: question_id
+        description: The unique identifier for the question.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.v1.AnswerService.AnswerCheckboxBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{inspection_id}/questions/{question_id}/dynamicfield:
+    post:
+      summary: Generate a dynamic field (repeated section)
+      description: This endpoint is used to generate new dynamic field elements (a.k.a. repeated sections) under the specified dynamic field. The generated element and its items will be empty.
+      operationId: AnswerService_GenerateDynamicField
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.GenerateDynamicFieldResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: question_id
+        description: The unique identifier for the question.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.inspections.v1.AnswerService.GenerateDynamicFieldBody'
+        required: true
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{inspection_id}/site:
+    put:
+      summary: Set inspection site
+      operationId: InspectionService_SetInspectionSite
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.SetInspectionSiteResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The ID of the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/s12.inspections.v1.InspectionService.SetInspectionSiteBody'
+      tags:
+      - Inspections
+  /inspections/v1/inspections/{inspection_id}/user/{removed_user_id}/access:
+    delete:
+      summary: Remove user access to an inspection
+      operationId: InspectionService_RemoveInspectionUserAccess
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.inspections.v1.RemoveInspectionUserAccessResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: inspection_id
+        description: The unique identifier for the inspection
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: removed_user_id
+        description: The unique identifier of the user to remove access from
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: new_owner_id
+        description: 'The unique identifier for a new owner of this inspection. Required when removing the current owner (when the inspection is owned by `removed_user_id`).
+
+          If the inspection is not owned by `removed_user_id`, this field is optional and ownership will not be changed.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Inspections
+components:
+  schemas:
+    s12.inspections.v1.InspectionDetails.InspectionItem.PageItem:
+      type: object
+      properties:
+        approval:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.PageItem.Approval'
+          description: Information on approval step
+    s12.inspections.v1.InspectionDetails.InspectionItem.SectionItem:
+      type: object
+    s12.inspections.v1.ArchiveInspectionResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The ID of the inspection
+      title: Result returned from ArchiveInspection
+    s12.inspections.v1.DynamicFieldAnswerSet:
+      type: object
+      properties:
+        id:
+          type: string
+          description: client side generated ID (Element ID)
+        children:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.DynamicFieldChild'
+    s12.inspections.pub.integration.v1.AddTableLineResponse:
+      type: object
+      properties:
+        line_id:
+          type: string
+          description: Server-generated ID for the new line.
+      description: AddTableLineResponse response for `rpc AddTableLine`.
+    s12.reports.v1.StartInspectionExportResponse.Status:
+      type: string
+      enum:
+      - STATUS_UNSPECIFIED
+      - STATUS_IN_PROGRESS
+      - STATUS_FAILED
+      - STATUS_DONE
+      default: STATUS_UNSPECIFIED
+    s12.thepub.v1.Inspection.Item:
+      type: object
+      properties:
+        item_id:
+          type: string
+          description: The id of the item.
+        label:
+          type: string
+          description: The label of the item.
+        type:
+          type: string
+          description: The type of the item.
+        children:
+          type: array
+          items:
+            type: string
+          description: The child items of the item.
+        parent_id:
+          type: string
+          description: The parent item of the item.
+        responses:
+          description: The responses of the item.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.Item.Responses'
+    s12.inspections.v1.Media:
+      type: object
+      properties:
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: media field contains media ID and token to download the media content
+        filename:
+          type: string
+          description: DEPRECATED filename is now provided as part of the media field
+        created_at:
+          type: string
+          format: date-time
+          description: created at contains date file was uploaded at
+    s12.inspections.pub.integration.v1.InspectionService.AddTableLineBody:
+      type: object
+      properties:
+        metadata:
+          type: object
+          description: metadata identifies the inspection and the table to add the line to.
+          title: metadata identifies the inspection and the table to add the line to.
+        cells:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.CellValue'
+          description: 'Cell values for the new line. Fields not listed are left empty.
+
+            If a field is listed multiple times, the last value is used.
+
+            At most 20 cells may be specified; omit or leave empty to create an empty line.'
+      description: AddTableLineRequest parameters for `rpc AddTableLine`.
+    s12.inspections.pub.integration.v1.InspectionItem:
+      type: object
+      properties:
+        item_id:
+          type: string
+          description: 'The unique identifier for this item, matching the corresponding template item.
+
+            For table line operations (AddTableLine, UpdateTableLine, DeleteTableLine),
+
+            this corresponds to the field_id of the table item.'
+        item_type:
+          description: The type of this inspection item.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.ItemType'
+        note:
+          type: string
+        text_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.TextItem'
+        number_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.NumberItem'
+        paragraph_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.ParagraphItem'
+        datetime_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.DateTimeItem'
+        location_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.LocationItem'
+        checkbox_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.CheckboxItem'
+        question_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.QuestionItem'
+        temperature_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.TemperatureItem'
+        slider_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.SliderItem'
+        asset_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.AssetItem'
+        site_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.SiteItem'
+        company_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.CompanyItem'
+        table_item:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.TableItem'
+      description: 'Represents a single item within an inspection, corresponding to a template item.
+
+        Each item has a type-specific definition containing the item''s value.'
+      required:
+      - item_id
+      - item_type
+    s12.inspections.pub.integration.v1.InspectionItem.CompanyItem:
+      type: object
+      properties:
+        company_id:
+          type: string
+          description: Company ID provides a reference to the company that the answer is associated with.
+      description: Company reference value.
+    s12.inspections.pub.integration.v1.InspectionItem.ParagraphItem:
+      type: object
+      properties:
+        value:
+          type: string
+      description: Multi-line text value.
+    s12.inspections.v1.ListAnswer:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+          description: Deprecated. Use attachments.
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.Media'
+          description: Deprecated. Use attachments.
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+      title: Answer returned for inspection items of type list
+    s12.inspections.v1.InspectionDetails.InspectionItem.LogicItem:
+      type: object
+    s12.inspections.pub.integration.v1.InspectionItem.SiteItem:
+      type: object
+      properties:
+        site_id:
+          type: string
+          description: Unique ID for the site
+      description: Site/location reference value.
+    s12.inspections.pub.integration.v1.InspectionPermission:
+      type: object
+      properties:
+        actor:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.Actor'
+          description: The actor (user, group, site, etc.) being granted access
+        access_level:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionPermission.AccessLevel'
+          description: The level of access granted to this actor
+      title: An inspection access rule granting a specific level of access to an actor
+    s12.inspections.pub.integration.v1.InspectionIdentity:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The unique identifier for the inspection
+        organisation_id:
+          type: string
+          description: The organisation ID that the inspection belongs to
+      title: InspectionIdentity uniquely identifies an inspection within its organization
+    s12.inspections.v1.AssetAnswer:
+      type: object
+      properties:
+        asset_id:
+          type: string
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+    s12.common.IdValueEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Key of the entry
+        value:
+          type: string
+          description: Value of the entry
+      title: 'Key/Value represents simple data structure
+
+        Use it for repeated map-like data structures
+
+        For example: `users := []*IdValueEntry{&IdValueEntry{id: "some-id", value:
+
+        "FirstName LastName")}}`'
+    s12.thepub.v1.Inspection.Item.Responses.Location.Geometry:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of geometry.
+        coordinates:
+          type: array
+          items:
+            type: number
+            format: double
+          description: The coordinates that define the geometry.
+    s12.thepub.v1.UpdateInspectionItem.Responses.Location.Geometry:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of geometry.
+        coordinates:
+          type: array
+          items:
+            type: number
+            format: double
+          description: The coordinates that define the geometry.
+    s12.thepub.v1.UpdateInspectionItem.Responses:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text response.
+        value:
+          type: string
+          description: Value response. Used for sliders, checkboxes, and switches.
+        name:
+          type: string
+          description: Someone's Name. Used with signature, location and weather items.
+        datetime:
+          type: string
+          format: date-time
+          description: Time of action. Used only with barcode and signature items.
+        location_text:
+          type: string
+          description: Location represented as text (address or coordinates).
+        location:
+          description: Location represented as coordinates.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.UpdateInspectionItem.Responses.Location'
+        selected:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.UpdateInspectionItem.Responses.Response'
+          description: The selected items from an response set.
+        note:
+          type: string
+          description: Note added to the response. Detailed information available [here](https://developer.mitti.com/reference/add-notes-to-inspection-questions)
+    s12.inspections.pub.integration.v1.SetInspectionAccessResponse:
+      type: object
+      properties:
+        inspection_identity:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionIdentity'
+          description: The inspection identity containing inspection ID and organisation ID
+        owner_id:
+          type: string
+          description: The user ID of the inspection owner (implicitly has full access)
+        permissions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionPermission'
+          description: Collection of access rules with their associated permission levels
+      title: Response message for SetInspectionAccess
+    s12.reports.v1.PreferenceContact.DeliveryType:
+      type: string
+      enum:
+      - UNKNOWN_DELIVERY_TYPE
+      - TO
+      - CC
+      - BCC
+      default: UNKNOWN_DELIVERY_TYPE
+    s12.thepub.v1.UpdateInspectionItem:
+      type: object
+      properties:
+        item_id:
+          type: string
+          description: The id of the item.
+        type:
+          description: The type of the item.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.UpdateInspectionItem.ItemType'
+        responses:
+          description: The responses of the item.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.UpdateInspectionItem.Responses'
+    s12.inspections.v1.CheckboxAnswer:
+      type: object
+      properties:
+        answer:
+          type: boolean
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+    s12.reports.v1.Preference:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The preference id
+        creator_id:
+          type: string
+          description: The user who created the preference
+        organisation_id:
+          type: string
+          description: The org id of the user who created this preference
+        filter:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.Filter'
+          description: 'Filter contains the boolean settings on what field/section to hide/show in
+
+            the report'
+        created_at:
+          type: string
+          format: date-time
+          description: Date/time this preference was created
+        modified_at:
+          type: string
+          format: date-time
+          description: Date/time this preference was modified
+        label:
+          type: string
+          description: The label/title of this preference
+        is_default:
+          type: boolean
+          description: Is this a default preference for a template
+        logo:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Logo media object
+        disclaimer:
+          type: string
+          description: Disclaimer message
+        is_global:
+          type: boolean
+          description: Is this preference a global preference?
+        template_id:
+          type: string
+          description: The template id where this preference can be associated with
+        pages:
+          type: array
+          items:
+            type: string
+          description: List of page IDs to be filtered
+        email_subject:
+          type: string
+          description: Email template to prefill with when sending PDF
+        email_body:
+          type: string
+        contacts:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.reports.v1.PreferenceContact'
+          description: Contacts to prefill email with
+        footer_text:
+          type: string
+          description: Footer message
+        media_layout:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.MediaLayout'
+          description: Set the media layout for the appendix
+        cover_page:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Cover page media object
+        inspection_items:
+          type: array
+          items:
+            type: string
+          description: List of report configurations
+        thumbnail_size:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.MediaSize'
+          description: Set the media size for thumbnails throughout the report
+        email_auto_send:
+          type: boolean
+          description: To specify whether emails are automatically sent for this template or not.
+        page_size:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.PageSize'
+          description: Sets the page size to render the report
+        blueprint_id:
+          type: string
+          description: 'Routing key selecting the report blueprint/layout to render.
+
+            Unset means render with the existing default blueprint.'
+        report_style:
+          description: 'Styling customisation (font family, branding colour) for this report.
+
+            Unset means render with the existing default styling.'
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.ReportStyle'
+      title: 'Preference represents a report preference that has been created for an
+
+        Org/Template'
+    s12.inspections.pub.integration.v1.InspectionService.CompleteInspectionBody:
+      type: object
+      description: Request message for CompleteInspection.
+    s12.inspections.pub.integration.v1.CellIdentity:
+      type: object
+      properties:
+        field_id:
+          type: string
+          description: 'field_id identifies which column this cell value belongs to.
+
+            Obtain column field_ids from GetTemplateDefinition — each child item_id
+
+            under a TableItem is the field_id for that column.'
+      description: CellIdentity identifies a single cell within a table line.
+      required:
+      - field_id
+    s12.thepub.v1.Inspection.Authorship:
+      type: object
+      properties:
+        device_id:
+          type: string
+          description: The ID of the device that this was last modified on.
+        owner:
+          type: string
+          description: The name of the user who created this document.
+        owner_id:
+          type: string
+          description: The id of the user who created this document.
+        author:
+          type: string
+          description: The name of the user who last modified this document.
+        author_id:
+          type: string
+          description: The id of the user who last modified this document.
+    s12.inspections.pub.integration.v1.InspectionItem.QuestionItem:
+      type: object
+      properties:
+        response_ids:
+          type: array
+          items:
+            type: string
+          description: The identifiers of the selected responses from the template's response set.
+      description: Response-set based question value.
+    s12.inspections.v1.Answer.InactiveState:
+      type: object
+      properties:
+        inactive:
+          type: boolean
+      title: InactiveState contains metadata for inactive answers
+    s12.inspections.v1.InspectionDetails.InspectionItem:
+      type: object
+      properties:
+        item_id:
+          type: string
+          description: The unique identifier for the inspection item
+        type:
+          type: string
+          description: The response type for the item
+        label:
+          type: string
+          description: The label for the inspection item
+        parent_id:
+          type: string
+          description: The item ID of the parent item
+        flagged:
+          type: boolean
+          description: For question and list item, true if flagged response is set.
+        last_modified_time:
+          type: string
+          format: date-time
+          description: Date/time of when the item was last modified
+        item_score:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.ItemScore'
+        combined_item_score:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.CombinedItemScore'
+        text_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.TextItem'
+        datetime_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.DateTimeItem'
+        address_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.AddressItem'
+        checkbox_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.CheckboxItem'
+        list_items:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.ListItems'
+        question_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.QuestionItem'
+        media_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.MediaItem'
+        drawing_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.DrawingItem'
+        signature_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.SignatureItem'
+        temperature_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.TemperatureItem'
+        slider_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.SliderItem'
+        asset_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.AssetItem'
+        site_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.SiteItem'
+        page_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.PageItem'
+        section_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.SectionItem'
+        repeated_section:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.RepeatedSection'
+        repeated_section_prototype_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.RepeatedSectionPrototypeItem'
+        repeated_section_instance_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.RepeatedSectionInstanceItem'
+        logic_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.LogicItem'
+        company_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.CompanyItem'
+        table_page_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.TablePageItem'
+        table_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.TableItem'
+        table_line_item:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.TableLineItem'
+        attachments:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.Attachments'
+          description: Attachments for the item
+    s12.inspections.v1.InspectionService.SetInspectionSiteBody:
+      type: object
+      properties:
+        site_id:
+          type: string
+          description: The ID of the site
+      title: The parameter body to `SetInspectionSite`
+      required:
+      - site_id
+    s12.reports.v1.PreferenceContact:
+      type: object
+      properties:
+        contact_type:
+          $ref: '#/components/schemas/s12.reports.v1.PreferenceContact.ContactType'
+        delivery_type:
+          $ref: '#/components/schemas/s12.reports.v1.PreferenceContact.DeliveryType'
+        value:
+          type: string
+          description: Email address (or userId/groupId in the future)
+    s12.reports.v1.ReportStyle:
+      type: object
+      properties:
+        font_family:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.ReportStyle.FontFamily'
+          description: The font family used throughout the report
+        brand_color:
+          type: string
+          description: Hex representation of the report's branding colour, e.g. "#FFFFFF"
+      description: 'ReportStyle represents the styling customisation applied to a report,
+
+        such as font family and branding colour.'
+    s12.reports.v1.PreferenceContact.ContactType:
+      type: string
+      enum:
+      - UNKNOWN_CONTACT_TYPE
+      - EXTERNAL
+      - USER
+      - GROUP
+      default: UNKNOWN_CONTACT_TYPE
+    s12.inspections.v1.GetInspectionResponse:
+      type: object
+      properties:
+        inspection:
+          $ref: '#/components/schemas/s12.inspections.v1.Inspection'
+      title: Result returned from `GetInspectionResponse`
+    s12.inspections.v1.InspectionDetails.InspectionItem.ItemScore:
+      type: object
+      properties:
+        score_percentage:
+          type: number
+          format: double
+          description: Score divided by total score
+        max_score:
+          type: number
+          format: double
+          description: Max score of the item
+        score:
+          type: number
+          format: double
+          description: Score of the item
+      title: Score for individual items
+    s12.reports.v1.MediaResolution:
+      type: string
+      enum:
+      - MEDIA_RESOLUTION_UNSPECIFIED
+      - MEDIA_RESOLUTION_LOW
+      - MEDIA_RESOLUTION_HIGH
+      default: MEDIA_RESOLUTION_UNSPECIFIED
+      description: "- MEDIA_RESOLUTION_LOW: Render images in low resolution (smaller file size)\n - MEDIA_RESOLUTION_HIGH: Render images in high resolution (larger file size)"
+      title: Desired quality of media in the appendix
+    s12.inspections.pub.integration.v1.InspectionPermission.AccessLevel:
+      type: string
+      enum:
+      - ACCESS_LEVEL_UNSPECIFIED
+      - ACCESS_LEVEL_NONE
+      - ACCESS_LEVEL_VIEW
+      - ACCESS_LEVEL_VIEW_EDIT
+      - ACCESS_LEVEL_VIEW_EDIT_DELETE
+      default: ACCESS_LEVEL_UNSPECIFIED
+      description: "- ACCESS_LEVEL_UNSPECIFIED: Default value; should not be used\n - ACCESS_LEVEL_NONE: No access granted\n - ACCESS_LEVEL_VIEW: View-only access\n - ACCESS_LEVEL_VIEW_EDIT: View and edit access\n - ACCESS_LEVEL_VIEW_EDIT_DELETE: Full access including view, edit, and delete"
+      title: AccessLevel defines the level of access to an inspection
+    s12.thepub.v1.Inspection.TemplateData:
+      type: object
+      properties:
+        authorship:
+          description: The authorship data of the template.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.Authorship'
+        metadata:
+          description: The metadata of the template.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.TemplateData.Metadata'
+        response_sets:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.thepub.v1.Inspection.TemplateData.ResponseSet'
+          description: Response sets used in the template.
+    s12.inspections.v1.InspectionDetails.InspectionItem.RepeatedSectionPrototypeItem:
+      type: object
+    s12.inspections.pub.integration.v1.InspectionService.UpdateInspectionBody:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem'
+          description: The inspection items with updated values.
+      description: Request message for UpdateInspection.
+    s12.inspections.v1.SignatureAnswer:
+      type: object
+      properties:
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: media field contains media ID and token to download the media content
+        name:
+          type: string
+          description: name on the signature
+        signed_at:
+          type: string
+          format: date-time
+          description: Timestamp for when the signature answer was last updated
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+      title: Signature item stores user name and an image with signature
+    s12.reports.v1.StartInspectionExportRequest.TabularExportSettings:
+      type: object
+      properties:
+        show_empty_notes:
+          type: boolean
+          description: This setting determines whether to include a separate column for unpopulated notes field for each inspection question
+        show_empty_timestamps:
+          type: boolean
+          description: This setting determines whether to include a separate column for empty timestamp from each signature / temperature type question
+        show_full_site_hierarchy:
+          type: boolean
+          description: This setting determines whether to include a separate column for all non-defined site hierarchy level
+        show_unanswered_logic_questions:
+          type: boolean
+          description: This setting determines whether to include unanswered logic questions for reports
+        show_inactive_questions:
+          type: boolean
+          description: This setting determines whether to include inactive questions (such as skipped questions) in tabular export
+    s12.inspections.v1.InspectionDetails.Metadata.Site:
+      type: object
+      properties:
+        site_id:
+          type: string
+          description: The unique identifier for the site
+        site_name:
+          type: string
+          description: The name of the site
+    s12.inspections.v1.DynamicFieldChild:
+      type: object
+      properties:
+        answer_id:
+          type: string
+          description: The unique identifier for the inspection item
+        question_id:
+          type: string
+          description: A reference to dynamic field element
+    s12.inspections.pub.integration.v1.InspectionItem.DateTimeItem:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: Date and time value.
+    s12.thepub.v1.Inspection.TemplateData.Metadata:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the template.
+        description:
+          type: string
+          description: The description of the template.
+    s12.inspections.v1.CalculatedItem.SingleValue:
+      type: object
+      properties:
+        value:
+          type: string
+    s12.inspections.v1.AnswerService.AnswerAssetBody:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            id:
+              type: string
+              description: '@deprecated: manual request id no longer in use'
+            timestamp:
+              type: string
+              format: date-time
+              description: Date/time the answer text request was created on the client.
+            location:
+              $ref: '#/components/schemas/s12.common.GeoPosition'
+              description: The location data sent from an answer.
+          description: The metadata for answering a question
+        asset_id:
+          type: string
+          description: The id of the asset that is selected, has to be a UUID
+      title: The parameter body to `AnswerAssetRequest`
+    s12.inspections.pub.integration.v1.InspectionItem.LocationItem.Location:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the location
+        thoroughfare:
+          type: string
+          description: The thoroughfare of the location
+        sub_thoroughfare:
+          type: string
+          description: The sub_thoroughfare of the location
+        locality:
+          type: string
+          description: The locality of the location
+        sub_locality:
+          type: string
+          description: The sub_locality of the location
+        administrative_area:
+          type: string
+          description: The administrative_area of the location
+        sub_administrative_area:
+          type: string
+          description: The sub_administrative_area of the location
+        postal_code:
+          type: string
+          description: The postal_code of the location
+        country:
+          type: string
+          description: The country of the location
+        iso_country_code:
+          type: string
+          description: The iso_country_code of the location
+        geo_position:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+          description: The geometry of the location
+      description: Optional structured location, typically populated via a location picker.
+    s12.inspections.v1.InspectionDetails:
+      type: object
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.Metadata'
+          description: Inspection metadata
+        template:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.Template'
+          description: Inspection template
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem'
+          description: Inspection items
+    s12.inspections.pub.integration.v1.InspectionItem.LocationItem:
+      type: object
+      properties:
+        label:
+          type: string
+          description: Free-text location label.
+        location:
+          description: Structured location details, if available.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.LocationItem.Location'
+      description: Location value.
+    s12.inspections.v1.SwitchAnswer:
+      type: object
+      properties:
+        answer:
+          type: boolean
+    s12.inspections.v1.AnswerSubmissionResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The ID of the inspection
+        calculated_values:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.inspections.v1.CalculatedItem'
+          description: Map of calculation item ids to their values that have been evaluated as a result of answering a number type question
+      title: Result returned from answering a question
+    s12.reports.v1.MediaLayout:
+      type: object
+      properties:
+        size:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.MediaSize'
+          description: The desired size for each media element
+        resolution:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.MediaResolution'
+          description: The desired resolution for each media element
+      title: Defines the layout of the media elements in the report appendix
+    s12.inspections.v1.InspectionDetails.InspectionItem.MediaItem:
+      type: object
+      properties:
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.Media'
+          description: An array of media attached to the item
+    s12.thepub.v1.Inspection.AuditData.Site:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the site this inspection was conducted at.
+    s12.inspections.v1.GenerateDynamicFieldResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The ID of the inspection
+        calculated_values:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.inspections.v1.CalculatedItem'
+          description: 'Map of calculation item ids to their results that have been
+
+            evaluated as a result of generating this dynamic field, if any.
+
+            Use this to see results or to update your local structure of the inspection
+
+            document without the need to refetch the entire inspection.'
+        ids:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Map of `item_id` which is part of primary element tree to `item_id`
+
+            of the newly created element. Use this map to either answer the questions
+
+            within dynamic fields or update you local structure of the inspection
+
+            document without the need to refetch the entire inspection.'
+      title: Result returned from `GenerateDynamicField`
+    s12.inspections.pub.integration.v1.Actor.User:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier for the user
+      title: Represents an individual user
+    s12.inspections.v1.CalculatedItem.Status:
+      type: string
+      enum:
+      - STATUS_UNSPECIFIED
+      - STATUS_SUCCESS
+      - STATUS_INVALID_FORMULA
+      - STATUS_UNANSWERED_DEPENDENCIES
+      - STATUS_DIVISION_BY_ZERO
+      - STATUS_UNSUPPORTED_FUNCTION
+      default: STATUS_UNSPECIFIED
+    s12.inspections.v1.InspectionPermissions:
+      type: object
+      properties:
+        isOwner:
+          type: boolean
+          description: Is the current user the owner the inspection
+        canView:
+          type: boolean
+          description: Can the current user view the inspection
+        canEdit:
+          type: boolean
+          description: Can the current user edit the inspection
+        canDelete:
+          type: boolean
+          description: Can the current user delete the inspection
+      title: Permissions granted to a user for a certain inspection
+    s12.inspections.pub.integration.v1.Actor.Everyone:
+      type: object
+      description: Empty message - presence indicates the permission applies to all users in the inspection's organisation
+      title: 'Represents all users in the inspection''s organisation
+
+        This is a convenience rule for granting access to everyone in the org'
+    s12.inspections.v1.StartInspectionTrigger.StartedFromSchedule:
+      type: object
+      properties:
+        schedule_id:
+          type: string
+          description: ID of the schedule that this inspection was started from.
+        occurrence_id:
+          type: string
+          format: uint64
+          description: Identifier of the occurrence within the schedule. Populated (greater than zero) only for inspections started by the scheduling service; zero for legacy schedule triggers.
+        parent_schedule_id:
+          type: string
+          description: ID of the parent schedule as created by the user and returned by the Schedules API. For inspections started by the scheduling service, schedule_id is the internal per-site or per-asset child schedule, which can be recreated on update; use this ID to match against schedules created through the API.
+    s12.inspections.v1.SiteAnswer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID for the site
+        name:
+          type: string
+          description: Name of site (for ex. Surry Hills)
+        region:
+          type: string
+          description: Name for region (for ex. NSW)
+        area:
+          type: string
+          description: Name for area (for ex. Sydney)
+      title: Site answer contains inspection location data
+    s12.inspections.v1.StartInspectionTrigger:
+      type: object
+      properties:
+        schedule:
+          description: Populated if this inspection was started from a schedule. Note this is only available on inspections created from late 2021.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.StartInspectionTrigger.StartedFromSchedule'
+        issue:
+          description: Populated if this inspection was started from an issue.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.StartInspectionTrigger.StartedFromIssue'
+      title: Represents the resource that started this inspection
+    s12.inspections.pub.integration.v1.InspectionItem.TableItem:
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem.TableItem.TableLine'
+          description: The lines within this table. Each line contains items for each column.
+      description: A table containing lines of items.
+    s12.thepub.v1.UpdateInspectionItem.Responses.Location:
+      type: object
+      properties:
+        administrative_area:
+          type: string
+          description: The administrative area of the location.
+        country:
+          type: string
+          description: The country of the location.
+        formatted_address:
+          type: array
+          items:
+            type: string
+          description: The formatted address of the location.
+        geometry:
+          description: The geometry of the location.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.UpdateInspectionItem.Responses.Location.Geometry'
+        iso_country_code:
+          type: string
+          description: The ISO Country Code of the location.
+        locality:
+          type: string
+          description: The locality of the location.
+        name:
+          type: string
+          description: The name of the location.
+        postal_code:
+          type: string
+          description: The postal code of the location.
+        sub_administrative_area:
+          type: string
+          description: The sub administrative area of the location.
+        sub_locality:
+          type: string
+          description: The sub locality of the location.
+        sub_thoroughfare:
+          type: string
+          description: The sub thoroughfare of the location.
+        thoroughfare:
+          type: string
+          description: The thoroughfare of the location.
+    s12.inspections.v1.InspectionService.SetOwnerBody:
+      type: object
+      properties:
+        owner_id:
+          type: string
+          description: The unique identifier for the new owner
+      title: The parameter body to `SetOwner`
+      required:
+      - owner_id
+    s12.inspections.v1.InspectionDetails.Metadata:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The unique identifier for the inspection
+        inspection_name:
+          type: string
+          description: The name of the inspection
+        created_time:
+          type: string
+          format: date-time
+          description: Datetime the inspection was sync to the server
+        last_modified_time:
+          type: string
+          format: date-time
+          description: Datetime of when the inspection last synced to the server
+        last_modified_by:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.User'
+          description: The user who last modified the inspection
+        completed_time:
+          type: string
+          format: date-time
+          description: Datetime when the inspection was marked as complete
+        is_marked_as_complete:
+          type: boolean
+          description: Is the inspection marked as complete
+        is_archived:
+          type: boolean
+          description: Is the inspection archived
+        start_trigger:
+          type: string
+          description: 'Describes the trigger that started this inspection if
+
+            it was not directly created by a user.'
+        score:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.Metadata.Score'
+          description: The score information for the given inspection
+        site:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.Metadata.Site'
+          description: The site assigned in the inspection
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.User'
+          description: The owner of the inspection
+    s12.inspections.v1.InspectionDetails.InspectionItem.CheckboxItem:
+      type: object
+      properties:
+        checked:
+          type: boolean
+          description: Value of the checkbox
+    s12.thepub.v1.Inspection.Item.Responses.Scoring:
+      type: object
+      properties:
+        combined_score:
+          type: number
+          format: double
+          description: The combined score of the category.
+        combined_max_score:
+          type: integer
+          format: int64
+          description: The combined maximum score of the category.
+        combined_score_percentage:
+          type: number
+          format: double
+          description: The combined score percentage of the category.
+        score:
+          type: number
+          format: double
+          description: The score of the item.
+        max_score:
+          type: integer
+          format: int64
+          description: The maximum score of the category.
+        score_percentage:
+          type: number
+          format: double
+          description: The score percentage of the category.
+    s12.inspections.pub.integration.v1.InspectionItem.ItemType:
+      type: string
+      enum:
+      - ITEM_TYPE_TEXT
+      - ITEM_TYPE_NUMBER
+      - ITEM_TYPE_PARAGRAPH
+      - ITEM_TYPE_DATETIME
+      - ITEM_TYPE_LOCATION
+      - ITEM_TYPE_CHECKBOX
+      - ITEM_TYPE_QUESTION
+      - ITEM_TYPE_TEMPERATURE
+      - ITEM_TYPE_SLIDER
+      - ITEM_TYPE_ASSET
+      - ITEM_TYPE_SITE
+      - ITEM_TYPE_COMPANY
+      - ITEM_TYPE_TABLE
+      description: "The type of an inspection item.\nValues are aligned with TemplateDefinition.TemplateItem.ItemType.\nOnly answerable types are included — structural types (page, section, logic)\nand types without public upload APIs (media, drawing, signature) are excluded.\n\n - ITEM_TYPE_TEXT: Single-line text input.\n - ITEM_TYPE_NUMBER: Numeric input.\n - ITEM_TYPE_PARAGRAPH: Multi-line text input.\n - ITEM_TYPE_DATETIME: Date and time input.\n - ITEM_TYPE_LOCATION: Location input.\n - ITEM_TYPE_CHECKBOX: Boolean checkbox input.\n - ITEM_TYPE_QUESTION: Response-set based question.\n - ITEM_TYPE_TEMPERATURE: Temperature reading.\n - ITEM_TYPE_SLIDER: Slider/range input.\n - ITEM_TYPE_ASSET: Asset reference.\n - ITEM_TYPE_SITE: Site/location reference.\n - ITEM_TYPE_COMPANY: Company reference.\n - ITEM_TYPE_TABLE: Table containing lines of items."
+    s12.inspections.v1.Inspection:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the inspection
+        template_id:
+          type: string
+          description: The unique identifier for the template
+        site_id:
+          type: string
+          description: 'Deprecated: Use Site object instead.'
+        title:
+          type: string
+          description: The title of the inspection
+        duration:
+          type: integer
+          format: int64
+          description: The duration over which the inspection is conducted
+        created_at:
+          type: string
+          format: date-time
+          description: Date/time the inspection was created
+        modified_at:
+          type: string
+          format: date-time
+          description: Date/time the inspection was last modified
+        modified_by:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.IdValueEntry'
+          description: The user who last modified the inspection
+        permissions:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionPermissions'
+          description: Permissions granted to user for the inspection
+        is_marked_as_complete:
+          type: boolean
+          description: Is the inspection marked as complete
+        completed_at:
+          type: string
+          format: date-time
+          description: Date when the inspection was marked as complete.
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.Media'
+          description: All the media linked to the inspection
+        revision_id:
+          type: string
+          description: Revisions are unique between inspections with same ID
+        started_on:
+          type: string
+          format: date-time
+          description: 'Deprecated: This field is unused and kept only for backward compatibility.'
+        site:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.Site'
+          description: The site data for the inspection
+        revision_key:
+          type: string
+          description: 'Similar to revision_id, revision_key is unique between inspections with same ID
+
+            Please use revision_key to compare between revisions'
+        start_trigger:
+          description: Describes the trigger that started this inspection if it was not directly created by a user.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.StartInspectionTrigger'
+        score:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.Inspection.Score'
+          description: The score information for the given inspection
+        template_revision_id:
+          type: string
+          description: Revisions are unique between templates with same ID
+    s12.thepub.v1.ThePubService.ShareInspectionBody:
+      type: object
+      properties:
+        shares:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.ShareInspectionRequest.Share'
+          description: The users and groups to share with.
+      description: The parameters for `ShareInspection`
+      title: ShareInspectionRequest
+    s12.inspections.pub.integration.v1.CreateInspectionRequest:
+      type: object
+      properties:
+        template_id:
+          type: string
+          description: The unique identifier of the template to create the inspection from.
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem'
+          description: The inspection items with their values, corresponding to items in the template.
+      description: Request message for CreateInspection.
+      required:
+      - template_id
+    s12.inspections.v1.InspectionDetails.InspectionItem.DateTimeItem:
+      type: object
+      properties:
+        datetime:
+          type: string
+          format: date-time
+          description: Value of the datetime item
+    s12.thepub.v1.ShareInspectionRequest.Share:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the user or group to share with.
+        permission:
+          description: The permissions to grant the user or group.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.ShareInspectionRequest.Share.Permissions'
+      description: The share used in `SearchInspections`
+      title: ShareInspectionShare
+      required:
+      - id
+      - permission
+    s12.inspections.v1.TableData.Line.Cell:
+      type: object
+      properties:
+        repeated_section_question_id:
+          type: string
+          description: The unique identifier for the prime element of the inspection item
+        repeated_section_answer_id:
+          type: string
+          description: 'The unique identifier for the answer item
+
+            This should refer to the answer item in `content`'
+        text_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.TextAnswer'
+        calculation_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.CalculationAnswer'
+        temperature_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.TemperatureAnswer'
+        checkbox_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.CheckboxAnswer'
+        datetime_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.DateTimeAnswer'
+        switch_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.SwitchAnswer'
+        media_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.MediaAnswer'
+        list_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.ListAnswer'
+    s12.inspections.v1.TextAnswer:
+      type: object
+      properties:
+        answer:
+          type: string
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+    s12.inspections.v1.InspectionDetails.InspectionItem.SignatureItem:
+      type: object
+      properties:
+        image:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.Media'
+          description: Media of the signature item
+        name:
+          type: string
+          description: Text response of the signature item
+        signed_at_time:
+          type: string
+          format: date-time
+          description: Time of the signature
+    s12.thepub.v1.Inspection.Media:
+      type: object
+      properties:
+        date_created:
+          type: string
+          format: date-time
+          description: The date the media was created.
+        file_ext:
+          type: string
+          description: The file extension of the media.
+        media_id:
+          type: string
+          description: The id of the media.
+        label:
+          type: string
+          description: The label of the media.
+        href:
+          type: string
+          description: The url to retrieve the media.
+    s12.inspections.v1.GetInspectionDetailsResponse:
+      type: object
+      properties:
+        inspection:
+          $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails'
+      title: Result returned from `GetInspectionDetails`
+    s12.thepub.v1.UpdateInspectionItem.ItemType:
+      type: string
+      enum:
+      - text
+      - textsingle
+      - address
+      - datetime
+      - question
+      - list
+      - checkbox
+      - slider
+      - switch
+      default: text
+    s12.inspections.v1.TemperatureAnswer:
+      type: object
+      properties:
+        answer:
+          type: number
+          format: double
+        recorded_at:
+          type: string
+          format: date-time
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+    s12.inspections.v1.InspectionDetails.InspectionItem.TextItem:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text response of the item
+    s12.inspections.pub.integration.v1.UpdateInspectionResponse:
+      type: object
+      properties:
+        inspection_identity:
+          description: Identity of the inspection that was updated.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionIdentity'
+      description: Response message for UpdateInspection.
+    s12.thepub.v1.GetInspectionWebReportLinkResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The web report link for the inspection.
+      description: Result returned from `GetInspectionWebReportLink`
+      title: GetInspectionWebReportLinkResponse
+    s12.inspections.v1.InspectionDetails.InspectionItem.Attachments:
+      type: object
+      properties:
+        note:
+          type: string
+          description: Note attached to the item
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.Media'
+          description: An array of media attached to the item
+    s12.inspections.pub.integration.v1.CellValue.DateTimeValue:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: DateTimeValue holds a timestamp cell value for DATETIME fields.
+    s12.inspections.v1.TableData.Line:
+      type: object
+      properties:
+        line_id:
+          type: string
+          description: client side generated ID (Element ID)
+        cells:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.TableData.Line.Cell'
+    s12.reports.v1.ReportStyle.FontFamily:
+      type: string
+      enum:
+      - FONT_FAMILY_UNSPECIFIED
+      - FONT_FAMILY_INTER
+      - FONT_FAMILY_IBM_PLEX_SERIF
+      - FONT_FAMILY_GEIST
+      default: FONT_FAMILY_UNSPECIFIED
+      title: FontFamily represents the set of fonts supported for report styling
+    s12.inspections.v1.RemoveInspectionUserAccessResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The ID of the inspection
+      title: Result returned from RemoveInspectionUserAccess
+    s12.inspections.v1.InspectionDetails.InspectionItem.CombinedItemScore:
+      type: object
+      properties:
+        combined_score_percentage:
+          type: number
+          format: double
+          description: Score divided by total score
+        combined_max_score:
+          type: number
+          format: double
+          description: Max score of the item
+        combined_score:
+          type: number
+          format: double
+          description: Score of the item
+      title: Combined score represents the sum of scores for all children items
+    s12.inspections.v1.CalculationAnswer:
+      type: object
+      properties:
+        answer:
+          $ref: '#/components/schemas/s12.inspections.v1.CalculatedItem'
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+    s12.inspections.pub.integration.v1.InspectionItem.TemperatureItem:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        recorded_at:
+          type: string
+          format: date-time
+      description: Temperature reading value.
+    s12.inspections.pub.integration.v1.CreateInspectionResponse:
+      type: object
+      properties:
+        inspection_identity:
+          description: Identity of the inspection that was created.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionIdentity'
+      description: Response message for CreateInspection.
+    s12.inspections.v1.InspectionDetails.InspectionItem.SliderItem:
+      type: object
+      properties:
+        answer:
+          type: number
+          format: double
+          description: Value of the slider item
+    s12.inspections.pub.integration.v1.InspectionItem.SliderItem:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+      description: Slider/range value.
+    s12.inspections.v1.InspectionDetails.Template:
+      type: object
+      properties:
+        template_id:
+          type: string
+          description: The unique identifier for the template
+        template_name:
+          type: string
+          description: The name of the template
+        template_revision_id:
+          type: string
+          description: Revisions are unique between templates with same ID
+    s12.thepub.v1.StartInspectionRequest:
+      type: object
+      properties:
+        template_id:
+          type: string
+          description: ID of the template to start an inspection from.
+        header_items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.UpdateInspectionItem'
+          description: The title page items of the inspection.
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.UpdateInspectionItem'
+          description: The items of the inspection.
+      description: The parameters for `StartInspection`
+      title: StartInspectionRequest
+      required:
+      - template_id
+    s12.thepub.v1.GetInspectionMediaResponse:
+      type: object
+      description: Result returned from `GetInspectionMedia`
+      title: GetInspectionMediaResponse
+    s12.inspections.v1.InspectionService.CloneInspectionBody:
+      type: object
+      title: The parameter body to `CloneInspection`
+    s12.reports.v1.StartInspectionExportRequest:
+      type: object
+      properties:
+        export_data:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.reports.v1.StartInspectionExportRequest.ExportData'
+          description: List of report configurations
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.StartInspectionExportRequest.DocumentType'
+          description: The requested file type for the export
+        timezone:
+          type: string
+          description: Sets the timezone for bulk exporting file name
+        regenerate:
+          type: boolean
+          description: 'Indicate whether to by pass any caching and regenerate the report from the
+
+            latest data. This flag would only take effect for authorized user.'
+        lang:
+          type: string
+          description: 'Sets the language for the document using language code from ISO-639
+
+            format'
+        inspection_filter:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.StartInspectionExportRequest.InspectionFilter'
+          description: List of inspections filters that filters out which inspection to be included. This is optional and only be evaluate
+        export_settings:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.StartInspectionExportRequest.TabularExportSettings'
+          description: Sets of export settings that can apply to tabular export, eg Excel
+      title: StartInspectionExportRequest represents the parameters to `StartInspectionExport`
+      required:
+      - export_data
+      - type
+    s12.thepub.v1.Inspection.Response:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the response.
+        colour:
+          type: string
+          description: The colour of the response.
+        enable_score:
+          type: boolean
+          description: If scoring is enabled for the response.
+        label:
+          type: string
+          description: The label of the response.
+        score:
+          type: integer
+          format: int32
+          description: The score of the response.
+        short_label:
+          type: string
+          description: The short label of the response.
+        type:
+          type: string
+          description: The type of the response. `question` or `list`
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.thepub.v1.Inspection.Item.Responses:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text response.
+        value:
+          type: string
+          description: Value response. Used for sliders, checkboxes, and switches.
+        name:
+          type: string
+          description: Someone's Name. Used with signature, location and weather items.
+        time:
+          type: string
+          format: date-time
+          description: Time of action. Used only with barcode and signature items.
+        location_text:
+          type: string
+          description: Location represented as text (address or coordinates).
+        location:
+          description: Location represented as coordinates.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.Item.Responses.Location'
+        selected:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.Inspection.Response'
+          description: The selected items from an response set.
+        failed:
+          type: boolean
+          description: If the response is considered failed.
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.Inspection.Media'
+          description: The media of the response.
+        image:
+          description: The signature or drawing of the response.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.Media'
+        scoring:
+          description: The score of the response.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.Item.Responses.Scoring'
+        notes:
+          type: string
+          description: Notes added to the response.
+    s12.inspections.pub.integration.v1.UpdateTableLineResponse:
+      type: object
+      description: UpdateTableLineResponse response for `rpc UpdateTableLine`.
+    s12.inspections.v1.InspectionDetails.InspectionItem.TableItem:
+      type: object
+      properties:
+        max_lines:
+          type: integer
+          format: int32
+      title: Contains metadata for a tabular item
+    s12.thepub.v1.Inspection.AuditData:
+      type: object
+      properties:
+        score:
+          type: integer
+          format: int32
+          description: The score of the inspection.
+        total_score:
+          type: integer
+          format: int32
+          description: The total possible score of the inspection.
+        percentage:
+          type: integer
+          format: int32
+          description: The percentage of the inspection score.
+        name:
+          type: string
+          description: The name of the inspection.
+        duration:
+          type: string
+          format: int64
+          description: The duration of the inspection.
+        authorship:
+          description: The authorship data of the inspection.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.Authorship'
+        date_completed:
+          type: string
+          format: date-time
+          description: The date and time the inspection was completed.
+        date_modified:
+          type: string
+          format: date-time
+          description: The date and time the inspection was last modified.
+        date_started:
+          type: string
+          format: date-time
+          description: The date and time the inspection was started.
+        site:
+          description: The site this inspection was conducted at.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.AuditData.Site'
+    s12.inspections.v1.Answer:
+      type: object
+      properties:
+        question_id:
+          type: string
+          description: The unique identifier for the inspection item
+        modified_at:
+          type: string
+          format: date-time
+          description: Date/time the item was last modified
+        text_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.TextAnswer'
+        datetime_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.DateTimeAnswer'
+        address_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.AddressAnswer'
+        checkbox_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.CheckboxAnswer'
+        dynamicfield_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.DynamicField'
+        list_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.ListAnswer'
+        question_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.QuestionAnswer'
+        media_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.MediaAnswer'
+        drawing_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.DrawingAnswer'
+        signature_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.SignatureAnswer'
+        temperature_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.TemperatureAnswer'
+        slider_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.SliderAnswer'
+        site_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.SiteAnswer'
+        switch_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.SwitchAnswer'
+        asset_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.AssetAnswer'
+        calculation_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.CalculationAnswer'
+        company_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.CompanyAnswer'
+        table_answer:
+          $ref: '#/components/schemas/s12.inspections.v1.TableData'
+        location:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+          description: Location metadata
+        inactive_state:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.Answer.InactiveState'
+          description: InactiveState contains metadata for inactive answers
+      title: Answer represents one inspection item
+    s12.inspections.pub.integration.v1.Actor.Group:
+      type: object
+      properties:
+        group_id:
+          type: string
+          description: The unique identifier for the group (role)
+      title: Represents a group (role) within an organisation
+    s12.inspections.v1.DateTimeAnswer:
+      type: object
+      properties:
+        answer:
+          type: string
+          format: date-time
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+    s12.inspections.pub.integration.v1.InspectionItem.TextItem:
+      type: object
+      properties:
+        value:
+          type: string
+      description: Single-line text value.
+    s12.inspections.v1.StartInspectionTrigger.StartedFromIssue:
+      type: object
+      properties:
+        issue_id:
+          type: string
+          description: ID of the issue that this inspection was started from.
+    s12.inspections.v1.DrawingAnswer:
+      type: object
+      properties:
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: media field contains media ID and token to download the media content
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+    s12.reports.v1.StartInspectionExportRequest.ExportData:
+      type: object
+      example:
+        inspection_id: 9961f8ef-fa73-4e66-bd79-17138f83a5b8
+        lang: en-US
+        preference_id: 5e3fe9e1-8b3f-41d2-8e2e-1b6172068bb2
+        pages:
+        - 3990d1f7-d9c0-48d8-8e3f-50ba6f164b0f
+        - 45ecc281-0cbf-480d-a66a-a00aae195fd5
+        media_layout:
+          size: MEDIA_SIZE_SMALL
+          resolution: MEDIA_RESOLUTION_LOW
+      properties:
+        inspection_id:
+          type: string
+          description: The ID of the inspection, this can be an s12ID or a UUID.
+        lang:
+          type: string
+          description: 'Sets the language for the document using language code from ISO-639
+
+            format. This is backward compatible with v2 request coming through thepub. Please use the lang property in the root level instead.'
+        preference_id:
+          type: string
+          description: Sets the requested preference
+        filters:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.Filter'
+          description: '@deprecated: Prefer using the preference_override field instead
+
+            Sets the specific filters for the generated document'
+        pages:
+          type: array
+          items:
+            type: string
+          description: '@deprecated: Prefer using the preference_override field instead
+
+            Sets the pages need to be hid for the generated document'
+        media_layout:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.MediaLayout'
+          description: '@deprecated: Prefer using the preference_override field instead
+
+            Sets the media layout for the generated document'
+        preference_override:
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.Preference'
+          description: Overrides the preferences for the generated document
+      description: Export data contains all export variant for a single inspection
+      title: StartInspectionExportRequest.ExportData
+      externalDocs:
+        url: https://en.wikipedia.org/wiki/IETF_language_tag
+      required:
+      - inspection_id
+    s12.inspections.pub.integration.v1.CompleteInspectionResponse:
+      type: object
+      properties:
+        inspection_identity:
+          description: Identity of the inspection that was completed.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionIdentity'
+      description: Response message for CompleteInspection.
+    s12.thepub.v1.SearchInspectionsResponse.SearchInspectionsInspection:
+      type: object
+      properties:
+        audit_id:
+          type: string
+          description: The inspection ID.
+        template_id:
+          type: string
+          description: The ID of the template this inspection was conducted from.
+        modified_at:
+          type: string
+          format: date-time
+          description: The date and time the inspection was last modified.
+      description: The inspection returned from `SearchInspections`
+      title: SearchInspectionsInspection
+    s12.inspections.v1.MediaAnswer:
+      type: object
+      properties:
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.Media'
+        attachments:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+          description: only note is supported in media attachments
+    s12.inspections.pub.integration.v1.CellValue:
+      type: object
+      properties:
+        cell_id:
+          description: cell_id identifies the cell to set.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.CellIdentity'
+        text_value:
+          description: text_value is used for TEXT_SINGLE, TEXT (paragraph), and NUMBER fields.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.CellValue.TextValue'
+        datetime_value:
+          description: datetime_value is used for DATETIME fields.
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.CellValue.DateTimeValue'
+      description: CellValue sets the value for a single cell in a table line.
+      required:
+      - cell_id
+    s12.inspections.v1.CalculatedItem.MultipleValue:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            type: string
+    s12.inspections.v1.CompanyAnswer:
+      type: object
+      properties:
+        company_id:
+          type: string
+          description: Company ID provides a reference to the company that the answer is associated with.
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+        company_name:
+          type: string
+          description: Company name is included in the answer to allow for a snapshot of the selection.
+    s12.inspections.v1.DynamicField:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.DynamicFieldAnswerSet'
+      description: 'DynamicField contains flat list of answers with one of answer type is being
+
+        DynamicMeta - a reference to DynamicField answer. Check the schema above for
+
+        better understanding.'
+    s12.inspections.v1.SetInspectionSiteResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The ID of the inspection
+      title: Result returned from `SetInspectionSite`
+    s12.inspections.v1.InspectionService.SetInspectionLocationBody:
+      type: object
+      properties:
+        geo_position:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+          description: 'Required. The geographical position associated with the inspections
+
+            start/finish'
+        is_start_location:
+          type: boolean
+          description: Required. Whether this is the inspections starting or completing location
+      title: The parameter body to `SetInspectionLocation`
+      required:
+      - geo_position
+      - is_start_location
+    s12.inspections.v1.InspectionDetails.InspectionItem.AddressItem:
+      type: object
+      properties:
+        location_text:
+          type: string
+          description: Text value of the address item
+        location:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.AddressLocation'
+          description: Base on AddressLocation in protos/s12/inspections/v1/answers.proto
+    s12.inspections.pub.integration.v1.InspectionItem.NumberItem:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+      description: Numeric value.
+    s12.inspections.v1.InspectionDetails.InspectionItem.RepeatedSection:
+      type: object
+    s12.inspections.pub.integration.v1.InspectionService.SetInspectionAccessBody:
+      type: object
+      properties:
+        owner_id:
+          type: string
+          description: 'The user ID of the inspection owner (optional); implicitly has full access
+
+            If access is to be revoked from the original owner, a new owner must be specified.'
+        permissions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionPermission'
+          description: Collection of access rules with their associated permission levels
+      title: Request message for SetInspectionAccess
+    s12.inspections.v1.InspectionDetails.InspectionItem.ListItems:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.IdValueEntry'
+          description: Response will contain both the ID and the corresponding value
+        responseset_id:
+          type: string
+          description: ID of the response set
+    s12.thepub.v1.SearchInspectionsResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+          description: The number of results returned.
+        total:
+          type: integer
+          format: int32
+          description: The total number of results available.
+        audits:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.SearchInspectionsResponse.SearchInspectionsInspection'
+          description: The results returned.
+      description: Result returned from `SearchInspections`
+      title: SearchInspectionsResponse
+    s12.inspections.pub.integration.v1.Actor.SiteIntersection:
+      type: object
+      properties:
+        group_id:
+          type: string
+          description: The group (role) component of the intersection
+      title: 'Represents the intersection of a selected site and a group (role)
+
+        This grants access to users who have a specific role at the selected site'
+    s12.common.MediaType:
+      type: string
+      enum:
+      - MEDIA_TYPE_IMAGE
+      - MEDIA_TYPE_VIDEO
+      - MEDIA_TYPE_PDF
+      - MEDIA_TYPE_DOCX
+      - MEDIA_TYPE_XLSX
+      - MEDIA_TYPE_PPTX
+      - MEDIA_TYPE_CSV
+      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.inspections.v1.SetInspectionLocationResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The unique identifier for the inspection
+      title: Result returned from `SetInspectionLocation`
+    s12.inspections.pub.integration.v1.InspectionItem.CheckboxItem:
+      type: object
+      properties:
+        value:
+          type: boolean
+      description: Boolean checkbox value.
+    s12.reports.v1.Filter:
+      type: object
+      properties:
+        show_actions:
+          type: boolean
+          description: Show/hide actions from the inspection report
+        show_failed_items:
+          type: boolean
+          description: Show/hide failed items
+        show_scores:
+          type: boolean
+          description: Show/hide all scoring
+        show_inspection:
+          type: boolean
+          description: Show/hide the inspection result
+        show_instructions:
+          type: boolean
+          description: Show/hide information/instruction fields
+        show_unanswered:
+          type: boolean
+          description: Show/hide unanswered questions
+        show_toc:
+          type: boolean
+          description: Show/hide table of content in exported file
+        show_high_quality_photo:
+          type: boolean
+          description: 'Show high/normal quality photo in exported file
+
+            @deprecated: use media_layout on the upper level instead'
+        show_disclaimer:
+          type: boolean
+          description: Show/hide the report disclaimer
+        show_media_summary:
+          type: boolean
+          description: Show media summary at the end of the report
+        show_footer:
+          type: boolean
+          description: Show/hide footer
+        show_footer_inspection_title:
+          type: boolean
+          description: Show/hide just the inspection title in footer
+        show_footer_custom_text:
+          type: boolean
+          description: Show/hide just the custom text in footer
+        enable_pdf_private_link:
+          type: boolean
+          description: Toggle the private pdf link feature
+        show_page_break:
+          type: boolean
+          description: Show/hide page breaks for each section
+        hide_failed_items_in_summary:
+          type: boolean
+          description: Show/hide failed items in report summary
+        hide_actions_in_summary:
+          type: boolean
+          description: Show/hide actions in report summary
+        hide_checked_questions:
+          type: boolean
+          description: Show/hide checked questions in report summary
+        hide_unchecked_questions:
+          type: boolean
+          description: Show/hide unchecked questions in report summary
+        show_ai_summary:
+          type: boolean
+          description: Show/hide AI generated summary in report summary
+        show_tables:
+          type: boolean
+          description: Show/hide any tables in the report
+      title: Filter show/hide a certain part of the web report
+    s12.inspections.v1.InspectionDetails.InspectionItem.CompanyItem:
+      type: object
+      properties:
+        company_id:
+          type: string
+          description: ID of the company
+    s12.inspections.v1.DeleteInspectionResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The ID of the inspection
+      title: Result returned from DeleteInspection
+    s12.inspections.v1.AddressLocation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the location
+        thoroughfare:
+          type: string
+          description: The thoroughfare of the location
+        sub_thoroughfare:
+          type: string
+          description: The sub_thoroughfare of the location
+        locality:
+          type: string
+          description: The locality of the location
+        sub_locality:
+          type: string
+          description: The sub_locality of the location
+        administrative_area:
+          type: string
+          description: The administrative_area of the location
+        sub_administrative_area:
+          type: string
+          description: The sub_administrative_area of the location
+        postal_code:
+          type: string
+          description: The postal_code of the location
+        country:
+          type: string
+          description: The country of the location
+        iso_country_code:
+          type: string
+          description: The iso_country_code of the location
+        geo_position:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+          description: The geometry of the location
+      title: 'The, optional, object generated only when location is added using a location
+
+        picker'
+    s12.thepub.v1.Inspection.TemplateData.ResponseSet:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the response set.
+        type:
+          type: string
+          description: The type of the response set.
+        responses:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.Inspection.Response'
+          description: The responses of the response set.
+    s12.inspections.v1.AnswerService.GenerateDynamicFieldBody:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            id:
+              type: string
+              description: '@deprecated: manual request id no longer in use'
+            timestamp:
+              type: string
+              format: date-time
+              description: Date/time the answer text request was created on the client.
+            location:
+              $ref: '#/components/schemas/s12.common.GeoPosition'
+              description: The location data sent from an answer.
+          description: 'The metadata of the dynamic field element. The `question_id` field
+
+            will be the ID of the dynamic field. All other fields are unused.'
+          title: 'The metadata of the dynamic field element. The `question_id` field
+
+            will be the ID of the dynamic field. All other fields are unused.'
+        parent_id:
+          type: string
+          description: 'The unique identifier of the item of type `dynamicField`. It is
+
+            the parent of the element we are creating.'
+      title: The request message for `GenerateDynamicField`
+    s12.reports.v1.StartInspectionExportRequest.InspectionFilter:
+      type: object
+      properties:
+        search_text:
+          type: string
+          description: text to search against.
+        template_ids:
+          type: array
+          items:
+            type: string
+          description: The ID of the template to be filter with, this can be an s12ID or a UUID
+        template_folders:
+          type: array
+          items:
+            type: string
+          description: template folder ids to filter by
+        groups:
+          type: array
+          items:
+            type: string
+          description: the role_id to be filter by
+        sites:
+          type: array
+          items:
+            type: string
+          description: locations (sites) to filter by
+        from_date:
+          type: string
+          format: date-time
+          description: earlier date in conducted date range to filter by
+        to_date:
+          type: string
+          format: date-time
+          description: later date in conducted date range to filter by
+        from_date_completed:
+          type: string
+          format: date-time
+          description: earlier date in completed date range to filter by
+        to_date_completed:
+          type: string
+          format: date-time
+          description: later date in completed date range to filter by
+        asset_ids:
+          type: array
+          items:
+            type: string
+          description: asset ids to filter by
+        owned:
+          type: boolean
+          description: filter by inspections owned by user
+        shared:
+          type: boolean
+          description: filter by inspections shared with user
+        is_archived:
+          type: boolean
+          description: filter by archived
+        completed:
+          type: boolean
+          description: 'Optional. When set to true, inspections that are completed will be included.
+
+            When set to false, inspections that are not-completed will be included.
+
+            If unset, this property is ignored
+
+            The fields completed, exclude_pending_approvals and inspection_approval_state are used to query the inspection state
+
+            They are set like this for historical reasons in inspections.'
+    s12.common.GeoPosition:
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+          description: The geographical longitude
+        latitude:
+          type: number
+          format: double
+          description: The geographical latitude
+        accuracy:
+          type: integer
+          format: int32
+          description: The accuracy in meters
+      description: A position is the fundamental geographical geometry construct.
+    s12.inspections.pub.integration.v1.InspectionItem.TableItem.TableLine:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionItem'
+          description: The items representing each cell in this table line.
+      description: A single line within a table.
+    s12.common.Media:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        filename:
+          type: string
+          description: full file name, including file extension
+        media_type:
+          $ref: '#/components/schemas/s12.common.MediaType'
+      title: Represents an image or video
+    s12.reports.v1.StartInspectionExportResponse.Info:
+      type: object
+      properties:
+        subject:
+          type: string
+          description: The code for a particular subject
+        details:
+          type: string
+          description: Any additional details for the particular subject
+    s12.inspections.v1.Attachments:
+      type: object
+      properties:
+        note:
+          type: string
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.Media'
+    s12.inspections.v1.InspectionDetails.InspectionItem.Media:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the media
+        url:
+          type: string
+          description: URL of the media, only present if include_media_url is set to true.
+        media_type:
+          description: Type of the media, only present if include_media_url is set to true.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.MediaType'
+        filename:
+          type: string
+          description: Name of the originally uploaded media file, only present if include_media_url is set to true.
+    s12.inspections.v1.InspectionDetails.InspectionItem.TableLineItem:
+      type: object
+      title: Contains metadata for a tabular row
+    s12.reports.v1.StartInspectionExportRequest.DocumentType:
+      type: string
+      enum:
+      - DOCUMENT_TYPE_UNSPECIFIED
+      - DOCUMENT_TYPE_PDF
+      - DOCUMENT_TYPE_WORD
+      - DOCUMENT_TYPE_MEDIA
+      - DOCUMENT_TYPE_EXCEL
+      - DOCUMENT_TYPE_CSV_V3
+      - DOCUMENT_TYPE_JSON
+      - DOCUMENT_TYPE_CSV
+      - DOCUMENT_TYPE_CSV_MEDIA
+      - DOCUMENT_TYPE_CSV_EXCEL
+      default: DOCUMENT_TYPE_UNSPECIFIED
+      title: "- DOCUMENT_TYPE_PDF: export document as PDF\n - DOCUMENT_TYPE_WORD: export document as MS Word\n - DOCUMENT_TYPE_MEDIA: export document as mediaZip\n - DOCUMENT_TYPE_EXCEL: export document as Excel\n - DOCUMENT_TYPE_CSV_V3: export document as CSV\n - DOCUMENT_TYPE_JSON: export document as JSON for backward compatibility\n - DOCUMENT_TYPE_CSV: export document as CSV for backward compatibility\n - DOCUMENT_TYPE_CSV_MEDIA: export document as CSVWithMedia for backward compatibility\n - DOCUMENT_TYPE_CSV_EXCEL: export document as Old Excel for backward compatibility"
+    s12.thepub.v1.ShareInspectionRequest.Share.Permissions:
+      type: string
+      enum:
+      - view
+      - edit
+      - delete
+      default: view
+      description: " - view: The user can view the inspection.\n - edit: The user can edit the inspection.\n - delete: The user can delete the inspection."
+    s12.inspections.v1.InspectionService.ArchiveInspectionBody:
+      type: object
+      title: The parameter body to `ArchiveInspection`
+    s12.inspections.v1.InspectionDetails.InspectionItem.QuestionItem:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.IdValueEntry'
+          description: Response will contain both the ID and the corresponding value
+        responseset_id:
+          type: string
+          description: ID of the response set
+    s12.thepub.v1.UpdateInspectionItem.Responses.Response:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the response.
+    s12.inspections.v1.InspectionDetails.InspectionItem.PageItem.Approval:
+      type: object
+      properties:
+        approval_state:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.Approvals.SectionApprovalState'
+          description: Approval state of an Approval Page
+        requested_at_time:
+          type: string
+          format: date-time
+          description: The time the approval was requested
+        requested_by:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.User'
+          description: The user who requested the approval
+        approved_at_time:
+          type: string
+          format: date-time
+          description: The time the approval was approved
+        approved_by:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.User'
+          description: The user who approved the approval
+    s12.inspections.pub.integration.v1.Actor.Organisation:
+      type: object
+      properties:
+        organisation_id:
+          type: string
+          description: The unique identifier for the organisation
+      title: Represents an entire organisation
+    s12.inspections.v1.Site:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The site id for the inspection
+        name:
+          type: string
+          description: The site name for the inspection
+      title: The site data for the inspection
+    s12.inspections.v1.SetOwnerResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The ID of the inspection
+      title: Result returned from SetOwner
+    s12.thepub.v1.Inspection:
+      type: object
+      properties:
+        template_id:
+          type: string
+          description: The template this inspection was conducted from.
+        audit_id:
+          type: string
+          description: The id of this inspection.
+        archived:
+          type: boolean
+          description: If this inspection is archived.
+        created_at:
+          type: string
+          format: date-time
+          description: The date this inspection was created on the server.
+        modified_at:
+          type: string
+          format: date-time
+          description: The date this inspection was last updated on the server.
+        audit_data:
+          description: The metadata of the inspection.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.AuditData'
+        template_data:
+          description: The metadata of the template.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.TemplateData'
+        header_items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.Inspection.Item'
+          description: The title page items of the inspection.
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.Inspection.Item'
+          description: The items of the inspection.
+    s12.inspections.v1.AddressAnswer:
+      type: object
+      properties:
+        location_text:
+          type: string
+        location:
+          $ref: '#/components/schemas/s12.inspections.v1.AddressLocation'
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+    s12.inspections.pub.integration.v1.CellValue.TextValue:
+      type: object
+      properties:
+        value:
+          type: string
+          description: len matches TextAnswer.answer in s12/inspections/v1/request.proto (1:10000).
+      description: 'TextValue holds a string cell value for TEXT_SINGLE, TEXT (paragraph),
+
+        and NUMBER fields. Number fields are stored as strings; numeric
+
+        formatting is display-only.'
+    s12.inspections.pub.integration.v1.InspectionItem.AssetItem:
+      type: object
+      properties:
+        asset_id:
+          type: string
+      description: Asset reference value.
+    s12.inspections.v1.InspectionDetails.InspectionItem.TablePageItem:
+      type: object
+      title: Contains metadata for a page that only has tabular data
+    s12.inspections.v1.SliderAnswer:
+      type: object
+      properties:
+        answer:
+          type: number
+          format: double
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+    s12.reports.v1.MediaSize:
+      type: string
+      enum:
+      - MEDIA_SIZE_UNSPECIFIED
+      - MEDIA_SIZE_SMALL
+      - MEDIA_SIZE_MEDIUM
+      - MEDIA_SIZE_LARGE
+      default: MEDIA_SIZE_UNSPECIFIED
+      description: "- MEDIA_SIZE_SMALL: Thumbnails: 6 per row, Appendix: 4 images per page\n - MEDIA_SIZE_MEDIUM: Thumbnails: 3 per row; Appendix: 2 images per page\n - MEDIA_SIZE_LARGE: Thumbnails: 2 per row; Appendix: 1 image per page"
+      title: Desired size of media as thumbnails or in the appendix
+    s12.inspections.v1.QuestionAnswer:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            type: string
+        note:
+          type: string
+          description: Deprecated. Use attachments.
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.Media'
+          description: Deprecated. Use attachments.
+        attachments:
+          $ref: '#/components/schemas/s12.inspections.v1.Attachments'
+      title: Answer returned for inspection items of type question
+    s12.inspections.v1.CloneInspectionResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: Inspection ID of the newly cloned inspection
+      title: Result returned from `CloneInspection`
+    s12.thepub.v1.DeleteInspectionWebReportLinkResponse:
+      type: object
+      description: Result returned from `DeleteInspectionWebReportLink`
+      title: DeleteInspectionWebReportLinkResponse
+    s12.inspections.pub.integration.v1.Actor:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.Actor.User'
+        group:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.Actor.Group'
+        organisation:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.Actor.Organisation'
+        everyone:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.Actor.Everyone'
+        selected_site:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.Actor.SelectedSite'
+        site_intersection:
+          $ref: '#/components/schemas/s12.inspections.pub.integration.v1.Actor.SiteIntersection'
+        cross_org:
+          type: boolean
+          readOnly: true
+          description: 'Set to true if this actor belongs to a different organisation than the inspection
+
+            This field is computed by the server and should not be set in requests'
+        organisation_id:
+          type: string
+          readOnly: true
+          description: 'If cross_org is true, this contains the organisation ID of the actor
+
+            This field is computed by the server and should not be set in requests'
+      title: An entity that can have access to an inspection
+    s12.inspections.pub.integration.v1.Actor.SelectedSite:
+      type: object
+      description: Empty message - presence indicates the permission applies to the selected site
+      title: 'Represents the site selected during the inspection (if any)
+
+        This is a dynamic rule that applies to whichever site is selected in the inspection'
+    s12.inspections.v1.RestoreArchivedInspectionResponse:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: The ID of the inspection
+      title: Result returned from RestoreArchivedInspection
+    s12.inspections.v1.InspectionDetails.InspectionItem.TemperatureItem:
+      type: object
+      properties:
+        temperature:
+          type: number
+          format: double
+          description: Temperature value recorded
+        scale:
+          type: string
+          description: Scale of the temperature
+    s12.inspections.v1.InspectionDetails.InspectionItem.DrawingItem:
+      type: object
+      properties:
+        image:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.v1.InspectionDetails.InspectionItem.Media'
+          description: Media of the drawing item
+    s12.inspections.v1.InspectionDetails.Metadata.Score:
+      type: object
+      properties:
+        combined_score_percentage:
+          type: number
+          format: double
+          description: Score divided by total score
+        combined_total_score:
+          type: number
+          format: double
+          description: Max score of the inspection
+        combined_score:
+          type: number
+          format: double
+          description: Sum of answered responses score
+    s12.inspections.v1.InspectionDetails.User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the user
+        name:
+          type: string
+          description: The name of the user
+    s12.inspections.pub.integration.v1.GetInspectionAccessResponse:
+      type: object
+      properties:
+        inspection_identity:
+          allOf:
+          - $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionIdentity'
+          description: The inspection identity containing inspection ID and organisation ID
+        owner_id:
+          type: string
+          description: The user ID of the inspection owner (implicitly has full access)
+        permissions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionPermission'
+          description: Collection of access rules with their associated permission levels
+      title: Response message for GetInspectionAccess
+    s12.inspections.pub.integration.v1.InspectionService.UpdateTableLineBody:
+      type: object
+      properties:
+        metadata:
+          type: object
+          description: metadata identifies the inspection and the table containing the line.
+          title: metadata identifies the inspection and the table containing the line.
+        cells:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.CellValue'
+          description: 'Cell values to update. Only listed cells are changed; omitted cells are untouched.
+
+            At least 1 and at most 20 cells may be specified.'
+      description: UpdateTableLineRequest parameters for `rpc UpdateTableLine`.
+    s12.inspections.v1.InspectionDetails.InspectionItem.SiteItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the site
+        name:
+          type: string
+          description: The name of the site
+    s12.inspections.v1.Approvals.SectionApprovalState:
+      type: string
+      enum:
+      - SECTION_APPROVAL_STATE_UNSPECIFIED
+      - SECTION_APPROVAL_STATE_NOT_REQUESTED
+      - SECTION_APPROVAL_STATE_REQUESTED
+      - SECTION_APPROVAL_STATE_APPROVED
+      default: SECTION_APPROVAL_STATE_UNSPECIFIED
+      description: "- SECTION_APPROVAL_STATE_UNSPECIFIED: Value not set.\n - SECTION_APPROVAL_STATE_NOT_REQUESTED: Approval hasn't been requested yet for this Approval Page. Default state of Approval Page.\n - SECTION_APPROVAL_STATE_REQUESTED: Approval has been requested for this Approval Page.\n - SECTION_APPROVAL_STATE_APPROVED: Approval Page has been approved."
+      title: Approval state of an Approval Page
+    s12.inspections.v1.InspectionDetails.InspectionItem.RepeatedSectionInstanceItem:
+      type: object
+    s12.thepub.v1.ThePubService.UpdateInspectionBody:
+      type: object
+      properties:
+        archived:
+          type: boolean
+          description: 'Whether to archive or un-archive the inspection.
+
+            Optional. Defaults to false (un-archive).'
+        header_items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.UpdateInspectionItem'
+          description: The title page items of the inspection.
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.UpdateInspectionItem'
+          description: The items of the inspection.
+      description: The parameters for `UpdateInspection`
+      title: UpdateInspectionRequest
+    s12.thepub.v1.GetInspectionDeepLinkResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The deep link for the inspection.
+      description: Result returned from `GetInspectionDeepLink`
+      title: GetInspectionDeepLinkResponse
+    s12.reports.v1.StartInspectionExportResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: 'The S3 bucket url for the generated export file, the url will only be
+
+            populated when the status is ''DONE'''
+        status:
+          description: The status of the exporting request.
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.StartInspectionExportResponse.Status'
+        version:
+          description: The version of the exported inspection.
+          allOf:
+          - $ref: '#/components/schemas/s12.reports.v1.StartInspectionExportResponse.Version'
+        info:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.reports.v1.StartInspectionExportResponse.Info'
+          description: Any additional info that feedback to the calling service
+      title: StartExportResponse represents the result of `StartExport`
+    s12.inspections.v1.CalculatedItem:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/s12.inspections.v1.CalculatedItem.Status'
+        error_parameters:
+          type: array
+          items:
+            type: string
+        single_value:
+          $ref: '#/components/schemas/s12.inspections.v1.CalculatedItem.SingleValue'
+        multiple_value:
+          $ref: '#/components/schemas/s12.inspections.v1.CalculatedItem.MultipleValue'
+      title: Data containing either the value of a calculated item or error data if something went wrong
+    s12.inspections.v1.AnswerService.AnswerCheckboxBody:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            id:
+              type: string
+              description: '@deprecated: manual request id no longer in use'
+            timestamp:
+              type: string
+              format: date-time
+              description: Date/time the answer text request was created on the client.
+            location:
+              $ref: '#/components/schemas/s12.common.GeoPosition'
+              description: The location data sent from an answer.
+          description: The metadata for answering a question
+        selected:
+          type: boolean
+          description: Whether the checkbox is selected
+      title: The parameter body to `AnswerCheckboxRequest`
+    s12.inspections.v1.TableData:
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.inspections.v1.TableData.Line'
+      title: 'Table stores a flat list of Lines which comprise of Cells
+
+        This message loosely follows the schema of DynamicField'
+    s12.thepub.v1.Inspection.Item.Responses.Location:
+      type: object
+      properties:
+        administrative_area:
+          type: string
+          description: The administrative area of the location.
+        country:
+          type: string
+          description: The country of the location.
+        formatted_address:
+          type: array
+          items:
+            type: string
+          description: The formatted address of the location.
+        geometry:
+          description: The geometry of the location.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.Inspection.Item.Responses.Location.Geometry'
+        iso_country_code:
+          type: string
+          description: The ISO Country Code of the location.
+        locality:
+          type: string
+          description: The locality of the location.
+        name:
+          type: string
+          description: The name of the location.
+        postal_code:
+          type: string
+          description: The postal code of the location.
+        sub_administrative_area:
+          type: string
+          description: The sub administrative area of the location.
+        sub_locality:
+          type: string
+          description: The sub locality of the location.
+        sub_thoroughfare:
+          type: string
+          description: The sub thoroughfare of the location.
+        thoroughfare:
+          type: string
+          description: The thoroughfare of the location.
+    s12.reports.v1.StartInspectionExportResponse.Version:
+      type: string
+      enum:
+      - VERSION_UNSPECIFIED
+      - VERSION_1
+      - VERSION_2
+      - VERSION_3
+      default: VERSION_UNSPECIFIED
+    s12.inspections.pub.integration.v1.DeleteTableLineResponse:
+      type: object
+      description: DeleteTableLineResponse response for `rpc DeleteTableLine`.
+    s12.reports.v1.PageSize:
+      type: string
+      enum:
+      - PAGE_SIZE_UNSPECIFIED
+      - PAGE_SIZE_A4
+      - PAGE_SIZE_US_LETTER
+      default: PAGE_SIZE_UNSPECIFIED
+      title: "- PAGE_SIZE_A4: A4 page size (210mm x 297mm)\n - PAGE_SIZE_US_LETTER: US Letter page size (8.5in x 11in)"
+    s12.inspections.v1.Inspection.Score:
+      type: object
+      properties:
+        score_percentage:
+          type: number
+          format: double
+          description: score percentage
+        total_score:
+          type: number
+          format: double
+          description: total score of the inspection
+    s12.inspections.v1.InspectionDetails.InspectionItem.AssetItem:
+      type: object
+      properties:
+        asset_id:
+          type: string
+          description: ID of the asset
+  requestBodies:
+    s12.inspections.pub.integration.v1.InspectionService.SetInspectionAccessBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/s12.inspections.pub.integration.v1.InspectionService.SetInspectionAccessBody'
+      required: true
+    s12.inspections.v1.InspectionService.SetInspectionSiteBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/s12.inspections.v1.InspectionService.SetInspectionSiteBody'
+      required: true
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0

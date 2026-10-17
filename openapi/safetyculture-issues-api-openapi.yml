@@ -1,0 +1,4031 @@
+openapi: 3.2.0
+info:
+  title: Mitti Issues API
+  version: v1.349.8
+  contact:
+    name: Mitti Support
+    url: https://help.mitti.com
+    email: support@mitti.com
+servers:
+- url: https://api.mitti.com
+security:
+- BearerAuthentication: []
+tags:
+- name: Issues
+paths:
+  /tasks/v1/customerconfiguration/categories:
+    get:
+      summary: List Categories
+      operationId: CustomerConfigurationService_GetCategories
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.GetCategoriesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: include_deleted
+        description: 'Optional. If this is set to true, all categories including deleted
+
+          categories will be returned.'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: search
+        description: Search used to search for specific named categories
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: category_ids
+        description: Define specific categoryIDs to filter for
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: page_token
+        description: Page token used to scroll for the next set of categories
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        description: Number of categories to respond with
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: sort_direction
+        description: Optional. Direction for sorting.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - SORT_DIRECTION_UNSPECIFIED
+          - SORT_DIRECTION_ASC
+          - SORT_DIRECTION_DESC
+          default: SORT_DIRECTION_UNSPECIFIED
+      - name: is_managing
+        description: 'Optional. Flag to indicate if the categories are being fetched to manage categories
+
+          if true, the `"admin:incidents"` permission will be required, and category visibility is ignored.'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Issues
+  /tasks/v1/incident/{id}:
+    get:
+      summary: Get Issue
+      operationId: IncidentsService_GetIncidentById
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.IncidentResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: 'Required. The unique ID of the incident to retrieve. Can either be a uuid
+
+          or a org level unique incident id. Example: IS-4352'
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Issues
+  /tasks/v1/incidents:
+    post:
+      summary: Create Issue (legacy)
+      operationId: IncidentsService_CreateIncident
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.CreateIncidentResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.CreateIncidentRequest'
+        required: true
+      tags:
+      - Issues
+      deprecated: true
+  /tasks/v1/incidents/delete:
+    post:
+      summary: Delete Issues
+      operationId: IncidentsService_DeleteIncidents
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.DeleteIncidentsRequest'
+        description: DeleteIncidentsRequest represents the list of issue UUIDs to delete.
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/list:
+    post:
+      summary: List Issues
+      operationId: IncidentsService_GetIncidents
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.IncidentsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        $ref: '#/components/requestBodies/s12.tasks.v1.GetIncidentsRequest'
+      tags:
+      - Issues
+  /tasks/v1/incidents/list/count:
+    post:
+      summary: Get count of Issues
+      operationId: IncidentsService_GetIncidentsCount
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsCountResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        $ref: '#/components/requestBodies/s12.tasks.v1.GetIncidentsRequest'
+      tags:
+      - Issues
+  /tasks/v1/incidents/submit:
+    post:
+      summary: Create Issue
+      operationId: IncidentsService_SubmitIncident
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.SubmitIncidentResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.SubmitIncidentRequest'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{id}:
+    get:
+      summary: Get Issue (legacy)
+      operationId: IncidentsService_GetIncident
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.IncidentResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: id
+        description: ID to query data for
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Issues
+      deprecated: true
+  /tasks/v1/incidents/{incident_id}/questions_answers:
+    get:
+      summary: Get Issue questions and answers
+      operationId: IncidentsService_GetIncidentQuestionsAndAnswers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.GetIncidentQuestionsAndAnswersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: incident_id
+        description: The ID of the issue.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/asset:
+    put:
+      summary: Update Issue asset
+      operationId: IncidentsService_UpdateAsset
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.UpdateAssetResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the task being updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.UpdateAssetBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/category:
+    put:
+      summary: Update Category
+      operationId: IncidentsService_UpdateCategory
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the issue being updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.UpdateCategoryBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/collaborators/add:
+    post:
+      summary: Add Issue assignee
+      operationId: IncidentsService_AddCollaborators
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the task being updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.AddCollaboratorsBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/collaborators/remove:
+    post:
+      summary: Remove Issue assignee
+      operationId: IncidentsService_RemoveCollaborators
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the task being updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.RemoveCollaboratorsBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/description:
+    put:
+      summary: Update Issue description
+      operationId: IncidentsService_UpdateDescription
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the task being updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.UpdateDescriptionBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/due_at:
+    put:
+      summary: Update Issue due date
+      operationId: IncidentsService_UpdateDueAt
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the task being updated
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.UpdateDueAtBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/occurred_at:
+    put:
+      summary: Update Issue occurred at
+      operationId: IncidentsService_UpdateOccurredAt
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.UpdateOccurredAtResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the task being updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.UpdateOccurredAtBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/pdf_report:
+    get:
+      summary: Export Issue to PDF
+      operationId: IncidentsService_GetPDFReport
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.GetPDFReportResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: The ID of the incident which the report is being created for
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/priority:
+    put:
+      summary: Update Issue priority
+      operationId: IncidentsService_UpdatePriority
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the task being updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.UpdatePriorityBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/site:
+    put:
+      summary: Update Issue site
+      operationId: IncidentsService_UpdateSite
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.UpdateSiteResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the task being updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.UpdateSiteBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/status:
+    put:
+      summary: Update Issue status
+      operationId: IncidentsService_UpdateStatus
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The ID of the action or issue you're updating.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.UpdateStatusBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/incidents/{task_id}/title:
+    put:
+      summary: Update Issue title
+      operationId: IncidentsService_UpdateTitle
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The UUID of the task being updated.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.IncidentsService.UpdateTitleBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/shared_link/{task_id}/web_report:
+    post:
+      summary: Get Issue web report link
+      operationId: SharedLinkService_GenerateForWebReport
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.GenerateResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      parameters:
+      - name: task_id
+        description: Required. The unique identifier of the issue to create a shareable link for.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.SharedLinkService.GenerateForWebReportBody'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/timeline:
+    post:
+      summary: List timeline events
+      operationId: TimelineService_GetTimeline
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/s12.tasks.v1.GetTimelineResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.GetTimelineRequest'
+        required: true
+      tags:
+      - Issues
+  /tasks/v1/timeline/comments:
+    post:
+      summary: Add comment to timeline
+      operationId: TimelineService_AddComment
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/s12.tasks.v1.AddCommentRequest'
+        required: true
+      tags:
+      - Issues
+components:
+  schemas:
+    s12.tasks.v1.IncidentsService.UpdateDueAtBody:
+      type: object
+      properties:
+        due_at:
+          type: string
+          format: date-time
+          description: 'Optional. Date/time this task is due.
+
+            If this is empty, "due at" will be unset.'
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      description: 'UpdateDueAtRequest represents the parameter to update the due date of the
+
+        task.'
+    s12.tasks.v1.GetIncidentsRequest.Filter:
+      type: object
+      properties:
+        status_id:
+          description: '`StatusID` filters issues on status.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.StatusID'
+        priority_id:
+          description: '`PriorityID` filters issues on priority.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.PriorityID'
+        category_id:
+          description: '`CategoryID` filters issues on category.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.CategoryID'
+        site_id:
+          description: '`SiteID` filters issues on site.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.SiteID'
+        assignee_id:
+          description: '`AssigneeID` filters issues on assignee.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.AssigneeID'
+        creator_id:
+          description: '`CreatorID` filters issues on creator.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.CreatorID'
+        title:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.Search'
+          description: '`title` filters issues on title text'
+        description:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.Search'
+          description: '`description` filters issues on description text'
+        task_id:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.TaskID'
+          description: '`TaskID` filters issues on task IDs'
+        due_at:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.Duration'
+          description: '`DueAt` filters on issues due at time'
+        created_at:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.Duration'
+          description: '`CreatedAt` filters on issues created at time'
+        occurred_at:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.Duration'
+          description: '`OccurredAt` filters on issues occurred at time'
+        keyword:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.Search'
+          description: '`Keyword` filters according to a search string'
+        modified_at:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.Duration'
+          description: '`ModifiedAt` filters on issues modified at time'
+        completed_at:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.Duration'
+          description: '`CompletedAt` filters on issues completed at time'
+        asset_id:
+          description: '`AssetID` filters issues on asset.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.AssetID'
+      description: 'Filters represents a filters object which contains the filters available
+
+        when listing issues. You can provide an array of filters in the request
+
+        to get a more specific response. Each filter can have an `operator` and a
+
+        `value`. The `operators` are described in `FilterOperator`, and the `value`
+
+        will be a UUID associated with that filter type.'
+    s12.tasks.v1.GetIncidentsRequest.Filter.CategoryID:
+      type: object
+      properties:
+        operator:
+          description: Optional, defaults to `IN` value.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.FilterOperator'
+        value:
+          type: array
+          items:
+            type: string
+          description: The ID of the category.
+      description: Will return issues that have a matching category.
+    s12.tasks.v1.GetIncidentsRequest.Filter.FilterOperator:
+      type: string
+      enum:
+      - FILTER_OPERATOR_UNKNOWN
+      - IN
+      default: FILTER_OPERATOR_UNKNOWN
+      description: "The options available when defining a filter. The only available option\nis `IN`.\n\n - FILTER_OPERATOR_UNKNOWN: `FILTER_OPERATOR_UNKNOWN` represents the default value for a filter\noperator, which is `IN`.\n - IN: `IN` returns results where the value is a direct match."
+    s12.tasks.v1.TimelineItem.TaskCustomFieldUpdatedMessageData:
+      type: object
+      properties:
+        field_id:
+          type: string
+          description: The ID of the field that was updated
+        field_name:
+          type: string
+          description: The name of the field that was updated
+      title: Data about when a custom field was updated
+    s12.tasks.v1.TimelineItem.TaskImageUploadedMessageData:
+      type: object
+      properties:
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Image uploaded to the task timeline
+      description: 'Data about when an image was added to a task. @deprecated
+
+        This has been deprecated in favour of media messages.
+
+        This is because the media messages allow videos and PDF as well as images.'
+    s12.tasks.v1.TimelineItem.TaskInspectionAddedMessageData:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: ID of the inspection that is being added
+        template_title:
+          type: string
+          description: Title of template being added
+      description: Data about when an inspection is linked to this issue.
+    s12.tasks.v1.TimelineItem.TaskAssigneeUpdatedMessageData:
+      type: object
+      properties:
+        assignees:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Collaborator'
+          description: Assignees of the task that was updated.
+      description: Data about when an assignee was updated.
+    s12.tasks.v1.TimelineItem.TaskAnswerAddedMessageData:
+      type: object
+      properties:
+        question_text:
+          type: string
+          description: The text of the question that was answered.
+        answer_text:
+          type: string
+          description: The text of the answer that was provided.
+        type:
+          description: The type of the question.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Question.QuestionType'
+      description: Data about when a custom question was answered on this issue.
+    s12.tasks.v1.GetIncidentsRequest.Filter.AssigneeID:
+      type: object
+      properties:
+        operator:
+          description: Optional, defaults to `IN` value.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.FilterOperator'
+        value:
+          type: array
+          items:
+            type: string
+          description: The user ID of the assignee.
+      description: 'Will return issues where the user ID of the assignee matches the
+
+        provided value.'
+    s12.tasks.v1.CreateIncidentResponse:
+      type: object
+      properties:
+        incident_id:
+          type: string
+      title: CreateIncidentResonse represents the result of `CreateIncident`
+    s12.tasks.v1.Category:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of a category.
+        key:
+          type: string
+          description: 'The name of a category. This can be a default name or one that is
+
+            customized in your organization.'
+        label:
+          type: string
+          description: 'The name of a category. This field''s value is the same as the value for
+
+            `key`.'
+        description:
+          type: string
+          description: The description of a category.
+        display_order:
+          type: integer
+          format: int32
+          description: 'The sorting order of a list of categories. This is unused, and is hardcoded
+
+            as `0`.'
+        is_visible:
+          type: boolean
+          description: 'The indicator for whether a category is visible or not for an organization
+
+            on the web app and the mobile app.'
+        use_category_access_whitelist:
+          type: boolean
+          description: 'The indicator for whether a category''s issues can be accessed by anyone
+
+            in your organization or not. If this is `false` for a category, then that
+
+            category''s issues can only be accessed by creators and assignees.'
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Item'
+          description: List of all items to be used in the category
+        notification_detail:
+          description: The level of detail for category notifications.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.CategoryNotificationDetail'
+        linked_template_ids:
+          type: array
+          items:
+            type: string
+          description: The list of template ids linked to this category.
+        visibility_summary:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.CategoryVisibilitySummary'
+          description: Summary of the number of entities that the category is visible to
+        user_access_as_reporter:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.CategoryUserAccessAsReporter'
+          description: The rule for whether the current user will gain access to issues they raise
+      description: 'A category is used to classify an issue.
+
+        For example, you can filter issues by category for analytics, or give
+
+        users or groups access to issues from a category.'
+    s12.tasks.v1.Task.SliderAnswer:
+      type: object
+      properties:
+        answer:
+          type: number
+          format: double
+          description: number of sliderAnswer
+        max:
+          type: number
+          format: double
+          description: 'A double representing the maximum value allowed for this item. Negatives
+
+            are allowed.'
+        min:
+          type: number
+          format: double
+          description: 'A double representing the minimum value allowed for this item. Negatives
+
+            are allowed.'
+      title: Answer returned for SliderItem
+    s12.tasks.v1.CategoryVisibilitySummary:
+      type: object
+      properties:
+        users:
+          type: integer
+          format: int32
+          description: The number of users that are the category is directly visible to
+        groups:
+          type: integer
+          format: int32
+          description: The number of groups that the category is directly visible to
+        sites:
+          type: integer
+          format: int32
+          description: The number of sites that the category is directly visible to
+      title: CategoryVisibilitySummary represents a summary of the number of entities that the category is visible for
+    s12.tasks.v1.TimelineItem.TaskLabelsUpdatedMessageData:
+      type: object
+      properties:
+        label_texts:
+          type: array
+          items:
+            type: string
+          description: 'The texts of the labels that were updated. If empty, any assigned labels
+
+            were cleared.'
+      description: Data about when labels were updated on this action.
+    s12.tasks.v1.GetIncidentsRequest.Filter.TaskID:
+      type: object
+      properties:
+        operator:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.FilterOperator'
+          description: 'optional. Default to FilterOperator.IN and should only be
+
+            FilterOperator.IN'
+        value:
+          type: array
+          items:
+            type: string
+          description: 'OR relation, represents the task_id should be
+
+            one of the value provided'
+      title: task id filter
+    s12.tasks.v1.Task.RangeComparison:
+      type: object
+      properties:
+        lower:
+          type: number
+          format: double
+          description: Represents the lower value of the range.
+        upper:
+          type: number
+          format: double
+          description: Represents the upper value of the range.
+      description: Used to compare values within a range.
+    s12.tasks.v1.TimelineItem.TaskOccurredAtUpdatedMessageData:
+      type: object
+      properties:
+        occurred_at:
+          type: string
+          format: date-time
+          description: The new occurred at date of the task.
+      description: Data about when the occurred at date of the task was updated.
+    s12.tasks.v1.GetIncidentsRequest.SortField:
+      type: string
+      enum:
+      - SORT_FIELD_UNKNOWN
+      - PRIORITY
+      - DATE_DUE
+      - CREATED_AT
+      - MODIFIED_AT
+      - OCCURRED_AT
+      default: SORT_FIELD_UNKNOWN
+      description: "The options available to sort the issues by.\nBy default, the issues will be returned by the date they were last\nmodified in descending order. This should be used in combination with\n`SortDirection` to determine how issues are sorted. If either\n`SortField` or `SortDirection` is missing, the default sort order will be\nused.\n\n - SORT_FIELD_UNKNOWN: `SORT_FIELD_UNKNOWN` will return the default sort order.\n - PRIORITY: `PRIORITY` will sort the issues by incident priority.\n - DATE_DUE: `DATE_DUE` will sort the issues by due date.\n - CREATED_AT: `CREATED_AT` will sort the issues by the date they were created.\n - MODIFIED_AT: `MODIFIED_AT` will sort the issues by the date they were last\nmodified.\n - OCCURRED_AT: `OCCURRED_AT` will sort the issues by the date they occurred at."
+    s12.tasks.v1.Item.ItemType:
+      type: string
+      enum:
+      - ITEM_TYPE_UNSPECIFIED
+      - ITEM_TYPE_TITLE
+      - ITEM_TYPE_DESCRIPTION
+      - ITEM_TYPE_SITE
+      - ITEM_TYPE_MEDIA
+      - ITEM_TYPE_LOCATION
+      - ITEM_TYPE_QUESTION
+      - ITEM_TYPE_OCCURRED_AT
+      - ITEM_TYPE_ASSET
+      default: ITEM_TYPE_UNSPECIFIED
+      description: '- ITEM_TYPE_UNSPECIFIED: The item type is unspecified'
+      title: The types of items
+    s12.tasks.v1.SharedLinkService.GenerateForWebReportBody:
+      type: object
+      properties:
+        path_prefix:
+          type: string
+          description: '@deprecated: This was a field used to specify part of the generated URL.
+
+            This is no longer used as the URL is now fixed.'
+      title: GenerateRequest represents the parameters to `GenerateWebReportSharedLink`
+    s12.tasks.v1.TaskType:
+      type: string
+      enum:
+      - TASK_TYPE_ACTION
+      - TASK_TYPE_CUSTOM
+      description: "- TASK_TYPE_ACTION: Indicates this task is of type Action.\n - TASK_TYPE_CUSTOM: Indicates this task is of a custom type."
+      title: Type is the type of the current task
+    s12.tasks.v1.TimelineItem.ActivityCreatorType:
+      type: string
+      enum:
+      - TYPE_NOT_SET
+      - INTERNAL_USER
+      - EXTERNAL_USER
+      default: TYPE_NOT_SET
+      description: "The type of individual who has created this timeline item.\n\n - TYPE_NOT_SET: An unknown type of creator.\n - INTERNAL_USER: The creator is an authenticated user within the organisation.\n - EXTERNAL_USER: The creator is an unauthenticated user who has been given external access\nto the task."
+    s12.tasks.v1.GetIncidentsRequest.SortDirection:
+      type: string
+      enum:
+      - SORT_DIRECTION_UNKNOWN
+      - ASC
+      - DESC
+      default: SORT_DIRECTION_UNKNOWN
+      description: "The options available to define the sort direction.\n\n - SORT_DIRECTION_UNKNOWN: `SORT_DIRECTION_UNKNOWN` will return the default sort direction.\n - ASC: `ASC` will return the sorted issues in ascending order.\n - DESC: `DESC` will return the sorted issues in descending order."
+    s12.tasks.v1.IncidentsService.UpdateOccurredAtBody:
+      type: object
+      properties:
+        occurred_at:
+          type: string
+          format: date-time
+          description: 'Optional. The new occurred at time for the task.
+
+            If this is empty, the occurred at value will be unset.'
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      title: 'UpdateOccurredAtRequest represents the parameters to update the
+
+        occurred at time associated with a task'
+    s12.tasks.v1.TimelineItem.TaskMediaUploadedMessageData:
+      type: object
+      properties:
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.Media'
+          description: 'Data about the media that were added at this time.
+
+            Users can add multiple pieces of media at once, so this may contain data
+
+            about multiple pieces of media.'
+        deleted_ids:
+          type: array
+          items:
+            type: string
+          description: IDs of media items previously associated with this activity that have since been deleted.
+      description: Data about when media files were added to the task.
+    s12.tasks.v1.IncidentsService.UpdateCategoryBody:
+      type: object
+      properties:
+        category_id:
+          type: string
+          description: 'Required. The new category UUID for the issue.
+
+            Call the `GetCategories` endpoint to get the available categories.'
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      title: UpdateCategoryRequest represents the parameters to `UpdateCategory`
+      required:
+      - category_id
+    s12.tasks.v1.Item:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the item.
+        name:
+          type: string
+          description: Name of the item
+        is_mandatory:
+          type: boolean
+          description: Whether or not the item must be filled before submission
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Item.ItemType'
+          description: Type of item
+        question_data:
+          $ref: '#/components/schemas/s12.tasks.v1.Question'
+        is_disabled:
+          type: boolean
+          description: Whether or not the item is disabled and hidden from submission
+      title: Item for a given category/incident
+    s12.tasks.v1.UpdateSiteResponse:
+      type: object
+    s12.tasks.v1.CollaboratorRole:
+      type: string
+      enum:
+      - ASSIGNEE
+      - CREATOR
+      default: COLLABORATOR_ROLE_NOT_SET
+      description: "- ASSIGNEE: The collaborator has been assigned to a task.\n - CREATOR: The collaborator has created the task."
+      title: The role of the collaborator in relation to a task
+    s12.common.Color:
+      type: object
+      properties:
+        red:
+          type: number
+          format: float
+          description: The amount of red in the color as a value in the interval [0, 255].
+        green:
+          type: number
+          format: float
+          description: The amount of green in the color as a value in the interval [0, 255].
+        blue:
+          type: number
+          format: float
+          description: The amount of blue in the color as a value in the interval [0, 255].
+      title: 'Color represents a color representation of given option and is decimal
+
+        representation of RGB'
+    s12.tasks.v1.Task.SensorAlertContext:
+      type: object
+      properties:
+        sensor_alert_id:
+          type: string
+          description: ID of sensor alert context associated with the action
+        level:
+          description: The level of the alert event.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.AlertEventLevel'
+        created_at:
+          type: string
+          format: date-time
+          description: The time the alert event was created/updated.
+        detected_at:
+          type: string
+          format: date-time
+          description: The time the first alert event was detected.
+        sensor_id:
+          type: string
+          description: Sensor asset ID for which the event happened
+        site_name:
+          type: string
+          description: Name of the site at a time of event
+        metric_type:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.MetricType'
+          description: Metric type of an alert event
+        sensor_name:
+          type: string
+          description: Name of the sensor at a time of event
+        reading_type:
+          type: string
+          description: Sensor reading type
+        reading_name:
+          type: string
+          description: Sensor reading name
+      title: context of sensor alert associated with the action
+    s12.tasks.v1.SubmitIncidentRequest.QuestionAnswer:
+      type: object
+      properties:
+        question_id:
+          type: string
+          description: The ID of the question being answered.
+        answer_text:
+          description: 'AnswerText indicates that the question being answered has a text
+
+            response.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.AnswerText'
+        answer_multiple_choice:
+          description: MultipleChoiceOption indicates that the question being answered is a multiple choice question.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.MultipleChoiceOption'
+      description: 'QuestionAnswer contains data about a question configured for this issue''s
+
+        category, as well as the answer to that question.'
+    s12.tasks.v1.GetIncidentsCountResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+          description: Total number of incidents
+      title: GetIncidentsCountResponse response object for getIncidentsCount
+    s12.tasks.v1.Task.TextAnswer:
+      type: object
+      properties:
+        answer:
+          type: string
+          description: Text answer content
+        unit_symbol:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.MeasurementUnitSymbol'
+          description: Unit symbol for number questions that has units assigned to them
+        format:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TextAnswerFormat'
+          description: Determines what is the format of the answer
+      title: Answer returned for TextItem, TextSingleItem, ScannerItem type
+    s12.common.v1.AiMarking:
+      type: object
+      properties:
+        ai_edited:
+          type: boolean
+          description: 'True when something non deterministic, in practice an LLM, produced or
+
+            changed this content. False when no AI did, which includes content a person
+
+            wrote and content a deterministic path produced. Absent when the origin was
+
+            not recorded. Do not report false in place of absent.'
+        human_edited:
+          type: boolean
+          description: 'True when a person authored or changed this content. False when no person
+
+            did, which includes content a model generated and content a deterministic
+
+            path produced. Absent when the origin was not recorded. Do not report false
+
+            in place of absent.'
+      description: "AiMarking carries the AI marking fact on an API representation, so a machine\ncan read whether AI and whether a person produced or changed the content.\nIt is the read side of the express path: one shared message with standard\nproperty names, rather than every domain inventing its own field for the\nsame fact.\n\nBoth fields are presence tracked. The three states each carry a different\nmeaning and must not be collapsed:\n\n  true    The actor named by the field produced or changed this content.\n  false   The actor named by the field is known not to have produced or\n          changed this content. It is a claim about that actor only.\n  absent  We did not record the origin.\n\nfalse is not evidence that a deterministic path produced the content. Known\nhuman only content can read ai_edited false, and known AI only content can\nread human_edited false. Set a field to false only when you know it is false.\nLeave it absent when you do not, so a consumer relying on the API for their\nown obligation can tell \"not true\" from \"not recorded\". EU AI Act Article\n50(2), engineering approach page."
+    s12.tasks.v1.Task.CheckboxAnswer:
+      type: object
+      properties:
+        answer:
+          type: boolean
+          description: answer content for CheckboxAnswer
+      title: Answer returned for CheckboxItem
+    s12.tasks.v1.IncidentsService.UpdateTitleBody:
+      type: object
+      properties:
+        title:
+          type: string
+          description: 'Required. The new title for the task.
+
+            The title must be between 0 and 255 characters.'
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      description: UpdateTitleRequest represents the parameters to update the title of the task.
+    s12.tasks.v1.Group:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      title: Group represents a user group configured within an organisation
+    s12.tasks.v1.TimelineItem.Type:
+      type: string
+      enum:
+      - TIMELINE_ITEM_UNKNOWN
+      - TASK_CREATED
+      - TASK_TITLE_UPDATED
+      - TASK_DESCRIPTION_UPDATED
+      - TASK_ASSIGNEE_ADDED
+      - TASK_ASSIGNEE_REMOVED
+      - TASK_DUE_AT_UPDATED
+      - TASK_STATUS_UPDATED
+      - TASK_PRIORITY_UPDATED
+      - TASK_COMMENT_ADDED
+      - TASK_IMAGE_UPLOADED
+      - TASK_SITE_UPDATED
+      - TASK_DELETED
+      - TASK_CATEGORY_UPDATED
+      - INCIDENT_CREATED
+      - TASK_NOTIFICATION_SENT
+      - TASK_MEDIA_UPLOADED
+      - TASK_ASSIGNEE_UPDATED
+      - TASK_LOCATION_ADDED
+      - TASK_INSPECTION_COMPLETED
+      - TASK_INSPECTION_DELETED
+      - TASK_INSPECTION_ADDED
+      - TASK_ANSWER_ADDED
+      - TASK_ASSET_UPDATED
+      - TASK_LABELS_UPDATED
+      - TASK_SCHEDULE_UPDATED
+      - INCIDENT_CHILD_CREATED
+      - TASK_CUSTOM_FIELD_UPDATED
+      - TASK_OCCURRED_AT_UPDATED
+      - TASK_MEDIA_DELETED
+      default: TIMELINE_ITEM_UNKNOWN
+      description: "The type of the timeline item.\n\n - TIMELINE_ITEM_UNKNOWN: Removed fields related to the cancelled actions/issues integration\nAn unknown type of timeline item.\n - TASK_CREATED: A timeline item for the creation of an action.\n - TASK_TITLE_UPDATED: A timeline item indicating that the title of the task has been updated.\n - TASK_DESCRIPTION_UPDATED: A timeline item indicating that the task's description has been updated.\n - TASK_ASSIGNEE_ADDED: A timeline item indicating that an assignee has been added to the task.\n - TASK_ASSIGNEE_REMOVED: A timeline item indicating that an assignee has been removed from the\ntask.\n - TASK_DUE_AT_UPDATED: A timeline item indicating that the due date of the task has been\nupdated.\n - TASK_STATUS_UPDATED: A timeline item indicating that the status of the task has been updated.\n - TASK_PRIORITY_UPDATED: A timeline item indicating that the priority of the task has been\nupdated.\n - TASK_COMMENT_ADDED: A timeline item indicating that a comment has been added to the task.\n - TASK_IMAGE_UPLOADED: A timeline item indicating that an image was added to the task.\nThis field is deprecated, and was replaced by the `TASK_MEDIA_ADDED`\ntype. It is kept here to maintain backwards compatibility.\n\n@deprecated use TASK_MEDIA_UPLOADED instead\n - TASK_SITE_UPDATED: A timeline item indicating that the folder (site) of the task has been\nupdated.\n - TASK_DELETED: A timeline item indicating that this task has been deleted.\n - TASK_CATEGORY_UPDATED: A timeline item indicating that the category of this task has been\nupdated. This type is only relevant to issues.\n - INCIDENT_CREATED: A timeline item for the creation of an issue.\n - TASK_NOTIFICATION_SENT: A timeline item indicating that a notification about this task has been\nsent.\n - TASK_MEDIA_UPLOADED: A timeline item indicating that media has been added to this task.\n - TASK_ASSIGNEE_UPDATED: reserved 17, 18, 19;\n17 - 19 reserved for the cancelled actions/issues integration feature.\nA timeline item indicating that the assignee of this task has been\nupdated.\n - TASK_LOCATION_ADDED: A timeline item indicating the geolocation of this issue.\nThis type is only relevant to issues.\n - TASK_INSPECTION_COMPLETED: A timeline item indicating that an inspection that has been linked to an\nissue has been completed. This type is only relevant to issues.\n - TASK_INSPECTION_DELETED: A timeline item indicating that an inspection that has been linked to an\nissue has been deleted. This type is only relevant to issues.\n - TASK_INSPECTION_ADDED: A timeline item indicating that an inspection has been linked to an\nissue. This type is only relevant to issues.\n - TASK_ANSWER_ADDED: A timeline item indicating that an issue's custom question has been\nanswered. This type is only relevant to issues.\n - TASK_ASSET_UPDATED: A timeline item indicating that an action has an asset updated\n - TASK_LABELS_UPDATED: A timeline item indicating that an action has labels updated\n - TASK_SCHEDULE_UPDATED: A timeline item indicating that the schedule that created this action was\nupdated.\n - INCIDENT_CHILD_CREATED: A timeline item indicating that an action has been created from an issue\n - TASK_CUSTOM_FIELD_UPDATED: A timeline item indicating that a custom field on this task was updated.\n - TASK_OCCURRED_AT_UPDATED: A timeline item indicating that occurred at date for the task has been\nupdated.\n - TASK_MEDIA_DELETED: A timeline item indicating that media has been deleted from this task."
+    s12.tasks.v1.Question.QuestionType:
+      type: string
+      enum:
+      - QUESTION_TYPE_UNSPECIFIED
+      - QUESTION_TYPE_TEXT
+      - QUESTION_TYPE_MULTIPLE_CHOICE
+      default: QUESTION_TYPE_UNSPECIFIED
+      description: "- QUESTION_TYPE_UNSPECIFIED: The question type is unspecified. This generally should not happen.\n - QUESTION_TYPE_TEXT: The question is text type. This question accepts freetext answers.\n - QUESTION_TYPE_MULTIPLE_CHOICE: The question is multiple choice. This question provides a list of options to choose from."
+      title: The types of questions
+    s12.tasks.v1.Task.Collaborator:
+      type: object
+      properties:
+        collaborator_id:
+          type: string
+          description: A UUID uniquely identifying this collaborator.
+        collaborator_type:
+          description: The type of the collaborator i.e. group or user.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.CollaboratorType'
+        assigned_role:
+          description: The role of the collaborator in this task.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.CollaboratorRole'
+        user:
+          description: Collaborator details for an authenticated user.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.User'
+        group:
+          description: Collaborator details for a group.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Group'
+        external_user:
+          description: Collaborator details for an external user.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.ExternalUser'
+        contributor:
+          description: Collaborator details for a contributor.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Contributor'
+      description: 'A collaborator is somebody who is involved with the task.
+
+        They have either created the task, or are assigned to it.'
+    s12.tasks.v1.IncidentsService.UpdateAssetBody:
+      type: object
+      properties:
+        asset_id:
+          description: 'Optional. The new asset UUID for the task.
+
+            If this is empty, the asset will be unset.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UUIDValue'
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      title: 'UpdateAssetRequest represents the parameter to update the asset
+
+        associated to a task'
+    s12.tasks.v1.MetricType:
+      type: string
+      enum:
+      - TEMPERATURE
+      - HUMIDITY
+      - BATTERY
+      - SIGNAL
+      - AIR_QUALITY_PM25
+      - AIR_QUALITY_PM10
+      - TEMPERATURE_2
+      - DIFFERENTIAL_AIR_PRESSURE
+      - CO
+      - DOOR_OPEN_CLOSED
+      - BATTERY_VOLTAGE
+      - WEATHER
+      - WIND_SPEED
+      - WIND_DIRECTION
+      - WIND_GUST
+      - CO2
+      default: UNKNOWN_TYPE
+      description: "- TEMPERATURE: Temperature metric\n - HUMIDITY: Humidity metric\n - BATTERY: Battery level. Percentage based i.e. 0 - 100\n - SIGNAL: Signal strength metric\n - AIR_QUALITY_PM25: Air quality for particulate matter less than 2.5 microns\n - AIR_QUALITY_PM10: Air quality for particulate matter less than 10 microns\n - TEMPERATURE_2: Alternative temperature (Some hardware i.e. Avem Quirks do have 2 probes\nand are sending 2 temperatures)\n - DIFFERENTIAL_AIR_PRESSURE: Differential air pressure\n - CO: Carbon monoxide\n - DOOR_OPEN_CLOSED: Door open/closed boolean metric\n - BATTERY_VOLTAGE: Battery voltage metric\n - WEATHER: Weather (e.g. sunny, thunderstorms)\n - WIND_SPEED: Wind speed\n - WIND_DIRECTION: Wind direction\n - WIND_GUST: Wind gust\n - CO2: Carbon dioxide"
+      title: Metric type represents a type of received metric
+    s12.tasks.v1.Incident:
+      type: object
+      properties:
+        task:
+          description: The task associated with the issue.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task'
+        category_id:
+          type: string
+          description: '@deprecated. Use category instead.
+
+            The category id associated with the issue.'
+        category:
+          description: The current category of the issue.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Category'
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.Media'
+          description: Any media associated with this issue.
+        location:
+          description: The location that the issue occurred at.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.AddressLocation'
+        inspections:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Inspection'
+          description: The inspections that are linked to this issue.
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Item'
+          description: A snapshot of the category items, at the time of creation.
+        question_answers:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.QuestionAnswers'
+          description: The answers to the snapshot category items
+        ai_generated:
+          type: boolean
+          description: 'Use `ai_marking`. True when this issue was created via an AI-assisted
+
+            flow. A plain boolean, so it cannot tell absent from false.'
+        ai_marking:
+          description: 'The AI marking for the issue, per EU AI Act Article 50(2) and the
+
+            engineering approach. `ai_edited` and `human_edited` are presence tracked,
+
+            so absent stays distinct from false. Carried on the response and accepted
+
+            on the create and submit requests under the write rules.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.AiMarking'
+      description: 'An Incident represents the details of an issue.
+
+        This can include the category, any attached media, the location,
+
+        any linked inspections and the task associated with the issue.'
+    s12.tasks.v1.Task.AddressAnswer:
+      type: object
+      properties:
+        location_text:
+          type: string
+          description: Location text
+        location:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.AddressLocation'
+          description: 'Location info generated only when location is added using a location
+
+            picker'
+      title: Answer returned for AddressItem
+    s12.tasks.v1.Question:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the question.
+        text:
+          type: string
+          description: 'The text of the question being asked (e.g. "How many eggs are in a dozen?"). This does not use the new
+
+            `validator.string` option as question processing logic fails when symbols are substituted for similar-looking
+
+            symbols.'
+        type:
+          description: The type of the question. See `enum QuestionType` for more details.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Question.QuestionType'
+        is_mandatory:
+          type: boolean
+          description: Whether the question is mandatory or not
+        multiple_choice_options:
+          $ref: '#/components/schemas/s12.tasks.v1.MultipleChoiceOptions'
+      description: Question represents the question structure for a custom question.
+    s12.tasks.v1.TimelineItem.ActivityCreator:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the individual who created this timeline item.
+        name:
+          type: string
+          description: The name of the individual who created this timeline item.
+        creator_type:
+          description: The type of the individual who created this timeline item.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.ActivityCreatorType'
+      description: Creator of the timeline item.
+    s12.tasks.v1.SubmitIncidentResponse:
+      type: object
+      properties:
+        incident_id:
+          type: string
+          description: The UUID of the incident that was created.
+        unique_id:
+          type: string
+          description: 'The unique id of the incident that was created. Formatted like: IS-1234.'
+      title: SubmitIncidentResponse represents the result of `SubmitIncident`
+    s12.tasks.v1.TimelineItem.TaskMediaDeletedMessageData:
+      type: object
+      properties:
+        media:
+          description: Data about the media that was deleted.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+      description: Data about when a media file was deleted from the task.
+    s12.tasks.v1.TimelineItem.TaskInspectionCompletedMessageData:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: ID of the completed inspection.
+        template_title:
+          type: string
+          description: The title of the template this inspection was created from.
+      description: Data about when an inspection linked to this issue is completed.
+    s12.tasks.v1.IncidentsResponse:
+      type: object
+      properties:
+        incidents:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Incident'
+          description: List of issues
+        next_page_token:
+          type: string
+          description: 'If there are more results than those appearing in this response, then
+
+            `next_page_token` is included. If empty then there are no more results.
+
+            To get the next set of results, call `GetIncidents`
+
+            method again using the value of `next_page_token` as `page_token`.
+
+            For Example: ''ODFBMzQ3MDYtNzQxNy00RDZGLThDNjE1MEFDMkM4MTQ3NDQ='''
+        total:
+          type: integer
+          format: int32
+          description: '@deprecated: Use `GetIncidentsCount` instead. Total number of issues found'
+      title: IncidentsResponse represents the result of `GetIncidents`
+    s12.tasks.v1.Task.User:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The UUID of this user.
+        firstname:
+          type: string
+          description: The first name of the user.
+        lastname:
+          type: string
+          description: The last name of the user.
+      description: The user associated to the task. They could be a creator or assignee.
+    s12.tasks.v1.TextAnswerFormat:
+      type: string
+      enum:
+      - TEXT
+      - NUMBER
+      default: UNKNOWN_FORMAT
+      description: "- TEXT: Normal textsingle item\n - NUMBER: Textsingle item with number format"
+      title: Represents the format of a Textsingle item for the inspection context
+    s12.tasks.v1.TimelineItem.TaskCreatedMessageData:
+      type: object
+      properties:
+        task:
+          description: Data about the action that was created.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task'
+      description: Data about when an action was created.
+    s12.tasks.v1.TimelineItem:
+      type: object
+      properties:
+        item_id:
+          type: string
+          description: The UUID of the timeline item
+        task_id:
+          type: string
+          description: The UUID of the task this timeline is associated with.
+        creator:
+          description: 'The creator of the timeline item.
+
+            This has been deprecated in favor of `activity_creator`.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.User'
+        timestamp:
+          type: string
+          format: date-time
+          description: UTC Timestamp for the timeline item.
+        item_type:
+          description: Type of the timeline item.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.Type'
+        task_created_data:
+          description: Data related to a created action.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskCreatedMessageData'
+        task_assignee_added_data:
+          description: Data related to an added assignee.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskAssigneeAddedMessageData'
+        task_due_at_updated_data:
+          description: Data related to an updated due date.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskDueAtUpdatedMessageData'
+        task_status_updated_data:
+          description: Data related to an updated status.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskStatusUpdatedMessageData'
+        task_priority_updated_data:
+          description: Data related to an updated priority.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskPriorityUpdatedMessageData'
+        task_comment_added_data:
+          description: Data related to an added comment.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskCommentAddedMessageData'
+        task_image_uploaded_data:
+          description: 'Data related to an added image.
+
+
+            @deprecated. Use TaskMediaUploadedMessageData instead'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskImageUploadedMessageData'
+        task_site_updated_data:
+          description: Data related to an updated site.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskSiteUpdatedMessageData'
+        task_category_updated_data:
+          description: Data related to an updated category.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskCategoryUpdatedMessageData'
+        incident_created_data:
+          description: Data related to a created issue.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.IncidentCreatedMessageData'
+        task_notification_sent_data:
+          description: Data related to a sent notification.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskNotificationSentMessageData'
+        task_media_uploaded_data:
+          description: Data related to added media.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskMediaUploadedMessageData'
+        task_assignee_updated_data:
+          description: Data related to an added assignee.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskAssigneeUpdatedMessageData'
+        task_location_added_data:
+          description: Data related to an added location.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskLocationAddedMessageData'
+        task_inspection_completed_data:
+          description: Data related to a completed linked inspection.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskInspectionCompletedMessageData'
+        task_inspection_deleted_data:
+          description: Data related to a deleted linked inspection.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskInspectionDeletedMessageData'
+        task_inspection_added_data:
+          description: Data related to the creation of a linked inspection.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskInspectionAddedMessageData'
+        task_answer_added_data:
+          description: Data related to an answered custom question.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskAnswerAddedMessageData'
+        task_asset_updated_data:
+          description: Data related to an updated asset.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskAssetUpdatedMessageData'
+        task_labels_updated_data:
+          description: Data related to updated labels.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskLabelsUpdatedMessageData'
+        task_schedule_updated_data:
+          description: Data related to an updated schedule.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskScheduleUpdatedMessageData'
+        task_custom_field_updated_data:
+          description: Data related to an updated custom field.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskCustomFieldUpdatedMessageData'
+        task_occurred_at_updated_data:
+          description: Data related to an updated occurred at date.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskOccurredAtUpdatedMessageData'
+        task_media_deleted_data:
+          description: Data related to deleted media.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.TaskMediaDeletedMessageData'
+        activity_creator:
+          description: The creator of the timeline activity.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TimelineItem.ActivityCreator'
+      description: TimelineItem contains information about each item in the timeline.
+    s12.tasks.v1.Task.InspectionContext:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: ID of the inspection associated with the action
+        inspection_name:
+          type: string
+          description: name of the inspection associated with the action
+        inspection_item_id:
+          type: string
+          description: ID of the inspectionItem associated with the action
+        inspection_item_name:
+          type: string
+          description: name of the inspectionItem associated with the action
+        inspection_item_type:
+          type: string
+          description: '@deprecated The type of the inspectionItem associated with the action'
+        inspection_item_path:
+          type: array
+          items:
+            type: string
+          description: The path(breadcrumbs) of the inspectionItem associated with the action
+        inspection_item_attachments:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Attachments'
+          description: Attachments of the inspectionItem associated with the action
+        list_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.ListAnswer'
+        text_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.TextAnswer'
+        checkbox_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.CheckboxAnswer'
+        media_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.MediaAnswer'
+        signature_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.SignatureAnswer'
+        drawing_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.DrawingAnswer'
+        slider_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.SliderAnswer'
+        datetime_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.DateTimeAnswer'
+        address_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.AddressAnswer'
+        switch_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.SwitchAnswer'
+        temperature_answer:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.TemperatureAnswer'
+        inspection_deleted:
+          type: boolean
+          description: Flag indicated whether the inspection has been deleted
+        is_complete:
+          type: boolean
+          description: Flag to indicate the inspection is marked as complete.
+        is_access_denied:
+          type: boolean
+          description: Flag to indicate the access for the inspection is denied.
+        completed_at:
+          type: string
+          format: date-time
+          description: The date the inspection was completed.
+      title: context of inspection associated with the action
+    s12.tasks.v1.Task.TemperatureAnswer:
+      type: object
+      properties:
+        temperature:
+          type: number
+          format: double
+          description: '@deprecated. Use answer instead'
+        display_unit:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.TemperatureUnit'
+          description: Represents the temperature unit type
+        between:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.RangeComparison'
+        above:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.NumberComparison'
+        below:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.NumberComparison'
+        answer:
+          type: number
+          format: double
+          description: answer of TemperatureAnswer
+      title: Answer returned for temperatureItem
+    s12.tasks.v1.ActionLabel:
+      type: object
+      properties:
+        label_id:
+          type: string
+          description: '(Required) The UUID of the action label.
+
+            For example, "73361b5d-407a-424e-b20e-c932bc41706c".'
+        label_name:
+          type: string
+          description: (Required) The name of the action label.
+      description: ActionLabel is the label that's selected for an action.
+    s12.common.UUIDValue:
+      type: object
+      properties:
+        value:
+          type: string
+      description: Wrapper message for a string representation of a `UUID`.
+    s12.tasks.v1.ReferenceType:
+      type: string
+      enum:
+      - SENSOR
+      - SENSOR_ALERT
+      - INSPECTION
+      - INCIDENT
+      - SCHEDULE
+      - ACTION
+      - LINKED_INSPECTION
+      - ASSET_MAINTENANCE_PLAN
+      default: REFERENCE_TYPE_NOT_SET
+      description: 'Reference type. The idea here is to list all the "external" types that would
+
+        be used as a reference when creating actions.'
+    s12.tasks.v1.Task.LinkedInspectionContext:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: ID of the inspection associated with the action.
+        template_id:
+          type: string
+          description: ID of the template this inspection was created from.
+        inspection_name:
+          type: string
+          description: Name of the inspection linked to the action.
+        is_complete:
+          type: boolean
+          description: Flag to indicate the inspection is marked as complete.
+        is_access_denied:
+          type: boolean
+          description: Flag to indicate the access for the inspection is denied.
+        is_deleted:
+          type: boolean
+          description: Flag to indicate whether the inspection is deleted or not.
+        created_at:
+          type: string
+          format: date-time
+          description: The date the inspection was created.
+        completed_at:
+          type: string
+          format: date-time
+          description: The date the inspection was completed.
+        template_name:
+          type: string
+          description: Name of the template this inspection was created from.
+      description: Context of an inspection started from a template associated with the action.
+    s12.tasks.v1.GetIncidentsRequest.Filter.Duration:
+      type: object
+      properties:
+        from:
+          type: string
+          format: date-time
+          description: optional. represents the time should be after the time provided
+        to:
+          type: string
+          format: date-time
+          description: optional. represents the time should be before the time provided
+      title: time duration filter
+    s12.tasks.v1.TimelineItem.TaskAssigneeAddedMessageData:
+      type: object
+      properties:
+        collaborators:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Collaborator'
+          description: Data about the people assigned to the task.
+      description: Data about when an assignee was added to the task.
+    s12.tasks.v1.QuestionAndAnswers:
+      type: object
+      properties:
+        question:
+          description: 'Question represents the question structure for a question associated with
+
+            an issue.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Question'
+        is_answered:
+          type: boolean
+          description: Whether the question has been answered at least once.
+        answer_set:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Answer'
+          description: The set of answers that is associated with the question.
+      description: 'QuestionAndAnswers represents the list of answers associated with a single
+
+        question. This is a 1:N relationship of Question to Answers, meaning a
+
+        question may have multiple answers.'
+    s12.tasks.v1.AddCommentRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          description: Required. The UUID for the task the comment is being added to.
+        comment:
+          type: string
+          description: Required. The content of the comment.
+        created_at:
+          type: string
+          format: date-time
+          description: Optional. Date/time this comment was added.
+        event_id:
+          type: string
+          description: 'Optional. The unique identifier for the event. This will be auto-generated
+
+            if omitted.'
+      title: Represents the parameters to `AddComment`
+      required:
+      - task_id
+      - comment
+    s12.tasks.v1.IncidentsService.UpdatePriorityBody:
+      type: object
+      properties:
+        priority_id:
+          type: string
+          description: Required. The new priority UUID for the task.
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      title: 'UpdatePriorityRequest represents the parameters to update the priority of the
+
+        task'
+      required:
+      - priority_id
+    s12.tasks.v1.TimelineItem.TaskInspectionDeletedMessageData:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: ID of the deleted inspection.
+        template_title:
+          type: string
+          description: The title of the template this inspection was created from.
+      description: Data about when an inspection linked to this issue was deleted.
+    s12.tasks.v1.Task.ListResponse:
+      type: object
+      properties:
+        label:
+          type: string
+          description: Label for the response
+        color:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Color'
+          description: Color represents a color representation of given option
+      title: Response of List type InspectionItem
+    s12.tasks.v1.CreateIncidentRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          description: 'A UUID to identify the issue.
+
+            Optional. If it is not provided, it will be automatically generated.'
+        title:
+          type: string
+          description: Required. Title of the issue (maximum 255 characters).
+        description:
+          type: string
+          description: Optional. Description of the issue (maximum 500 characters).
+        collaborators:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Collaborator'
+          description: 'The collaborators involved in this issue.
+
+            Collaborators are users who have been assigned to the issue. The user will
+
+            appear in the "Assignee" field in the issue. Only one user can be assigned
+
+            to an issue at a time.'
+        created_at:
+          type: string
+          format: date-time
+          description: 'Optional. The date and time this issue was created.
+
+            If no date is provided, the current time will be used.
+
+            Must be sent in the Internet Date-Time format, more information about the type is
+
+            available here:
+
+            https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#timestamp.'
+        category_id:
+          type: string
+          description: 'Required. The ID of the issue''s category.
+
+            Categories are configured at an organization level, and can be retrieved
+
+            from the `GetCategories` endpoint. The issue will not be created if the
+
+            category is missing, and an error will be returned.'
+        status_id:
+          type: string
+          description: 'Optional. ID of the issue''s status.
+
+            If not set, this issue will be stored with the default status (Open).
+
+            An issue can be open, in progress, or resolved, and these are represented
+
+            by hardcoded UUID values. Open status: `547ed646-5e34-4732-bb54-a199d304368a`.
+
+            In Progress status: `ca6f3bc7-b943-406e-8399-8a713b7e6268`.
+
+            Resolved status: `450484b1-56cd-4784-9b49-a3cf97d0c0ad`.'
+        site_id:
+          type: string
+          description: 'The ID of the site associated with the issue.
+
+            Site IDs can be retrieved on platform.'
+        location:
+          description: The geographical location of the issue.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.AddressLocation'
+        question_answers:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.QuestionAnswer'
+          description: Answers for questions on the issue.
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Item'
+          description: 'Optional. The category fields and questions that applied to this incident
+
+            when it was created.'
+        occurred_at:
+          type: string
+          format: date-time
+          description: Optional. Date and time this incident occurred at
+        asset_id:
+          type: string
+          description: Optional. The ID of the asset associated with this issue.
+        ai_generated:
+          type: boolean
+          description: 'The Assistant passes the mitti-ai-marked header on the create call, so a
+
+            new caller sets it the same way. The field stays for existing callers.'
+      title: CreateIncidentRequest represents the parameters to `CreateIncident`
+      required:
+      - title
+      - category_id
+    s12.tasks.v1.MultipleChoiceOptions:
+      type: object
+      properties:
+        options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.MultipleChoiceOption'
+      description: MultipleChoiceOptions is an explicit message for a set of MultipleChoiceOption's to use in a oneof field below.
+    s12.tasks.v1.Task.ExternalUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID uniquely identifying this external user.
+        email:
+          type: string
+          description: The email address of the external user.
+      description: The external user that is assigned to a task.
+    s12.tasks.v1.GetCategoriesResponse:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Category'
+          description: A list of the categories that are configured for the organisation
+        next_page_token:
+          type: string
+          description: NextPageToken to get the next set of categories. Empty if scrolled to the end.
+        total:
+          type: integer
+          format: int32
+          description: Total number of categories
+      description: 'GetCategoriesResponse represents the response to a GetCategories request.
+
+        It is an array of `Category`, containing data about the organization''s
+
+        categories.'
+    s12.tasks.v1.GetIncidentsRequest.Filter.SiteID:
+      type: object
+      properties:
+        operator:
+          description: Optional, defaults to `IN` value.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.FilterOperator'
+        value:
+          type: array
+          items:
+            type: string
+          description: The ID of the site.
+      description: Will return issues that have a matching site.
+    s12.tasks.v1.Task.AssetMaintenancePlan.AssetMaintenancePlanState:
+      type: string
+      enum:
+      - ASSET_MAINTENANCE_PLAN_STATE_UNSPECIFIED
+      - ASSET_MAINTENANCE_PLAN_STATE_ACTIVE
+      - ASSET_MAINTENANCE_PLAN_STATE_DELETED
+      default: ASSET_MAINTENANCE_PLAN_STATE_UNSPECIFIED
+      description: " - ASSET_MAINTENANCE_PLAN_STATE_UNSPECIFIED: ASSET_MAINTENANCE_PLAN_STATE_UNSPECIFIED is an unknown maintenance plan state.\n - ASSET_MAINTENANCE_PLAN_STATE_ACTIVE: ASSET_MAINTENANCE_PLAN_STATE_ACTIVE is a maintenance plan state that is active.\n - ASSET_MAINTENANCE_PLAN_STATE_DELETED: ASSET_MAINTENANCE_PLAN_STATE_DELETED is a maintenance plan state that is deleted."
+    s12.tasks.v1.TimelineItem.TaskNotificationSentMessageData:
+      type: object
+      properties:
+        group_id:
+          type: array
+          items:
+            type: string
+          description: 'UUIDs for any groups that received a notification in this timeline item.
+
+            IDs that belong to the task''s specific category. This is deprecated in
+
+            favour of the `groups` field.'
+        groups:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Group'
+          description: Data about any groups who received a notification in this timeline item.
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.User'
+          description: 'Data about any individual users who received a notification in this
+
+            timeline item.'
+        external_users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.ExternalUser'
+          description: 'Data about any external users who received a notification in this
+
+            timeline item.'
+        site_groups:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Group'
+          description: 'Groups that received a notification due to site based notification
+
+            configuration.'
+        site:
+          description: 'The site that was assigned to the task at the time that this notification
+
+            was triggered. Members of this site with any configured intersection
+
+            rules will receive notifications about this task.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Site'
+        is_critical:
+          type: boolean
+          description: Whether or not the notifications were sent as critical
+      description: Data about when a notification is sent about a task.
+    s12.tasks.v1.Task:
+      type: object
+      properties:
+        task_id:
+          type: string
+          description: 'An ID uniquely identifying this task message.
+
+            For example: ''aa70d8a6-af37-44f4-8768d8899fe274c5'''
+        creator:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.User'
+          description: Creator is user that created this task
+        title:
+          type: string
+          description: Title of this task
+        description:
+          type: string
+          description: Description of this task
+        created_at:
+          type: string
+          format: date-time
+          description: Date/time this task was created
+        due_at:
+          type: string
+          format: date-time
+          description: Date/time this task is due
+        priority_id:
+          type: string
+          description: Priority ID of this task
+        status_id:
+          type: string
+          description: 'Status ID of this task
+
+            @deprecated. For task type of action use status instead.
+
+            In use by task type of incident.'
+        collaborators:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Collaborator'
+          description: Collaborators of this task
+        template_id:
+          type: string
+          description: Template ID of the inspection the action belongs to
+        inspection:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Inspection'
+          description: Inspection details of the task
+        inspection_item:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.InspectionItem'
+          description: Inspection Item details of the task
+        site:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Site'
+          description: Site ID of this task
+        modified_at:
+          type: string
+          format: date-time
+          description: Date/time this task was last modified
+        references:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Reference'
+          description: References on this task.
+        completed_at:
+          type: string
+          format: date-time
+          description: Date/time this task was completed at
+        template_name:
+          type: string
+          description: Template name of the inspection the action belongs to
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Status'
+          description: Status object of this task
+        asset_id:
+          type: string
+          description: '@deprecated Asset ID of this task'
+        asset:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Asset'
+          description: Asset of this task
+        action_label:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.ActionLabel'
+          description: Label of a task
+        unique_id:
+          type: string
+          description: The human readable unique ID of the task
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TaskType'
+          description: The type of the current task
+        occurred_at:
+          type: string
+          format: date-time
+          description: Date/time this task occurred at
+        task_templates:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.TaskTemplate'
+          description: The list of templates linked to the action.
+      title: Task represents a stand-alone task that has been created
+    s12.tasks.v1.AlertEventLevel:
+      type: string
+      enum:
+      - OK
+      - INFO
+      - WARN
+      - CRITICAL
+      default: UNKNOWN_LEVEL
+      description: "- OK: `OK` level indicates that device metric became healthy\n - INFO: `INFO` level indicates that the first alert event sent\n - WARN: `WARN` level indicates that the second alert event sent\n - CRITICAL: `CRITICAL` level indicates that the third alert event sent"
+      title: Alert event level represents a level of importance of the alert event
+    s12.tasks.v1.TimelineItem.TaskDueAtUpdatedMessageData:
+      type: object
+      properties:
+        due_at:
+          type: string
+          format: date-time
+          description: The new due date of the task.
+      description: Data about when the due date of a task was changed.
+    s12.tasks.v1.GetTimelineResponse:
+      type: object
+      properties:
+        timeline_items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.TimelineItem'
+          description: A list of items in the task timeline.
+      title: Represents the result of `GetTimeline`
+    s12.tasks.v1.TaskTemplate:
+      type: object
+      properties:
+        template_id:
+          type: string
+          description: The unique identifier of the template.
+        name:
+          type: string
+          description: Custom defined template name.
+        is_deleted:
+          type: boolean
+        is_archived:
+          type: boolean
+        is_access_denied:
+          type: boolean
+        owner_id:
+          type: string
+          description: The id of the owner of the template
+      description: Metadata related to the template associated with this action.
+    s12.tasks.v1.QuestionAnswers:
+      type: object
+      properties:
+        question_id:
+          type: string
+          description: The ID of the question
+        answer_set:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Answer'
+          description: The set of answers that is associated with the question.
+    s12.tasks.v1.Task.AssetMaintenancePlanContext:
+      type: object
+      properties:
+        maintenance_plan:
+          description: The maintenance plan associated with the action.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.AssetMaintenancePlan'
+        maintenance_program:
+          description: The maintenance program where the maintenance plan belongs.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.AssetMaintenanceProgram'
+      title: 'AssetMaintenancePlanContext is the context of the maintenance plan associated
+
+        with the action'
+    s12.tasks.v1.Task.ActionContext:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the action
+        description:
+          type: string
+          description: Description of the action
+        creator:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.User'
+          description: User that created the action
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Status'
+          description: Status ID of the action
+        due_at:
+          type: string
+          format: date-time
+          description: Date/time the action is due
+        priority_id:
+          type: string
+          description: Priority ID of the action
+        unique_id:
+          type: string
+          description: The human readable unique ID of the action
+        collaborators:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Collaborator'
+          description: The collaborators of the action
+        inspection:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Inspection'
+          description: The inspection of the related action (if relevant)
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Type'
+          description: The type id and label associated with the action
+      title: context of an action associated with the incident
+    s12.tasks.v1.CategoryNotificationDetail:
+      type: string
+      enum:
+      - CATEGORY_NOTIFICATION_DETAIL_UNSPECIFIED
+      - CATEGORY_NOTIFICATION_DETAIL_PRIVATE
+      - CATEGORY_NOTIFICATION_DETAIL_SUMMARY
+      - CATEGORY_NOTIFICATION_DETAIL_FULL
+      default: CATEGORY_NOTIFICATION_DETAIL_UNSPECIFIED
+      description: "CategoryNotificationDetail represents the different level of detail for category notifications.\n\n - CATEGORY_NOTIFICATION_DETAIL_UNSPECIFIED: CATEGORY_NOTIFICATION_DETAIL_UNSPECIFIED is the default value and should not be used.\n - CATEGORY_NOTIFICATION_DETAIL_PRIVATE: CATEGORY_NOTIFICATION_DETAIL_PRIVATE notifications will be restricted to public metadata.\n - CATEGORY_NOTIFICATION_DETAIL_SUMMARY: CATEGORY_NOTIFICATION_DETAIL_SUMMARY notifications will include public and private metadata.\n - CATEGORY_NOTIFICATION_DETAIL_FULL: CATEGORY_NOTIFICATION_DETAIL_FULL will include all metadata and detailed responses."
+    s12.tasks.v1.QuestionAnswer:
+      type: object
+      properties:
+        question_id:
+          type: string
+          description: The ID of the question being answered.
+        answer_text:
+          description: 'AnswerText indicates that the question being answered has a text
+
+            response.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.AnswerText'
+        answer_multiple_choice:
+          description: MultipleChoiceOption indicates that the question being answered is a multiple choice question.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.MultipleChoiceOption'
+      description: 'QuestionAnswer contains data about a question configured for this issue''s
+
+        category, as well as the answer to that question.'
+    s12.tasks.v1.Task.Group:
+      type: object
+      properties:
+        group_id:
+          type: string
+          description: The UUID of this group.
+        name:
+          type: string
+          description: The name of the group
+      description: The group that is assigned to a task.
+    s12.tasks.v1.Type:
+      type: object
+      properties:
+        type:
+          description: 'The type associated with an action. We currently only support one type: `Action`.'
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.TaskType'
+        id:
+          type: string
+          description: The unique identifier of a type.
+        name:
+          type: string
+          description: The name of a type.
+      description: The type associated with an action.
+    s12.tasks.v1.TimelineItem.TaskCommentAddedMessageData:
+      type: object
+      properties:
+        comment:
+          type: string
+          description: The text value of the comment.
+      description: Data about when a comment is added to a task.
+    s12.tasks.v1.IncidentsService.UpdateSiteBody:
+      type: object
+      properties:
+        site_id:
+          description: 'Optional. The new site UUID for the task.
+
+            If this is empty, the site will be unset.
+
+            Use the `GetFolders` endpoint to get the available sites.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UUIDValue'
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      title: 'UpdateSiteRequest represents the parameter to update the site (folder)
+
+        associated to a task'
+    s12.tasks.v1.Task.AssetMaintenanceProgram.AssetMaintenanceProgramState:
+      type: string
+      enum:
+      - ASSET_MAINTENANCE_PROGRAM_STATE_UNSPECIFIED
+      - ASSET_MAINTENANCE_PROGRAM_STATE_ACTIVE
+      - ASSET_MAINTENANCE_PROGRAM_STATE_DELETED
+      default: ASSET_MAINTENANCE_PROGRAM_STATE_UNSPECIFIED
+      description: " - ASSET_MAINTENANCE_PROGRAM_STATE_UNSPECIFIED: ASSET_MAINTENANCE_PROGRAM_STATE_UNSPECIFIED is an unknown maintenance program state.\n - ASSET_MAINTENANCE_PROGRAM_STATE_ACTIVE: ASSET_MAINTENANCE_PROGRAM_STATE_ACTIVE is a maintenance program state that is active.\n - ASSET_MAINTENANCE_PROGRAM_STATE_DELETED: ASSET_MAINTENANCE_PROGRAM_STATE_DELETED is a maintenance program state that is deleted."
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.tasks.v1.Task.Reference:
+      type: object
+      properties:
+        type:
+          description: Required. Reference Type.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.ReferenceType'
+        id:
+          type: string
+          description: Required. Reference ID.
+        inspection_context:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.InspectionContext'
+        sensor_alert_context:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.SensorAlertContext'
+        sensor_context:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.SensorContext'
+        incident_context:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.IncidentContext'
+        action_context:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.ActionContext'
+        linked_inspection_context:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.LinkedInspectionContext'
+        asset_maintenance_plan_context:
+          $ref: '#/components/schemas/s12.tasks.v1.Task.AssetMaintenancePlanContext'
+      title: 'Reference is a type/id pair defined as:'
+    s12.tasks.v1.Task.SwitchAnswer:
+      type: object
+      properties:
+        answer:
+          type: boolean
+          description: Answer content for SwitchItem
+      description: 'Answer returned for SwitchItem, exists in old inspections
+
+        Users can’t change answer to them & can’t attach actions to them either.'
+    s12.tasks.v1.Task.DateTimeAnswer:
+      type: object
+      properties:
+        answer:
+          type: string
+          format: date-time
+          description: answer content for DateTimeItem
+        enable_date:
+          type: boolean
+          description: Enable date turns on input for date values
+        enable_time:
+          type: boolean
+          description: Enable date turns on input for time values
+      title: Answer returned for DateTimeItem
+    s12.tasks.v1.TimelineItem.TaskPriorityUpdatedMessageData:
+      type: object
+      properties:
+        priority_id:
+          type: string
+          description: The new priority UUID of the task.
+      description: Data about when the priority of a task was updated.
+    s12.tasks.v1.IncidentResponse:
+      type: object
+      properties:
+        incident:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Incident'
+          description: Issue data
+      title: IncidentResponse represents the result of `GetIncident`
+    s12.tasks.v1.Task.DrawingAnswer:
+      type: object
+      properties:
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: media field contains media ID and token to download the media content
+      title: Answer returned for DrawingItem
+    s12.tasks.v1.GetIncidentsRequest.Filter.StatusID:
+      type: object
+      properties:
+        operator:
+          description: Optional, defaults to `IN` value.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.FilterOperator'
+        value:
+          type: array
+          items:
+            type: string
+          description: The ID of the status.
+      description: 'Will return issues that have a matching status.
+
+        An issue can be open or resolved, and these are represented by
+
+        hardcoded UUID values.
+
+        Open status: `547ed646-5e34-4732-bb54-a199d304368a`.
+
+        Resolved status: `450484b1-56cd-4784-9b49-a3cf97d0c0ad`.'
+    s12.tasks.v1.TimelineItem.TaskScheduleUpdatedMessageData:
+      type: object
+      properties:
+        schedule_id:
+          type: string
+          description: The ID of the schedule that was updated
+      title: Data about when a schedule was updated
+    s12.tasks.v1.GenerateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The shareable link pointing to the issue's public web report.
+      title: GenerateReponse represents the result of `GenerateWebReportSharedLink`
+    s12.tasks.v1.Task.SignatureAnswer:
+      type: object
+      properties:
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: media field contains media ID and token to download the media content
+        name:
+          type: string
+          description: name on the signature
+        signed_at:
+          type: string
+          format: date-time
+          description: Timestamp for when the signature answer was last updated
+      title: Signature item stores user name and an image with signature
+    s12.tasks.v1.TimelineItem.TaskAssetUpdatedMessageData:
+      type: object
+      properties:
+        asset_id:
+          type: string
+          description: The UUID of an Asset assigned to a task
+        asset_code:
+          type: string
+          description: Asset code
+      description: Data about when the asset of this task was updated.
+    s12.tasks.v1.TimelineItem.TaskLocationAddedMessageData:
+      type: object
+      properties:
+        location:
+          description: The location that the task occurred at.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.AddressLocation'
+      description: Data about when a location is added to a task.
+    s12.tasks.v1.GetIncidentQuestionsAndAnswersResponse:
+      type: object
+      properties:
+        questions_answers:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.QuestionAndAnswers'
+          description: The list of questions and their respective answers.
+      description: 'GetIncidentQuestionsAndAnswersResponse returns a list of questions and
+
+        answers associated with an issue ID.'
+    s12.tasks.v1.Task.AssetMaintenancePlan:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the maintenance plan.
+        name:
+          type: string
+          description: The name of the maintenance plan.
+        state:
+          description: The state of the maintenance plan.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.AssetMaintenancePlan.AssetMaintenancePlanState'
+      description: 'AssetMaintenancePlan represents the maintenance plan associated with the
+
+        action.'
+    s12.tasks.v1.Task.MediaAnswer:
+      type: object
+      properties:
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.Media'
+          description: answer content of MediaItem
+      title: Answer returned for MediaItem
+    s12.tasks.v1.GetIncidentsRequest.Filter.Search:
+      type: object
+      properties:
+        term:
+          type: string
+          description: '`term` represents the text to search for.'
+      description: 'Will return issues where the title and/or description contain the search
+
+        term.'
+    s12.tasks.v1.Task.Asset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the asset associated with this task.
+        code:
+          type: string
+          description: The code of the asset associated with this task.
+        type_id:
+          type: string
+          description: The id of the asset type associated with this task.
+    s12.tasks.v1.MultipleChoiceOption:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the multiple choice option.
+        text:
+          type: string
+          description: 'The text of the multiple choice option. This does not use the new `validator.string` option as question processing
+
+            logic fails when symbols are substituted for similar-looking symbols.'
+      description: MultipleChoiceOption represents a possible answer for a multiple choice question.
+    s12.common.MediaType:
+      type: string
+      enum:
+      - MEDIA_TYPE_IMAGE
+      - MEDIA_TYPE_VIDEO
+      - MEDIA_TYPE_PDF
+      - MEDIA_TYPE_DOCX
+      - MEDIA_TYPE_XLSX
+      - MEDIA_TYPE_PPTX
+      - MEDIA_TYPE_CSV
+      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    s12.tasks.v1.IncidentsService.UpdateStatusBody:
+      type: object
+      properties:
+        status_id:
+          type: string
+          description: 'Required. The ID of the status you''re updating the action or issue to.
+
+            An issue can be in an "Open" or "Resolved" status, where each status is represented by hardcoded UUID values.
+
+            Issue statuses:
+
+            - Open: `547ed646-5e34-4732-bb54-a199d304368a`.
+
+            - Resolved: `450484b1-56cd-4784-9b49-a3cf97d0c0ad`.
+
+
+            An action can be in a "To do", "In progress", "Complete", or "Can''t do" status, where each status is represented by hardcoded UUID values.
+
+            Action statuses:
+
+            - To do: `17e793a1-26a3-4ecd-99ca-f38ecc6eaa2e`.
+
+            - In progress: `20ce0cb1-387a-47d4-8c34-bc6fd3be0e27`.
+
+            - Complete: `7223d809-553e-4714-a038-62dc98f3fbf3`.
+
+            - Can''t do: `06308884-41c2-4ee0-9da7-5676647d3d75`.'
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The UTC time and date the modification took place.
+      description: UpdateStatusRequest represents the parameters for `UpdateStatus`.
+      required:
+      - status_id
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.tasks.v1.GetIncidentsRequest.Filter.PriorityID:
+      type: object
+      properties:
+        operator:
+          description: Optional, defaults to `IN` value.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.FilterOperator'
+        value:
+          type: array
+          items:
+            type: string
+          description: The ID of the priority.
+      description: 'Will return issues that have a matching priority.
+
+        The priority of an issue can be one of four options: none, low, medium
+
+        or high. Each of these are represented by a hardcoded UUID value.
+
+        No priority: `58941717-817f-4c7c-a6f6-5cd05e2bbfde`.
+
+        Low priority: `16ba4717-adc9-4d48-bf7c-044cfe0d2727`.
+
+        Medium priority: `ce87c58a-eeb2-4fde-9dc4-c6e85f1f4055`.
+
+        High priority: `02eb40c1-4f46-40c5-be16-d32941c96ec9`.'
+    s12.tasks.v1.Inspection.InspectionStatus:
+      type: string
+      enum:
+      - INSPECTION_STATUS_UNSPECIFIED
+      - INSPECTION_STATUS_IN_PROGRESS
+      - INSPECTION_STATUS_COMPLETED
+      - INSPECTION_STATUS_DELETED
+      default: INSPECTION_STATUS_UNSPECIFIED
+      description: "- INSPECTION_STATUS_UNSPECIFIED: The status of the inspection is unspecified\n - INSPECTION_STATUS_IN_PROGRESS: The status of the inspection is 'In Progress'\n - INSPECTION_STATUS_COMPLETED: The status of the inspection is 'Completed'\n - INSPECTION_STATUS_DELETED: The status of the inspection is 'Deleted'"
+      title: The status of the linked inspection
+    s12.tasks.v1.Task.InspectionItem:
+      type: object
+      properties:
+        inspection_item_id:
+          type: string
+          description: ID of the item in the inspection associated with the action
+        inspection_item_name:
+          type: string
+          description: The name of the item in the inspection associated with the action
+        inspection_item_type:
+          type: string
+          description: The type of the item in the inspection associated with the action
+        inspection_item_response_values:
+          type: array
+          items:
+            type: string
+          description: The labels of the responses
+      title: The inspection item data of this task
+    s12.tasks.v1.Inspection:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'The ID of the linked inspection. This may or may not be a UUID, so we don''t
+
+            validate it here.'
+        created_at:
+          type: string
+          format: date-time
+          description: The date the inspection was created.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Inspection.InspectionStatus'
+          description: The status of the inspection
+        title:
+          type: string
+          description: The title of the inspection
+        template_title:
+          type: string
+          description: The title of the template that this inspection was created from
+      title: Inspection represents an inspection that is linked to an issue
+    s12.tasks.v1.Task.AssetMaintenanceProgram:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the maintenance program.
+        name:
+          type: string
+          description: The name of the maintenance program.
+        state:
+          description: The state of the maintenance program.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.AssetMaintenanceProgram.AssetMaintenanceProgramState'
+      description: 'AssetMaintenanceProgram represents the maintenance program where the
+
+        maintenance plan belongs.'
+    s12.tasks.v1.TimelineItem.TaskCategoryUpdatedMessageData:
+      type: object
+      properties:
+        category_id:
+          type: string
+          description: '@deprecated. Use category instead.
+
+            ID of the category of the task that was updated.
+
+            The field has been deprecated, as more information about the category is
+
+            in the `category` field.'
+        category:
+          description: The new category of the issue.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Category'
+      description: Data about when an issue's category was updated.
+    s12.common.TemperatureUnit:
+      type: string
+      enum:
+      - KELVIN
+      - CELSIUS
+      - FAHRENHEIT
+      default: UNKNOWN_TEMPERATURE_UNIT
+      description: "- KELVIN: Represents Kelvin temperature unit\n - CELSIUS: Represents Celsius temperature unit\n - FAHRENHEIT: Represents Fahrenheit temperature unit"
+      title: Represents different units to measure temperature
+    s12.common.GeoPosition:
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+          description: The geographical longitude
+        latitude:
+          type: number
+          format: double
+          description: The geographical latitude
+        accuracy:
+          type: integer
+          format: int32
+          description: The accuracy in meters
+      description: A position is the fundamental geographical geometry construct.
+    s12.tasks.v1.Task.SensorContext:
+      type: object
+      title: context of sensor associated with the action
+    s12.tasks.v1.Task.ListAnswer:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.ListResponse'
+          description: Responses of inspection item
+      title: Answer returned for ListItem
+    s12.tasks.v1.Task.AddressLocation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the task's location.
+        thoroughfare:
+          type: string
+          description: The thoroughfare of the location.
+        sub_thoroughfare:
+          type: string
+          description: The sub_thoroughfare of the location,
+        locality:
+          type: string
+          description: The locality of the location
+        sub_locality:
+          type: string
+          description: The sub_locality of the location
+        administrative_area:
+          type: string
+          description: The administrative_area of the location
+        sub_administrative_area:
+          type: string
+          description: The sub_administrative_area of the location
+        postal_code:
+          type: string
+          description: The postal_code of the location
+        country:
+          type: string
+          description: The country of the location
+        iso_country_code:
+          type: string
+          description: The iso_country_code of the location
+        geo_position:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+          description: The geometry of the location
+      description: 'The location of the task.
+
+        The latitude and longitude in the `geo_position` object are required.
+
+        All other fields are optional, but add extra context to the location on
+
+        platform.'
+    s12.tasks.v1.TimelineItem.TaskSiteUpdatedMessageData:
+      type: object
+      properties:
+        site:
+          description: Data about the folder (site) of the task.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.Site'
+        site_hierarchy:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Site'
+          description: 'Information about the hierarchy of the site.
+
+            This is ordered in ascending order, ie: Site -> Area -> Region -> State
+
+            -> Country.'
+      description: Data about when the folder (site) of this task was updated.
+    s12.tasks.v1.Task.Inspection:
+      type: object
+      properties:
+        inspection_id:
+          type: string
+          description: ID of the inspection the action belongs to
+        inspection_name:
+          type: string
+          description: The name of the inspection the action belongs to
+      title: The inspection data of this task
+    s12.tasks.v1.CategoryUserAccessAsReporter:
+      type: string
+      enum:
+      - CATEGORY_USER_ACCESS_AS_REPORTER_UNSPECIFIED
+      - CATEGORY_USER_ACCESS_AS_REPORTER_ALWAYS
+      - CATEGORY_USER_ACCESS_AS_REPORTER_NEVER
+      - CATEGORY_USER_ACCESS_AS_REPORTER_WHEN_SITE_MEMBER
+      default: CATEGORY_USER_ACCESS_AS_REPORTER_UNSPECIFIED
+      title: "- CATEGORY_USER_ACCESS_AS_REPORTER_UNSPECIFIED: CATEGORY_USER_ACCESS_AS_REPORTER_UNSPECIFIED is the default value and should not be used\n - CATEGORY_USER_ACCESS_AS_REPORTER_ALWAYS: CATEGORY_USER_ACCESS_AS_REPORTER_ALWAYS the user will always gain access to issues they report\n - CATEGORY_USER_ACCESS_AS_REPORTER_NEVER: CATEGORY_USER_ACCESS_AS_REPORTER_NEVER the user will never gain access to issues they report\n - CATEGORY_USER_ACCESS_AS_REPORTER_WHEN_SITE_MEMBER: CATEGORY_USER_ACCESS_AS_REPORTER_WHEN_SITE_MEMBER the user will gain access to issues they report\nwhen they have membership to the site that the issue has been raised at"
+    s12.tasks.v1.IncidentsService.RemoveCollaboratorsBody:
+      type: object
+      properties:
+        collaborators:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Collaborator'
+          description: Required. The collaborators to be removed from the task.
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      title: 'RemoveCollaboratorsRequest represents the parameters to remove the
+
+        collaborators from the task'
+    s12.tasks.v1.Task.Attachments:
+      type: object
+      properties:
+        note:
+          type: string
+          description: Note inside Attachments of inspectionItem Answer
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.Media'
+          description: images or pdf inside Attachments of inspectionItem Answer
+      title: Attachments of inspectionItem Answer
+    s12.tasks.v1.GetIncidentsRequest.Filter.CreatorID:
+      type: object
+      properties:
+        operator:
+          description: Optional, defaults to `IN` value.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.FilterOperator'
+        value:
+          type: array
+          items:
+            type: string
+          description: The user ID of the creator.
+      description: 'Will return issues where the user ID of the creator matches the
+
+        provided value.'
+    s12.tasks.v1.Task.IncidentContext:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the incident
+        description:
+          type: string
+          description: Description of the incident
+        creator:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.User'
+          description: User that created the incident
+        status_id:
+          type: string
+          description: Status ID of the incident
+        category_id:
+          type: string
+          description: Category of the incident
+        due_at:
+          type: string
+          format: date-time
+          description: Date/time the incident is due
+        priority_id:
+          type: string
+          description: Priority ID of the incident
+        unique_id:
+          type: string
+          description: The human readable unique ID of the incident
+        collaborators:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Collaborator'
+          description: The collaborators of the incident
+      title: context of an incident associated with the action
+    s12.tasks.v1.GetIncidentsRequest:
+      type: object
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: 'Optional. Number of issues to be returned in a single request.
+
+            This must be a value between 1 and 100, any values outside of this range
+
+            will be ignored. The presence of `next_page_token` in the response
+
+            indicates that more results might be available.'
+        page_token:
+          type: string
+          description: 'Optional. If present, then retrieve the next batch of results from the
+
+            preceding call to this method. `page_token` must be the value of
+
+            `next_page_token` from the previous response.  The values of other method
+
+            parameters should be identical to those in the previous call.
+
+            This can be used to retrieve more than 100 issues with multiple API
+
+            calls. For example: ''ODFBMzQ3MDYtNzQxNy00RDZGLThDNjE1MEFDMkM4MTQ3NDQ='''
+        sort_field:
+          description: Optional. Which field to use for sorting.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.SortField'
+        sort_direction:
+          description: Optional. Direction for sorting.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.SortDirection'
+        filters:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter'
+          description: 'Optional. An array of filters can be provided in the request to filter the
+
+            issues.'
+      description: GetIncidentsRequest represents the parameters to `GetIncidents`.
+    s12.tasks.v1.GetTimelineRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          description: Required. The UUID of the task whose timeline will be retrieved.
+      title: Represents the parameters to `GetTimeline`
+      required:
+      - task_id
+    s12.tasks.v1.GetIncidentsRequest.Filter.AssetID:
+      type: object
+      properties:
+        operator:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest.Filter.FilterOperator'
+          description: 'optional. Default to FilterOperator.IN and should only be
+
+            FilterOperator.IN'
+        value:
+          type: array
+          items:
+            type: string
+          description: OR relation, represents the asset_id should be one of the value provided
+      title: asset id filter
+    s12.tasks.v1.Task.Contributor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID uniquely identifying this contributor
+        name:
+          type: string
+          description: Optional. The contributor's name.
+        email:
+          type: string
+          description: Optional. The contributor's email address.
+        contact:
+          type: string
+          description: Optional. The contributor's (freetext) contact details.
+      title: The contributor that raised the issue
+    s12.tasks.v1.AnswerText:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The text that answers the question.
+      description: A type of answer for a custom question containing text data.
+    s12.tasks.v1.IncidentsService.UpdateDescriptionBody:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Required. The new description for the task.
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      title: 'UpdateDescriptionRequest represents the parameters to update the description
+
+        of the task'
+    s12.tasks.v1.IncidentsService.AddCollaboratorsBody:
+      type: object
+      properties:
+        collaborators:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Task.Collaborator'
+          description: Required. The collaborators to be added to the task.
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The timestamp of when this event occurred.
+      title: 'AddCollaboratorsRequest represents the parameters to add collaborators to the
+
+        task'
+    s12.tasks.v1.Answer:
+      type: object
+      properties:
+        answer_text:
+          description: AnswerText indicates that this answer is text.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.AnswerText'
+        answer_multiple_choice_option:
+          description: MultipleChoiceOption indicates that the question being answered is a multiple choice question.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.MultipleChoiceOption'
+        answer_id:
+          type: string
+          description: The ID of the answer.
+        answered_at:
+          type: string
+          format: date-time
+          description: Date and time the question was answered.
+      description: Answer contains information about the answer to a custom question.
+    s12.tasks.v1.UpdateAssetResponse:
+      type: object
+    s12.tasks.v1.SubmitIncidentRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          description: 'Optional. The unique identifier of the incident
+
+            If not provided, UUID will be generated server side'
+        title:
+          type: string
+          description: 'Required. Title of the incident
+
+            Title is limited to only 255 characters max'
+        created_at:
+          type: string
+          format: date-time
+          description: Optional. Date and time this incident was created
+        category_id:
+          type: string
+          description: 'Required. ID of the incident''s category
+
+            If not set, this incident will be stored with the default category(None)'
+        answered_questions:
+          type: array
+          items:
+            type: string
+          description: 'Optional. An array of all, if any, custom questions that have been answered
+
+            by the contributor
+
+            @deprecated: Use `QuestionAnswer` instead. This was a field used for string
+
+            custom questions. We''ve since moved to structured custom questions in the
+
+            `QuestionAnswer` field.'
+        email:
+          type: string
+          description: Optional. The email address of the contributor
+        media:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.Media'
+          description: Optional. Array of media items to be linked to the incident.
+        site_id:
+          type: string
+          description: 'Optional. ID of the site to associate with the incident.
+
+            If not provided, no site will be associated with the incident.'
+        name:
+          type: string
+          description: Optional. The name of the contributor
+        contact:
+          type: string
+          description: Optional. The contact details of the contributor
+        location:
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Task.AddressLocation'
+          description: The location that the incident occurred at
+        access_token:
+          type: string
+          description: 'Optional. The access token used to authenticate the request. This field
+
+            should be set when following the contributor flow. Otherwise, authenticate
+
+            via normal means.'
+        description:
+          type: string
+          description: Optional. Description of the issue (maximum 500 characters).
+        questions_and_answers:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.SubmitIncidentRequest.QuestionAnswer'
+          description: 'Optional. An array of all, if any, custom questions that have been answered
+
+            for this issue.'
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.tasks.v1.Item'
+          description: 'Optional. The category fields and questions that applied to this incident
+
+            when it was created.'
+        occurred_at:
+          type: string
+          format: date-time
+          description: Optional. Date and time this incident occurred at
+        asset_id:
+          type: string
+          description: Optional. The ID of the asset associated with this incident.
+        ai_generated:
+          type: boolean
+          description: 'Use `ai_marking`. True when this issue was created via an AI-assisted
+
+            flow, for example the QR-code AI Issue Creation flow seeded by
+
+            GenerateIncidentStream.'
+        ai_marking:
+          description: 'Optional. The AI marking the caller declares for this issue, under the
+
+            write rules. A caller can set a flag true and cannot clear it, and false is
+
+            recorded as absent. Surfaces on Incident.ai_marking. The Assistant sets it
+
+            through the mitti-ai-marked header rather than this field.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.AiMarking'
+      title: SubmitIncidentRequest represents the incident submitted by a contributor
+      required:
+      - title
+      - category_id
+    s12.common.MeasurementUnitSymbol:
+      type: string
+      enum:
+      - MEASUREMENT_UNIT_SYMBOL_KILOMETERS
+      - MEASUREMENT_UNIT_SYMBOL_MILES
+      - MEASUREMENT_UNIT_SYMBOL_HOURS
+      - MEASUREMENT_UNIT_SYMBOL_MINUTES
+      - MEASUREMENT_UNIT_SYMBOL_INCHES
+      - MEASUREMENT_UNIT_SYMBOL_FOOT
+      - MEASUREMENT_UNIT_SYMBOL_MILLIMETERS
+      - MEASUREMENT_UNIT_SYMBOL_CENTIMETERS
+      - MEASUREMENT_UNIT_SYMBOL_METERS
+      - MEASUREMENT_UNIT_SYMBOL_MILLILITRES
+      - MEASUREMENT_UNIT_SYMBOL_LITRES
+      - MEASUREMENT_UNIT_SYMBOL_GALLONS
+      - MEASUREMENT_UNIT_SYMBOL_CUBIC_METERS
+      - MEASUREMENT_UNIT_SYMBOL_SECONDS
+      - MEASUREMENT_UNIT_SYMBOL_FAHRENHEIT
+      - MEASUREMENT_UNIT_SYMBOL_CELSIUS
+      - MEASUREMENT_UNIT_SYMBOL_KELVIN
+      - MEASUREMENT_UNIT_SYMBOL_OUNCE
+      - MEASUREMENT_UNIT_SYMBOL_POUNDS
+      - MEASUREMENT_UNIT_SYMBOL_TONNES
+      - MEASUREMENT_UNIT_SYMBOL_GRAMS
+      - MEASUREMENT_UNIT_SYMBOL_KILOGRAMS
+      - MEASUREMENT_UNIT_SYMBOL_AMPERES
+      - MEASUREMENT_UNIT_SYMBOL_HERTZ
+      - MEASUREMENT_UNIT_SYMBOL_OHM
+      - MEASUREMENT_UNIT_SYMBOL_VOLTS
+      - MEASUREMENT_UNIT_SYMBOL_WATTS
+      - MEASUREMENT_UNIT_SYMBOL_CANDELA
+      - MEASUREMENT_UNIT_SYMBOL_CYCLES
+      - MEASUREMENT_UNIT_SYMBOL_PERCENT
+      - MEASUREMENT_UNIT_SYMBOL_POUNDS_PER_SQUARE_INCH
+      - MEASUREMENT_UNIT_SYMBOL_MOLE
+      - MEASUREMENT_UNIT_SYMBOL_DAYS
+      - MEASUREMENT_UNIT_SYMBOL_WEEKS
+      - MEASUREMENT_UNIT_SYMBOL_MONTHS
+      description: "Collection of symbols (km, mi, hr, etc) used in units of measurement.\n\n - MEASUREMENT_UNIT_SYMBOL_KILOMETERS: Measurement unit symbol for kilometers.\n - MEASUREMENT_UNIT_SYMBOL_MILES: Measurement unit symbol for miles.\n - MEASUREMENT_UNIT_SYMBOL_HOURS: Measurement unit symbol for hours.\n - MEASUREMENT_UNIT_SYMBOL_MINUTES: Measurement unit symbol for minutes.\n - MEASUREMENT_UNIT_SYMBOL_INCHES: Measurement unit symbol for inches.\n - MEASUREMENT_UNIT_SYMBOL_FOOT: Measurement unit symbol for foot.\n - MEASUREMENT_UNIT_SYMBOL_MILLIMETERS: Measurement unit symbol for Millimeters.\n - MEASUREMENT_UNIT_SYMBOL_CENTIMETERS: Measurement unit symbol for Centimeters.\n - MEASUREMENT_UNIT_SYMBOL_METERS: Measurement unit symbol for meters.\n - MEASUREMENT_UNIT_SYMBOL_MILLILITRES: Measurement unit symbol for millilitres.\n - MEASUREMENT_UNIT_SYMBOL_LITRES: Measurement unit symbol for litres.\n - MEASUREMENT_UNIT_SYMBOL_GALLONS: Measurement unit symbol for gallons.\n - MEASUREMENT_UNIT_SYMBOL_CUBIC_METERS: Measurement unit symbol for cubic meters.\n - MEASUREMENT_UNIT_SYMBOL_SECONDS: Measurement unit symbol for seconds.\n - MEASUREMENT_UNIT_SYMBOL_FAHRENHEIT: Measurement unit symbol for fahrenheit.\n - MEASUREMENT_UNIT_SYMBOL_CELSIUS: Measurement unit symbol for celsius.\n - MEASUREMENT_UNIT_SYMBOL_KELVIN: Measurement unit symbol for kelvin.\n - MEASUREMENT_UNIT_SYMBOL_OUNCE: Measurement unit symbol for ounce.\n - MEASUREMENT_UNIT_SYMBOL_POUNDS: Measurement unit symbol for pounds.\n - MEASUREMENT_UNIT_SYMBOL_TONNES: Measurement unit symbol for tonnes.\n - MEASUREMENT_UNIT_SYMBOL_GRAMS: Measurement unit symbol for grams.\n - MEASUREMENT_UNIT_SYMBOL_KILOGRAMS: Measurement unit symbol for kilograms.\n - MEASUREMENT_UNIT_SYMBOL_AMPERES: Measurement unit symbol for amperes.\n - MEASUREMENT_UNIT_SYMBOL_HERTZ: Measurement unit symbol for hertz.\n - MEASUREMENT_UNIT_SYMBOL_OHM: Measurement unit symbol for ohm.\n - MEASUREMENT_UNIT_SYMBOL_VOLTS: Measurement unit symbol for volts.\n - MEASUREMENT_UNIT_SYMBOL_WATTS: Measurement unit symbol for watts.\n - MEASUREMENT_UNIT_SYMBOL_CANDELA: Measurement unit symbol for candela.\n - MEASUREMENT_UNIT_SYMBOL_CYCLES: Measurement unit symbol for cycles.\n - MEASUREMENT_UNIT_SYMBOL_PERCENT: Measurement unit symbol for percent.\n - MEASUREMENT_UNIT_SYMBOL_POUNDS_PER_SQUARE_INCH: Measurement unit symbol for pounds per square inch.\n - MEASUREMENT_UNIT_SYMBOL_MOLE: Measurement unit symbol for mole.\n - MEASUREMENT_UNIT_SYMBOL_DAYS: Measurement unit symbol for days.\n - MEASUREMENT_UNIT_SYMBOL_WEEKS: Measurement unit symbol for weeks.\n - MEASUREMENT_UNIT_SYMBOL_MONTHS: Measurement unit symbol for months."
+    s12.tasks.v1.DeleteIncidentsRequest:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: The list of issue UUIDs to be deleted.
+        modified_at:
+          type: string
+          format: date-time
+          description: Optional. The UTC time and date the deletion took place.
+      description: DeleteIncidentsRequest represents the list of issue UUIDs to delete.
+      required:
+      - ids
+    s12.tasks.v1.Task.Status:
+      type: object
+      properties:
+        status_id:
+          type: string
+          description: 'An ID uniquely identifying this task status message.
+
+            For example: ''aa70d8a6-af37-44f4-8768d8899fe274c5'''
+        key:
+          type: string
+          description: 'A pre-defined value that the system can use to handle
+
+            the particular label e.g. analytics, filter based on it
+
+            A key may look like: "to do" | "In progress" | "Done" | "Can''t do"'
+        label:
+          type: string
+          description: A label associated with the key, typically for display purposes
+        display_order:
+          type: integer
+          format: int32
+          description: Used to order this status when displaying a list of statuses
+      title: The task status
+    s12.tasks.v1.Task.NumberComparison:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+      description: Used to compare values against a single number.
+    s12.tasks.v1.CollaboratorType:
+      type: string
+      enum:
+      - USER
+      - GROUP
+      - EXTERNAL_USER
+      - CONTRIBUTOR
+      default: COLLABORATOR_TYPE_NOT_SET
+      description: "- USER: The collaborator is an internal user.\n - GROUP: The collaborator is a group.\n - EXTERNAL_USER: The collaborator is an external user.\nThis happens when a task is assigned to an email address.\n - CONTRIBUTOR: The collaborator is a contributor.\nA contributor is an individual who raises a task anonymously. For example,\ncreating an incident through the incident QR code functionality."
+      title: The type of the collaborator
+    s12.tasks.v1.UpdateOccurredAtResponse:
+      type: object
+      title: 'UpdateOccurredAtResponse represents the response of the
+
+        UpdateOccurredAt call'
+    s12.tasks.v1.Task.Site:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the site associated with this task.
+        name:
+          type: string
+          description: The name of the site associated with this task.
+        region:
+          type: string
+          description: The region of the site associated with the task.
+        area:
+          type: string
+          description: The area of the site associated with the task
+      description: The folder (site) data of this task.
+    s12.tasks.v1.GetPDFReportResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The pdf report download link
+    s12.tasks.v1.TimelineItem.IncidentCreatedMessageData:
+      type: object
+      properties:
+        incident:
+          description: Data about the issue that was created.
+          allOf:
+          - $ref: '#/components/schemas/s12.tasks.v1.Incident'
+      description: Data about when an issue was created.
+    s12.common.Media:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        filename:
+          type: string
+          description: full file name, including file extension
+        media_type:
+          $ref: '#/components/schemas/s12.common.MediaType'
+      title: Represents an image or video
+    s12.tasks.v1.TimelineItem.TaskStatusUpdatedMessageData:
+      type: object
+      properties:
+        status_id:
+          type: string
+          description: The new status UUID of the task.
+      description: Data about when the status of a task was updated.
+  requestBodies:
+    s12.tasks.v1.GetIncidentsRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/s12.tasks.v1.GetIncidentsRequest'
+      description: GetIncidentsRequest represents the parameters to `GetIncidents`.
+      required: true
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+externalDocs:
+  description: How to generate an API Token
+  url: https://help.mitti.com/en-US/000007/
+x-provenance:
+  method: searched
+  source: https://developer.mitti.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.mitti.com/reference/actionsservice_createaction.md
+  - https://developer.mitti.com/reference/actionsservice_createactionschedule.md
+  - https://developer.mitti.com/reference/actionsservice_createactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_deleteactions.md
+  - https://developer.mitti.com/reference/actionsservice_getaction.md
+  - https://developer.mitti.com/reference/actionsservice_getactions.md
+  - https://developer.mitti.com/reference/actionsservice_getactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_revokeactionsharedlink.md
+  - https://developer.mitti.com/reference/actionsservice_updateactionlabels.md
+  - https://developer.mitti.com/reference/actionsservice_updateasset.md
+  - https://developer.mitti.com/reference/actionsservice_updateassignees.md
+  - https://developer.mitti.com/reference/actionsservice_updatedescription.md
+  - https://developer.mitti.com/reference/actionsservice_updatedueat.md
+  - https://developer.mitti.com/reference/actionsservice_updatepriority.md
+  - https://developer.mitti.com/reference/actionsservice_updatesite.md
+  - https://developer.mitti.com/reference/actionsservice_updatestatus.md
+  - https://developer.mitti.com/reference/actionsservice_updatetitle.md
+  - https://developer.mitti.com/reference/answerservice_answerasset.md
+  - https://developer.mitti.com/reference/answerservice_answercheckbox.md
+  - https://developer.mitti.com/reference/answerservice_generatedynamicfield.md
+  - https://developer.mitti.com/reference/answerservice_getanswersforinspection.md
+  - https://developer.mitti.com/reference/assetsservice_archiveasset.md
+  - https://developer.mitti.com/reference/assetsservice_bulkcreateassets.md
+  - https://developer.mitti.com/reference/assetsservice_bulkupdateassets.md
+  - https://developer.mitti.com/reference/assetsservice_createasset.md
+  - https://developer.mitti.com/reference/assetsservice_deleteasset.md
+  - https://developer.mitti.com/reference/assetsservice_getasset.md
+  - https://developer.mitti.com/reference/assetsservice_getassetbycode.md
+  - https://developer.mitti.com/reference/assetsservice_listassets.md
+  - https://developer.mitti.com/reference/assetsservice_lookupassetsbyfield.md
+  - https://developer.mitti.com/reference/assetsservice_restorearchivedasset.md
+  - https://developer.mitti.com/reference/assetsservice_setassetfieldvalues.md
+  - https://developer.mitti.com/reference/assetsservice_updateasset.md
+  - https://developer.mitti.com/reference/assetsservice_updateassetlocation.md
+  - https://developer.mitti.com/reference/companydocumentsservice_deletecompanydocumenttype.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocuments.md
+  - https://developer.mitti.com/reference/companydocumentsservice_listcompanydocumenttypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_getcompanytype.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypes.md
+  - https://developer.mitti.com/reference/contractorcompanytypesservice_listcompanytypesmetrics.md
+  - https://developer.mitti.com/reference/contractorsservice_createcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_deletecontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_getcontractorcompany.md
+  - https://developer.mitti.com/reference/contractorsservice_listcompanyusermetadata.md
+  - https://developer.mitti.com/reference/contractorsservice_listcontractorcompanies.md
+  - https://developer.mitti.com/reference/contractorsservice_updatecontractorcompany.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createcustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_createtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deleteactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_deletetasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getactionlabels.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_getorgtasktypeunmappedfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypecustomfields.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_mapfieldtotasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfield.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_renametasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_unmapfieldfromtasktype.md
+  - https://developer.mitti.com/reference/customerconfigurationservice_upsertactionlabel.md
+  - https://developer.mitti.com/reference/directory_addusersfoldersassociations.md
+  - https://developer.mitti.com/reference/directory_createfolder.md
+  - https://developer.mitti.com/reference/directory_deletefolders.md
+  - https://developer.mitti.com/reference/directory_getallusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getfolder.md
+  - https://developer.mitti.com/reference/directory_getfolderidsforuser.md
+  - https://developer.mitti.com/reference/directory_getfolders.md
+  - https://developer.mitti.com/reference/directory_getfoldersbyparent.md
+  - https://developer.mitti.com/reference/directory_getinheritedusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_getorglabels.md
+  - https://developer.mitti.com/reference/directory_getusersbyfolder.md
+  - https://developer.mitti.com/reference/directory_movefolders.md
+  - https://developer.mitti.com/reference/directory_removefoldersassociation.md
+  - https://developer.mitti.com/reference/directory_removeusersassociation.md
+  - https://developer.mitti.com/reference/directory_searchfolders.md
+  - https://developer.mitti.com/reference/directory_updatefolderproperties.md
+  - https://developer.mitti.com/reference/documentspublicservice_archiveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkaddfileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkremovefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_bulkupdatefileowners.md
+  - https://developer.mitti.com/reference/documentspublicservice_createfile.md
+  - https://developer.mitti.com/reference/documentspublicservice_getfolderchildren.md
+  - https://developer.mitti.com/reference/documentspublicservice_linkfiles.md
+  - https://developer.mitti.com/reference/documentspublicservice_moveitem.md
+  - https://developer.mitti.com/reference/documentspublicservice_searchitems.md
+  - https://developer.mitti.com/reference/documentspublicservice_updatefile.md
+  - https://developer.mitti.com/reference/documenttypesservice_createdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_deletedocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_getdocumenttype.md
+  - https://developer.mitti.com/reference/documenttypesservice_listdocumenttypes.md
+  - https://developer.mitti.com/reference/documenttypesservice_updatedocumenttype.md
+  - https://developer.mitti.com/reference/externalinspectionservice_getinspectiondetails.md
+  - https://developer.mitti.com/reference/feedservice_credentials.md
+  - https://developer.mitti.com/reference/feedservice_credentialtypes.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields.md
+  - https://developer.mitti.com/reference/feedservice_feedactionfields2.md
+  - https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanies.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanydocuments.md
+  - https://developer.mitti.com/reference/feedservice_feedcontractorcompanyusermemberships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationdetailfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationfields.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigationrelationships.md
+  - https://developer.mitti.com/reference/feedservice_feedinvestigations.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md
+  - https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md
+  - https://developer.mitti.com/reference/feedservice_feedtrainingcourseprogress.md
+  - https://developer.mitti.com/reference/fieldsservice_createfield.md
+  - https://developer.mitti.com/reference/fieldsservice_deletefield.md
+  - https://developer.mitti.com/reference/fieldsservice_listfields.md
+  - https://developer.mitti.com/reference/fieldsservice_updatefield.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsup.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupcompletioncounts.md
+  - https://developer.mitti.com/reference/headsupservice_getheadsupmessages.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupmanage.md
+  - https://developer.mitti.com/reference/headsupservice_listheadsupusers.md
+  - https://developer.mitti.com/reference/incidentsservice_addcollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_createincident.md
+  - https://developer.mitti.com/reference/incidentsservice_deleteincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincident.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentquestionsandanswers.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidents.md
+  - https://developer.mitti.com/reference/incidentsservice_getincidentscount.md
+  - https://developer.mitti.com/reference/incidentsservice_getpdfreport.md
+  - https://developer.mitti.com/reference/incidentsservice_removecollaborators.md
+  - https://developer.mitti.com/reference/incidentsservice_submitincident.md
+  - https://developer.mitti.com/reference/incidentsservice_updateasset.md
+  - https://developer.mitti.com/reference/incidentsservice_updatecategory.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedescription.md
+  - https://developer.mitti.com/reference/incidentsservice_updatedueat.md
+  - https://developer.mitti.com/reference/incidentsservice_updateoccurredat.md
+  - https://developer.mitti.com/reference/incidentsservice_updatepriority.md
+  - https://developer.mitti.com/reference/incidentsservice_updatesite.md
+  - https://developer.mitti.com/reference/incidentsservice_updatestatus.md
+  - https://developer.mitti.com/reference/incidentsservice_updatetitle.md
+  - https://developer.mitti.com/reference/inspectionservice_addtableline.md
+  - https://developer.mitti.com/reference/inspectionservice_archiveinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_cloneinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_completeinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_createinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deleteinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_deletetableline.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_getinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_removeinspectionuseraccess.md
+  - https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionaccess.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionlocation.md
+  - https://developer.mitti.com/reference/inspectionservice_setinspectionsite.md
+  - https://developer.mitti.com/reference/inspectionservice_setowner.md
+  - https://developer.mitti.com/reference/inspectionservice_updateinspection.md
+  - https://developer.mitti.com/reference/inspectionservice_updatetableline.md
+  - https://developer.mitti.com/reference/investigationsservice_clonecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createcategory.md
+  - https://developer.mitti.com/reference/investigationsservice_createdetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_createinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_deletecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_deletedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_deleteinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationactioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationcoursecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationinspectioncount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationissuecount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationmediacount.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationpdfreport.md
+  - https://developer.mitti.com/reference/investigationsservice_getinvestigationscount.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategories.md
+  - https://developer.mitti.com/reference/investigationsservice_listcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listdetailfieldlibrary.md
+  - https://developer.mitti.com/reference/investigationsservice_listfields.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationactions.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationcourses.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationinspections.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationissues.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationlog.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigationmedia.md
+  - https://developer.mitti.com/reference/investigationsservice_listinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_listsettingslog.md
+  - https://developer.mitti.com/reference/investigationsservice_liststatuses.md
+  - https://developer.mitti.com/reference/investigationsservice_renamedetailfield.md
+  - https://developer.mitti.com/reference/investigationsservice_setcategorydetailfields.md
+  - https://developer.mitti.com/reference/investigationsservice_setdetailfieldoptions.md
+  - https://developer.mitti.com/reference/investigationsservice_updatecategory.md
+  - https://developer.mitti.com/reference/investigationsservice_updatefields.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigation.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigationaccess.md
+  - https://developer.mitti.com/reference/investigationsservice_updateinvestigations.md
+  - https://developer.mitti.com/reference/investigationsservice_updatestatuses.md
+  - https://developer.mitti.com/reference/jobsservice_getjobevents.md
+  - https://developer.mitti.com/reference/jobsservice_getjobs.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetlastservice.md
+  - https://developer.mitti.com/reference/maintenanceservice_addassetstoprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_createplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_createprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_deleteprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_getprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetservicehistory.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancedetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_listassetsmaintenancestatuscounts.md
+  - https://developer.mitti.com/reference/maintenanceservice_listprogramsdetails.md
+  - https://developer.mitti.com/reference/maintenanceservice_removeassetsfromprogram.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateplan.md
+  - https://developer.mitti.com/reference/maintenanceservice_updateprogram.md
+  - https://developer.mitti.com/reference/mediaservice_getdownloadsignedurl.md
+  - https://developer.mitti.com/reference/organisationservice_bulkdeletegroups.md
+  - https://developer.mitti.com/reference/organisationservice_getusergroups.md
+  - https://developer.mitti.com/reference/oshaservice_createcase.md
+  - https://developer.mitti.com/reference/oshaservice_createestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_deletecase.md
+  - https://developer.mitti.com/reference/oshaservice_deleteestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getcase.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_getestablishmenthours.md
+  - https://developer.mitti.com/reference/oshaservice_listcases.md
+  - https://developer.mitti.com/reference/oshaservice_listestablishments.md
+  - https://developer.mitti.com/reference/oshaservice_updatecase.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishment.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmentemployees.md
+  - https://developer.mitti.com/reference/oshaservice_updateestablishmenthours.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_createinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteconfiguration.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_deleteinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_getinstallation.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listapplications.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_listinstallations.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_registerapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateapplication.md
+  - https://developer.mitti.com/reference/partnerintegrationservice_updateconfiguration.md
+  - https://developer.mitti.com/reference/permissionsservice_assignpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_getpermissionset.md
+  - https://developer.mitti.com/reference/permissionsservice_listpermissionsets.md
+  - https://developer.mitti.com/reference/reportsservice_startinspectionexport.md
+  - https://developer.mitti.com/reference/rolesservice_createrole.md
+  - https://developer.mitti.com/reference/rolesservice_getrole.md
+  - https://developer.mitti.com/reference/rolesservice_updaterole.md
+  - https://developer.mitti.com/reference/schedulesservice_createscheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_deletescheduleitem.md
+  - https://developer.mitti.com/reference/schedulesservice_listscheduleitems.md
+  - https://developer.mitti.com/reference/schedulesservice_updatescheduleitem.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/schedulingfeedservice_feedschedules.md
+  - https://developer.mitti.com/reference/schedulingservice_createnewschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_deleteschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_endschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_getschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduleaccess.md
+  - https://developer.mitti.com/reference/schedulingservice_listscheduletargets.md
+  - https://developer.mitti.com/reference/schedulingservice_pauseschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_resumeschedule.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduleassignees.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduledetails.md
+  - https://developer.mitti.com/reference/schedulingservice_updateschedulerecurrence.md
+  - https://developer.mitti.com/reference/schedulingservice_updatescheduletarget.md
+  - https://developer.mitti.com/reference/sensorsservice_deprovisionsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensor.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorid.md
+  - https://developer.mitti.com/reference/sensorsservice_getsensorlatestreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_ingestsensorreadings.md
+  - https://developer.mitti.com/reference/sensorsservice_listsensors.md
+  - https://developer.mitti.com/reference/sensorsservice_provisionsensor.md
+  - https://developer.mitti.com/reference/sharedlinkservice_generateforwebreport.md
+  - https://developer.mitti.com/reference/statusgroupsservice_addstatusgrouptoassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_createstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_deletestatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_getstatusgroup.md
+  - https://developer.mitti.com/reference/statusgroupsservice_liststatusgroups.md
+  - https://developer.mitti.com/reference/statusgroupsservice_removestatusgroupfromassettypes.md
+  - https://developer.mitti.com/reference/statusgroupsservice_updatestatusgroup.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstorole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_adduserstostructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listdirectusersinstructure.md
+  - https://developer.mitti.com/reference/structuremembershipservice_listusersbyrole.md
+  - https://developer.mitti.com/reference/structuremembershipservice_removeusersfromstructure.md
+  - https://developer.mitti.com/reference/structuresfieldsservice_listfields.md
+  - https://developer.mitti.com/reference/structuresservice_createstructure.md
+  - https://developer.mitti.com/reference/structuresservice_getstructuremetadata.md
+  - https://developer.mitti.com/reference/structuresservice_getstructureprofile.md
+  - https://developer.mitti.com/reference/structuresservice_movestructure.md
+  - https://developer.mitti.com/reference/structuresservice_searchstructures.md
+  - https://developer.mitti.com/reference/structuresservice_updatestructure.md
+  - https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md
+  - https://developer.mitti.com/reference/templateservice_createtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_discardtemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedefinition.md
+  - https://developer.mitti.com/reference/templateservice_gettemplatedraft.md
+  - https://developer.mitti.com/reference/templateservice_publishtemplate.md
+  - https://developer.mitti.com/reference/templateservice_updatetemplatedraft.md
+  - https://developer.mitti.com/reference/templatesservice_archivetemplate.md
+  - https://developer.mitti.com/reference/templatesservice_deletetemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyid.md
+  - https://developer.mitti.com/reference/templatesservice_gettemplatebyinspectionid.md
+  - https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate.md
+  - https://developer.mitti.com/reference/thepubservice_addnewusertogroup.md
+  - https://developer.mitti.com/reference/thepubservice_adduser.md
+  - https://developer.mitti.com/reference/thepubservice_createglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_creategroup.md
+  - https://developer.mitti.com/reference/thepubservice_creategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_deletegrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_deleteinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_feedactionassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedactions.md
+  - https://developer.mitti.com/reference/thepubservice_feedactiontimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedactivitylogevents.md
+  - https://developer.mitti.com/reference/thepubservice_feedassets.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroups.md
+  - https://developer.mitti.com/reference/thepubservice_feedgroupusers.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspectionitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedinspections.md
+  - https://developer.mitti.com/reference/thepubservice_feedissueassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuerelationships.md
+  - https://developer.mitti.com/reference/thepubservice_feedissues.md
+  - https://developer.mitti.com/reference/thepubservice_feedissuetimelineitems.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees.md
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences.md
+  - https://developer.mitti.com/reference/thepubservice_feedschedules.md
+  - https://developer.mitti.com/reference/thepubservice_feedsitemembers.md
+  - https://developer.mitti.com/reference/thepubservice_feedsites.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplatepermissions.md
+  - https://developer.mitti.com/reference/thepubservice_feedtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_feedusers.md
+  - https://developer.mitti.com/reference/thepubservice_getglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_getinspection.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectiondeeplink.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionmedia.md
+  - https://developer.mitti.com/reference/thepubservice_getinspectionwebreportlink.md
+  - https://developer.mitti.com/reference/thepubservice_getuser.md
+  - https://developer.mitti.com/reference/thepubservice_getusergroups.md
+  - https://developer.mitti.com/reference/thepubservice_listallglobalresponsesets.md
+  - https://developer.mitti.com/reference/thepubservice_listgroups.md
+  - https://developer.mitti.com/reference/thepubservice_listusersingroup.md
+  - https://developer.mitti.com/reference/thepubservice_removeuser.md
+  - https://developer.mitti.com/reference/thepubservice_searchinspections.md
+  - https://developer.mitti.com/reference/thepubservice_searchtemplates.md
+  - https://developer.mitti.com/reference/thepubservice_searchusers.md
+  - https://developer.mitti.com/reference/thepubservice_shareinspection.md
+  - https://developer.mitti.com/reference/thepubservice_startinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateglobalresponseset.md
+  - https://developer.mitti.com/reference/thepubservice_updategrsresponse.md
+  - https://developer.mitti.com/reference/thepubservice_updateinspection.md
+  - https://developer.mitti.com/reference/thepubservice_updateuser.md
+  - https://developer.mitti.com/reference/timelineservice_addcomment.md
+  - https://developer.mitti.com/reference/timelineservice_gettimeline.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getcoursestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonattempts.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonprogressevents.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getlessonstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getrapidrefreshanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslidestatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getslideuserstatistics.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyanswers.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getsurveyquestiondefinitions.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogress.md
+  - https://developer.mitti.com/reference/traininganalyticsservice_getuserlessonprogressevents.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursecollections.md
+  - https://developer.mitti.com/reference/trainingcollectionsservice_getcoursesbycoursecollectionid.md
+  - https://developer.mitti.com/reference/trainingcourseprogressservice_resetcourseprogress.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getcourses.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_getlessonsbycourseid.md
+  - https://developer.mitti.com/reference/trainingcoursesservice_updatecourseassignments.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboardrankings.md
+  - https://developer.mitti.com/reference/trainingindividualleaderboardsservice_getindividualleaderboards.md
+  - https://developer.mitti.com/reference/traininglessonsservice_getlessonbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpathbyid.md
+  - https://developer.mitti.com/reference/trainingpathsservice_getpaths.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefresh.md
+  - https://developer.mitti.com/reference/trainingrapidrefreshservice_getrapidrefreshbyid.md
+  - https://developer.mitti.com/reference/typesservice_createtype.md
+  - https://developer.mitti.com/reference/typesservice_deletetype.md
+  - https://developer.mitti.com/reference/typesservice_gettype.md
+  - https://developer.mitti.com/reference/typesservice_listtypefields.md
+  - https://developer.mitti.com/reference/typesservice_listtypes.md
+  - https://developer.mitti.com/reference/typesservice_updatetype.md
+  - https://developer.mitti.com/reference/typesservice_updatetypefields.md
+  - https://developer.mitti.com/reference/userattributeservice_getuserattributes.md
+  - https://developer.mitti.com/reference/userattributeservice_setuserattributes.md
+  - https://developer.mitti.com/reference/userdocumentsservice_adddocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deleteallmediafordocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_deletedocumentforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumenthistory.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocuments.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getdocumentversion.md
+  - https://developer.mitti.com/reference/userdocumentsservice_getsettings.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatedocumentversionforuser.md
+  - https://developer.mitti.com/reference/userdocumentsservice_updatesettings.md
+  - https://developer.mitti.com/reference/userfieldservice_createfield.md
+  - https://developer.mitti.com/reference/userfieldservice_deletefield.md
+  - https://developer.mitti.com/reference/userfieldservice_disablefield.md
+  - https://developer.mitti.com/reference/userfieldservice_listfields.md
+  - https://developer.mitti.com/reference/userfieldservice_restorefield.md
+  - https://developer.mitti.com/reference/userfieldservice_setfieldsettings.md
+  - https://developer.mitti.com/reference/userfieldservice_updatefield.md
+  - https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_createorupdateusers.md
+  - https://developer.mitti.com/reference/usersservice_getcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_initcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/usersservice_listcreateorupdateusersjobs.md
+  - https://developer.mitti.com/reference/usersservice_listusers.md
+  - https://developer.mitti.com/reference/usersservice_startcreateorupdateusersjob.md
+  - https://developer.mitti.com/reference/webhooksservice_createwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_deletewebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_generatetoken.md
+  - https://developer.mitti.com/reference/webhooksservice_gettoken.md
+  - https://developer.mitti.com/reference/webhooksservice_getwebhook.md
+  - https://developer.mitti.com/reference/webhooksservice_listwebhooks.md
+  - https://developer.mitti.com/reference/webhooksservice_updatewebhook.md
+  merge:
+    pages: 416
+    deduped: 3213
+    conflicts_kept_first: 0
