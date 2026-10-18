@@ -223,6 +223,8 @@ apis:
   humanURL: https://developer.safetyculture.com
   baseURL: https://api.safetyculture.io
   tags:
+  - Application
+  tags_raw:
   - Apps
   properties:
   - type: OpenAPI
@@ -296,6 +298,8 @@ apis:
   humanURL: https://developer.safetyculture.com
   baseURL: https://api.safetyculture.io
   tags:
+  - Bulk User Operations
+  tags_raw:
   - Bulk user operations
   properties:
   - type: OpenAPI
@@ -404,6 +408,8 @@ apis:
   humanURL: https://developer.safetyculture.com
   baseURL: https://api.safetyculture.io
   tags:
+  - Data Feed
+  tags_raw:
   - Data Feeds
   properties:
   - type: OpenAPI
@@ -512,6 +518,8 @@ apis:
   humanURL: https://developer.safetyculture.com
   baseURL: https://api.safetyculture.io
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -584,6 +592,8 @@ apis:
   humanURL: https://developer.safetyculture.com
   baseURL: https://api.safetyculture.io
   tags:
+  - Inspection
+  tags_raw:
   - Inspections
   properties:
   - type: OpenAPI
@@ -872,6 +882,8 @@ apis:
   humanURL: https://developer.safetyculture.com
   baseURL: https://api.safetyculture.io
   tags:
+  - Schedule
+  tags_raw:
   - Schedules
   properties:
   - type: OpenAPI
@@ -1088,6 +1100,8 @@ apis:
   humanURL: https://developer.safetyculture.com
   baseURL: https://api.safetyculture.io
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
@@ -1124,6 +1138,8 @@ apis:
   humanURL: https://developer.safetyculture.com
   baseURL: https://api.safetyculture.io
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
