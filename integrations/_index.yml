@@ -15,32 +15,6 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
-- slug: safetyculture-pipedream
-  label: Pipedream
-  partner: pipedream
-  partner_name: Pipedream
-  type: marketplace
-  marketplace: pipedream-components
-  channel: open-source-node
-  evidence: https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/iauditor_by_safetyculture
-  source: edge
-  relationship: ipaas-bridge
-  contract_reference:
-    register: Pipedream components (PipedreamHQ/pipedream components/)
-    spec_file: null
-    role: ipaas-connector:pipedream
-    registered_name: iauditor by safetyculture
-    matched_domain: safetyculture.com
-    matched_by: domain
-    detected_by: sweep-workflow-automation.py
-    detected: '2026-10-15'
-    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
-    app_slug: iauditor_by_safetyculture
-    actions: true
-    sources: true
-    builder: Pipedream repo (component)
-  status: not-a-workflow
-  arazzo: null
 - slug: safetyculture-airbyte
   label: Airbyte
   partner: airbyte
@@ -95,5 +69,31 @@
     - connectors/applications/safetyculture
     vendor_link: https://safetyculture.com/
     builder: Fivetran
+  status: not-a-workflow
+  arazzo: null
+- slug: safetyculture-pipedream
+  label: Pipedream
+  partner: pipedream
+  partner_name: Pipedream
+  type: marketplace
+  marketplace: pipedream-components
+  channel: open-source-node
+  evidence: https://github.com/PipedreamHQ/pipedream/tree/d5872355ef27b4efa769f05352f2820c299a456e/components/iauditor_by_safetyculture
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Pipedream components (PipedreamHQ/pipedream components/)
+    spec_file: null
+    role: ipaas-connector:pipedream
+    registered_name: iauditor by safetyculture
+    matched_domain: safetyculture.com
+    matched_by: domain
+    detected_by: sweep-workflow-automation.py
+    detected: '2026-10-15'
+    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
+    app_slug: iauditor_by_safetyculture
+    actions: true
+    sources: true
+    builder: Pipedream repo (component)
   status: not-a-workflow
   arazzo: null
