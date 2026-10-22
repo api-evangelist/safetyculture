@@ -1,34 +1,28 @@
 ---
-name: Provision users and groups
-description: Create a group, add users to it, and list a group's members in SafetyCulture.
-api: https://api.safetyculture.io
+name: safetyculture-provision-users-and-groups
+description: Create a group, find users, add them to the group, and verify group membership.
+api: https://api.mitti.com
 operations:
-  - thepubservice_creategroup
-  - thepubservice_addnewusertogroup
-  - thepubservice_listusersingroup
+- ThePubService_CreateGroup
+- ThePubService_ListGroups
+- UsersService_ListUsers
+- ThePubService_AddNewUserToGroup
+- ThePubService_ListUsersInGroup
+- ThePubService_RemoveUser
 ---
 
 # Provision users and groups
 
-Authenticate with `Authorization: Bearer {api_token}` against
-`https://api.safetyculture.io`. The token owner's permissions bound what you can
-create or change.
-
 ## Steps
 
-1. **Create a group** (`thepubservice_creategroup`) to model a team, site, or role.
-2. **Add a user to the group** (`thepubservice_addnewusertogroup`).
-3. **List group members** (`thepubservice_listusersingroup`) to verify membership and
-   reconcile against your source of truth.
-
-## When to use SCIM instead
-
-For continuous, identity-provider-driven provisioning, prefer SafetyCulture's SCIM 2.0
-integration with Microsoft Entra ID or Okta (see `conformance/` and the user-provisioning
-guides) rather than scripting group membership directly. Use these operations for
-lightweight or supplementary automation.
+1. **Check for the group** with `ThePubService_ListGroups`; create it with `ThePubService_CreateGroup` only if it is missing (this avoids duplicate groups).
+2. **Find users** with `UsersService_ListUsers`.
+3. **Add each user** to the group (`ThePubService_AddNewUserToGroup`).
+4. **Verify membership** with `ThePubService_ListUsersInGroup`. Remove someone with `ThePubService_RemoveUser`.
 
 ## Conventions
 
-- Bulk user upsert is heavily rate-limited (5 req / 60s); batch accordingly
-  (`rate-limits/safetyculture-rate-limits.yml`).
+- Base URL `https://api.mitti.com`; authenticate every call with `Authorization: Bearer {api_token}` (a user API token).
+- Rate limits are per endpoint over a 60-second window; a throttled call returns `429 Too Many Requests`. Read the `x-ratelimit-*` headers and back off (see `rate-limits/`).
+- No client-supplied idempotency key is documented (see `conventions/`), so do not blindly retry writes: after a timeout, re-read the resource with a list/get call before you resubmit.
+- Prefer the current operations over the ones whose summary says `(legacy)`.

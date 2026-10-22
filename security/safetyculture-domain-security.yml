@@ -1,15 +1,32 @@
-generated: '2026-07-21'
+generated: '2026-10-20'
 method: probed
 source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
 hosts:
-- host: safetyculture.com
+- host: mitti.com
   https: true
   tls_version: TLSv1.3
-  cert_expires: Oct 13 16:05:15 2026 GMT
+  cert_expires: Dec 30 18:53:35 2026 GMT
+  hsts: true
+  hsts_max_age: 15552000
+- host: developer.mitti.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Jan  6 22:59:08 2027 GMT
+  hsts: null
+- host: api.safetyculture.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov 28 23:53:02 2026 GMT
   hsts: true
   hsts_max_age: 15552000
 domains:
-- domain: safetyculture.com
+- domain: mitti.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine
+- domain: safetyculture.io
   dnssec: true
   caa: []
   spf: true

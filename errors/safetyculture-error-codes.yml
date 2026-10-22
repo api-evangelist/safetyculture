@@ -1,0 +1,233 @@
+generated: '2026-10-20'
+method: searched
+source: https://developer.mitti.com/reference/bulk-user-operations-errors
+format: custom
+envelope:
+  fields:
+  - reason
+  - field_hint
+  - value_hint
+  - message
+  - level
+  - value_reference
+  - details
+  levels:
+    INFO: Provides context about the operation. Informational only and does not impact processing.
+    WARNING: Potential issue that may lead to unexpected results, but does not block processing.
+    ERROR: Prevents the field from being processed for this user.
+    FATAL: Critical problem that stops the user from being created or updated.
+scope: Bulk user operations (users upsert jobs)
+problems:
+- status: null
+  code: REASON_USER_EXISTS
+  title: REASON_USER_EXISTS
+  description: A user with this username already exists in the organization.
+- status: null
+  code: REASON_USER_NOT_FOUND
+  title: REASON_USER_NOT_FOUND
+  description: The user ID does not match any existing user in the organization.
+- status: null
+  code: REASON_DUPLICATE_ROW
+  title: REASON_DUPLICATE_ROW
+  description: Duplicate user entries were detected in the request.
+- status: null
+  code: REASON_DUPLICATE_USERNAME
+  title: REASON_DUPLICATE_USERNAME
+  description: The username appears more than once in the request or already exists in the organization.
+- status: null
+  code: REASON_MUST_HAVE_ID_OR_USERNAME
+  title: REASON_MUST_HAVE_ID_OR_USERNAME
+  description: Each user record must include either a user ID or username.
+- status: null
+  code: REASON_INVALID_ID_FORMAT
+  title: REASON_INVALID_ID_FORMAT
+  description: The user ID is not in a valid format.
+- status: null
+  code: REASON_INVALID_USERNAME_FORMAT
+  title: REASON_INVALID_USERNAME_FORMAT
+  description: The username must be a valid email address.
+- status: null
+  code: REASON_ID_USERNAME_MISMATCH
+  title: REASON_ID_USERNAME_MISMATCH
+  description: The provided username does not match the existing username for this user ID. Username updates are
+    not currently supported.
+- status: null
+  code: REASON_FIELD_MANDATORY_FOR_CREATION
+  title: REASON_FIELD_MANDATORY_FOR_CREATION
+  description: A required field is missing for creating a new user.
+- status: null
+  code: REASON_CANNOT_CREATE_DEACTIVATED_USERS
+  title: REASON_CANNOT_CREATE_DEACTIVATED_USERS
+  description: Users must be created as `active`. Creating a deactivated user is not allowed.
+- status: null
+  code: REASON_FIELD_CHANGE_NOT_ALLOWED_FOR_CALLER
+  title: REASON_FIELD_CHANGE_NOT_ALLOWED_FOR_CALLER
+  description: You don't have permission to change the field for this action type.
+- status: null
+  code: REASON_INVALID_SEAT_PERMISSION_SET_COMBINATION
+  title: REASON_INVALID_SEAT_PERMISSION_SET_COMBINATION
+  description: The permission set and seat type combination is not valid. Some permission sets can only be assigned
+    to specific seat types.
+- status: null
+  code: REASON_INVALID_VALUE_PASSWORD_TOO_WEAK
+  title: REASON_INVALID_VALUE_PASSWORD_TOO_WEAK
+  description: The password does not meet the required strength criteria.
+- status: null
+  code: REASON_INVALID_VALUE_PASSWORD_CANNOT_UPDATE_USERS_PASSWORD
+  title: REASON_INVALID_VALUE_PASSWORD_CANNOT_UPDATE_USERS_PASSWORD
+  description: Passwords for existing users cannot be updated through this API.
+- status: null
+  code: REASON_INVALID_VALUE_REFERENCE_NAME_DOES_NOT_FOUND
+  title: REASON_INVALID_VALUE_REFERENCE_NAME_DOES_NOT_FOUND
+  description: The referenced site, group, or attribute name could not be found.
+- status: null
+  code: REASON_INVALID_VALUE_REFERENCE_ID_DOES_NOT_FOUND
+  title: REASON_INVALID_VALUE_REFERENCE_ID_DOES_NOT_FOUND
+  description: The referenced site, group, or attribute ID could not be found.
+- status: null
+  code: REASON_PERMISSION_SET_PERMISSION_DENIED
+  title: REASON_PERMISSION_SET_PERMISSION_DENIED
+  description: You don't have permission to modify other users' permission sets.
+- status: null
+  code: REASON_PERMISSION_SET_USER_NOT_ACTIVE
+  title: REASON_PERMISSION_SET_USER_NOT_ACTIVE
+  description: Permission sets cannot be modified for inactive users. Activate the user first.
+- status: null
+  code: REASON_PERMISSION_SET_NOT_FOUND
+  title: REASON_PERMISSION_SET_NOT_FOUND
+  description: The specified permission set was not found in the organization.
+- status: null
+  code: REASON_INVALID_PERMISSION_SET_FOR_ORGANIZATION_TIER
+  title: REASON_INVALID_PERMISSION_SET_FOR_ORGANIZATION_TIER
+  description: The permission set cannot be used with your organization's current plan. For example, custom permission
+    sets are only available on Premium Plan or Enterprise Plan.
+- status: null
+  code: REASON_USER_ATTRIBUTE_DUPLICATE_ATTRIBUTE
+  title: REASON_USER_ATTRIBUTE_DUPLICATE_ATTRIBUTE
+  description: The same user attribute was specified multiple times for this user in the request.
+- status: null
+  code: REASON_USER_ATTRIBUTE_NOT_FOUND
+  title: REASON_USER_ATTRIBUTE_NOT_FOUND
+  description: The user attribute could not be found in the organization.
+- status: null
+  code: REASON_USER_ATTRIBUTE_INVALID_ATTRIBUTE_TYPE
+  title: REASON_USER_ATTRIBUTE_INVALID_ATTRIBUTE_TYPE
+  description: The attribute type is not supported. This may occur if a new attribute type is added before it's
+    supported by the endpoint.
+- status: null
+  code: REASON_USER_ATTRIBUTE_INVALID_SELECT_VALUE
+  title: REASON_USER_ATTRIBUTE_INVALID_SELECT_VALUE
+  description: The provided value is not one of the allowed options for this select-type attribute.
+- status: null
+  code: REASON_USER_ATTRIBUTE_INVALID_USER_ID_VALUE
+  title: REASON_USER_ATTRIBUTE_INVALID_USER_ID_VALUE
+  description: The value is not a valid user ID.
+- status: null
+  code: REASON_USER_ATTRIBUTE_INVALID_TIMESTAMP_VALUE
+  title: REASON_USER_ATTRIBUTE_INVALID_TIMESTAMP_VALUE
+  description: The value is not a valid timestamp.
+- status: null
+  code: REASON_USER_ATTRIBUTE_INVALID_STRING_VALUE
+  title: REASON_USER_ATTRIBUTE_INVALID_STRING_VALUE
+  description: The string value is not valid. For example, some fields do not allow empty strings.
+- status: null
+  code: REASON_INVALID_SEAT_TYPE_FOR_ORGANIZATION_TIER
+  title: REASON_INVALID_SEAT_TYPE_FOR_ORGANIZATION_TIER
+  description: The seat type is not supported on your organization's current plan. For example, lite seats aren't
+    available on the Free Plan.
+- status: null
+  code: REASON_SEAT_LIMIT_REACHED
+  title: REASON_SEAT_LIMIT_REACHED
+  description: The request would exceed your organization's seat limit.
+- status: null
+  code: REASON_GROUP_NOT_FOUND
+  title: REASON_GROUP_NOT_FOUND
+  description: The group could not be found in the organization.
+- status: null
+  code: REASON_GROUP_DUPLICATE_ENTRY
+  title: REASON_GROUP_DUPLICATE_ENTRY
+  description: The same group was listed more than once for this user.
+- status: null
+  code: REASON_GROUP_CANNOT_ASSIGN_TO_DEACTIVATED_USER
+  title: REASON_GROUP_CANNOT_ASSIGN_TO_DEACTIVATED_USER
+  description: Groups cannot be assigned to users who are deactivated or will be deactivated.
+- status: null
+  code: REASON_GROUP_INVALID_REMOVE_REFERENCE
+  title: REASON_GROUP_INVALID_REMOVE_REFERENCE
+  description: The group reference specified for removal is invalid.
+- status: null
+  code: REASON_GROUP_REFERENCE_AMBIGUOUS
+  title: REASON_GROUP_REFERENCE_AMBIGUOUS
+  description: Multiple groups share the same name. Use a group ID instead.
+- status: null
+  code: REASON_SITE_NOT_FOUND
+  title: REASON_SITE_NOT_FOUND
+  description: The site could not be found in the organization.
+- status: null
+  code: REASON_SITE_DUPLICATE_ENTRY
+  title: REASON_SITE_DUPLICATE_ENTRY
+  description: The same site was listed more than once for this user.
+- status: null
+  code: REASON_SITE_CANNOT_ASSIGN_TO_DEACTIVATED_USER
+  title: REASON_SITE_CANNOT_ASSIGN_TO_DEACTIVATED_USER
+  description: Sites cannot be assigned to users who are deactivated or will be deactivated.
+- status: null
+  code: REASON_USER_ALREADY_ASSIGNED_TO_ANCESTOR_SITE
+  title: REASON_USER_ALREADY_ASSIGNED_TO_ANCESTOR_SITE
+  description: The user is already assigned to a higher-level site. For example, this happens if a user is assigned
+    to a site under a parent country they belong to.
+- status: null
+  code: REASON_SITE_INVALID_REMOVE_REFERENCE
+  title: REASON_SITE_INVALID_REMOVE_REFERENCE
+  description: The site reference specified for removal is invalid.
+- status: null
+  code: REASON_SITE_ASSOCIATION_LIMIT_REACHED
+  title: REASON_SITE_ASSOCIATION_LIMIT_REACHED
+  description: The maximum number of site associations for this user has been reached.
+- status: null
+  code: REASON_SITE_REFERENCE_AMBIGUOUS
+  title: REASON_SITE_REFERENCE_AMBIGUOUS
+  description: Multiple sites share the same name. Use a site ID instead.
+- status: null
+  code: REASON_USER_ATTRIBUTE_DISABLED
+  title: REASON_USER_ATTRIBUTE_DISABLED
+  description: The user attribute is currently disabled and cannot be used.
+- status: null
+  code: REASON_LAST_ADMINISTRATOR
+  title: REASON_LAST_ADMINISTRATOR
+  description: The requested change would remove the organization's last administrator, which is not allowed.
+- status: null
+  code: REASON_FIELD_VALUE_INVALID_MIN_LENGTH
+  title: REASON_FIELD_VALUE_INVALID_MIN_LENGTH
+  description: The value is shorter than the minimum allowed length.
+- status: null
+  code: REASON_FIELD_VALUE_INVALID_MAX_LENGTH
+  title: REASON_FIELD_VALUE_INVALID_MAX_LENGTH
+  description: The value exceeds the maximum allowed length.
+- status: null
+  code: REASON_COMPANY_NOT_FOUND
+  title: REASON_COMPANY_NOT_FOUND
+  description: The company could not be found in the organization.
+- status: null
+  code: REASON_COMPANY_DUPLICATE_ENTRY
+  title: REASON_COMPANY_DUPLICATE_ENTRY
+  description: The same company was listed more than once for this user.
+- status: null
+  code: REASON_COMPANY_CANNOT_ASSIGN_TO_DEACTIVATED_USER
+  title: REASON_COMPANY_CANNOT_ASSIGN_TO_DEACTIVATED_USER
+  description: Companies cannot be assigned to users who are deactivated or will be deactivated.
+- status: null
+  code: REASON_COMPANY_INVALID_REMOVE_REFERENCE
+  title: REASON_COMPANY_INVALID_REMOVE_REFERENCE
+  description: The company reference specified for removal is invalid.
+- status: null
+  code: REASON_COMPANY_MEMBERSHIP_CHANGE_NOT_ALLOWED_FOR_CALLER
+  title: REASON_COMPANY_MEMBERSHIP_CHANGE_NOT_ALLOWED_FOR_CALLER
+  description: You don't have permission to change user membership for this company.
+also:
+  exporter_errors:
+    url: https://developer.mitti.com/docs/mitti-exporter-errors
+    statuses:
+      401: problem with the access_token in the configuration file
+      403: problem with your token's permissions
+      504: amount of data processed; lower export.inspection.limit

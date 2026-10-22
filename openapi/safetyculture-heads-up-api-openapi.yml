@@ -144,62 +144,15 @@ paths:
       - Heads Up
 components:
   schemas:
-    s12.announcements.v1.ListHeadsUpManageRequest.Filter.StatusFilter:
-      type: string
-      enum:
-      - STATUS_FILTER_UNSPECIFIED
-      - STATUS_FILTER_INCOMPLETE
-      - STATUS_FILTER_COMPLETED
-      - STATUS_FILTER_DRAFT
-      - STATUS_FILTER_SCHEDULED
-      default: STATUS_FILTER_UNSPECIFIED
-    s12.documents.v1.AcknowledgementType:
-      type: string
-      enum:
-      - ACKNOWLEDGEMENT_TYPE_UNSPECIFIED
-      - ACKNOWLEDGEMENT_TYPE_ACKNOWLEDGEMENT
-      - ACKNOWLEDGEMENT_TYPE_SIGNATURE
-      default: ACKNOWLEDGEMENT_TYPE_UNSPECIFIED
-      description: "The acknowledgement type for a linked node — used both as the requirement on a link\nand as the type recorded when a user acknowledges.\nUNSPECIFIED means no acknowledgement is required.\n\n - ACKNOWLEDGEMENT_TYPE_UNSPECIFIED: No acknowledgement required."
-    s12.common.TextMessage:
+    s12.common.RequestByID:
       type: object
       properties:
-        text:
+        id:
           type: string
-      title: TextMessage the message type containing a message in text
-    s12.common.ExpiryStatus:
-      type: string
-      enum:
-      - EXPIRY_STATUS_VALID
-      - EXPIRY_STATUS_EXPIRED
-      - EXPIRY_STATUS_EXPIRING_SOON
-      description: The expiry status of an object based on its validity period.
-    s12.announcements.v1.ListHeadsUpUsersRequest.Filter.ViewedFilter:
-      type: string
-      enum:
-      - VIEWED_FILTER_UNKNOWN_NONE_UNSPECIFIED
-      - VIEWED_FILTER_HAS_VIEWED
-      - VIEWED_FILTER_HAS_NOT_VIEWED
-      default: VIEWED_FILTER_UNKNOWN_NONE_UNSPECIFIED
-      title: '- VIEWED_FILTER_UNKNOWN_NONE_UNSPECIFIED: Defaults to no filter'
-    s12.announcements.v1.HeadsUpReactionUser:
-      type: object
-      properties:
-        user_id:
-          type: string
-          description: ID of the user who reacted
-        user_full_name:
-          type: string
-          description: Name of the user who reacted
-        user_profile_picture:
-          allOf:
-          - $ref: '#/components/schemas/s12.common.Media'
-          description: Profile picture of the user who reacted
-        created_at:
-          type: string
-          format: date-time
-          description: The time the user reacted
-      title: HeadsUpReactionUser represents a user who has reacted to a HeadsUp
+          description: ID to query data for
+      title: Generic request by ID structure
+      required:
+      - id
     s12.common.MentionType:
       type: string
       enum:
@@ -210,46 +163,94 @@ components:
       description: 'MentionType the type of mention that is being used. This could be users/roles
 
         etc.'
-    s12.common.RequestByID:
+    s12.common.TextMessage:
       type: object
       properties:
-        id:
+        text:
           type: string
-          description: ID to query data for
-      title: Generic request by ID structure
-      required:
-      - id
-    google.rpc.Status:
+      title: TextMessage the message type containing a message in text
+    s12.announcements.v1.LinkedDocument:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        message:
+        link_id:
           type: string
-        details:
+          description: ID of the link relationship connecting this media to the asset.
+        is_archived:
+          type: boolean
+          description: Boolean flag indicating whether the linked media is archived.
+        document_node_id:
+          type: string
+          description: Document node ID the media came from.
+        expiry_status:
+          description: Expiry status of the document the media came from.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.ExpiryStatus'
+        acknowledgement_type:
+          description: 'The acknowledgement requirement on this linked document.
+
+            ACKNOWLEDGEMENT_TYPE_UNSPECIFIED means no acknowledgement is required.'
+          allOf:
+          - $ref: '#/components/schemas/s12.documents.v1.AcknowledgementType'
+        acknowledged:
+          type: boolean
+          description: 'Whether the requesting user has satisfied the acknowledgement requirement
+
+            for this linked document''s version. Always true when acknowledgement_type
+
+            is ACKNOWLEDGEMENT_TYPE_UNSPECIFIED.'
+        acknowledged_at:
+          type: string
+          format: date-time
+          description: 'Timestamp when the requesting user acknowledged this document.
+
+            Only set when acknowledged is true.'
+    s12.announcements.v1.ListHeadsUpManageResponse:
+      type: object
+      properties:
+        heads_ups:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
-    s12.announcements.v1.DocumentType:
-      type: string
-      enum:
-      - DOCUMENT_TYPE_UNKNOWN_UNSPECIFIED
-      - DOCUMENT_TYPE_PDF
-      default: DOCUMENT_TYPE_UNKNOWN_UNSPECIFIED
-      title: '- DOCUMENT_TYPE_UNKNOWN_UNSPECIFIED: Defaults to PDF'
-    s12.common.MentionMessage:
+            $ref: '#/components/schemas/s12.announcements.v1.HeadsUpManageListItem'
+          description: List of HeadsUps
+        next_page_token:
+          type: string
+          description: 'If there are more results than those appearing in this response, then
+
+            `next_page_token` is included. If empty then there are no more results.
+
+            To get the next set of results, call the same
+
+            method again using the value of `next_page_token` as `page_token`.
+
+            For Example: ''ODFBMzQ3MDYtNzQxNy00RDZGLThDNjE1MEFDMkM4MTQ3NDQ='''
+        total:
+          type: integer
+          format: int32
+          description: Total number of HeadsUps found
+      description: Result returned from `ListHeadsUpManage`
+      title: ListHeadsUpManageResponse
+    s12.announcements.v1.ListHeadsUpManageRequest.Filter:
       type: object
       properties:
-        mention_id:
-          type: string
-        mention_type:
-          $ref: '#/components/schemas/s12.common.MentionType'
-        text:
-          type: string
-          description: Used as a response value but cannot be sent or edited.
-      title: Mentionmessage is the message type used for sending @mentions
+        group_ids:
+          type: array
+          items:
+            type: string
+        user_ids:
+          type: array
+          items:
+            type: string
+        completed:
+          $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpManageRequest.Filter.CompletedFilter'
+        author_ids:
+          type: array
+          items:
+            type: string
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpManageRequest.Filter.StatusFilter'
     s12.announcements.v1.ListHeadsUpUsersRequest.SortField:
       type: string
       enum:
@@ -261,34 +262,80 @@ components:
       default: SORT_FIELD_UNKNOWN_UNSPECIFIED
       description: '- SORT_FIELD_UNKNOWN_UNSPECIFIED: Defaults to NAME'
       title: The SortField for request items to be sorted in
-    s12.announcements.v1.HeadsUpMedia:
+    s12.announcements.v1.GetHeadsUpCompletionCountsResponse:
       type: object
       properties:
-        media:
+        viewed_count:
+          type: integer
+          format: int32
+          description: 'ViewedCount represents the total number of assigned users who have viewed a
+
+            HeadsUp'
+        acknowledged_count:
+          type: integer
+          format: int32
+          description: 'AcknowledgedCount represents the total number of users who have
+
+            acknowledged a HeadsUp.'
+        message_count:
+          type: integer
+          format: int32
+          description: MessageCount represents the total number of comments on this HeadsUp.
+        reaction_summary:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.announcements.v1.HeadsUpReactionSummary'
+          description: Reactions associated for the assigned heads up
+      description: Result returned from `GetHeadsUpCompletionCounts`
+      title: GetHeadsUpCompletionCountsResponse
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.announcements.v1.ListHeadsUpUsersRequest:
+      type: object
+      properties:
+        heads_up_id:
+          type: string
+          description: UUID used to look up HeadsUp.
+        page_size:
+          type: integer
+          format: int32
+          description: 'Optional. Number of HeadsUps to be returned in a single request. Maximum
+
+            100. Non-positive values are ignored.'
+        offset:
+          type: integer
+          format: int32
+          description: 'Number of users to offset, used with page_size indicates what page is
+
+            displayed'
+        sort_field:
+          description: Optional. Which field to use for sorting.
           allOf:
-          - $ref: '#/components/schemas/s12.common.Media'
-          description: Media object with details on how to retrieve and view media
-        video:
+          - $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.SortField'
+        sort_direction:
+          description: Optional. Direction for sorting.
           allOf:
-          - $ref: '#/components/schemas/s12.announcements.v1.VideoMeta'
-          description: Contains meta information about the video
-        document:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+        search_value:
+          type: string
+          description: 'Optional. Search value that will Search on Title & any other relevant
+
+            field.'
+        filters:
           allOf:
-          - $ref: '#/components/schemas/s12.announcements.v1.DocumentMeta'
-          description: Contains meta information about the document
-        linked_document:
-          allOf:
-          - $ref: '#/components/schemas/s12.announcements.v1.LinkedDocument'
-          description: Contains meta information about the linked document
-      title: HeadsUpMedia represents media associated with a HeadsUp
-    s12.common.SortDirection:
-      type: string
-      enum:
-      - SORT_DIRECTION_UNSPECIFIED
-      - SORT_DIRECTION_ASC
-      - SORT_DIRECTION_DESC
-      default: SORT_DIRECTION_UNSPECIFIED
-      title: Common set of sorting directions as used by lists
+          - $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.Filter'
+          description: Optional. Filters consists of an array of filter for listing incidents
+      description: The parameters for `ListHeadsUpUsers`
+      title: ListHeadsUpUsersRequest
+      required:
+      - heads_up_id
     s12.common.Message:
       type: object
       properties:
@@ -330,6 +377,176 @@ components:
           format: int32
           description: Number of replies to this given message.
       title: Message represents a given singular message
+    s12.common.MessageReferenceTypes:
+      type: string
+      enum:
+      - MESSAGE_REFERENCE_TYPES_UNKNOWN_UNSPECIFIED
+      - MESSAGE_REFERENCE_TYPES_HEADS_UP
+      default: MESSAGE_REFERENCE_TYPES_UNKNOWN_UNSPECIFIED
+      description: MessageReferenceTypes is a list of supported message reference types.
+    s12.announcements.v1.GetHeadsUpMessagesRequest:
+      type: object
+      properties:
+        message_request:
+          $ref: '#/components/schemas/s12.common.GetMessagesRequest'
+      description: The parameters for `GetHeadsUpMessages`
+      title: GetHeadsUpMessagesRequest
+    s12.common.GetMessagesRequest:
+      type: object
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: 'Optional. Number of messages to be returned in a single request. Maximum
+
+            100. Non-positive values are ignored. The presence of `next_page_token` in
+
+            the response indicates that more results might be available. For example:
+
+            ''20'''
+        page_token:
+          type: string
+          description: 'Optional. If present, then retrieve the next batch of results from the
+
+            preceding call to this method. `page_token` must be the value of
+
+            `next_page_token` from the previous response.  The values of other method
+
+            parameters should be identical to those in the previous call.
+
+            For example: ''ODFBMzQ3MDYtNzQxNy00RDZGLThDNjE1MEFDMkM4MTQ3NDQ='''
+        reference_id:
+          type: string
+          description: The ID of the resource your are looking for messages for
+        reference_type:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.MessageReferenceTypes'
+          description: The type of resource you are requesting on behalf of e.g. heads_up
+        parent_id:
+          type: string
+          description: Optional. Parent_id represents the ID of the parent message if any.
+        sort_direction:
+          description: Optional. Direction for sorting.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+      description: The parameters for `GetMessages`
+      title: GetMessagesRequest
+      required:
+      - reference_id
+      - reference_type
+    s12.common.MediaType:
+      type: string
+      enum:
+      - MEDIA_TYPE_IMAGE
+      - MEDIA_TYPE_VIDEO
+      - MEDIA_TYPE_PDF
+      - MEDIA_TYPE_DOCX
+      - MEDIA_TYPE_XLSX
+      - MEDIA_TYPE_PPTX
+      - MEDIA_TYPE_CSV
+      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    s12.announcements.v1.HeadsUpMedia:
+      type: object
+      properties:
+        media:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Media object with details on how to retrieve and view media
+        video:
+          allOf:
+          - $ref: '#/components/schemas/s12.announcements.v1.VideoMeta'
+          description: Contains meta information about the video
+        document:
+          allOf:
+          - $ref: '#/components/schemas/s12.announcements.v1.DocumentMeta'
+          description: Contains meta information about the document
+        linked_document:
+          allOf:
+          - $ref: '#/components/schemas/s12.announcements.v1.LinkedDocument'
+          description: Contains meta information about the linked document
+      title: HeadsUpMedia represents media associated with a HeadsUp
+    s12.announcements.v1.DocumentType:
+      type: string
+      enum:
+      - DOCUMENT_TYPE_UNKNOWN_UNSPECIFIED
+      - DOCUMENT_TYPE_PDF
+      default: DOCUMENT_TYPE_UNKNOWN_UNSPECIFIED
+      title: '- DOCUMENT_TYPE_UNKNOWN_UNSPECIFIED: Defaults to PDF'
+    s12.announcements.v1.HeadsUpReactionUser:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: ID of the user who reacted
+        user_full_name:
+          type: string
+          description: Name of the user who reacted
+        user_profile_picture:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Profile picture of the user who reacted
+        created_at:
+          type: string
+          format: date-time
+          description: The time the user reacted
+      title: HeadsUpReactionUser represents a user who has reacted to a HeadsUp
+    s12.common.SortDirection:
+      type: string
+      enum:
+      - SORT_DIRECTION_UNSPECIFIED
+      - SORT_DIRECTION_ASC
+      - SORT_DIRECTION_DESC
+      default: SORT_DIRECTION_UNSPECIFIED
+      title: Common set of sorting directions as used by lists
+    s12.common.GetMessagesResponse:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.common.Message'
+          description: All messages for a given resource
+        next_page_token:
+          type: string
+          description: 'If there are more results than those appearing in this response, then
+
+            `next_page_token` is included. If empty then there are no more results.
+
+            To get the next set of results, call the same
+
+            method again using the value of `next_page_token` as `page_token`.
+
+            For Example: ''ODFBMzQ3MDYtNzQxNy00RDZGLThDNjE1MEFDMkM4MTQ3NDQ='''
+        total:
+          type: integer
+          format: int32
+          description: Total number of Messages found
+      description: The result of `GetMessages`
+      title: GetMessagesResponse
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.announcements.v1.VideoMeta:
+      type: object
+      properties:
+        video_duration:
+          type: integer
+          format: int64
+          description: Number of milliseconds in the video
+        is_video_transcoded:
+          type: boolean
+          description: Whether or not the video has been transcoded
     s12.announcements.v1.HeadsUpResponse:
       type: object
       properties:
@@ -339,6 +556,229 @@ components:
           description: The current HeadsUp object
       description: Result returned from `GetHeadsUp`
       title: HeadsUpResponse
+    s12.documents.v1.AcknowledgementType:
+      type: string
+      enum:
+      - ACKNOWLEDGEMENT_TYPE_UNSPECIFIED
+      - ACKNOWLEDGEMENT_TYPE_ACKNOWLEDGEMENT
+      - ACKNOWLEDGEMENT_TYPE_SIGNATURE
+      default: ACKNOWLEDGEMENT_TYPE_UNSPECIFIED
+      description: "The acknowledgement type for a linked node — used both as the requirement on a link\nand as the type recorded when a user acknowledges.\nUNSPECIFIED means no acknowledgement is required.\n\n - ACKNOWLEDGEMENT_TYPE_UNSPECIFIED: No acknowledgement required."
+    s12.common.MentionMessage:
+      type: object
+      properties:
+        mention_id:
+          type: string
+        mention_type:
+          $ref: '#/components/schemas/s12.common.MentionType'
+        text:
+          type: string
+          description: Used as a response value but cannot be sent or edited.
+      title: Mentionmessage is the message type used for sending @mentions
+    s12.announcements.v1.DocumentMeta:
+      type: object
+      properties:
+        document_type:
+          allOf:
+          - $ref: '#/components/schemas/s12.announcements.v1.DocumentType'
+          description: Document type
+    s12.announcements.v1.ListHeadsUpUsersRequest.Filter:
+      type: object
+      properties:
+        viewed:
+          $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.Filter.ViewedFilter'
+        acknowledged:
+          $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.Filter.AcknowledgedFilter'
+        group_ids:
+          type: array
+          items:
+            type: string
+    s12.common.ExpiryStatus:
+      type: string
+      enum:
+      - EXPIRY_STATUS_VALID
+      - EXPIRY_STATUS_EXPIRED
+      - EXPIRY_STATUS_EXPIRING_SOON
+      description: The expiry status of an object based on its validity period.
+    s12.announcements.v1.HeadsUpCompletionDetails:
+      type: object
+      properties:
+        viewed:
+          type: boolean
+          description: Viewed determines whether or not the user has viewed the headsup before
+        viewed_at:
+          type: string
+          format: date-time
+          description: ViewedAt defines when a headsup was first viewed
+        acknowledged:
+          type: boolean
+          description: Acknowledged defines if a headsup has been acknowledged
+        acknowledged_at:
+          type: string
+          format: date-time
+          description: AcknowledgedAt defines when a headsup was acknowledged by the user
+      title: HeadsUpCompletionDetails is a composition for the headsup completion details
+    s12.announcements.v1.HeadsUpUserListItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the user
+        email:
+          type: string
+          description: Users email
+        first_name:
+          type: string
+          description: Users first name
+        last_name:
+          type: string
+          description: Users last name
+        profile_picture:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: Media object with details on how to retrieve and view users profile picture
+        completion_details:
+          allOf:
+          - $ref: '#/components/schemas/s12.announcements.v1.HeadsUpCompletionDetails'
+          description: Composition of the users completion stats
+        status:
+          type: boolean
+          description: 'Status represents whether or not the user has completed all necessary
+
+            requirements'
+      title: 'HeadsUpUserListItem represents a list response item containing information on
+
+        a user'
+    s12.announcements.v1.ListHeadsUpUsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.announcements.v1.HeadsUpUserListItem'
+          description: List of users
+        total:
+          type: integer
+          format: int32
+          description: Total number of users found
+      description: Result returned from `ListHeadsUpUsers`
+      title: ListHeadsUpUsersResponse
+    s12.announcements.v1.ListHeadsUpManageRequest.Filter.CompletedFilter:
+      type: string
+      enum:
+      - COMPLETED_FILTER_UNKNOWN_NONE_UNSPECIFIED
+      - COMPLETED_FILTER_HAS_COMPLETED
+      - COMPLETED_FILTER_HAS_NOT_COMPLETED
+      default: COMPLETED_FILTER_UNKNOWN_NONE_UNSPECIFIED
+      title: '- COMPLETED_FILTER_UNKNOWN_NONE_UNSPECIFIED: Defaults to no filter'
+    s12.announcements.v1.ListHeadsUpUsersRequest.Filter.ViewedFilter:
+      type: string
+      enum:
+      - VIEWED_FILTER_UNKNOWN_NONE_UNSPECIFIED
+      - VIEWED_FILTER_HAS_VIEWED
+      - VIEWED_FILTER_HAS_NOT_VIEWED
+      default: VIEWED_FILTER_UNKNOWN_NONE_UNSPECIFIED
+      title: '- VIEWED_FILTER_UNKNOWN_NONE_UNSPECIFIED: Defaults to no filter'
+    s12.announcements.v1.ListHeadsUpManageRequest.Filter.StatusFilter:
+      type: string
+      enum:
+      - STATUS_FILTER_UNSPECIFIED
+      - STATUS_FILTER_INCOMPLETE
+      - STATUS_FILTER_COMPLETED
+      - STATUS_FILTER_DRAFT
+      - STATUS_FILTER_SCHEDULED
+      default: STATUS_FILTER_UNSPECIFIED
+    s12.common.Media:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        filename:
+          type: string
+          description: full file name, including file extension
+        media_type:
+          $ref: '#/components/schemas/s12.common.MediaType'
+      title: Represents an image or video
+    s12.announcements.v1.HeadsUpManageListItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: An ID uniquely identifying this Heads Up.
+        title:
+          type: string
+          description: Title of the Heads Up
+        published_at:
+          type: string
+          format: date-time
+          description: Timestamp representing the instance this Heads Up was published.
+        author_id:
+          type: string
+          description: ID of the author who originally created the Announcement.
+        author_name:
+          type: string
+          description: Name of the author who originally created the Announcement.
+        viewed_count:
+          type: integer
+          format: int32
+          description: Number of unique user views
+        acknowledgement_count:
+          type: integer
+          format: int32
+          description: Number of unique acknowledgement count
+        has_acknowledgement:
+          type: boolean
+          description: Defines whether or not a Heads Up requires an acknowledgement
+        media_type:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.MediaType'
+          description: Defines what media type is present within the HeadsUp
+        assigned_users_count:
+          type: integer
+          format: int32
+          description: The number of users who are assigned this HeadsUp
+        complete:
+          type: boolean
+          description: Whether or not the HeadsUp has been completed by all assignee's
+        message_count:
+          type: integer
+          format: int32
+          description: MessageCount represents the total number of comments on this Heads Up.
+        is_comments_disabled:
+          type: boolean
+          description: Whether or not comments are disabled on this HeadsUp
+        author_profile_image:
+          description: Profile image of the author if any.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+        is_reactions_disabled:
+          type: boolean
+          description: Whether or not reactions are disabled for this Heads Up
+        reaction_count:
+          type: integer
+          format: int64
+          description: Number of reactions on the HeadsUp
+      title: HeadsUpManageListItem response item of listing ManageHeadsUps
+    s12.announcements.v1.ListHeadsUpManageRequest.SortField:
+      type: string
+      enum:
+      - SORT_FIELD_UNKNOWN_UNSPECIFIED
+      - SORT_FIELD_PUBLISHED_AT
+      - SORT_FIELD_TITLE
+      default: SORT_FIELD_UNKNOWN_UNSPECIFIED
+      description: '- SORT_FIELD_UNKNOWN_UNSPECIFIED: Defaults to published_at'
+      title: The SortField for request items to be sorted in
+    s12.announcements.v1.ListHeadsUpUsersRequest.Filter.AcknowledgedFilter:
+      type: string
+      enum:
+      - ACKNOWLEDGED_FILTER_UNKNOWN_NONE_UNSPECIFIED
+      - ACKNOWLEDGED_FILTER_HAS_ACKNOWLEDGED
+      - ACKNOWLEDGED_FILTER_HAS_NOT_ACKNOWLEDGED
+      default: ACKNOWLEDGED_FILTER_UNKNOWN_NONE_UNSPECIFIED
+      title: '- ACKNOWLEDGED_FILTER_UNKNOWN_NONE_UNSPECIFIED: Defaults to no filter'
     s12.common.MessageContent:
       type: object
       properties:
@@ -347,27 +787,39 @@ components:
         mention:
           $ref: '#/components/schemas/s12.common.MentionMessage'
       description: MessageContent list of possible message types.
-    s12.announcements.v1.ListHeadsUpManageRequest.Filter:
+    s12.announcements.v1.HeadsUpReactionSummary:
       type: object
       properties:
-        group_ids:
+        emoji_short_code:
+          type: string
+          description: A string which represents the short code of the emoji
+        total_reaction_count:
+          type: integer
+          format: int32
+          description: the number of reactions for the given emoji_short_code
+        did_user_react:
+          type: boolean
+          description: returns true if the requesting user reacted with the given emoji_short_code, otherwise false
+        users:
           type: array
           items:
-            type: string
-        user_ids:
-          type: array
-          items:
-            type: string
-        completed:
-          $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpManageRequest.Filter.CompletedFilter'
-        author_ids:
-          type: array
-          items:
-            type: string
-        statuses:
-          type: array
-          items:
-            $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpManageRequest.Filter.StatusFilter'
+            type: object
+            $ref: '#/components/schemas/s12.announcements.v1.HeadsUpReactionUser'
+          description: The list of users who reacted with the given emoji_short_code
+        reaction_user_limit:
+          type: integer
+          format: int32
+          description: 'The maximum number of HeadsUpReactionUsers that will be returned.
+
+            Should be use with total count to calculate "and X others."'
+      title: HeadsUpReactionSummary a summary of all the reactions for a given heads up
+    s12.announcements.v1.GetHeadsUpMessagesResponse:
+      type: object
+      properties:
+        message_response:
+          $ref: '#/components/schemas/s12.common.GetMessagesResponse'
+      description: Result returned from `GetHeadsUpMessages`
+      title: GetHeadsUpMessagesResponse
     s12.announcements.v1.HeadsUp:
       type: object
       properties:
@@ -500,458 +952,6 @@ components:
           description: Optional. Filters consists of an array of filter for listing incidents
       description: The parameters for `ListHeadsUpManage`
       title: ListHeadsUpManageRequest
-    s12.common.MessageReferenceTypes:
-      type: string
-      enum:
-      - MESSAGE_REFERENCE_TYPES_UNKNOWN_UNSPECIFIED
-      - MESSAGE_REFERENCE_TYPES_HEADS_UP
-      default: MESSAGE_REFERENCE_TYPES_UNKNOWN_UNSPECIFIED
-      description: MessageReferenceTypes is a list of supported message reference types.
-    s12.announcements.v1.DocumentMeta:
-      type: object
-      properties:
-        document_type:
-          allOf:
-          - $ref: '#/components/schemas/s12.announcements.v1.DocumentType'
-          description: Document type
-    s12.announcements.v1.ListHeadsUpManageRequest.SortField:
-      type: string
-      enum:
-      - SORT_FIELD_UNKNOWN_UNSPECIFIED
-      - SORT_FIELD_PUBLISHED_AT
-      - SORT_FIELD_TITLE
-      default: SORT_FIELD_UNKNOWN_UNSPECIFIED
-      description: '- SORT_FIELD_UNKNOWN_UNSPECIFIED: Defaults to published_at'
-      title: The SortField for request items to be sorted in
-    s12.announcements.v1.ListHeadsUpManageResponse:
-      type: object
-      properties:
-        heads_ups:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.announcements.v1.HeadsUpManageListItem'
-          description: List of HeadsUps
-        next_page_token:
-          type: string
-          description: 'If there are more results than those appearing in this response, then
-
-            `next_page_token` is included. If empty then there are no more results.
-
-            To get the next set of results, call the same
-
-            method again using the value of `next_page_token` as `page_token`.
-
-            For Example: ''ODFBMzQ3MDYtNzQxNy00RDZGLThDNjE1MEFDMkM4MTQ3NDQ='''
-        total:
-          type: integer
-          format: int32
-          description: Total number of HeadsUps found
-      description: Result returned from `ListHeadsUpManage`
-      title: ListHeadsUpManageResponse
-    s12.announcements.v1.HeadsUpReactionSummary:
-      type: object
-      properties:
-        emoji_short_code:
-          type: string
-          description: A string which represents the short code of the emoji
-        total_reaction_count:
-          type: integer
-          format: int32
-          description: the number of reactions for the given emoji_short_code
-        did_user_react:
-          type: boolean
-          description: returns true if the requesting user reacted with the given emoji_short_code, otherwise false
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.announcements.v1.HeadsUpReactionUser'
-          description: The list of users who reacted with the given emoji_short_code
-        reaction_user_limit:
-          type: integer
-          format: int32
-          description: 'The maximum number of HeadsUpReactionUsers that will be returned.
-
-            Should be use with total count to calculate "and X others."'
-      title: HeadsUpReactionSummary a summary of all the reactions for a given heads up
-    s12.announcements.v1.ListHeadsUpManageRequest.Filter.CompletedFilter:
-      type: string
-      enum:
-      - COMPLETED_FILTER_UNKNOWN_NONE_UNSPECIFIED
-      - COMPLETED_FILTER_HAS_COMPLETED
-      - COMPLETED_FILTER_HAS_NOT_COMPLETED
-      default: COMPLETED_FILTER_UNKNOWN_NONE_UNSPECIFIED
-      title: '- COMPLETED_FILTER_UNKNOWN_NONE_UNSPECIFIED: Defaults to no filter'
-    s12.announcements.v1.VideoMeta:
-      type: object
-      properties:
-        video_duration:
-          type: integer
-          format: int64
-          description: Number of milliseconds in the video
-        is_video_transcoded:
-          type: boolean
-          description: Whether or not the video has been transcoded
-    s12.announcements.v1.HeadsUpManageListItem:
-      type: object
-      properties:
-        id:
-          type: string
-          description: An ID uniquely identifying this Heads Up.
-        title:
-          type: string
-          description: Title of the Heads Up
-        published_at:
-          type: string
-          format: date-time
-          description: Timestamp representing the instance this Heads Up was published.
-        author_id:
-          type: string
-          description: ID of the author who originally created the Announcement.
-        author_name:
-          type: string
-          description: Name of the author who originally created the Announcement.
-        viewed_count:
-          type: integer
-          format: int32
-          description: Number of unique user views
-        acknowledgement_count:
-          type: integer
-          format: int32
-          description: Number of unique acknowledgement count
-        has_acknowledgement:
-          type: boolean
-          description: Defines whether or not a Heads Up requires an acknowledgement
-        media_type:
-          allOf:
-          - $ref: '#/components/schemas/s12.common.MediaType'
-          description: Defines what media type is present within the HeadsUp
-        assigned_users_count:
-          type: integer
-          format: int32
-          description: The number of users who are assigned this HeadsUp
-        complete:
-          type: boolean
-          description: Whether or not the HeadsUp has been completed by all assignee's
-        message_count:
-          type: integer
-          format: int32
-          description: MessageCount represents the total number of comments on this Heads Up.
-        is_comments_disabled:
-          type: boolean
-          description: Whether or not comments are disabled on this HeadsUp
-        author_profile_image:
-          description: Profile image of the author if any.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.Media'
-        is_reactions_disabled:
-          type: boolean
-          description: Whether or not reactions are disabled for this Heads Up
-        reaction_count:
-          type: integer
-          format: int64
-          description: Number of reactions on the HeadsUp
-      title: HeadsUpManageListItem response item of listing ManageHeadsUps
-    s12.announcements.v1.ListHeadsUpUsersResponse:
-      type: object
-      properties:
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.announcements.v1.HeadsUpUserListItem'
-          description: List of users
-        total:
-          type: integer
-          format: int32
-          description: Total number of users found
-      description: Result returned from `ListHeadsUpUsers`
-      title: ListHeadsUpUsersResponse
-    s12.common.GetMessagesResponse:
-      type: object
-      properties:
-        messages:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.common.Message'
-          description: All messages for a given resource
-        next_page_token:
-          type: string
-          description: 'If there are more results than those appearing in this response, then
-
-            `next_page_token` is included. If empty then there are no more results.
-
-            To get the next set of results, call the same
-
-            method again using the value of `next_page_token` as `page_token`.
-
-            For Example: ''ODFBMzQ3MDYtNzQxNy00RDZGLThDNjE1MEFDMkM4MTQ3NDQ='''
-        total:
-          type: integer
-          format: int32
-          description: Total number of Messages found
-      description: The result of `GetMessages`
-      title: GetMessagesResponse
-    s12.common.GetMessagesRequest:
-      type: object
-      properties:
-        page_size:
-          type: integer
-          format: int32
-          description: 'Optional. Number of messages to be returned in a single request. Maximum
-
-            100. Non-positive values are ignored. The presence of `next_page_token` in
-
-            the response indicates that more results might be available. For example:
-
-            ''20'''
-        page_token:
-          type: string
-          description: 'Optional. If present, then retrieve the next batch of results from the
-
-            preceding call to this method. `page_token` must be the value of
-
-            `next_page_token` from the previous response.  The values of other method
-
-            parameters should be identical to those in the previous call.
-
-            For example: ''ODFBMzQ3MDYtNzQxNy00RDZGLThDNjE1MEFDMkM4MTQ3NDQ='''
-        reference_id:
-          type: string
-          description: The ID of the resource your are looking for messages for
-        reference_type:
-          allOf:
-          - $ref: '#/components/schemas/s12.common.MessageReferenceTypes'
-          description: The type of resource you are requesting on behalf of e.g. heads_up
-        parent_id:
-          type: string
-          description: Optional. Parent_id represents the ID of the parent message if any.
-        sort_direction:
-          description: Optional. Direction for sorting.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.SortDirection'
-      description: The parameters for `GetMessages`
-      title: GetMessagesRequest
-      required:
-      - reference_id
-      - reference_type
-    s12.announcements.v1.ListHeadsUpUsersRequest.Filter.AcknowledgedFilter:
-      type: string
-      enum:
-      - ACKNOWLEDGED_FILTER_UNKNOWN_NONE_UNSPECIFIED
-      - ACKNOWLEDGED_FILTER_HAS_ACKNOWLEDGED
-      - ACKNOWLEDGED_FILTER_HAS_NOT_ACKNOWLEDGED
-      default: ACKNOWLEDGED_FILTER_UNKNOWN_NONE_UNSPECIFIED
-      title: '- ACKNOWLEDGED_FILTER_UNKNOWN_NONE_UNSPECIFIED: Defaults to no filter'
-    s12.common.MediaType:
-      type: string
-      enum:
-      - MEDIA_TYPE_IMAGE
-      - MEDIA_TYPE_VIDEO
-      - MEDIA_TYPE_PDF
-      - MEDIA_TYPE_DOCX
-      - MEDIA_TYPE_XLSX
-      - MEDIA_TYPE_PPTX
-      - MEDIA_TYPE_CSV
-      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
-    s12.announcements.v1.HeadsUpUserListItem:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the user
-        email:
-          type: string
-          description: Users email
-        first_name:
-          type: string
-          description: Users first name
-        last_name:
-          type: string
-          description: Users last name
-        profile_picture:
-          allOf:
-          - $ref: '#/components/schemas/s12.common.Media'
-          description: Media object with details on how to retrieve and view users profile picture
-        completion_details:
-          allOf:
-          - $ref: '#/components/schemas/s12.announcements.v1.HeadsUpCompletionDetails'
-          description: Composition of the users completion stats
-        status:
-          type: boolean
-          description: 'Status represents whether or not the user has completed all necessary
-
-            requirements'
-      title: 'HeadsUpUserListItem represents a list response item containing information on
-
-        a user'
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.announcements.v1.ListHeadsUpUsersRequest.Filter:
-      type: object
-      properties:
-        viewed:
-          $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.Filter.ViewedFilter'
-        acknowledged:
-          $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.Filter.AcknowledgedFilter'
-        group_ids:
-          type: array
-          items:
-            type: string
-    s12.announcements.v1.HeadsUpCompletionDetails:
-      type: object
-      properties:
-        viewed:
-          type: boolean
-          description: Viewed determines whether or not the user has viewed the headsup before
-        viewed_at:
-          type: string
-          format: date-time
-          description: ViewedAt defines when a headsup was first viewed
-        acknowledged:
-          type: boolean
-          description: Acknowledged defines if a headsup has been acknowledged
-        acknowledged_at:
-          type: string
-          format: date-time
-          description: AcknowledgedAt defines when a headsup was acknowledged by the user
-      title: HeadsUpCompletionDetails is a composition for the headsup completion details
-    s12.announcements.v1.ListHeadsUpUsersRequest:
-      type: object
-      properties:
-        heads_up_id:
-          type: string
-          description: UUID used to look up HeadsUp.
-        page_size:
-          type: integer
-          format: int32
-          description: 'Optional. Number of HeadsUps to be returned in a single request. Maximum
-
-            100. Non-positive values are ignored.'
-        offset:
-          type: integer
-          format: int32
-          description: 'Number of users to offset, used with page_size indicates what page is
-
-            displayed'
-        sort_field:
-          description: Optional. Which field to use for sorting.
-          allOf:
-          - $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.SortField'
-        sort_direction:
-          description: Optional. Direction for sorting.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.SortDirection'
-        search_value:
-          type: string
-          description: 'Optional. Search value that will Search on Title & any other relevant
-
-            field.'
-        filters:
-          allOf:
-          - $ref: '#/components/schemas/s12.announcements.v1.ListHeadsUpUsersRequest.Filter'
-          description: Optional. Filters consists of an array of filter for listing incidents
-      description: The parameters for `ListHeadsUpUsers`
-      title: ListHeadsUpUsersRequest
-      required:
-      - heads_up_id
-    s12.announcements.v1.GetHeadsUpCompletionCountsResponse:
-      type: object
-      properties:
-        viewed_count:
-          type: integer
-          format: int32
-          description: 'ViewedCount represents the total number of assigned users who have viewed a
-
-            HeadsUp'
-        acknowledged_count:
-          type: integer
-          format: int32
-          description: 'AcknowledgedCount represents the total number of users who have
-
-            acknowledged a HeadsUp.'
-        message_count:
-          type: integer
-          format: int32
-          description: MessageCount represents the total number of comments on this HeadsUp.
-        reaction_summary:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.announcements.v1.HeadsUpReactionSummary'
-          description: Reactions associated for the assigned heads up
-      description: Result returned from `GetHeadsUpCompletionCounts`
-      title: GetHeadsUpCompletionCountsResponse
-    s12.common.Media:
-      type: object
-      properties:
-        id:
-          type: string
-        token:
-          type: string
-        filename:
-          type: string
-          description: full file name, including file extension
-        media_type:
-          $ref: '#/components/schemas/s12.common.MediaType'
-      title: Represents an image or video
-    s12.announcements.v1.GetHeadsUpMessagesRequest:
-      type: object
-      properties:
-        message_request:
-          $ref: '#/components/schemas/s12.common.GetMessagesRequest'
-      description: The parameters for `GetHeadsUpMessages`
-      title: GetHeadsUpMessagesRequest
-    s12.announcements.v1.LinkedDocument:
-      type: object
-      properties:
-        link_id:
-          type: string
-          description: ID of the link relationship connecting this media to the asset.
-        is_archived:
-          type: boolean
-          description: Boolean flag indicating whether the linked media is archived.
-        document_node_id:
-          type: string
-          description: Document node ID the media came from.
-        expiry_status:
-          description: Expiry status of the document the media came from.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.ExpiryStatus'
-        acknowledgement_type:
-          description: 'The acknowledgement requirement on this linked document.
-
-            ACKNOWLEDGEMENT_TYPE_UNSPECIFIED means no acknowledgement is required.'
-          allOf:
-          - $ref: '#/components/schemas/s12.documents.v1.AcknowledgementType'
-        acknowledged:
-          type: boolean
-          description: 'Whether the requesting user has satisfied the acknowledgement requirement
-
-            for this linked document''s version. Always true when acknowledgement_type
-
-            is ACKNOWLEDGEMENT_TYPE_UNSPECIFIED.'
-        acknowledged_at:
-          type: string
-          format: date-time
-          description: 'Timestamp when the requesting user acknowledged this document.
-
-            Only set when acknowledged is true.'
-    s12.announcements.v1.GetHeadsUpMessagesResponse:
-      type: object
-      properties:
-        message_response:
-          $ref: '#/components/schemas/s12.common.GetMessagesResponse'
-      description: Result returned from `GetHeadsUpMessages`
-      title: GetHeadsUpMessagesResponse
   securitySchemes:
     BearerAuthentication:
       type: http

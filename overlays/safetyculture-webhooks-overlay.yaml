@@ -1,0 +1,32 @@
+overlay: 1.0.0
+info:
+  title: SafetyCulture Mitti Webhooks API enhancements
+  version: 1.0.0
+extends: openapi/safetyculture-webhooks-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-provider: SafetyCulture (Mitti)
+    x-apievangelist-mcp:
+      endpoint: https://mcp.mitti.com/mcp
+      auth: oauth
+      status: early-access
+      docs: https://developer.mitti.com/docs/connect-an-ai-tool-to-mitti
+    x-llms-txt: https://developer.mitti.com/llms.txt
+- target: $
+  update:
+    externalDocs:
+      description: Mitti developer portal
+      url: https://developer.mitti.com/reference/introduction
+- target: $.components.securitySchemes.BearerAuthentication
+  update:
+    description: 'User API token sent as Authorization: Bearer {api_token}. Tokens are managed per user (https://help.mitti.com/000007).'
+- target: $.paths['/webhooks/v1/token'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/webhooks/v1/webhooks'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/webhooks/v1/webhooks/{webhook_id}'].get
+  update:
+    x-agent-safe: read-only

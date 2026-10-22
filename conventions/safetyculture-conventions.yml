@@ -1,27 +1,24 @@
-generated: '2026-07-21'
+generated: '2026-10-20'
 method: searched
-source: https://developer.safetyculture.com/reference/introduction
-docs: https://developer.safetyculture.com
-summary: >-
-  Cross-cutting request/response semantics for the SafetyCulture API, harvested from
-  the developer docs. REST over HTTPS at https://api.safetyculture.io, bearer-token
+source: https://developer.mitti.com/reference/introduction
+docs: https://developer.mitti.com
+summary: Cross-cutting request/response semantics for the SafetyCulture (Mitti) API, harvested from the developer
+  docs. REST over HTTPS at https://api.mitti.com (legacy https://api.safetyculture.io still works), bearer-token
   auth, RFC 3339 date/times, cursor/page-token pagination, and x-ratelimit-* signaling.
-base_url: https://api.safetyculture.io
+base_url: https://api.mitti.com
 authentication:
   style: bearer-token
   header: 'Authorization: Bearer {api_token}'
   detail: authentication/safetyculture-authentication.yml
 idempotency:
-  supported: false
-  note: >-
-    SafetyCulture does not document an idempotency-key header. Several write flows are
-    naturally idempotent by resource identity (e.g. user upsert), but there is no
-    documented client-supplied idempotency key.
+  coverage: none
+  header: null
+  note: No idempotency-key header or parameter is documented or declared in the OpenAPI. User upsert is identity-keyed
+    (id or username), which is natural rather than client-keyed replay protection.
 pagination:
   style: cursor
-  note: >-
-    List endpoints support filtering, sorting, and pagination; cursor/page-token style
-    is used across list operations (e.g. company documents, contractor companies).
+  note: List endpoints support filtering, sorting, and pagination; cursor/page-token style is used across list operations
+    (e.g. company documents, contractor companies).
 date_time:
   standard: rfc3339
   pattern: '{year}-{month}-{day}T{hour}:{min}:{sec}[.{frac_sec}]Z'
@@ -31,19 +28,67 @@ date_time:
   - '2024-03-15T02:22:20.6546022Z'
   - '1996-12-19T16:39:57-08:00'
   query_param_encoding: URL-encode date/time in query params (colon -> %3A)
-  docs: https://developer.safetyculture.com/reference/date-time-format
+  docs: https://developer.mitti.com/reference/date-time-format
 rate_limit_signaling:
-  headers: [x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset]
+  headers:
+  - x-ratelimit-limit
+  - x-ratelimit-remaining
+  - x-ratelimit-reset
   throttle_status: 429
   detail: rate-limits/safetyculture-rate-limits.yml
 versioning:
   style: uri-path
-  note: >-
-    Some resource paths are version-segmented (e.g. /users/v1/users/upsert). No global
-    dated API version header is documented.
+  note: Some resource paths are version-segmented (e.g. /users/v1/users/upsert). No global dated API version header
+    is documented.
 ids:
-  note: >-
-    Resources use UUIDs; a recipe documents converting between legacy SafetyCulture IDs
-    and UUIDs.
-  docs: https://developer.safetyculture.com/recipes/convert-between-legacy-safetyculture-ids-and-uuids
+  note: Resources use UUIDs; a recipe documents converting between legacy SafetyCulture IDs and UUIDs.
+  docs: https://developer.mitti.com/recipes/convert-between-legacy-safetyculture-ids-and-uuids
 webhooks: asyncapi/safetyculture-webhooks.yml
+base_url_legacy: https://api.safetyculture.io
+error_envelope:
+  default: google.rpc.Status (OpenAPI default response)
+  bulk_user_operations: reason/field_hint/value_hint/message/level/value_reference/details
+  detail:
+  - errors/safetyculture-problem-types.yml
+  - errors/safetyculture-error-codes.yml
+reversibility:
+  status: documented
+  note: Reversal paths exist for archive operations and the users upsert job; the docs state no time window for
+    any of them, so none is verified.
+  surfaces:
+  - surface: inspections
+    action: InspectionService_ArchiveInspection
+    reversal: InspectionService_RestoreArchivedInspection
+    window: null
+    docs: https://developer.mitti.com/reference/inspectionservice_restorearchivedinspection
+  - surface: templates
+    action: TemplatesService_ArchiveTemplate
+    reversal: TemplatesService_RestoreArchivedTemplate
+    window: null
+    docs: https://developer.mitti.com/reference/templatesservice_restorearchivedtemplate
+  - surface: assets
+    action: AssetsService_ArchiveAsset
+    reversal: AssetsService_RestoreArchivedAsset
+    window: null
+    docs: https://developer.mitti.com/reference/assetsservice_restorearchivedasset
+  - surface: user fields
+    reversal: UserFieldService_RestoreField
+    window: null
+    docs: https://developer.mitti.com/reference/userfieldservice_restorefield
+  - surface: bulk user upsert jobs
+    reversal: UsersService_CancelCreateOrUpdateUsersJob
+    window: null
+    docs: https://developer.mitti.com/reference/usersservice_cancelcreateorupdateusersjob
+    note: '"Cancels a previously created job to create or update users."'
+  - surface: template drafts
+    reversal: TemplateService_DiscardTemplateDraft
+    window: null
+    docs: https://developer.mitti.com/reference/template-editing
+  - surface: roles
+    reversal: null
+    note: PUT /permissions/v1/roles/{role.id} is a full replacement (changelog 2026-09-30); no undo documented.
+mcp:
+  endpoint: https://mcp.mitti.com/mcp
+  auth: OAuth 2.0 (remote MCP)
+  default: 'read-only; write requires the "MCP: Write" permission'
+  docs: https://developer.mitti.com/docs/connect-an-ai-tool-to-mitti

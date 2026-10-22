@@ -1,0 +1,51 @@
+name: SafetyCulture (Mitti) pricing
+generated: '2026-10-20'
+method: searched
+source: https://mitti.com/pricing
+audience: business-product
+pricing_basis: per-seat
+published: true
+currency: USD
+delivery:
+  delivery: managed
+plan_count: 3
+plans:
+- name: Free
+  description: For small teams (up to 10) getting started with inspections and reports
+  price: 0
+  price_text: $0
+  features:
+  - Up to 300 AI credits / seat / month
+  - 5 active inspection templates
+  - Basic analytics
+  limits:
+  - Up to 10 seats
+- name: Premium
+  description: Improve safety, quality, and operations with advanced tools for growing teams
+  price: $24 / seat / month (annually); $29 / seat / month (monthly)
+  price_text: $24 / seat / month
+  price_text_monthly: $29 / seat / month
+  billing_period: annually (save 17%) or monthly
+  features:
+  - Start at 500 AI credits / seat / month
+  - Out-of-the-box & custom integrations
+  - Advanced security, including SSO
+  limits:
+  - Up to 50K calls/ month
+  limit_text: Up to 50K calls/ month
+- name: Enterprise
+  description: Pricing & services tailored to maximize impact across large organizations
+  price: Custom price
+  price_text: Custom price
+  features:
+  - Start at 800 AI credits / seat / month
+  - Enforced login controls and SCIM user provisioning
+  - Advanced integrations builder
+  - Sandbox testing environment
+  limits:
+  - Up to 500K calls/ month
+  limit_text: Up to 500K calls/ month
+note: API usage row of the plan comparison table lists "Up to 50K calls/ month" and "Up to 500K calls/ month" in
+  the paid columns; column assignment (Premium, Enterprise) is read from table order. Service user API tokens require
+  Premium or Enterprise (developer docs /reference/authentication). Location-based pricing for multi-site operations
+  is offered via sales.

@@ -325,146 +325,9 @@ components:
         value:
           type: string
       description: The new description of the file. Maximum of 1000 characters and must exclude invalid characters.
-    s12.documents.v1.DocumentsPublicService.UpdateFileBody:
+    s12.documents.v1.BulkUpdateFileOwnersResponse:
       type: object
-      properties:
-        file_type:
-          description: 'The type of the file to be created.
-
-            Please note that videos are currently not supported.'
-          allOf:
-          - $ref: '#/components/schemas/s12.common.MediaType'
-        file_size:
-          type: integer
-          format: int64
-          description: The size of the file in bytes. Must not exceed 50MB. This field is required if `file_type` is provided.
-        name:
-          type: string
-          description: The new name of the file. Maximum of 255 characters and must exclude invalid characters.
-        description:
-          $ref: '#/components/schemas/s12.documents.v1.UpdateFileRequest.Description'
-        owners:
-          $ref: '#/components/schemas/s12.documents.v1.UpdateFileRequest.Owners'
-        valid_to:
-          description: The expiry date of the file. Set year, month, and day to 0 to clear the file's expiry date.
-          allOf:
-          - $ref: '#/components/schemas/google.type.Date'
-        file_extension:
-          type: string
-          description: 'The file extension of the uploaded blob (e.g. "pdf", "jpg"), without the leading dot.
-
-            Used to populate the file''s extension when the extension cannot be derived from `name`
-
-            or the underlying media metadata is unavailable.'
-      title: Request to update the file with the specified ID
-    s12.documents.v1.BulkAddFileOwnersResponse:
-      type: object
-      title: Response for the BulkAddFileOwners request
-    s12.common.ExpiryStatus:
-      type: string
-      enum:
-      - EXPIRY_STATUS_VALID
-      - EXPIRY_STATUS_EXPIRED
-      - EXPIRY_STATUS_EXPIRING_SOON
-      description: The expiry status of an object based on its validity period.
-    s12.documents.v1.Site:
-      type: object
-      properties:
-        site_id:
-          type: string
-          description: The ID of the site
-        name:
-          type: string
-          description: The name of the site
-      title: A site associated with a file
-    s12.documents.v1.SearchItemsResponse:
-      type: object
-      properties:
-        folders:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.documents.v1.Folder'
-          description: List of folders that match the search criteria.
-        files:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.documents.v1.File'
-          description: List of files that match the search criteria.
-        total:
-          type: integer
-          format: int32
-          description: Total number of files and folders that match the search criteria.
-        next_page_token:
-          type: string
-          description: The token used to retrieve the next page of results. Empty if there are no more items.
-      title: Response for the SearchItems request
-    s12.documents.v1.DocumentsPublicService.ArchiveItemBody:
-      type: object
-      description: Request to archive an item (file or folder).
-    s12.documents.v1.Group:
-      type: object
-      properties:
-        group_id:
-          type: string
-          description: The ID of the group
-        name:
-          type: string
-          description: The name of the group
-      title: A group that owns a folder or file
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
-    s12.documents.v1.BulkAddFileOwnersRequest:
-      type: object
-      properties:
-        file_ids:
-          type: array
-          items:
-            type: string
-          description: 'The IDs of the files you want to add owners to.
-
-            To get the `file_id`, open the file in the SafetyCulture web app and copy the last part of the URL.
-
-            For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
-
-            the file ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
-        user_ids:
-          type: array
-          items:
-            type: string
-          description: 'The IDs of the users you want to add as owners.
-
-            To get the `user_id`, open the user in the SafetyCulture web app and copy the last part of the URL before /profile
-
-            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/users/user_7a7cddac38ac4dd197304ba0d05b981a/profile`,
-
-            the user ID is `user_7a7cddac38ac4dd197304ba0d05b981a`.'
-        group_ids:
-          type: array
-          items:
-            type: string
-          description: 'The IDs of the groups you want to add as owners.
-
-            To get the `group_id`, open the group in the SafetyCulture web app and copy the last part of the URL before /users.
-
-            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/groups/role_1ebbbca147644b5aa4ea646429f941e7/users`,
-
-            the group ID is `role_1ebbbca147644b5aa4ea646429f941e7`.'
-      description: Request to add owners to multiple files without removing existing owners.
-      required:
-      - file_ids
+      title: Response for the BulkUpdateFileOwners request
     s12.documents.v1.UpdateFileResponse:
       type: object
       properties:
@@ -476,45 +339,41 @@ components:
           format: int32
           description: The version number of the file after the update.
       title: Response for the UpdateFile request
-    s12.documents.v1.ArchiveItemResponse:
-      type: object
-      title: Response for the ArchiveItem request
-    s12.documents.v1.ParentFolder:
+    s12.documents.v1.LinkFilesRequest:
       type: object
       properties:
-        folder_id:
-          type: string
-          description: The ID of the parent folder
-        name:
-          type: string
-          description: The name of the parent folder
-      title: Object representing the parent folder of a file or folder
-    s12.documents.v1.Label:
-      type: object
-      properties:
-        label_id:
-          type: string
-          description: The ID of the label
-        name:
-          type: string
-          description: The name of the label
-      title: The labels associated with the file
-    s12.documents.v1.LinkedFileDomain:
-      type: string
-      enum:
-      - LINKED_FILE_DOMAIN_UNSPECIFIED
-      - LINKED_FILE_DOMAIN_ASSET
-      default: LINKED_FILE_DOMAIN_UNSPECIFIED
-    s12.documents.v1.LinkFilesResponse:
-      type: object
-      properties:
-        linked_files:
+        file_ids:
           type: array
           items:
-            type: object
-            $ref: '#/components/schemas/s12.documents.v1.LinkFilesResponse.LinkedFile'
-          description: List of files that were linked.
-      title: Response for the LinkFiles request
+            type: string
+          description: 'The ids of the files to be linked
+
+            To get the `file_id`, open the file in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+            the file ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        entity_ids:
+          type: array
+          items:
+            type: string
+          description: 'The ids of the entities that the file(s) are being linked to
+
+            To get the `entity_id`, open the entity (e.g. asset) in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/assets/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+            the entity ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        domain:
+          allOf:
+          - $ref: '#/components/schemas/s12.documents.v1.LinkedFileDomain'
+          description: 'The domain of the entity that the file(s) are being linked to
+
+            If the entity is an asset, use `DOMAIN_ASSET`'
+      title: Request to link documents to other areas of the platform e.g. an asset
+      required:
+      - entity_ids
+      - domain
     s12.documents.v1.BulkUpdateFileOwnersRequest:
       type: object
       properties:
@@ -554,34 +413,40 @@ components:
       description: Request to update and replace the existing owners of multiple files.
       required:
       - file_ids
-    s12.documents.v1.GetFolderChildrenRequest:
+    s12.documents.v1.CreateFileResponse:
       type: object
       properties:
-        parent_id:
+        file_id:
           type: string
-          description: 'The ID of the folder whose children (files and folders) you want to retrieve.
-
-            Leave empty to retrieve the root folder''s children.
-
-            To get the `parent_id`, open the folder in the SafetyCulture web app and copy the last part of the URL.'
-        page_size:
-          type: integer
-          format: int32
-          description: 'The number of items (files and folders combined) to return.
-
-            Max value is 25. Defaults to 25 if not provided.'
-        page_token:
+          description: The ID of the file that was created.
+        upload_url:
           type: string
-          description: 'The token to retrieve the next page of results.
+          description: 'The URL where you must upload the file’s binary content.
 
-            Use the value returned in the `next_page_token`` from the previous response.'
-        include_media_url:
-          type: boolean
-          description: If `true`, includes a temporary media URL for each file so it can be downloaded.
-        archived:
-          type: boolean
-          description: If `true`, only archived files will be returned.
-      description: Request to get the children (files and folders) of a specified folder.
+            It is valid for 20 minutes.'
+        path:
+          type: string
+          description: If provided, the full folder path where the file was stored.
+        name:
+          type: string
+          description: The name of the created file.
+      title: Response for the CreateFile request
+    s12.documents.v1.ParentFolder:
+      type: object
+      properties:
+        folder_id:
+          type: string
+          description: The ID of the parent folder
+        name:
+          type: string
+          description: The name of the parent folder
+      title: Object representing the parent folder of a file or folder
+    s12.documents.v1.BulkRemoveFileOwnersResponse:
+      type: object
+      title: Response for the BulkRemoveFileOwners request
+    s12.documents.v1.DocumentsPublicService.ArchiveItemBody:
+      type: object
+      description: Request to archive an item (file or folder).
     s12.documents.v1.LinkFilesResponse.LinkedFile:
       type: object
       properties:
@@ -594,25 +459,135 @@ components:
         link_id:
           type: string
           description: The ID of the link that was created. Link ID is a unique identifier for the link used to retrieve the link details.
-    s12.documents.v1.User:
+    s12.documents.v1.DocumentsPublicService.UpdateFileBody:
       type: object
       properties:
-        user_id:
+        file_type:
+          description: 'The type of the file to be created.
+
+            Please note that videos are currently not supported.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.MediaType'
+        file_size:
+          type: integer
+          format: int64
+          description: The size of the file in bytes. Must not exceed 50MB. This field is required if `file_type` is provided.
+        name:
           type: string
-          description: The ID of the user
-        email:
+          description: The new name of the file. Maximum of 255 characters and must exclude invalid characters.
+        description:
+          $ref: '#/components/schemas/s12.documents.v1.UpdateFileRequest.Description'
+        owners:
+          $ref: '#/components/schemas/s12.documents.v1.UpdateFileRequest.Owners'
+        valid_to:
+          description: The expiry date of the file. Set year, month, and day to 0 to clear the file's expiry date.
+          allOf:
+          - $ref: '#/components/schemas/google.type.Date'
+        file_extension:
           type: string
-          description: The email of the user
-        first_name:
-          type: string
-          description: The first name of the user
-        last_name:
-          type: string
-          description: The last name of the user
-      title: A user that owns a folder or file
-    s12.documents.v1.BulkUpdateFileOwnersResponse:
+          description: 'The file extension of the uploaded blob (e.g. "pdf", "jpg"), without the leading dot.
+
+            Used to populate the file''s extension when the extension cannot be derived from `name`
+
+            or the underlying media metadata is unavailable.'
+      title: Request to update the file with the specified ID
+    google.protobuf.Any:
       type: object
-      title: Response for the BulkUpdateFileOwners request
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.documents.v1.SearchItemsResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.Folder'
+          description: List of folders that match the search criteria.
+        files:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.File'
+          description: List of files that match the search criteria.
+        total:
+          type: integer
+          format: int32
+          description: Total number of files and folders that match the search criteria.
+        next_page_token:
+          type: string
+          description: The token used to retrieve the next page of results. Empty if there are no more items.
+      title: Response for the SearchItems request
+    s12.documents.v1.BulkAddFileOwnersRequest:
+      type: object
+      properties:
+        file_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the files you want to add owners to.
+
+            To get the `file_id`, open the file in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
+
+            the file ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the users you want to add as owners.
+
+            To get the `user_id`, open the user in the SafetyCulture web app and copy the last part of the URL before /profile
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/users/user_7a7cddac38ac4dd197304ba0d05b981a/profile`,
+
+            the user ID is `user_7a7cddac38ac4dd197304ba0d05b981a`.'
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the groups you want to add as owners.
+
+            To get the `group_id`, open the group in the SafetyCulture web app and copy the last part of the URL before /users.
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/groups/role_1ebbbca147644b5aa4ea646429f941e7/users`,
+
+            the group ID is `role_1ebbbca147644b5aa4ea646429f941e7`.'
+      description: Request to add owners to multiple files without removing existing owners.
+      required:
+      - file_ids
+    s12.documents.v1.MoveItemResponse:
+      type: object
+      title: Response for the MoveItem request
+    s12.common.MediaType:
+      type: string
+      enum:
+      - MEDIA_TYPE_IMAGE
+      - MEDIA_TYPE_VIDEO
+      - MEDIA_TYPE_PDF
+      - MEDIA_TYPE_DOCX
+      - MEDIA_TYPE_XLSX
+      - MEDIA_TYPE_PPTX
+      - MEDIA_TYPE_CSV
+      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    s12.documents.v1.Site:
+      type: object
+      properties:
+        site_id:
+          type: string
+          description: The ID of the site
+        name:
+          type: string
+          description: The name of the site
+      title: A site associated with a file
+    s12.documents.v1.BulkAddFileOwnersResponse:
+      type: object
+      title: Response for the BulkAddFileOwners request
     s12.documents.v1.File:
       type: object
       properties:
@@ -702,188 +677,66 @@ components:
             $ref: '#/components/schemas/s12.documents.v1.Site'
           description: The sites the file is associated with
       title: The file structure of the file system
-    s12.documents.v1.TimeInterval:
+    s12.documents.v1.ArchiveItemResponse:
+      type: object
+      title: Response for the ArchiveItem request
+    google.rpc.Status:
       type: object
       properties:
-        from:
-          type: string
-          format: date-time
-          description: optional. represents the time should be after the time provided
-        to:
-          type: string
-          format: date-time
-          description: optional. represents the time should be before the time provided
-      title: Object representing the time interval applied to filtering folder and files
-    s12.common.MediaType:
-      type: string
-      enum:
-      - MEDIA_TYPE_IMAGE
-      - MEDIA_TYPE_VIDEO
-      - MEDIA_TYPE_PDF
-      - MEDIA_TYPE_DOCX
-      - MEDIA_TYPE_XLSX
-      - MEDIA_TYPE_PPTX
-      - MEDIA_TYPE_CSV
-      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
-    s12.documents.v1.GetFolderChildrenResponse:
-      type: object
-      properties:
-        folders:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.documents.v1.Folder'
-          description: List of folders that match the search criteria.
-        files:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.documents.v1.File'
-          description: List of files that match the search criteria.
-        total:
+        code:
           type: integer
           format: int32
-          description: Total number of files and folders that match the search criteria.
-        next_page_token:
+        message:
           type: string
-          description: The token used to retrieve the next page of results. Empty if there are no more items.
-      title: Response for the GetFolderChildrenResponse request
-    s12.documents.v1.Folder:
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.documents.v1.GetFolderChildrenRequest:
       type: object
       properties:
-        folder_id:
+        parent_id:
           type: string
-          description: The ID of the folder
-        name:
+          description: 'The ID of the folder whose children (files and folders) you want to retrieve.
+
+            Leave empty to retrieve the root folder''s children.
+
+            To get the `parent_id`, open the folder in the SafetyCulture web app and copy the last part of the URL.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'The number of items (files and folders combined) to return.
+
+            Max value is 25. Defaults to 25 if not provided.'
+        page_token:
           type: string
-          description: The name of the folder
-        created_at:
-          type: string
-          format: date-time
-          description: The time the folder was created
-        modified_at:
-          type: string
-          format: date-time
-          description: The time the folder was last modified
-        archived_at:
-          type: string
-          format: date-time
-          description: If archived, the time the folder was archived
+          description: 'The token to retrieve the next page of results.
+
+            Use the value returned in the `next_page_token`` from the previous response.'
+        include_media_url:
+          type: boolean
+          description: If `true`, includes a temporary media URL for each file so it can be downloaded.
         archived:
           type: boolean
-          description: If the folder is archived or not
-        bookmarked:
-          type: boolean
-          description: If the folder is bookmarked by the requested user
-        ancestors:
+          description: If `true`, only archived files will be returned.
+      description: Request to get the children (files and folders) of a specified folder.
+    s12.documents.v1.LinkedFileDomain:
+      type: string
+      enum:
+      - LINKED_FILE_DOMAIN_UNSPECIFIED
+      - LINKED_FILE_DOMAIN_ASSET
+      default: LINKED_FILE_DOMAIN_UNSPECIFIED
+    s12.documents.v1.LinkFilesResponse:
+      type: object
+      properties:
+        linked_files:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.documents.v1.ParentFolder'
-          description: 'Ordered from Highest ancestor to the current node
-
-            eg. [Grandparent, Parent, Current]'
-        child_count:
-          type: integer
-          format: int32
-          description: The number of children in the folder
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.documents.v1.User'
-          description: The users that own the folder
-        groups:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.documents.v1.Group'
-          description: The groups that own the folder
-      title: The folder structure of the file system
-    s12.documents.v1.MoveItemResponse:
-      type: object
-      title: Response for the MoveItem request
-    s12.documents.v1.BulkRemoveFileOwnersResponse:
-      type: object
-      title: Response for the BulkRemoveFileOwners request
-    google.type.Date:
-      type: object
-      properties:
-        year:
-          type: integer
-          format: int32
-          description: 'Year of the date. Must be from 1 to 9999, or 0 to specify a date without
-
-            a year.'
-        month:
-          type: integer
-          format: int32
-          description: 'Month of a year. Must be from 1 to 12, or 0 to specify a year without a
-
-            month and day.'
-        day:
-          type: integer
-          format: int32
-          description: 'Day of a month. Must be from 1 to 31 and valid for the year and month, or 0
-
-            to specify a year by itself or a year and month where the day isn''t
-
-            significant.'
-      description: '* A full date, with non-zero year, month, and day values
-
-        * A month and day value, with a zero year, such as an anniversary
-
-        * A year on its own, with zero month and day values
-
-        * A year and month value, with a zero day, such as a credit card expiration
-
-        date
-
-
-        Related types are [google.type.TimeOfDay][google.type.TimeOfDay] and
-
-        `google.protobuf.Timestamp`.'
-      title: 'Represents a whole or partial calendar date, such as a birthday. The time of
-
-        day and time zone are either specified elsewhere or are insignificant. The
-
-        date is relative to the Gregorian Calendar. This can represent one of the
-
-        following:'
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.documents.v1.UpdateFileRequest.Owners:
-      type: object
-      properties:
-        user_ids:
-          type: array
-          items:
-            type: string
-          description: 'The IDs of the users you want to add as owners.
-
-            To get the `user_id`, open the user in the SafetyCulture web app and copy the last part of the URL before /profile
-
-            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/users/user_7a7cddac38ac4dd197304ba0d05b981a/profile`,
-
-            the user ID is `user_7a7cddac38ac4dd197304ba0d05b981a`.'
-        group_ids:
-          type: array
-          items:
-            type: string
-          description: 'The IDs of the groups you want to add as owners.
-
-            To get the `group_id`, open the group in the SafetyCulture web app and copy the last part of the URL before /users.
-
-            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/groups/role_1ebbbca147644b5aa4ea646429f941e7/users`,
-
-            the group ID is `role_1ebbbca147644b5aa4ea646429f941e7`.'
-      description: The new owners of the file. Maximum of 5 users and groups.
+            $ref: '#/components/schemas/s12.documents.v1.LinkFilesResponse.LinkedFile'
+          description: List of files that were linked.
+      title: Response for the LinkFiles request
     s12.documents.v1.CreateFileRequest:
       type: object
       properties:
@@ -936,6 +789,59 @@ components:
 
             or the underlying media metadata is unavailable.'
       title: Request to create a file in the specified folder
+    s12.documents.v1.Group:
+      type: object
+      properties:
+        group_id:
+          type: string
+          description: The ID of the group
+        name:
+          type: string
+          description: The name of the group
+      title: A group that owns a folder or file
+    s12.common.ExpiryStatus:
+      type: string
+      enum:
+      - EXPIRY_STATUS_VALID
+      - EXPIRY_STATUS_EXPIRED
+      - EXPIRY_STATUS_EXPIRING_SOON
+      description: The expiry status of an object based on its validity period.
+    s12.documents.v1.UpdateFileRequest.Owners:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the users you want to add as owners.
+
+            To get the `user_id`, open the user in the SafetyCulture web app and copy the last part of the URL before /profile
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/users/user_7a7cddac38ac4dd197304ba0d05b981a/profile`,
+
+            the user ID is `user_7a7cddac38ac4dd197304ba0d05b981a`.'
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: 'The IDs of the groups you want to add as owners.
+
+            To get the `group_id`, open the group in the SafetyCulture web app and copy the last part of the URL before /users.
+
+            For example, in this link `https://app.safetyculture.com/organisation/role_d7b113c0c6774a59b8cfdea1ab1da89a/groups/role_1ebbbca147644b5aa4ea646429f941e7/users`,
+
+            the group ID is `role_1ebbbca147644b5aa4ea646429f941e7`.'
+      description: The new owners of the file. Maximum of 5 users and groups.
+    s12.documents.v1.Label:
+      type: object
+      properties:
+        label_id:
+          type: string
+          description: The ID of the label
+        name:
+          type: string
+          description: The name of the label
+      title: The labels associated with the file
     s12.documents.v1.SearchItemsRequest:
       type: object
       properties:
@@ -971,24 +877,65 @@ components:
           allOf:
           - $ref: '#/components/schemas/s12.documents.v1.TimeInterval'
       description: Request to search the files and folders.
-    s12.documents.v1.CreateFileResponse:
+    s12.documents.v1.DocumentsPublicService.MoveItemBody:
       type: object
       properties:
-        file_id:
+        target_folder_id:
           type: string
-          description: The ID of the file that was created.
-        upload_url:
-          type: string
-          description: 'The URL where you must upload the file’s binary content.
+          description: 'The ID of the folder where the item (file or folder) should be moved.
 
-            It is valid for 20 minutes.'
-        path:
-          type: string
-          description: If provided, the full folder path where the file was stored.
-        name:
-          type: string
-          description: The name of the created file.
-      title: Response for the CreateFile request
+            If you don’t provide a target_folder_id, the item will be moved to the root folder.
+
+            To get the `target_folder_id`, open the target folder in the SafetyCulture web app and copy the last part of the URL.
+
+            For example, in this link `https://app.safetyculture.com/documents/9dd76834-65ef-41d3-815c-964df32450e4`,
+
+            the target folder ID is `9dd76834-65ef-41d3-815c-964df32450e4`.'
+      description: Request to move an item (file or folder) to a different folder.
+    google.type.Date:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          description: 'Year of the date. Must be from 1 to 9999, or 0 to specify a date without
+
+            a year.'
+        month:
+          type: integer
+          format: int32
+          description: 'Month of a year. Must be from 1 to 12, or 0 to specify a year without a
+
+            month and day.'
+        day:
+          type: integer
+          format: int32
+          description: 'Day of a month. Must be from 1 to 31 and valid for the year and month, or 0
+
+            to specify a year by itself or a year and month where the day isn''t
+
+            significant.'
+      description: '* A full date, with non-zero year, month, and day values
+
+        * A month and day value, with a zero year, such as an anniversary
+
+        * A year on its own, with zero month and day values
+
+        * A year and month value, with a zero day, such as a credit card expiration
+
+        date
+
+
+        Related types are [google.type.TimeOfDay][google.type.TimeOfDay] and
+
+        `google.protobuf.Timestamp`.'
+      title: 'Represents a whole or partial calendar date, such as a birthday. The time of
+
+        day and time zone are either specified elsewhere or are insignificant. The
+
+        date is relative to the Gregorian Calendar. This can represent one of the
+
+        following:'
     s12.documents.v1.BulkRemoveFileOwnersRequest:
       type: object
       properties:
@@ -1026,56 +973,109 @@ components:
 
             the group ID is `role_1ebbbca147644b5aa4ea646429f941e7`.'
       description: Request to remove owners from multiple files.
-    s12.documents.v1.LinkFilesRequest:
+    s12.documents.v1.User:
       type: object
       properties:
-        file_ids:
-          type: array
-          items:
-            type: string
-          description: 'The ids of the files to be linked
-
-            To get the `file_id`, open the file in the SafetyCulture web app and copy the last part of the URL.
-
-            For example, in this link `https://app.safetyculture.com/documents/document/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
-
-            the file ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
-        entity_ids:
-          type: array
-          items:
-            type: string
-          description: 'The ids of the entities that the file(s) are being linked to
-
-            To get the `entity_id`, open the entity (e.g. asset) in the SafetyCulture web app and copy the last part of the URL.
-
-            For example, in this link `https://app.safetyculture.com/assets/765aa2e6-69cb-43b5-8ab4-48ab26e2a094`,
-
-            the entity ID is `765aa2e6-69cb-43b5-8ab4-48ab26e2a094`.'
-        domain:
-          allOf:
-          - $ref: '#/components/schemas/s12.documents.v1.LinkedFileDomain'
-          description: 'The domain of the entity that the file(s) are being linked to
-
-            If the entity is an asset, use `DOMAIN_ASSET`'
-      title: Request to link documents to other areas of the platform e.g. an asset
-      required:
-      - entity_ids
-      - domain
-    s12.documents.v1.DocumentsPublicService.MoveItemBody:
-      type: object
-      properties:
-        target_folder_id:
+        user_id:
           type: string
-          description: 'The ID of the folder where the item (file or folder) should be moved.
+          description: The ID of the user
+        email:
+          type: string
+          description: The email of the user
+        first_name:
+          type: string
+          description: The first name of the user
+        last_name:
+          type: string
+          description: The last name of the user
+      title: A user that owns a folder or file
+    s12.documents.v1.TimeInterval:
+      type: object
+      properties:
+        from:
+          type: string
+          format: date-time
+          description: optional. represents the time should be after the time provided
+        to:
+          type: string
+          format: date-time
+          description: optional. represents the time should be before the time provided
+      title: Object representing the time interval applied to filtering folder and files
+    s12.documents.v1.Folder:
+      type: object
+      properties:
+        folder_id:
+          type: string
+          description: The ID of the folder
+        name:
+          type: string
+          description: The name of the folder
+        created_at:
+          type: string
+          format: date-time
+          description: The time the folder was created
+        modified_at:
+          type: string
+          format: date-time
+          description: The time the folder was last modified
+        archived_at:
+          type: string
+          format: date-time
+          description: If archived, the time the folder was archived
+        archived:
+          type: boolean
+          description: If the folder is archived or not
+        bookmarked:
+          type: boolean
+          description: If the folder is bookmarked by the requested user
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.ParentFolder'
+          description: 'Ordered from Highest ancestor to the current node
 
-            If you don’t provide a target_folder_id, the item will be moved to the root folder.
-
-            To get the `target_folder_id`, open the target folder in the SafetyCulture web app and copy the last part of the URL.
-
-            For example, in this link `https://app.safetyculture.com/documents/9dd76834-65ef-41d3-815c-964df32450e4`,
-
-            the target folder ID is `9dd76834-65ef-41d3-815c-964df32450e4`.'
-      description: Request to move an item (file or folder) to a different folder.
+            eg. [Grandparent, Parent, Current]'
+        child_count:
+          type: integer
+          format: int32
+          description: The number of children in the folder
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.User'
+          description: The users that own the folder
+        groups:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.Group'
+          description: The groups that own the folder
+      title: The folder structure of the file system
+    s12.documents.v1.GetFolderChildrenResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.Folder'
+          description: List of folders that match the search criteria.
+        files:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.documents.v1.File'
+          description: List of files that match the search criteria.
+        total:
+          type: integer
+          format: int32
+          description: Total number of files and folders that match the search criteria.
+        next_page_token:
+          type: string
+          description: The token used to retrieve the next page of results. Empty if there are no more items.
+      title: Response for the GetFolderChildrenResponse request
   securitySchemes:
     BearerAuthentication:
       type: http

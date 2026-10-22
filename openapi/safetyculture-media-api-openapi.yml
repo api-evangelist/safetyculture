@@ -75,6 +75,48 @@ paths:
       - Media
 components:
   schemas:
+    s12.media.v1.MediaSource:
+      type: string
+      enum:
+      - MEDIA_SOURCE_UNSPECIFIED
+      - MEDIA_SOURCE_AI_GENERATED
+      default: MEDIA_SOURCE_UNSPECIFIED
+      description: "MediaSource identifies which client uploaded the media, not who authored its\ncontent. Unset means a user upload.\n\n - MEDIA_SOURCE_AI_GENERATED: Set for all AI-service uploads, including re-encoded copies of user media."
+    s12.media.v1.SignedURLResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: 'The url has been deprecated for upload paths. For download paths, it is
+
+            still valid. The signed URL that can be used to upload or download the
+
+            media to the S12 system. UploadSignedURL is only valid for 5 minutes and
+
+            DownloadSignedURL for 20 minutes; this is from the first bytes received
+
+            i.e. if upload started within 5 minutes, it is still valid even if upload
+
+            takes 10 minutes to complete. It is safe to reject a signed URL and
+
+            re-request a new Upload/Download Signed URL.'
+        upload_info:
+          $ref: '#/components/schemas/s12.media.v1.Upload'
+        download_info:
+          $ref: '#/components/schemas/s12.media.v1.Download'
+        source:
+          $ref: '#/components/schemas/s12.media.v1.MediaSource'
+      title: The URL response from `GetUploadSignedURL` and `GetDownloadSignedURL`
+    s12.media.v1.Download.MP4:
+      type: object
+      properties:
+        url:
+          type: string
+          description: Signed url to download the MP4 file
+        captions_url:
+          type: string
+          description: Signed url to download the captions file for the video
+      title: Message to be used for the MP4 video file object
     s12.media.v1.Upload.MultipartUpload:
       type: object
       properties:
@@ -88,26 +130,12 @@ components:
           items:
             type: object
             $ref: '#/components/schemas/s12.media.v1.Upload.MultipartUpload.UploadPartBody'
-    s12.media.v1.Download.Stream:
+    s12.media.v1.Upload:
       type: object
       properties:
-        stream_url:
-          type: string
-          description: URL to the HLS manifest file, used to start the streaming
-        cookies:
-          type: array
-          items:
-            type: string
-          description: List of cookies to be used when requesting resource from CloudFront.
-      title: Messages to be used for video streaming with HLS files
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+        multipart_upload:
+          $ref: '#/components/schemas/s12.media.v1.Upload.MultipartUpload'
+      title: Information to be included for upload in SignedURLResponse
     s12.media.v1.Upload.MultipartUpload.UploadPartBody:
       type: object
       properties:
@@ -135,27 +163,6 @@ components:
         received i.e. if upload started within 10 minutes, it is still valid even
 
         if upload takes more than 10 minutes to complete.'
-    s12.media.v1.Download:
-      type: object
-      properties:
-        stream_info:
-          $ref: '#/components/schemas/s12.media.v1.Download.Stream'
-        mp4_info:
-          $ref: '#/components/schemas/s12.media.v1.Download.MP4'
-      title: Information to be included for download in SignedURLResponse
-    s12.media.v1.Upload:
-      type: object
-      properties:
-        multipart_upload:
-          $ref: '#/components/schemas/s12.media.v1.Upload.MultipartUpload'
-      title: Information to be included for upload in SignedURLResponse
-    s12.media.v1.MediaSource:
-      type: string
-      enum:
-      - MEDIA_SOURCE_UNSPECIFIED
-      - MEDIA_SOURCE_AI_GENERATED
-      default: MEDIA_SOURCE_UNSPECIFIED
-      description: "MediaSource identifies which client uploaded the media, not who authored its\ncontent. Unset means a user upload.\n\n - MEDIA_SOURCE_AI_GENERATED: Set for all AI-service uploads, including re-encoded copies of user media."
     google.rpc.Status:
       type: object
       properties:
@@ -169,41 +176,34 @@ components:
           items:
             type: object
             $ref: '#/components/schemas/google.protobuf.Any'
-    s12.media.v1.Download.MP4:
+    google.protobuf.Any:
       type: object
       properties:
-        url:
+        '@type':
           type: string
-          description: Signed url to download the MP4 file
-        captions_url:
-          type: string
-          description: Signed url to download the captions file for the video
-      title: Message to be used for the MP4 video file object
-    s12.media.v1.SignedURLResponse:
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.media.v1.Download.Stream:
       type: object
       properties:
-        url:
+        stream_url:
           type: string
-          description: 'The url has been deprecated for upload paths. For download paths, it is
-
-            still valid. The signed URL that can be used to upload or download the
-
-            media to the S12 system. UploadSignedURL is only valid for 5 minutes and
-
-            DownloadSignedURL for 20 minutes; this is from the first bytes received
-
-            i.e. if upload started within 5 minutes, it is still valid even if upload
-
-            takes 10 minutes to complete. It is safe to reject a signed URL and
-
-            re-request a new Upload/Download Signed URL.'
-        upload_info:
-          $ref: '#/components/schemas/s12.media.v1.Upload'
-        download_info:
-          $ref: '#/components/schemas/s12.media.v1.Download'
-        source:
-          $ref: '#/components/schemas/s12.media.v1.MediaSource'
-      title: The URL response from `GetUploadSignedURL` and `GetDownloadSignedURL`
+          description: URL to the HLS manifest file, used to start the streaming
+        cookies:
+          type: array
+          items:
+            type: string
+          description: List of cookies to be used when requesting resource from CloudFront.
+      title: Messages to be used for video streaming with HLS files
+    s12.media.v1.Download:
+      type: object
+      properties:
+        stream_info:
+          $ref: '#/components/schemas/s12.media.v1.Download.Stream'
+        mp4_info:
+          $ref: '#/components/schemas/s12.media.v1.Download.MP4'
+      title: Information to be included for download in SignedURLResponse
   securitySchemes:
     BearerAuthentication:
       type: http

@@ -1,0 +1,89 @@
+overlay: 1.0.0
+info:
+  title: SafetyCulture Mitti Training API enhancements
+  version: 1.0.0
+extends: openapi/safetyculture-training-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-provider: SafetyCulture (Mitti)
+    x-apievangelist-mcp:
+      endpoint: https://mcp.mitti.com/mcp
+      auth: oauth
+      status: early-access
+      docs: https://developer.mitti.com/docs/connect-an-ai-tool-to-mitti
+    x-llms-txt: https://developer.mitti.com/llms.txt
+- target: $
+  update:
+    externalDocs:
+      description: Mitti developer portal
+      url: https://developer.mitti.com/reference/introduction
+- target: $.components.securitySchemes.BearerAuthentication
+  update:
+    description: 'User API token sent as Authorization: Bearer {api_token}. Tokens are managed per user (https://help.mitti.com/000007).'
+- target: $.paths['/training/analytics/v1/courses/statistics'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/lessons/attempts'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/lessons/progress/events'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/lessons/statistics'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/rapidRefresh/answers'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/slides/statistics'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/surveys/answers'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/surveys/questionDefinitions'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/users/{userId}/lessons/progress'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/users/{userId}/lessons/progress/events'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/analytics/v1/users/{userId}/slides/statistics'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/collections/v1'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/collections/v1/{courseCollectionId}/courses'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/courses/v1'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/courses/v1/{courseId}/lessons'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/individualleaderboards/v1'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/individualleaderboards/v1/rankings'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/lessons/v1/{id}'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/paths/v1'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/paths/v1/{pathId}'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/rapid-refresh/v1'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/rapid-refresh/v1/{id}'].get
+  update:
+    x-agent-safe: read-only

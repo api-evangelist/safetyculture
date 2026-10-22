@@ -1,34 +1,316 @@
-generated: '2026-07-21'
+name: SafetyCulture (Mitti) rate limits
+generated: '2026-10-20'
 method: searched
-source: https://developer.safetyculture.com/reference/rate-limits
-name: SafetyCulture API Rate Limits
-docs: https://developer.safetyculture.com/reference/rate-limits
-window_seconds: 60
+source: https://developer.mitti.com/reference/rate-limits
+docs: https://developer.mitti.com/reference/rate-limits
+summary: Hard throttling limit per endpoint over a 60-second interval; requests sent by the same user simultaneously
+  at a high rate are throttled. The docs page carries no plan tie for these limits (monthly API call quotas per
+  plan are on the pricing page, see plans/).
 throttle_status: 429
 throttle_message: Too Many Requests
 headers:
 - name: x-ratelimit-limit
-  description: The rate limit credit for that endpoint.
+  description: The rate limit credit for that given endpoint
 - name: x-ratelimit-remaining
-  description: The number of requests left for the window.
+  description: The number of requests left for the window
 - name: x-ratelimit-reset
-  description: The number of seconds until this window resets.
+  description: The number of seconds until this window resets
+limit_count: 42
 limits:
-- endpoint: default (all other endpoints)
-  limit_count: 800
-  window_seconds: 60
-- endpoint: most endpoints
-  limit_count: 200
-  window_seconds: 60
-- endpoint: POST /audits
-  limit_count: 30
-  window_seconds: 60
-- endpoint: POST /audits/<audit ID>/export
-  limit_count: 20
-  window_seconds: 60
-- endpoint: POST /users/v1/users/upsert
-  limit_count: 5
-  window_seconds: 60
-- endpoint: POST /users/v1/users/upsert/jobs/{job_id}
-  limit_count: 5
-  window_seconds: 60
+- name: POST /users/search
+  endpoint: POST /users/search
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: POST /users/search 200 60 seconds
+- name: GET /share/connections
+  endpoint: GET /share/connections
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /share/connections 200 60 seconds
+- name: POST /audits
+  endpoint: POST /audits
+  limit: 30
+  max: 30
+  window: 60 seconds
+  scope: per-user
+  limit_text: POST /audits 30 60 seconds
+- name: GET /audits/search
+  endpoint: GET /audits/search
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /audits/search 200 60 seconds
+- name: GET /export_profiles/search
+  endpoint: GET /export_profiles/search
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /export_profiles/search 200 60 seconds
+- name: GET /templates/search
+  endpoint: GET /templates/search
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /templates/search 200 60 seconds
+- name: GET /response_sets
+  endpoint: GET /response_sets
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /response_sets 200 60 seconds
+- name: POST /audits/<audit ID>/export
+  endpoint: POST /audits/<audit ID>/export
+  limit: 20
+  max: 20
+  window: 60 seconds
+  scope: per-user
+  limit_text: POST /audits/<audit ID>/export 20 60 seconds
+- name: GET /audits/<audit ID>/exports/<export ID>
+  endpoint: GET /audits/<audit ID>/exports/<export ID>
+  limit: 100
+  max: 100
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /audits/<audit ID>/exports/<export ID> 100 60 seconds
+- name: GET /audits/<audit ID>/exports/<export ID>/<filename>
+  endpoint: GET /audits/<audit ID>/exports/<export ID>/<filename>
+  limit: 100
+  max: 100
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /audits/<audit ID>/exports/<export ID>/<filename> 100 60 seconds
+- name: GET /preferences/search
+  endpoint: GET /preferences/search
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /preferences/search 200 60 seconds
+- name: POST /audits/{audit ID}/report
+  endpoint: POST /audits/{audit ID}/report
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: POST /audits/{audit ID}/report 200 60 seconds
+- name: GET /audits/{audit ID}/report/{export ID}
+  endpoint: GET /audits/{audit ID}/report/{export ID}
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /audits/{audit ID}/report/{export ID} 200 60 seconds
+- name: POST /users/v1/users/upsert
+  endpoint: POST /users/v1/users/upsert
+  limit: 5
+  max: 5
+  window: 60 seconds
+  scope: per-user
+  limit_text: POST /users/v1/users/upsert 5 60 seconds
+- name: POST /users/v1/users/upsert/jobs
+  endpoint: POST /users/v1/users/upsert/jobs
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: POST /users/v1/users/upsert/jobs 200 60 seconds
+- name: POST /users/v1/users/upsert/jobs/{job_id}
+  endpoint: POST /users/v1/users/upsert/jobs/{job_id}
+  limit: 5
+  max: 5
+  window: 60 seconds
+  scope: per-user
+  limit_text: POST /users/v1/users/upsert/jobs/{job_id} 5 60 seconds
+- name: DELETE /users/v1/users/upsert/jobs/{job_id}
+  endpoint: DELETE /users/v1/users/upsert/jobs/{job_id}
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: DELETE /users/v1/users/upsert/jobs/{job_id} 200 60 seconds
+- name: GET /users/v1/users/upsert/jobs/{job_id}
+  endpoint: GET /users/v1/users/upsert/jobs/{job_id}
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /users/v1/users/upsert/jobs/{job_id} 200 60 seconds
+- name: POST /users/v1/users/upsert/jobs/list
+  endpoint: POST /users/v1/users/upsert/jobs/list
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: POST /users/v1/users/upsert/jobs/list 200 60 seconds
+- name: GET /training/collections/v1
+  endpoint: GET /training/collections/v1
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/collections/v1 200 60 seconds
+- name: GET /training/collections/v1/{collection ID}/courses
+  endpoint: GET /training/collections/v1/{collection ID}/courses
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/collections/v1/{collection ID}/courses 200 60 seconds
+- name: GET /training/courses/v1
+  endpoint: GET /training/courses/v1
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/courses/v1 200 60 seconds
+- name: GET /training/courses/v1/{course ID}/lessons
+  endpoint: GET /training/courses/v1/{course ID}/lessons
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/courses/v1/{course ID}/lessons 200 60 seconds
+- name: PUT /training/courses/v1/{course ID}/assignments
+  endpoint: PUT /training/courses/v1/{course ID}/assignments
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: PUT /training/courses/v1/{course ID}/assignments 200 60 seconds
+- name: GET /training/paths/v1
+  endpoint: GET /training/paths/v1
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/paths/v1 200 60 seconds
+- name: GET /training/paths/v1/{path ID}
+  endpoint: GET /training/paths/v1/{path ID}
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/paths/v1/{path ID} 200 60 seconds
+- name: GET /training/individualleaderboards/v1
+  endpoint: GET /training/individualleaderboards/v1
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/individualleaderboards/v1 200 60 seconds
+- name: GET /training/individualleaderboards/v1/rankings
+  endpoint: GET /training/individualleaderboards/v1/rankings
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/individualleaderboards/v1/rankings 200 60 seconds
+- name: GET /training/rapid-refresh/v1
+  endpoint: GET /training/rapid-refresh/v1
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/rapid-refresh/v1 200 60 seconds
+- name: GET /training/rapid-refresh/v1/{id}
+  endpoint: GET /training/rapid-refresh/v1/{id}
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/rapid-refresh/v1/{id} 200 60 seconds
+- name: GET /training/analytics/v1/lessons/attempts
+  endpoint: GET /training/analytics/v1/lessons/attempts
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/lessons/attempts 200 60 seconds
+- name: GET /training/analytics/v1/courses/statistics
+  endpoint: GET /training/analytics/v1/courses/statistics
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/courses/statistics 200 60 seconds
+- name: GET /training/analytics/v1/lessons/progress/events
+  endpoint: GET /training/analytics/v1/lessons/progress/events
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/lessons/progress/events 200 60 seconds
+- name: GET /training/analytics/v1/lessons/statistics
+  endpoint: GET /training/analytics/v1/lessons/statistics
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/lessons/statistics 200 60 seconds
+- name: GET /training/analytics/v1/slides/statistics
+  endpoint: GET /training/analytics/v1/slides/statistics
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/slides/statistics 200 60 seconds
+- name: GET /training/analytics/v1/users/{user_id}/slides/statistics
+  endpoint: GET /training/analytics/v1/users/{user_id}/slides/statistics
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/users/USER_ID/slides/statistics 200 60 seconds
+- name: GET /training/analytics/v1/users/{user_id}/lessons/progress
+  endpoint: GET /training/analytics/v1/users/{user_id}/lessons/progress
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/users/USER_ID/lessons/progress 200 60 seconds
+- name: GET /training/analytics/v1/users/{user_id}/lessons/progress/events
+  endpoint: GET /training/analytics/v1/users/{user_id}/lessons/progress/events
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/users/USER_ID/lessons/progress/events 200 60 seconds
+- name: GET /training/analytics/v1/surveys/questionDefinitions
+  endpoint: GET /training/analytics/v1/surveys/questionDefinitions
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/surveys/questionDefinitions 200 60 seconds
+- name: GET /training/analytics/v1/surveys/answers
+  endpoint: GET /training/analytics/v1/surveys/answers
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/surveys/answers 200 60 seconds
+- name: GET /training/analytics/v1/rapidRefresh/answers
+  endpoint: GET /training/analytics/v1/rapidRefresh/answers
+  limit: 200
+  max: 200
+  window: 60 seconds
+  scope: per-user
+  limit_text: GET /training/analytics/v1/rapidRefresh/answers 200 60 seconds
+- name: Other (all other endpoints)
+  endpoint: Other
+  limit: 800
+  max: 800
+  window: 60 seconds
+  scope: per-user
+  limit_text: Other 800 60 seconds
+note: limit_text is the row of the docs table (endpoint, Rate, Interval) with table pipes removed; the rebrand changelog
+  states rate limits are unchanged by the move to api.mitti.com. The rendered page shows {user_id} as USER_ID; limit_text
+  follows the rendered page, endpoint follows the markdown source.

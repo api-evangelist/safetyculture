@@ -526,365 +526,36 @@ paths:
       deprecated: true
 components:
   schemas:
-    s12.users.userfield.v1.SetFieldSettingsResponse:
-      type: object
-      properties:
-        settings:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldSettings'
-          description: The updated field settings
-    s12.users.v1.ListUsersResponse:
-      type: object
-      properties:
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.User'
-          description: Users matching the filters on this page.
-        next_page_token:
-          type: string
-          description: Opaque cursor for the next page. Absent when there are no more results.
-      description: ListUsersResponse contains a page of users matching the request filters.
-    s12.thepub.v1.ThePubSeatType:
+    s12.typefield.v1.FieldValueType:
       type: string
       enum:
-      - full
-      - free
-      - lite
-      default: full
-      title: "- full: Full seat\n - free: Free seat\n - lite: Lite seat"
-    s12.users.userattribute.v1.Attribute:
+      - FIELD_VALUE_TYPE_UNSPECIFIED
+      - FIELD_VALUE_TYPE_STRING
+      - FIELD_VALUE_TYPE_MONEY
+      - FIELD_VALUE_TYPE_TIMESTAMP
+      - FIELD_VALUE_TYPE_USER_ID
+      - FIELD_VALUE_TYPE_SELECT
+      - FIELD_VALUE_TYPE_TEMPLATE_ID
+      - FIELD_VALUE_TYPE_MULTI_SELECT
+      - FIELD_VALUE_TYPE_SITE
+      - FIELD_VALUE_TYPE_MULTI_SITE
+      - FIELD_VALUE_TYPE_INTEGER
+      - FIELD_VALUE_TYPE_ADDRESS
+      - FIELD_VALUE_TYPE_TIMEZONE
+      - FIELD_VALUE_TYPE_CONTACT_DETAILS
+      default: FIELD_VALUE_TYPE_UNSPECIFIED
+      description: "Type of FieldValue.\nDefaults to type String.\n\n - FIELD_VALUE_TYPE_UNSPECIFIED: Field value type unspecified.\n - FIELD_VALUE_TYPE_STRING: Field value type string.\n - FIELD_VALUE_TYPE_MONEY: Field value type money.\n - FIELD_VALUE_TYPE_TIMESTAMP: Field value type timestamp.\n - FIELD_VALUE_TYPE_USER_ID: Field value type user ID.\n - FIELD_VALUE_TYPE_SELECT: Field value type select\n - FIELD_VALUE_TYPE_TEMPLATE_ID: Field value type template ID.\n - FIELD_VALUE_TYPE_MULTI_SELECT: Field value type multi-select\n - FIELD_VALUE_TYPE_SITE: Field value type site\n - FIELD_VALUE_TYPE_MULTI_SITE: Field value type multi-site\n - FIELD_VALUE_TYPE_INTEGER: Field value type integer\n - FIELD_VALUE_TYPE_ADDRESS: Field value type address.\n - FIELD_VALUE_TYPE_TIMEZONE: Field value type timezone\n - FIELD_VALUE_TYPE_CONTACT_DETAILS: Field value type contact details"
+    s12.users.userfield.v1.UserFieldService.RestoreFieldBody:
       type: object
-      properties:
-        field_id:
-          type: string
-          description: Required. The field UUID
-        attribute_values:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.userattribute.v1.AttributeValue'
-          description: The list of values if field supports multiple values
-        field_name:
-          type: string
-          readOnly: true
-          description: Read only. The name of the field
-        value_type:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
-          description: Read only. The value type of the field
-    s12.users.userfield.v1.Field:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Required. The field UUID
-        data_type:
-          allOf:
-          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
-          description: Data type for the attribute
-        name:
-          type: string
-          description: Required. The attribute name
-        description:
-          type: string
-          description: The attribute description
-        has_attributes:
-          type: boolean
-          description: Required. Flag to specify if the field has associated populated attributes
-        status:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldStatus'
-          description: Status to indicate whether the field is disabled or not
-        settings:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldSettings'
-          description: Field visibility and editing settings
-        category:
-          allOf:
-          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
-          description: Field category - System or Custom
-        select_options:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
-          description: Field select options
-    s12.users.userfield.v1.ListFieldsRequest:
-      type: object
-      properties:
-        filter:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.userfield.v1.ListFieldsRequest.FieldsFilter'
-          description: Filters to apply against the list of fields
-    s12.thepub.v1.SearchUsersRequest:
-      type: object
-      properties:
-        email:
-          type: array
-          items:
-            type: string
-          description: Emails to filter by. Required.
-      description: The parameters for `SearchUsers`
-      title: SearchUsersRequest
-      required:
-      - email
-    s12.permissions.v1.PermissionSetOrder:
+    s12.common.UserActiveStatus:
       type: string
       enum:
-      - PERMISSION_SET_ORDER_UNSPECIFIED
-      - PERMISSION_SET_ORDER_ASC
-      - PERMISSION_SET_ORDER_DESC
-      default: PERMISSION_SET_ORDER_UNSPECIFIED
-      description: "The possible sort orders for permission sets.\n\n - PERMISSION_SET_ORDER_UNSPECIFIED: Unspecified order.\n - PERMISSION_SET_ORDER_ASC: Ascending order.\n - PERMISSION_SET_ORDER_DESC: Descending order."
-    s12.users.userfield.v1.RestoreFieldResponse:
-      type: object
-    s12.users.userfield.v1.ListFieldsRequest.FieldsFilter:
-      type: object
-      properties:
-        field_category:
-          description: 'Category for the attribute, either system or custom.
-
-            Providing an unspecified field_category will result in system & custom fields being returned.'
-          allOf:
-          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
-        data_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
-          description: 'Data type for the attributes.
-
-            Providing an empty data_types list will result in all data types being returned.'
-        status:
-          description: 'Status - whether the fields are enabled or disabled.
-
-            Providing an unspecified status will result in both enabled and disabled fields being returned.'
-          allOf:
-          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldStatus'
-        query:
-          type: string
-          description: The attribute name to filter by
-    s12.users.userattribute.v1.UserAttributeService.SetUserAttributesBody:
-      type: object
-      properties:
-        attributes:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.userattribute.v1.Attribute'
-          description: Required. The list of attributes to set
-    s12.permissions.v1.ListPermissionSetsResponse:
-      type: object
-      properties:
-        permission_sets:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.permissions.v1.PermissionSetWithUsers'
-          description: The permission sets.
-        total_results:
-          type: integer
-          format: int32
-          description: The total number of results for the provided input.
-      description: The response for ListPermissionSets.
-    s12.users.userfield.v1.CreateFieldResponse:
-      type: object
-      properties:
-        field:
-          $ref: '#/components/schemas/s12.users.userfield.v1.Field'
-    s12.users.userfield.v1.FieldSettings:
-      type: object
-      properties:
-        show_on_profile:
-          type: boolean
-          description: Required. Flag to specify if the attribute is visible/configurable on the user profile
-        allow_self_update:
-          type: boolean
-          description: Required. Flag to specify if all users can update the attribute for their own account
-        read_only:
-          type: boolean
-          description: 'Read only. True when the field is system-managed and cannot be edited by users:
-
-            allow_self_update is locked off and clients should render its toggle as disabled.
-
-            Derived server-side from the set of read-only fields; ignored on write.'
-          readOnly: true
-    s12.thepub.v1.AddUserResponse.UserResponse:
-      type: object
-      properties:
-        firstname:
-          type: string
-          description: The first name of the created user.
-        lastname:
-          type: string
-          description: The last name of the created user.
-        email:
-          type: string
-          description: The email of the created user.
-        user_id:
-          type: string
-          description: The id of the created user.
-      title: User response
-    s12.thepub.v1.SearchUsersResponse:
-      type: object
-      properties:
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.thepub.v1.SearchUsersResponse.User'
-          description: The users that match the search criteria.
-      description: Result returned from `SearchUsers`
-      title: SearchUsersResponse
-    s12.users.userfield.v1.UserFieldService.SetFieldSettingsBody:
-      type: object
-      properties:
-        settings:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldSettings'
-          description: The new field settings
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
-    s12.thepub.v1.ThePubService.UpdateUserBody:
-      type: object
-      properties:
-        firstname:
-          type: string
-          description: 'The first name of the user.
-
-
-            Optional'
-        lastname:
-          type: string
-          description: 'The last name of the user.
-
-
-            Optional'
-        new_email:
-          type: string
-          description: 'The email address of the user.
-
-
-            Optional'
-        status:
-          description: 'The status of the user.
-
-
-            Optional'
-          allOf:
-          - $ref: '#/components/schemas/s12.thepub.v1.ThePubUserStatus'
-        seat_type:
-          description: 'The billing seat type of the added user, `free` or `full`.
-
-
-            Optional'
-          allOf:
-          - $ref: '#/components/schemas/s12.thepub.v1.ThePubSeatType'
-      description: The parameters for `UpdateUser`
-      title: UpdateUserRequest
-    s12.permissions.v1.PermissionSet:
-      type: object
-      properties:
-        identifier:
-          description: The identifier of the permission set.
-          allOf:
-          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetIdentifier'
-        modified_at:
-          type: string
-          format: date-time
-          description: Last modification time of the permission set.
-        permissions:
-          description: The permissions of the permission set.
-          allOf:
-          - $ref: '#/components/schemas/s12.permissions.v1.Permissions'
-        default_for_seat_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
-          description: The seat types that this permission set is the default for.
-        permissions_denylist:
-          description: The permissions denylist of the permission set.
-          allOf:
-          - $ref: '#/components/schemas/s12.permissions.v1.Permissions'
-        supports_email_less:
-          type: boolean
-          description: 'Whether the permission set is applicable to users without an email-based
-
-            username. Derived from `permissions` and the non-email username denylist;
-
-            mirrors PermissionSetIdentifier.supports_email_less for callers consuming
-
-            the full PermissionSet. Server-computed; ignored on writes.'
-      description: PermissionSet represents a permission set.
-    s12.users.userfield.v1.CreateFieldRequest:
-      type: object
-      properties:
-        data_type:
-          allOf:
-          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
-          description: Required. Data type for the attribute
-        name:
-          type: string
-          description: Required. Attribute name
-        description:
-          type: string
-          description: The attribute description
-        settings:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldSettings'
-          description: The attribute visibility & editing settings
-        select_options:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
-          description: Field select options
-    s12.permissions.v1.PermissionSetWithUsers:
-      type: object
-      properties:
-        permission_set:
-          description: The permission set.
-          allOf:
-          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSet'
-        users:
-          type: array
-          items:
-            type: string
-          description: A subset of the users assigned to the permission set.
-        user_count:
-          type: integer
-          format: int32
-          description: The number of users assigned to the permission set.
-      title: A permission set and its users
-    s12.thepub.v1.AddUserResponse:
-      type: object
-      properties:
-        user:
-          description: The user that was created.
-          allOf:
-          - $ref: '#/components/schemas/s12.thepub.v1.AddUserResponse.UserResponse'
-      description: Result returned from `AddUser`
-      title: AddUserResponse
-    s12.users.userfield.v1.FieldStatus:
-      type: string
-      enum:
-      - FIELD_STATUS_UNSPECIFIED
-      - FIELD_STATUS_ENABLED
-      - FIELD_STATUS_DISABLED
-      default: FIELD_STATUS_UNSPECIFIED
+      - USER_ACTIVE_STATUS_UNSPECIFIED
+      - USER_ACTIVE_STATUS_ACTIVE
+      - USER_ACTIVE_STATUS_DEACTIVATED
+      default: USER_ACTIVE_STATUS_UNSPECIFIED
+      description: "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated"
+      title: UserActiveStatus enumerates possible states of 'status' a user may be in
     s12.permissions.v1.Permissions:
       type: object
       properties:
@@ -1065,34 +736,9 @@ components:
           type: boolean
           description: Permission representing "Create actions"
       description: Permissions represents a set of permissions. Individual permissions can be omitted to leave them unchanged.
-    s12.permissions.v1.ListPermissionSetsRequest:
+    s12.permissions.v1.AssignPermissionSetResponse:
       type: object
-      properties:
-        search:
-          type: string
-          description: Search input to filter down the permission sets.
-        sort:
-          description: The sorting to apply.
-          allOf:
-          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetSort'
-        include_users:
-          type: boolean
-          description: Whether to include users in the response.
-        limit:
-          type: integer
-          format: int32
-          description: The maximum number of permission sets to return.
-        offset:
-          type: integer
-          format: int32
-          description: The offset of the first permission set to return.
-        filters:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.permissions.v1.ListPermissionSetsFilter'
-          description: (Optional). The filters to apply.
-      description: The request for ListPermissionSets.
+      description: The response for AssignPermissionSet.
     s12.permissions.v1.ListPermissionSetsFilter:
       type: object
       properties:
@@ -1104,144 +750,196 @@ components:
           description: Filter by required seat type.
           allOf:
           - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
-    s12.thepub.v1.ThePubUserStatus:
-      type: string
-      enum:
-      - active
-      - inactive
-      default: active
-      description: "- active: Active user.\n - inactive: Inactive user."
-      title: ThePubUserStatus
-    s12.users.userfield.v1.ListFieldsResponse:
+    s12.users.v1.ListUsersRequest:
       type: object
       properties:
-        fields:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.userfield.v1.Field'
-          description: List of user fields that satisfy the filter condition sorted by System Fields, Custom Fields
-    s12.permissions.v1.AssignPermissionSetRequest:
+        filters:
+          description: 'Filter criteria. AND semantics across all populated filter fields.
+
+            At least one filter must be set, or list_all must be true.'
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.ListUsersFilters'
+        list_all:
+          type: boolean
+          description: 'Set to true to return all active users in the org with no filter applied.
+
+            Required when filters is empty or absent. Prevents accidental full org scans.'
+        page_size:
+          type: integer
+          format: int32
+          description: 'Maximum number of users to return per page. Range: 1–200. Defaults to 50.'
+        page_token:
+          type: string
+          description: 'Opaque pagination cursor returned by a previous ListUsers response.
+
+            Omit to start from the beginning.'
+      description: 'ListUsersRequest contains the parameters for listing users within the caller''s org.
+
+        The organization is derived from the caller''s JWT token.
+
+        Results are sorted by user_id ascending. No other sort order is supported in v1.'
+    s12.permissions.v1.PermissionSetIdentifier:
       type: object
       properties:
         id:
           type: string
-          description: Optional. The ID of the permission set.
-        user_ids:
+          description: The ID of the permission set.
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetType'
+          description: The type of the permission set (e.g. default or custom)
+        name:
+          type: string
+          description: 'The name of the permission set. Free text set by a customer admin on
+
+            CreatePermissionSet/UpdatePermissionSet — tagged pii since nothing
+
+            prevents a personal name being entered.'
+        description:
+          type: string
+          description: The description of the permission set. Same free-text risk as `name`.
+        allowed_seat_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
+          description: The seat types allowed for the permission set. The first element is the "minimum" allowed seat type.
+        supports_email_less:
+          type: boolean
+          description: 'Whether the permission set is applicable to users without an email-based
+
+            username. False when the set grants any permission that is denylisted for
+
+            non-email usernames (e.g. billing). Server-computed; ignored on writes.'
+      description: Identifier for a permission set.
+    s12.permissions.v1.ListPermissionSetsResponse:
+      type: object
+      properties:
+        permission_sets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.permissions.v1.PermissionSetWithUsers'
+          description: The permission sets.
+        total_results:
+          type: integer
+          format: int32
+          description: The total number of results for the provided input.
+      description: The response for ListPermissionSets.
+    s12.common.SubscriptionSeatTypes:
+      type: string
+      enum:
+      - SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      - SUBSCRIPTION_SEAT_TYPE_PREMIUM
+      - SUBSCRIPTION_SEAT_TYPE_COLLABORATOR
+      - SUBSCRIPTION_SEAT_TYPE_LITE
+      - SUBSCRIPTION_SEAT_TYPE_SERVICE_USER
+      - SUBSCRIPTION_SEAT_TYPE_SUPPORT
+      default: SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      title: SubscriptionSeatTypes is a list of potential subscription seat types
+    s12.users.userattribute.v1.UserAttributeService.SetUserAttributesBody:
+      type: object
+      properties:
+        attributes:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.userattribute.v1.Attribute'
+          description: Required. The list of attributes to set
+    s12.thepub.v1.SearchUsersRequest:
+      type: object
+      properties:
+        email:
           type: array
           items:
             type: string
-          description: The IDs of the users to assign.
-        name:
-          type: string
-          description: 'Optional. The name of the permission set to assign.
-
-            De-prioritised in favour of id.'
-      description: The request for AssignPermissionSet.
-    s12.thepub.v1.UpdateUserResponse:
-      type: object
-      description: Result returned from `UpdateUser`
-      title: UpdateUserResponse
-    s12.permissions.v1.AssignPermissionSetResponse:
-      type: object
-      description: The response for AssignPermissionSet.
-    s12.users.userfield.v1.UserFieldService.RestoreFieldBody:
-      type: object
-    s12.common.UserActiveStatus:
+          description: Emails to filter by. Required.
+      description: The parameters for `SearchUsers`
+      title: SearchUsersRequest
+      required:
+      - email
+    s12.thepub.v1.ThePubSeatType:
       type: string
       enum:
-      - USER_ACTIVE_STATUS_UNSPECIFIED
-      - USER_ACTIVE_STATUS_ACTIVE
-      - USER_ACTIVE_STATUS_DEACTIVATED
-      default: USER_ACTIVE_STATUS_UNSPECIFIED
-      description: "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated"
-      title: UserActiveStatus enumerates possible states of 'status' a user may be in
-    s12.users.userfield.v1.UserFieldService.UpdateFieldBody:
+      - full
+      - free
+      - lite
+      default: full
+      title: "- full: Full seat\n - free: Free seat\n - lite: Lite seat"
+    google.protobuf.Any:
       type: object
       properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.users.userfield.v1.Field:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Required. The field UUID
+        data_type:
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
+          description: Data type for the attribute
         name:
           type: string
-          description: Attribute name
+          description: Required. The attribute name
         description:
           type: string
           description: The attribute description
+        has_attributes:
+          type: boolean
+          description: Required. Flag to specify if the field has associated populated attributes
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldStatus'
+          description: Status to indicate whether the field is disabled or not
+        settings:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldSettings'
+          description: Field visibility and editing settings
+        category:
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
+          description: Field category - System or Custom
         select_options:
           type: array
           items:
             type: object
             $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
           description: Field select options
-        update_mask:
+    s12.users.userattribute.v1.GetUserAttributesResponse:
+      type: object
+      properties:
+        attributes:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.userattribute.v1.Attribute'
+          description: The list of attributes for the user
+    s12.users.userattribute.v1.Attribute:
+      type: object
+      properties:
+        field_id:
           type: string
-          description: 'Required. The attributes (such as name etc.) you want to update for the field,
-
-            specified in the parameters. For example, the update_mask=name parameter
-
-            indicates that only the name will be updated in a request, any other
-
-            attributes provided in your request body will be ignored.'
-    s12.typefield.v1.FieldValueType:
-      type: string
-      enum:
-      - FIELD_VALUE_TYPE_UNSPECIFIED
-      - FIELD_VALUE_TYPE_STRING
-      - FIELD_VALUE_TYPE_MONEY
-      - FIELD_VALUE_TYPE_TIMESTAMP
-      - FIELD_VALUE_TYPE_USER_ID
-      - FIELD_VALUE_TYPE_SELECT
-      - FIELD_VALUE_TYPE_TEMPLATE_ID
-      - FIELD_VALUE_TYPE_MULTI_SELECT
-      - FIELD_VALUE_TYPE_SITE
-      - FIELD_VALUE_TYPE_MULTI_SITE
-      - FIELD_VALUE_TYPE_INTEGER
-      - FIELD_VALUE_TYPE_ADDRESS
-      - FIELD_VALUE_TYPE_TIMEZONE
-      - FIELD_VALUE_TYPE_CONTACT_DETAILS
-      default: FIELD_VALUE_TYPE_UNSPECIFIED
-      description: "Type of FieldValue.\nDefaults to type String.\n\n - FIELD_VALUE_TYPE_UNSPECIFIED: Field value type unspecified.\n - FIELD_VALUE_TYPE_STRING: Field value type string.\n - FIELD_VALUE_TYPE_MONEY: Field value type money.\n - FIELD_VALUE_TYPE_TIMESTAMP: Field value type timestamp.\n - FIELD_VALUE_TYPE_USER_ID: Field value type user ID.\n - FIELD_VALUE_TYPE_SELECT: Field value type select\n - FIELD_VALUE_TYPE_TEMPLATE_ID: Field value type template ID.\n - FIELD_VALUE_TYPE_MULTI_SELECT: Field value type multi-select\n - FIELD_VALUE_TYPE_SITE: Field value type site\n - FIELD_VALUE_TYPE_MULTI_SITE: Field value type multi-site\n - FIELD_VALUE_TYPE_INTEGER: Field value type integer\n - FIELD_VALUE_TYPE_ADDRESS: Field value type address.\n - FIELD_VALUE_TYPE_TIMEZONE: Field value type timezone\n - FIELD_VALUE_TYPE_CONTACT_DETAILS: Field value type contact details"
-    s12.permissions.v1.GetPermissionSetResponse:
-      type: object
-      properties:
-        permission_set:
-          description: The permission set.
+          description: Required. The field UUID
+        attribute_values:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.userattribute.v1.AttributeValue'
+          description: The list of values if field supports multiple values
+        field_name:
+          type: string
+          readOnly: true
+          description: Read only. The name of the field
+        value_type:
+          readOnly: true
           allOf:
-          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetWithUsers'
-      description: The response for GetPermissionSet.
-    s12.permissions.v1.PermissionSetSort:
-      type: object
-      properties:
-        criteria:
-          description: The criteria to sort by.
-          allOf:
-          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetSortCriteria'
-        order:
-          description: The order to sort by.
-          allOf:
-          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetOrder'
-        prioritise_seat_type:
-          description: The seat type to prioritise. If set, permission sets with this seat type will be returned first. Cannot be used with criteria set to seat_type.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
-      description: The parameters to sort permission sets by (criteria and order).
-    s12.permissions.v1.PermissionSetSortCriteria:
-      type: string
-      enum:
-      - PERMISSION_SET_SORT_CRITERIA_UNSPECIFIED
-      - PERMISSION_SET_SORT_CRITERIA_DEFAULT
-      - PERMISSION_SET_SORT_CRITERIA_NAME
-      - PERMISSION_SET_SORT_CRITERIA_MIN_SEAT_TYPE
-      - PERMISSION_SET_SORT_CRITERIA_LAST_MODIFIED
-      default: PERMISSION_SET_SORT_CRITERIA_UNSPECIFIED
-      description: "The possible criteria to sort permission sets by.\n\n - PERMISSION_SET_SORT_CRITERIA_UNSPECIFIED: Unspecified sort.\n - PERMISSION_SET_SORT_CRITERIA_DEFAULT: Sort by the default order, which may or may not be equivalent as any other option.\n - PERMISSION_SET_SORT_CRITERIA_NAME: Sort by name.\n - PERMISSION_SET_SORT_CRITERIA_MIN_SEAT_TYPE: Sort by minimum seat type.\n - PERMISSION_SET_SORT_CRITERIA_LAST_MODIFIED: Sort by last modified date."
-    s12.typefield.v1.FieldCategory:
-      type: string
-      enum:
-      - FIELD_CATEGORY_UNSPECIFIED
-      - FIELD_CATEGORY_SYSTEM_FIELD
-      - FIELD_CATEGORY_CUSTOM_FIELD
-      default: FIELD_CATEGORY_UNSPECIFIED
-      description: "- FIELD_CATEGORY_UNSPECIFIED: Field category Unspecified.\n - FIELD_CATEGORY_SYSTEM_FIELD: Field category pre-defined.\n - FIELD_CATEGORY_CUSTOM_FIELD: Field category custom."
-      title: Category of Field
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
+          description: Read only. The value type of the field
     s12.permissions.v1.PermissionSetType:
       type: string
       enum:
@@ -1250,35 +948,8 @@ components:
       - PERMISSION_SET_TYPE_CUSTOM
       default: PERMISSION_SET_TYPE_UNSPECIFIED
       description: "The possible types of permission sets.\n\n - PERMISSION_SET_TYPE_UNSPECIFIED: Unspecified permission set type.\n - PERMISSION_SET_TYPE_DEFAULT: Default permission set.\n - PERMISSION_SET_TYPE_CUSTOM: Custom permission set."
-    s12.thepub.v1.AddUserRequest:
+    s12.users.userfield.v1.DisableFieldResponse:
       type: object
-      properties:
-        firstname:
-          type: string
-          description: The first name of the user.
-        lastname:
-          type: string
-          description: The last name of the user.
-        email:
-          type: string
-          description: The email address of the user.
-        password:
-          type: string
-          description: The password of the user.
-        message:
-          type: string
-          description: Message passed to the newly created user.
-        seat_type:
-          description: The billing seat type of the added user, `free` or `full`.
-          allOf:
-          - $ref: '#/components/schemas/s12.thepub.v1.ThePubSeatType'
-      description: The parameters for `AddUser`
-      title: AddUserRequest
-      required:
-      - firstname
-      - lastname
-      - email
-      - password
     s12.users.v1.ListUsersFilters:
       type: object
       properties:
@@ -1323,225 +994,72 @@ components:
         Filters across different fields are combined with AND.
 
         An empty ListUsersFilters with list_all = true returns all active org users.'
-    s12.permissions.v1.PermissionSetIdentifier:
+    s12.users.userfield.v1.ListFieldsRequest.FieldsFilter:
       type: object
       properties:
-        id:
-          type: string
-          description: The ID of the permission set.
-        type:
+        field_category:
+          description: 'Category for the attribute, either system or custom.
+
+            Providing an unspecified field_category will result in system & custom fields being returned.'
           allOf:
-          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetType'
-          description: The type of the permission set (e.g. default or custom)
-        name:
-          type: string
-          description: 'The name of the permission set. Free text set by a customer admin on
-
-            CreatePermissionSet/UpdatePermissionSet — tagged pii since nothing
-
-            prevents a personal name being entered.'
-        description:
-          type: string
-          description: The description of the permission set. Same free-text risk as `name`.
-        allowed_seat_types:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
+        data_types:
           type: array
           items:
-            $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
-          description: The seat types allowed for the permission set. The first element is the "minimum" allowed seat type.
-        supports_email_less:
-          type: boolean
-          description: 'Whether the permission set is applicable to users without an email-based
+            $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
+          description: 'Data type for the attributes.
 
-            username. False when the set grants any permission that is denylisted for
-
-            non-email usernames (e.g. billing). Server-computed; ignored on writes.'
-      description: Identifier for a permission set.
-    s12.users.userfield.v1.UpdateFieldResponse:
-      type: object
-      properties:
-        field:
-          $ref: '#/components/schemas/s12.users.userfield.v1.Field'
-    s12.users.userfield.v1.DisableFieldResponse:
-      type: object
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.users.userattribute.v1.AttributeValue:
-      type: object
-      properties:
-        string_value:
-          type: string
-          description: The string value of a field.
-        timestamp_value:
-          type: string
-          format: date-time
-          description: The timestamp value of a field.
-        uuid_value:
-          type: string
-          description: The UUID value of a field
-    s12.users.v1.TimestampRange:
-      type: object
-      properties:
-        from:
-          type: string
-          format: date-time
-          description: Inclusive lower bound (>=). Omit for an open lower bound.
-        to:
-          type: string
-          format: date-time
-          description: Inclusive upper bound (<=). Omit for an open upper bound.
-      description: 'TimestampRange is an inclusive range over a TIMESTAMP field value. At least
-
-        one bound must be set; an omitted bound leaves that side open.'
-    s12.users.userattribute.v1.SetUserAttributesResponse:
-      type: object
-    s12.thepub.v1.SearchUsersResponse.User:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id of the user.
-        firstname:
-          type: string
-          description: The first name of the user.
-        lastname:
-          type: string
-          description: The last name of the user.
-        email:
-          type: string
-          description: The email address of the user.
+            Providing an empty data_types list will result in all data types being returned.'
         status:
-          description: The status of the user.
+          description: 'Status - whether the fields are enabled or disabled.
+
+            Providing an unspecified status will result in both enabled and disabled fields being returned.'
           allOf:
-          - $ref: '#/components/schemas/s12.thepub.v1.ThePubUserStatus'
-        seat_type:
-          description: The seat type of the user.
-          allOf:
-          - $ref: '#/components/schemas/s12.thepub.v1.ThePubSeatType'
-      description: User returned for search  operations.
-    s12.users.userfield.v1.UserFieldService.DisableFieldBody:
+          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldStatus'
+        query:
+          type: string
+          description: The attribute name to filter by
+    s12.typefield.v1.FieldCategory:
+      type: string
+      enum:
+      - FIELD_CATEGORY_UNSPECIFIED
+      - FIELD_CATEGORY_SYSTEM_FIELD
+      - FIELD_CATEGORY_CUSTOM_FIELD
+      default: FIELD_CATEGORY_UNSPECIFIED
+      description: "- FIELD_CATEGORY_UNSPECIFIED: Field category Unspecified.\n - FIELD_CATEGORY_SYSTEM_FIELD: Field category pre-defined.\n - FIELD_CATEGORY_CUSTOM_FIELD: Field category custom."
+      title: Category of Field
+    s12.users.userfield.v1.DeleteFieldResponse:
       type: object
-    s12.users.v1.ListUsersRequest:
+    s12.users.userfield.v1.FieldSettings:
       type: object
       properties:
-        filters:
-          description: 'Filter criteria. AND semantics across all populated filter fields.
-
-            At least one filter must be set, or list_all must be true.'
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.ListUsersFilters'
-        list_all:
+        show_on_profile:
           type: boolean
-          description: 'Set to true to return all active users in the org with no filter applied.
+          description: Required. Flag to specify if the attribute is visible/configurable on the user profile
+        allow_self_update:
+          type: boolean
+          description: Required. Flag to specify if all users can update the attribute for their own account
+        read_only:
+          type: boolean
+          description: 'Read only. True when the field is system-managed and cannot be edited by users:
 
-            Required when filters is empty or absent. Prevents accidental full org scans.'
-        page_size:
+            allow_self_update is locked off and clients should render its toggle as disabled.
+
+            Derived server-side from the set of read-only fields; ignored on write.'
+          readOnly: true
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
           type: integer
           format: int32
-          description: 'Maximum number of users to return per page. Range: 1–200. Defaults to 50.'
-        page_token:
+        message:
           type: string
-          description: 'Opaque pagination cursor returned by a previous ListUsers response.
-
-            Omit to start from the beginning.'
-      description: 'ListUsersRequest contains the parameters for listing users within the caller''s org.
-
-        The organization is derived from the caller''s JWT token.
-
-        Results are sorted by user_id ascending. No other sort order is supported in v1.'
-    s12.users.v1.FieldAttributeFilter:
-      type: object
-      properties:
-        field_id:
-          type: string
-          description: Field UUID. Stable across renames; preferred for production integrations.
-        field_name:
-          type: string
-          description: 'Field name as returned by ListFields. Resolved against the org''s field
-
-            catalogue at request time. Unknown names return InvalidArgument.'
-        values:
-          type: array
-          items:
-            type: string
-          description: 'Values to match. Matched with ANY (OR) semantics — a user is included if
-
-            they hold any of these values for the specified field. Maximum 100 values.
-
-            Required unless timestamp_range is set; the two are mutually exclusive.'
-        timestamp_range:
-          description: 'Inclusive datetime range for TIMESTAMP fields only. Mutually exclusive with
-
-            values; at least one of from/to must be set. Bounds are absolute UTC
-
-            instants compared against the stored value. Caller-timezone / wall-clock
-
-            ranges are out of scope; use an absolute instant.'
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.TimestampRange'
-      description: 'FieldAttributeFilter filters users by a specific user field value.
-
-        The field can be identified by UUID or human-readable name.
-
-        Multiple values within a single entry are combined with OR (ANY).
-
-        Multiple FieldAttributeFilter entries are combined with AND.'
-    s12.users.userattribute.v1.GetUserAttributesResponse:
-      type: object
-      properties:
-        attributes:
+        details:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.users.userattribute.v1.Attribute'
-          description: The list of attributes for the user
-    s12.thepub.v1.GetUserResponse:
-      type: object
-      properties:
-        user_id:
-          type: string
-          description: The id of the user.
-        firstname:
-          type: string
-          description: The first name of the user.
-        lastname:
-          type: string
-          description: The last name of the user.
-        email:
-          type: string
-          description: The email address of the user.
-        status:
-          description: The status of the user.
-          allOf:
-          - $ref: '#/components/schemas/s12.thepub.v1.ThePubUserStatus'
-        seat_type:
-          description: The seat type of the user.
-          allOf:
-          - $ref: '#/components/schemas/s12.thepub.v1.ThePubSeatType'
-      description: Result returned from `GetUser`
-      title: GetUserResponse
-    s12.typefield.v1.FieldOption:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id of a field select option.
-        label:
-          type: string
-          description: The label of a field select option.
-        order:
-          type: integer
-          format: int32
-          description: 'The display order of this option, 0-indexed.
-
-            Options should be displayed in ascending order of this field,
-
-            matching the order they were defined in the field settings.'
+            $ref: '#/components/schemas/google.protobuf.Any'
     s12.users.v1.User:
       type: object
       properties:
@@ -1597,19 +1115,501 @@ components:
         values are not guaranteed to be populated. Callers should handle empty
 
         or default values gracefully.'
-    s12.common.SubscriptionSeatTypes:
+    s12.permissions.v1.GetPermissionSetResponse:
+      type: object
+      properties:
+        permission_set:
+          description: The permission set.
+          allOf:
+          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetWithUsers'
+      description: The response for GetPermissionSet.
+    s12.thepub.v1.ThePubService.UpdateUserBody:
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: 'The first name of the user.
+
+
+            Optional'
+        lastname:
+          type: string
+          description: 'The last name of the user.
+
+
+            Optional'
+        new_email:
+          type: string
+          description: 'The email address of the user.
+
+
+            Optional'
+        status:
+          description: 'The status of the user.
+
+
+            Optional'
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.ThePubUserStatus'
+        seat_type:
+          description: 'The billing seat type of the added user, `free` or `full`.
+
+
+            Optional'
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.ThePubSeatType'
+      description: The parameters for `UpdateUser`
+      title: UpdateUserRequest
+    s12.users.userfield.v1.RestoreFieldResponse:
+      type: object
+    s12.users.userfield.v1.SetFieldSettingsResponse:
+      type: object
+      properties:
+        settings:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldSettings'
+          description: The updated field settings
+    s12.users.userfield.v1.UserFieldService.DisableFieldBody:
+      type: object
+    s12.users.v1.TimestampRange:
+      type: object
+      properties:
+        from:
+          type: string
+          format: date-time
+          description: Inclusive lower bound (>=). Omit for an open lower bound.
+        to:
+          type: string
+          format: date-time
+          description: Inclusive upper bound (<=). Omit for an open upper bound.
+      description: 'TimestampRange is an inclusive range over a TIMESTAMP field value. At least
+
+        one bound must be set; an omitted bound leaves that side open.'
+    s12.users.userfield.v1.UpdateFieldResponse:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/s12.users.userfield.v1.Field'
+    s12.users.userfield.v1.CreateFieldRequest:
+      type: object
+      properties:
+        data_type:
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
+          description: Required. Data type for the attribute
+        name:
+          type: string
+          description: Required. Attribute name
+        description:
+          type: string
+          description: The attribute description
+        settings:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldSettings'
+          description: The attribute visibility & editing settings
+        select_options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: Field select options
+    s12.users.userfield.v1.FieldStatus:
       type: string
       enum:
-      - SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
-      - SUBSCRIPTION_SEAT_TYPE_PREMIUM
-      - SUBSCRIPTION_SEAT_TYPE_COLLABORATOR
-      - SUBSCRIPTION_SEAT_TYPE_LITE
-      - SUBSCRIPTION_SEAT_TYPE_SERVICE_USER
-      - SUBSCRIPTION_SEAT_TYPE_SUPPORT
-      default: SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
-      title: SubscriptionSeatTypes is a list of potential subscription seat types
-    s12.users.userfield.v1.DeleteFieldResponse:
+      - FIELD_STATUS_UNSPECIFIED
+      - FIELD_STATUS_ENABLED
+      - FIELD_STATUS_DISABLED
+      default: FIELD_STATUS_UNSPECIFIED
+    s12.users.userfield.v1.ListFieldsRequest:
       type: object
+      properties:
+        filter:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.userfield.v1.ListFieldsRequest.FieldsFilter'
+          description: Filters to apply against the list of fields
+    s12.users.v1.ListUsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.User'
+          description: Users matching the filters on this page.
+        next_page_token:
+          type: string
+          description: Opaque cursor for the next page. Absent when there are no more results.
+      description: ListUsersResponse contains a page of users matching the request filters.
+    s12.users.v1.FieldAttributeFilter:
+      type: object
+      properties:
+        field_id:
+          type: string
+          description: Field UUID. Stable across renames; preferred for production integrations.
+        field_name:
+          type: string
+          description: 'Field name as returned by ListFields. Resolved against the org''s field
+
+            catalogue at request time. Unknown names return InvalidArgument.'
+        values:
+          type: array
+          items:
+            type: string
+          description: 'Values to match. Matched with ANY (OR) semantics — a user is included if
+
+            they hold any of these values for the specified field. Maximum 100 values.
+
+            Required unless timestamp_range is set; the two are mutually exclusive.'
+        timestamp_range:
+          description: 'Inclusive datetime range for TIMESTAMP fields only. Mutually exclusive with
+
+            values; at least one of from/to must be set. Bounds are absolute UTC
+
+            instants compared against the stored value. Caller-timezone / wall-clock
+
+            ranges are out of scope; use an absolute instant.'
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.TimestampRange'
+      description: 'FieldAttributeFilter filters users by a specific user field value.
+
+        The field can be identified by UUID or human-readable name.
+
+        Multiple values within a single entry are combined with OR (ANY).
+
+        Multiple FieldAttributeFilter entries are combined with AND.'
+    s12.thepub.v1.AddUserResponse:
+      type: object
+      properties:
+        user:
+          description: The user that was created.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.AddUserResponse.UserResponse'
+      description: Result returned from `AddUser`
+      title: AddUserResponse
+    s12.permissions.v1.PermissionSet:
+      type: object
+      properties:
+        identifier:
+          description: The identifier of the permission set.
+          allOf:
+          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetIdentifier'
+        modified_at:
+          type: string
+          format: date-time
+          description: Last modification time of the permission set.
+        permissions:
+          description: The permissions of the permission set.
+          allOf:
+          - $ref: '#/components/schemas/s12.permissions.v1.Permissions'
+        default_for_seat_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
+          description: The seat types that this permission set is the default for.
+        permissions_denylist:
+          description: The permissions denylist of the permission set.
+          allOf:
+          - $ref: '#/components/schemas/s12.permissions.v1.Permissions'
+        supports_email_less:
+          type: boolean
+          description: 'Whether the permission set is applicable to users without an email-based
+
+            username. Derived from `permissions` and the non-email username denylist;
+
+            mirrors PermissionSetIdentifier.supports_email_less for callers consuming
+
+            the full PermissionSet. Server-computed; ignored on writes.'
+      description: PermissionSet represents a permission set.
+    s12.users.userattribute.v1.AttributeValue:
+      type: object
+      properties:
+        string_value:
+          type: string
+          description: The string value of a field.
+        timestamp_value:
+          type: string
+          format: date-time
+          description: The timestamp value of a field.
+        uuid_value:
+          type: string
+          description: The UUID value of a field
+    s12.thepub.v1.ThePubUserStatus:
+      type: string
+      enum:
+      - active
+      - inactive
+      default: active
+      description: "- active: Active user.\n - inactive: Inactive user."
+      title: ThePubUserStatus
+    s12.permissions.v1.AssignPermissionSetRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Optional. The ID of the permission set.
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: The IDs of the users to assign.
+        name:
+          type: string
+          description: 'Optional. The name of the permission set to assign.
+
+            De-prioritised in favour of id.'
+      description: The request for AssignPermissionSet.
+    s12.users.userfield.v1.UserFieldService.SetFieldSettingsBody:
+      type: object
+      properties:
+        settings:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.userfield.v1.FieldSettings'
+          description: The new field settings
+    s12.thepub.v1.AddUserRequest:
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: The first name of the user.
+        lastname:
+          type: string
+          description: The last name of the user.
+        email:
+          type: string
+          description: The email address of the user.
+        password:
+          type: string
+          description: The password of the user.
+        message:
+          type: string
+          description: Message passed to the newly created user.
+        seat_type:
+          description: The billing seat type of the added user, `free` or `full`.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.ThePubSeatType'
+      description: The parameters for `AddUser`
+      title: AddUserRequest
+      required:
+      - firstname
+      - lastname
+      - email
+      - password
+    s12.permissions.v1.ListPermissionSetsRequest:
+      type: object
+      properties:
+        search:
+          type: string
+          description: Search input to filter down the permission sets.
+        sort:
+          description: The sorting to apply.
+          allOf:
+          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetSort'
+        include_users:
+          type: boolean
+          description: Whether to include users in the response.
+        limit:
+          type: integer
+          format: int32
+          description: The maximum number of permission sets to return.
+        offset:
+          type: integer
+          format: int32
+          description: The offset of the first permission set to return.
+        filters:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.permissions.v1.ListPermissionSetsFilter'
+          description: (Optional). The filters to apply.
+      description: The request for ListPermissionSets.
+    s12.permissions.v1.PermissionSetOrder:
+      type: string
+      enum:
+      - PERMISSION_SET_ORDER_UNSPECIFIED
+      - PERMISSION_SET_ORDER_ASC
+      - PERMISSION_SET_ORDER_DESC
+      default: PERMISSION_SET_ORDER_UNSPECIFIED
+      description: "The possible sort orders for permission sets.\n\n - PERMISSION_SET_ORDER_UNSPECIFIED: Unspecified order.\n - PERMISSION_SET_ORDER_ASC: Ascending order.\n - PERMISSION_SET_ORDER_DESC: Descending order."
+    s12.thepub.v1.UpdateUserResponse:
+      type: object
+      description: Result returned from `UpdateUser`
+      title: UpdateUserResponse
+    s12.users.userfield.v1.ListFieldsResponse:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.userfield.v1.Field'
+          description: List of user fields that satisfy the filter condition sorted by System Fields, Custom Fields
+    s12.thepub.v1.SearchUsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.thepub.v1.SearchUsersResponse.User'
+          description: The users that match the search criteria.
+      description: Result returned from `SearchUsers`
+      title: SearchUsersResponse
+    s12.permissions.v1.PermissionSetSortCriteria:
+      type: string
+      enum:
+      - PERMISSION_SET_SORT_CRITERIA_UNSPECIFIED
+      - PERMISSION_SET_SORT_CRITERIA_DEFAULT
+      - PERMISSION_SET_SORT_CRITERIA_NAME
+      - PERMISSION_SET_SORT_CRITERIA_MIN_SEAT_TYPE
+      - PERMISSION_SET_SORT_CRITERIA_LAST_MODIFIED
+      default: PERMISSION_SET_SORT_CRITERIA_UNSPECIFIED
+      description: "The possible criteria to sort permission sets by.\n\n - PERMISSION_SET_SORT_CRITERIA_UNSPECIFIED: Unspecified sort.\n - PERMISSION_SET_SORT_CRITERIA_DEFAULT: Sort by the default order, which may or may not be equivalent as any other option.\n - PERMISSION_SET_SORT_CRITERIA_NAME: Sort by name.\n - PERMISSION_SET_SORT_CRITERIA_MIN_SEAT_TYPE: Sort by minimum seat type.\n - PERMISSION_SET_SORT_CRITERIA_LAST_MODIFIED: Sort by last modified date."
+    s12.users.userfield.v1.UserFieldService.UpdateFieldBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Attribute name
+        description:
+          type: string
+          description: The attribute description
+        select_options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: Field select options
+        update_mask:
+          type: string
+          description: 'Required. The attributes (such as name etc.) you want to update for the field,
+
+            specified in the parameters. For example, the update_mask=name parameter
+
+            indicates that only the name will be updated in a request, any other
+
+            attributes provided in your request body will be ignored.'
+    s12.thepub.v1.SearchUsersResponse.User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the user.
+        firstname:
+          type: string
+          description: The first name of the user.
+        lastname:
+          type: string
+          description: The last name of the user.
+        email:
+          type: string
+          description: The email address of the user.
+        status:
+          description: The status of the user.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.ThePubUserStatus'
+        seat_type:
+          description: The seat type of the user.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.ThePubSeatType'
+      description: User returned for search  operations.
+    s12.permissions.v1.PermissionSetWithUsers:
+      type: object
+      properties:
+        permission_set:
+          description: The permission set.
+          allOf:
+          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSet'
+        users:
+          type: array
+          items:
+            type: string
+          description: A subset of the users assigned to the permission set.
+        user_count:
+          type: integer
+          format: int32
+          description: The number of users assigned to the permission set.
+      title: A permission set and its users
+    s12.users.userattribute.v1.SetUserAttributesResponse:
+      type: object
+    s12.thepub.v1.AddUserResponse.UserResponse:
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: The first name of the created user.
+        lastname:
+          type: string
+          description: The last name of the created user.
+        email:
+          type: string
+          description: The email of the created user.
+        user_id:
+          type: string
+          description: The id of the created user.
+      title: User response
+    s12.permissions.v1.PermissionSetSort:
+      type: object
+      properties:
+        criteria:
+          description: The criteria to sort by.
+          allOf:
+          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetSortCriteria'
+        order:
+          description: The order to sort by.
+          allOf:
+          - $ref: '#/components/schemas/s12.permissions.v1.PermissionSetOrder'
+        prioritise_seat_type:
+          description: The seat type to prioritise. If set, permission sets with this seat type will be returned first. Cannot be used with criteria set to seat_type.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
+      description: The parameters to sort permission sets by (criteria and order).
+    s12.typefield.v1.FieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of a field select option.
+        label:
+          type: string
+          description: The label of a field select option.
+        order:
+          type: integer
+          format: int32
+          description: 'The display order of this option, 0-indexed.
+
+            Options should be displayed in ascending order of this field,
+
+            matching the order they were defined in the field settings.'
+    s12.users.userfield.v1.CreateFieldResponse:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/s12.users.userfield.v1.Field'
+    s12.thepub.v1.GetUserResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The id of the user.
+        firstname:
+          type: string
+          description: The first name of the user.
+        lastname:
+          type: string
+          description: The last name of the user.
+        email:
+          type: string
+          description: The email address of the user.
+        status:
+          description: The status of the user.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.ThePubUserStatus'
+        seat_type:
+          description: The seat type of the user.
+          allOf:
+          - $ref: '#/components/schemas/s12.thepub.v1.ThePubSeatType'
+      description: Result returned from `GetUser`
+      title: GetUserResponse
   securitySchemes:
     BearerAuthentication:
       type: http

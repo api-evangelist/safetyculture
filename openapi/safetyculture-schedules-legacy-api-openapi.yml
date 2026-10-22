@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Mitti Schedules (legacy) API
+  title: Mitti Schedules (legacy) Schedules (legacy) API
   version: v1.349.8
   contact:
     name: Mitti Support
@@ -166,107 +166,48 @@ paths:
       - Schedules (legacy)
 components:
   schemas:
-    s12.schedules.v1.ScheduleItem.Entity:
-      type: object
-      example:
-        id: 0e7cff72-f919-4c84-aa37-e847b306423e
-        type: USER
-        name: Joe Bloggs
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the entity
-        type:
-          allOf:
-          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.EntityType'
-          description: The type of entity, e.g. "user" or "role"
-        name:
-          type: string
-          readOnly: true
-          description: The name of the entity
-      description: Entity represent the entity in a schedule, either creator or assignee
-      title: ScheduleItem.Entity
-      required:
-      - id
-      - type
-    s12.schedules.v1.ScheduleItem.Reminder:
-      type: object
-      example:
-        event: START
-        duration: PT5M
-      properties:
-        event:
-          allOf:
-          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.ReminderEventType'
-          description: On what event to remind the assignees
-        duration:
-          type: string
-          description: 'ISO8601 duration string, e.g. PT1H. How long before the event to remind
-
-            the assignees.'
-      description: Reminder represents a reminder for a schedule item
-      title: ScheduleItem.Reminder
-      required:
-      - event
-      - duration
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
-    s12.schedules.v1.ScheduleItem.MustComplete:
+    s12.schedules.v1.ScheduleItem.Status:
       type: string
       enum:
-      - MUST_COMPLETE_UNSPECIFIED
-      - ONE
-      - ALL
-      default: MUST_COMPLETE_UNSPECIFIED
-      description: "- MUST_COMPLETE_UNSPECIFIED: Unspecified must complete value\n - ONE: Schedule must be completed by one assignee\n - ALL: Schedule must be completed by all assignees"
-      title: 'MustComplete is whom must complete a given schedule, either one assignee or
-
-        all assignees'
+      - STATUS_UNSPECIFIED
+      - ACTIVE
+      - PAUSED
+      - NO_TEMPLATE
+      - NO_ASSIGNEE
+      - FINISHED
+      - SUBSCRIPTION_INACTIVE
+      - NO_SITE
+      default: STATUS_UNSPECIFIED
+      description: "- STATUS_UNSPECIFIED: Unspecified status value\n - ACTIVE: Default value - schedule item is still active\n - PAUSED: Schedule has been paused e.g. manually paused/org frozen\n - NO_TEMPLATE: The template used for this schedule item has been deleted/archived\n - NO_ASSIGNEE: No valid assignees exist for this schedule item anymore\n - FINISHED: The schedule item has hit its end date or count limit and is now complete\n - SUBSCRIPTION_INACTIVE: User/org subscription is inactive\n - NO_SITE: The site used for this schedule has been removed"
+      title: Status is the current status of the schedule item
     s12.schedules.v1.DeleteScheduleItemResponse:
       type: object
       description: Result returned from `DeleteScheduleItem`
       title: DeleteScheduleItemResponse
-    s12.schedules.v1.ScheduleItem.NextOccurrence:
-      type: object
-      properties:
-        start:
-          type: string
-          format: date-time
-          description: The timestamp in the Internet Date-Time format when the next occurrence will occur
-        due:
-          type: string
-          format: date-time
-          description: The timestamp in the Internet Date-Time format when the next occurrence is due by
-      description: NextOccurrence is the next time the schedule item will occur for assignees
-      title: ScheduleItem.NextOccurrence
-    s12.schedules.v1.CreateScheduleItemResponse:
+    s12.schedules.v1.UpdateScheduleItemResponse:
       type: object
       properties:
         id:
           type: string
-          description: The id of the newly created schedule item
-      description: Result returned from `CreateScheduleItem`
-      title: CreateScheduleItemResponse
-    s12.schedules.v1.ScheduleItem.EntityType:
+          description: The identifier of the updated schedule item
+      description: Result returned from `UpdateScheduleItem`
+      title: UpdateScheduleItemResponse
+    s12.schedules.v1.ScheduleItem.DocumentType:
       type: string
       enum:
-      - ENTITY_TYPE_UNSPECIFIED
-      - USER
-      - ROLE
-      default: ENTITY_TYPE_UNSPECIFIED
-      description: "- ENTITY_TYPE_UNSPECIFIED: Unspecified entity type\n - USER: User\n - ROLE: Role"
-      title: EntityType is the type of entity, either a user or a role
+      - DOCUMENT_TYPE_UNSPECIFIED
+      - TEMPLATE
+      default: DOCUMENT_TYPE_UNSPECIFIED
+      description: "- DOCUMENT_TYPE_UNSPECIFIED: Unspecified document type\n - TEMPLATE: Inspection Template"
+      title: DocumentType is the type of document (e.g. template)
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     s12.schedules.v1.ScheduleItem:
       type: object
       properties:
@@ -362,6 +303,57 @@ components:
           - $ref: '#/components/schemas/s12.schedules.v1.MigrationStatus'
       description: ScheduleItem represents a the rule for a reoccuring schedule event
       title: ScheduleItem
+    s12.schedules.v1.ScheduleItem.StartTime:
+      type: object
+      example:
+        hour: 15
+        minute: 56
+      properties:
+        hour:
+          type: integer
+          format: int32
+          description: The hour of the day to start the schedule
+        minute:
+          type: integer
+          format: int32
+          description: The minute of the day to start the schedule
+      description: StartTime represents the start time of a schedule item
+      title: ScheduleItem.StartTime
+      required:
+      - hour
+      - minute
+    s12.schedules.v1.CreateScheduleItemResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the newly created schedule item
+      description: Result returned from `CreateScheduleItem`
+      title: CreateScheduleItemResponse
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.schedules.v1.ScheduleItem.MustComplete:
+      type: string
+      enum:
+      - MUST_COMPLETE_UNSPECIFIED
+      - ONE
+      - ALL
+      default: MUST_COMPLETE_UNSPECIFIED
+      description: "- MUST_COMPLETE_UNSPECIFIED: Unspecified must complete value\n - ONE: Schedule must be completed by one assignee\n - ALL: Schedule must be completed by all assignees"
+      title: 'MustComplete is whom must complete a given schedule, either one assignee or
+
+        all assignees'
     s12.schedules.v1.ListScheduleItemsResponse:
       type: object
       properties:
@@ -388,71 +380,79 @@ components:
           description: Total number of schedule items found
       description: Result returned from `ListScheduleItems`
       title: ListScheduleItemsResponse
-    s12.schedules.v1.ScheduleItem.StartTime:
+    s12.schedules.v1.ScheduleItem.Reminder:
       type: object
       example:
-        hour: 15
-        minute: 56
+        event: START
+        duration: PT5M
       properties:
-        hour:
-          type: integer
-          format: int32
-          description: The hour of the day to start the schedule
-        minute:
-          type: integer
-          format: int32
-          description: The minute of the day to start the schedule
-      description: StartTime represents the start time of a schedule item
-      title: ScheduleItem.StartTime
+        event:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.ReminderEventType'
+          description: On what event to remind the assignees
+        duration:
+          type: string
+          description: 'ISO8601 duration string, e.g. PT1H. How long before the event to remind
+
+            the assignees.'
+      description: Reminder represents a reminder for a schedule item
+      title: ScheduleItem.Reminder
       required:
-      - hour
-      - minute
-    s12.schedules.v1.ScheduleItem.Status:
+      - event
+      - duration
+    s12.schedules.v1.MigrationStatus:
       type: string
       enum:
-      - STATUS_UNSPECIFIED
-      - ACTIVE
-      - PAUSED
-      - NO_TEMPLATE
-      - NO_ASSIGNEE
-      - FINISHED
-      - SUBSCRIPTION_INACTIVE
-      - NO_SITE
-      default: STATUS_UNSPECIFIED
-      description: "- STATUS_UNSPECIFIED: Unspecified status value\n - ACTIVE: Default value - schedule item is still active\n - PAUSED: Schedule has been paused e.g. manually paused/org frozen\n - NO_TEMPLATE: The template used for this schedule item has been deleted/archived\n - NO_ASSIGNEE: No valid assignees exist for this schedule item anymore\n - FINISHED: The schedule item has hit its end date or count limit and is now complete\n - SUBSCRIPTION_INACTIVE: User/org subscription is inactive\n - NO_SITE: The site used for this schedule has been removed"
-      title: Status is the current status of the schedule item
-    s12.schedules.v1.ScheduleItem.ReminderEventType:
-      type: string
-      enum:
-      - REMINDER_EVENT_TYPE_UNSPECIFIED
-      - START
-      - DUE
-      default: REMINDER_EVENT_TYPE_UNSPECIFIED
-      description: "- REMINDER_EVENT_TYPE_UNSPECIFIED: Unspecified reminder event type\n - START: Default value - start of the schedule\n - DUE: End of the schedule"
-      title: ReminderEventType is the type of reminder event
-    s12.schedules.v1.ScheduleItem.Document:
+      - MIGRATION_STATUS_UNSPECIFIED
+      - MIGRATION_STATUS_MIGRATED
+      - MIGRATION_STATUS_STARTED
+      default: MIGRATION_STATUS_UNSPECIFIED
+      description: "MigrationStatus represents the legacy to new self-service migration state of a schedule item.\n\n - MIGRATION_STATUS_UNSPECIFIED: Default value; item has not been through migration.\n - MIGRATION_STATUS_MIGRATED: Item was successfully migrated to new scheduling.\n - MIGRATION_STATUS_STARTED: Item is being migrated: paused in legacy but new schedule has not been created yet."
+    s12.schedules.v1.ScheduleItem.Entity:
       type: object
       example:
         id: 0e7cff72-f919-4c84-aa37-e847b306423e
-        type: TEMPLATE
-        name: Joe's JSA Template
+        type: USER
+        name: Joe Bloggs
       properties:
         id:
           type: string
-          description: The unique identifier for the document
+          description: The unique identifier for the entity
         type:
           allOf:
-          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.DocumentType'
-          description: The type of document, e.g. "template"
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.EntityType'
+          description: The type of entity, e.g. "user" or "role"
         name:
           type: string
           readOnly: true
-          description: The name of the document
-      description: Document represents the document in a schedule
-      title: ScheduleItem.Document
+          description: The name of the entity
+      description: Entity represent the entity in a schedule, either creator or assignee
+      title: ScheduleItem.Entity
       required:
       - id
       - type
+    s12.schedules.v1.ScheduleItem.NextOccurrence:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: The timestamp in the Internet Date-Time format when the next occurrence will occur
+        due:
+          type: string
+          format: date-time
+          description: The timestamp in the Internet Date-Time format when the next occurrence is due by
+      description: NextOccurrence is the next time the schedule item will occur for assignees
+      title: ScheduleItem.NextOccurrence
+    s12.schedules.v1.ScheduleItem.EntityType:
+      type: string
+      enum:
+      - ENTITY_TYPE_UNSPECIFIED
+      - USER
+      - ROLE
+      default: ENTITY_TYPE_UNSPECIFIED
+      description: "- ENTITY_TYPE_UNSPECIFIED: Unspecified entity type\n - USER: User\n - ROLE: Role"
+      title: EntityType is the type of entity, either a user or a role
     s12.schedules.v1.UpdateScheduleItem:
       type: object
       properties:
@@ -552,38 +552,38 @@ components:
       - from_date
       - assignees
       - document
-    google.protobuf.Any:
+    s12.schedules.v1.ScheduleItem.ReminderEventType:
+      type: string
+      enum:
+      - REMINDER_EVENT_TYPE_UNSPECIFIED
+      - START
+      - DUE
+      default: REMINDER_EVENT_TYPE_UNSPECIFIED
+      description: "- REMINDER_EVENT_TYPE_UNSPECIFIED: Unspecified reminder event type\n - START: Default value - start of the schedule\n - DUE: End of the schedule"
+      title: ReminderEventType is the type of reminder event
+    s12.schedules.v1.ScheduleItem.Document:
       type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.schedules.v1.UpdateScheduleItemResponse:
-      type: object
+      example:
+        id: 0e7cff72-f919-4c84-aa37-e847b306423e
+        type: TEMPLATE
+        name: Joe's JSA Template
       properties:
         id:
           type: string
-          description: The identifier of the updated schedule item
-      description: Result returned from `UpdateScheduleItem`
-      title: UpdateScheduleItemResponse
-    s12.schedules.v1.ScheduleItem.DocumentType:
-      type: string
-      enum:
-      - DOCUMENT_TYPE_UNSPECIFIED
-      - TEMPLATE
-      default: DOCUMENT_TYPE_UNSPECIFIED
-      description: "- DOCUMENT_TYPE_UNSPECIFIED: Unspecified document type\n - TEMPLATE: Inspection Template"
-      title: DocumentType is the type of document (e.g. template)
-    s12.schedules.v1.MigrationStatus:
-      type: string
-      enum:
-      - MIGRATION_STATUS_UNSPECIFIED
-      - MIGRATION_STATUS_MIGRATED
-      - MIGRATION_STATUS_STARTED
-      default: MIGRATION_STATUS_UNSPECIFIED
-      description: "MigrationStatus represents the legacy to new self-service migration state of a schedule item.\n\n - MIGRATION_STATUS_UNSPECIFIED: Default value; item has not been through migration.\n - MIGRATION_STATUS_MIGRATED: Item was successfully migrated to new scheduling.\n - MIGRATION_STATUS_STARTED: Item is being migrated: paused in legacy but new schedule has not been created yet."
+          description: The unique identifier for the document
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.schedules.v1.ScheduleItem.DocumentType'
+          description: The type of document, e.g. "template"
+        name:
+          type: string
+          readOnly: true
+          description: The name of the document
+      description: Document represents the document in a schedule
+      title: ScheduleItem.Document
+      required:
+      - id
+      - type
   securitySchemes:
     BearerAuthentication:
       type: http

@@ -1,4 +1,4 @@
-generated: '2026-10-14'
+generated: '2026-10-20'
 method: probed
 source: pre-flight dossier (docs platform, portal detections) + CNAME chains and response headers of the hosts apis.yml names
 registry: all/0-working/vendors.yml
@@ -19,17 +19,29 @@ vendors:
 - vendor: cloudflare
   name: Cloudflare
   area: cdn
-  host: safetyculture.com
+  host: mitti.com
   evidence: header:cf-ray
   signal: header
   confidence: high
   kin_score:
   - https_enforced
   - hsts
+- vendor: readme
+  name: ReadMe
+  area: documentation
+  host: developer.mitti.com
+  evidence: cname:readmessl.com
+  signal: docs-platform
+  confidence: high
+  kin_score:
+  - openapi_published
+  - changelog_present
+  - llms_txt
+  - api_explorer
 - vendor: vercel
   name: Vercel
   area: hosting
-  host: safetyculture.com
+  host: mitti.com
   evidence: header:x-vercel-id
   signal: header
   confidence: high
@@ -37,20 +49,24 @@ vendors:
 reliance:
   areas_vendor_served:
   - cdn
+  - documentation
   - hosting
-  vendor_count: 2
+  vendor_count: 3
   areas_observed: 12
-  share_of_observable_areas: 0.167
+  share_of_observable_areas: 0.25
   note: areas where a third party was DETECTED serving this provider; an area absent here was either self-run or not observed, and this script
     cannot tell those apart
 checked:
-- 'docs-platform: not probed'
-- safetyculture.com (Website)
-- developer.safetyculture.com (DeveloperPortal)
-- developer.safetyculture.com (Documentation)
-- developer.safetyculture.com (APIReference)
-- developer.safetyculture.com (GettingStarted)
-- app.safetyculture.com (SignUp)
-- safetyculture.com (Support)
-- status.safetyculture.com (StatusPage)
-- api.safetyculture.io (baseURL)
+- 'docs-platform: readme'
+- mitti.com (Website)
+- developer.mitti.com (DeveloperPortal)
+- developer.mitti.com (Documentation)
+- developer.mitti.com (APIReference)
+- developer.mitti.com (GettingStarted)
+- app.mitti.com (SignUp)
+- app.safetyculture.com (Login)
+- help.mitti.com (Support)
+- community.mitti.com (Community)
+- status.mitti.com (StatusPage)
+- api.mitti.com (baseURL)
+- mcp.mitti.com (mcp)

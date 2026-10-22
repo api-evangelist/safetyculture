@@ -1,0 +1,11 @@
+generated: '2026-10-20'
+method: searched
+source: https://mitti.com/pricing
+docs: https://mitti.com/pricing
+description: The pricing page lists "Sandbox testing environment" (and a "Test Environment" row in the comparison
+  table) as an Enterprise plan feature. The developer docs index (llms.txt, 489 pages) has no sandbox/testing page,
+  and no test keys, test-vs-live token prefixes or fixtures are published.
+availability: Enterprise plan
+test_credentials: []
+note: No published test values; tokens are created per environment by the customer (authentication docs recommend
+  separate tokens for development, staging, production).

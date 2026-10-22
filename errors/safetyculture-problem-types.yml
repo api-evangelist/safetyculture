@@ -1,20 +1,31 @@
-generated: '2026-10-14'
+generated: '2026-10-20'
 method: derived
 generator: derive-problem-types.py
 source:
-- openapi/safetyculture-mitti-api-openapi.yml
+- openapi/safetyculture-actions-api-openapi.yml
+- openapi/safetyculture-apps-api-openapi.yml
+- openapi/safetyculture-assets-api-openapi.yml
+- openapi/safetyculture-bulk-user-operations-api-openapi.yml
+- openapi/safetyculture-companies-api-openapi.yml
+- openapi/safetyculture-credentials-api-openapi.yml
+- openapi/safetyculture-data-feeds-api-openapi.yml
+- openapi/safetyculture-directory-sites-api-openapi.yml
+- openapi/safetyculture-documents-api-openapi.yml
+- openapi/safetyculture-groups-api-openapi.yml
+- openapi/safetyculture-heads-up-api-openapi.yml
+- openapi/safetyculture-inspections-api-openapi.yml
 format: custom
 envelope:
   media_type: application/json
   schema: google.rpc.Status
 coverage:
-  operations: 416
+  operations: 418
   statuses_declared: 1
 problems:
 - status: default
   title: null
   description: An unexpected error response.
-  operations: 416
+  operations: 418
   media_types:
   - application/json
   schema: google.rpc.Status

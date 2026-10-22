@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Mitti Directory (Sites) API
+  title: Mitti Directory (Sites) Directory (Sites) API
   version: v1.349.8
   contact:
     name: Mitti Support
@@ -620,183 +620,20 @@ paths:
       - Directory (Sites)
 components:
   schemas:
-    s12.directory.v1.CreateFolderRequest:
+    s12.directory.v1.GetInheritedUsersByFolderResponse:
       type: object
       properties:
-        name:
-          type: string
-          description: Required. Non-empty folder name. Limited to maximum 250 characters.
-        parent_id:
-          type: string
-          description: 'Optional. Parent folder UUID. If unspecified, will be created as a root
-
-            folder'
-        id:
-          type: string
-          description: Optional. Folder UUID. If unspecified, backend will generate the ID.
-        meta_label:
-          type: string
-          description: 'Required. Must be one of: "location", "area", "region", "state", or "country".
-
-            Note that these meta labels may not match custom site hierarchy labels used by the organization.'
-        domain:
-          type: string
-          description: 'domain represents the type/domain/hierarchy for the folder. This is used
-
-            for getting folders of a certain domain, i.e. getting all `template`
-
-            folders or `site` folders'
-      description: The parameters for `CreateFolderRequest`
-      title: CreateFolderRequest
-      required:
-      - name
-      - meta_label
-    s12.directory.v1.GetFoldersByParentResponse:
-      type: object
-      properties:
-        folders:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.directory.v1.FolderWithMembersCount'
-          description: 'List of children folders with a count of
-
-            their explicitly associated members
-
-            When `include_members_count` is set to false
-
-            `members_count` in `FolderWithMembersCount` is
-
-            always set to the default zero value'
-        next_page_token:
-          type: string
-          description: 'Optional. base64 encoded. If this field is present, the value should be
-
-            used in subsequent calls to GetFoldersByParent to get the next page of
-
-            results. Otherwise, no further calls should be made.'
-      description: Result returned from `GetFoldersByParentResponse`
-      title: GetFoldersByParentResponse
-    s12.directory.v1.FolderWithAncestors:
-      type: object
-      properties:
-        folder:
-          allOf:
-          - $ref: '#/components/schemas/s12.directory.v1.Folder'
-          description: The folder we are interested in
-        ancestors:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.directory.v1.Folder'
-          description: 'The folders ancestors. For example, when returning a `location` leaf node,
-
-            the ancestors will be the [`area`,`region`] folders, when applicable'
-        members_count:
-          type: integer
-          format: int32
-          description: Members count are the count of active users associated with the folder.
-        has_children:
-          type: boolean
-          description: Whether the folder has children or not
-      description: FolderWithAncestors represents a a folder with an array of ancestor folders
-      title: FolderWithAncestors
-    s12.directory.v1.RemoveFoldersAssociationResponse.Status:
-      type: string
-      enum:
-      - UNKNOWN
-      - REMOVED
-      - NOT_FOUND
-      default: UNKNOWN
-      description: "- UNKNOWN: Status unknown\n - REMOVED: Folder was successfully removed from the user\n - NOT_FOUND: Folder user association was not found"
-      title: Resulting status values after removing a folder from a user
-    s12.directory.v1.AddUsersFoldersAssociationsResponse.Status:
-      type: string
-      enum:
-      - STATUS_UNSPECIFIED
-      - STATUS_ADDED
-      - STATUS_ALREADY_DIRECT_MEMBER
-      - STATUS_ALREADY_INHERITED_MEMBER
-      - STATUS_REMOVED
-      default: STATUS_UNSPECIFIED
-      description: "- STATUS_UNSPECIFIED: Status unknown\n - STATUS_ADDED: Folder was successfully associated to the user\n - STATUS_ALREADY_DIRECT_MEMBER: User was already a direct member of the folder\n - STATUS_ALREADY_INHERITED_MEMBER: User was already an inherited member of the folder\n - STATUS_REMOVED: User was removed from the folder (side-effect of being added to an ancestor)"
-      title: Resulting status values after associating a folder and user
-    s12.directory.v1.AddUsersFoldersAssociationsResponse.FolderAssignmentsStatuses:
-      type: object
-      properties:
-        users:
+        user_folders:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse.Status'
-          description: 'Map of UserIDs for users with an association type of "MEMBER" with their
+            $ref: '#/components/schemas/s12.directory.v1.FolderList'
+          description: 'Map of UserIDs for users with an inherited association type of "MEMBER" for
 
-            resulting status after adding access to the folder. This map corresponds to the
+            the specified folder. The list of folders per user is ordered from highest to
 
-            list of UserIDs passed through `user_ids` in `AddUsersFoldersAssociationsRequest`'
-        manager_status:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse.Status'
-          description: 'Map of UserIDs for users with an association type of "MANAGER" with their
-
-            resulting status after adding access to the folder. This map corresponds to the
-
-            list of UserIDs passed through `manager_user_ids` in `AddUsersFoldersAssociationsRequest`'
-      title: FolderAssignmentsStatuses maps the user IDs to their status for the given folder
-    s12.directory.v1.DeleteFoldersResponse:
-      type: object
-      properties:
-        folder_ids:
-          type: array
-          items:
-            type: string
-          description: List of deleted folderIDs
-      description: Result returned from `DeleteFoldersResponse`
-      title: DeleteFoldersResponse
-    s12.directory.v1.AddUsersFoldersAssociationsRequest:
-      type: object
-      properties:
-        assignments:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsRequest.FolderAssignments'
-          description: Map of folder ID to users assignments
-      title: AddUsersFoldersAssociationsRequest is the request for the `AddUsersFoldersAssociations` endpoint
-    s12.directory.v1.MoveFoldersResponse:
-      type: object
-      properties:
-        new_parent_id:
-          type: string
-          description: 'New parent folder ID. Empty means the folder has been moved
-
-            as root.'
-      description: Result returned from `MoveFoldersResponse`
-      title: MoveFoldersResponse
-    s12.directory.v1.SearchFoldersResponse:
-      type: object
-      properties:
-        folders:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.directory.v1.FolderWithAncestors'
-          description: An array of folders with their ancestors that match the search results
-        folder_count:
-          type: integer
-          format: int32
-          description: The total number of folders found for the search query
-        next_page_token:
-          type: string
-          description: 'Optional. base64 encoded. If this field is present, the value should be
-
-            used in subsequent calls to SearchFolders to get the next page of results.
-
-            Otherwise, no further calls should be made.'
-        folders_enabled:
-          type: boolean
-          description: Whether or not the org settings setting is enabled.
-      description: Result returned from `SearchFoldersResponse`
-      title: SearchFoldersResponse
+            highest to lowest ancestor.'
+      description: Result returned from `GetInheritedUsersByFolderResponse`
+      title: GetInheritedUsersByFolderResponse
     s12.directory.v1.GetAllUsersByFolderResponse:
       type: object
       properties:
@@ -809,138 +646,6 @@ components:
             requested folder'
       description: Result returned from `GetAllUsersByFolderResponse`
       title: GetAllUsersByFolderResponse
-    s12.directory.v1.RemoveFoldersAssociationResponse:
-      type: object
-      properties:
-        folder_status:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/s12.directory.v1.RemoveFoldersAssociationResponse.Status'
-          description: 'Map of folders ids with their resulting status after removing the user
-
-            access to that folder. This map is populated with the list of folders
-
-            passed in through the `RemoveFoldersAssociation`
-
-            For example: <Key,Value> -> <5441fffcde344415bb7ccaceda27e196,
-
-            Status>'
-      description: Result returned from `RemoveFoldersAssociationResponse`
-      title: RemoveFoldersAssociationResponse
-    s12.directory.v1.GetFolderIDsForUserResponse:
-      type: object
-      properties:
-        folder_ids:
-          type: array
-          items:
-            type: string
-          description: 'List of folder IDs the user has access to.
-
-            For example: ''5441fffcde344415bb7ccaceda27e196'''
-        folder_paths:
-          type: array
-          items:
-            type: string
-          description: 'List of folder paths the user has access to.
-
-            For example: ''07c7acbf5b1f450d817e5ebb11fda832.5441fffcde344415bb7ccaceda27e196'''
-      description: Result returned from `GetFolderIDsForUserResponse`
-      title: GetFolderIDsForUserResponse
-    s12.directory.v1.FoldersOrderBy:
-      type: object
-      example:
-        sort_field: 1
-        sort_order: 1
-      properties:
-        sort_field:
-          allOf:
-          - $ref: '#/components/schemas/s12.directory.v1.FoldersOrderBy.SortField'
-          description: The field to order by
-        sort_order:
-          allOf:
-          - $ref: '#/components/schemas/s12.directory.v1.FoldersOrderBy.SortOrder'
-          description: The direction to order by
-      description: FoldersOrderBy represents the sort order folders will be returned in
-      title: FoldersOrderBy
-    s12.directory.v1.GetOrgLabelsResponse:
-      type: object
-      properties:
-        custom_labels:
-          type: object
-          additionalProperties:
-            type: string
-          description: 'Custom labels is a map of ''meta_label'' to the display label to return
-
-            instead'
-      description: Result returned from `GetOrgLabelsResponse`
-      title: GetOrgLabelsResponse
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
-    s12.directory.v1.FolderList:
-      type: object
-      properties:
-        folders:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.directory.v1.Folder'
-          description: The list of folders in the message
-      description: FolderList represents an array of folders
-      title: FolderList
-    s12.directory.v1.FoldersFilter:
-      type: object
-      properties:
-        not:
-          type: boolean
-          description: If true, exclude results that match the condition
-        meta_label:
-          type: string
-          description: Filter on the status
-        folder_id:
-          type: string
-          description: Filter on a specific folder id
-        is_dynamic:
-          type: boolean
-          description: Filter on whether a folder is dynamic or not
-      description: FoldersFilter represents a filter when getting folders
-      title: FoldersFilter
-    s12.directory.v1.CreateFolderResponse:
-      type: object
-      properties:
-        folder:
-          allOf:
-          - $ref: '#/components/schemas/s12.directory.v1.Folder'
-          description: newly created folder
-      description: Result returned from `CreateFolderRequest`
-      title: CreateFolderResponse
-    s12.directory.v1.AddUsersFoldersAssociationsRequest.FolderAssignments:
-      type: object
-      properties:
-        user_ids:
-          type: array
-          items:
-            type: string
-          description: List of UserIDs for users to be granted a "MEMBER" association with the given folder
-      title: FolderAssignments represents the folders to be assigned to a given user
-    s12.directory.v1.FoldersOrderBy.SortOrder:
-      type: string
-      enum:
-      - SORT_ORDER_UNSPECIFIED
-      - SORT_ORDER_ASCENDING
-      - SORT_ORDER_DESCENDING
-      default: SORT_ORDER_UNSPECIFIED
-      title: "- SORT_ORDER_UNSPECIFIED: The sort order is not specified\n - SORT_ORDER_ASCENDING: The sort order is asc\n - SORT_ORDER_DESCENDING: The sort order is desc"
     s12.directory.v1.Folder:
       type: object
       example:
@@ -994,20 +699,174 @@ components:
           description: Whether a folder has been marked as deleted or not.
       description: Folder represents the main directory object
       title: Folder
-    s12.directory.v1.GetInheritedUsersByFolderResponse:
+    s12.directory.v1.AddUsersFoldersAssociationsResponse.FolderAssignmentsStatuses:
       type: object
       properties:
-        user_folders:
+        users:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/s12.directory.v1.FolderList'
-          description: 'Map of UserIDs for users with an inherited association type of "MEMBER" for
+            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse.Status'
+          description: 'Map of UserIDs for users with an association type of "MEMBER" with their
 
-            the specified folder. The list of folders per user is ordered from highest to
+            resulting status after adding access to the folder. This map corresponds to the
 
-            highest to lowest ancestor.'
-      description: Result returned from `GetInheritedUsersByFolderResponse`
-      title: GetInheritedUsersByFolderResponse
+            list of UserIDs passed through `user_ids` in `AddUsersFoldersAssociationsRequest`'
+        manager_status:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse.Status'
+          description: 'Map of UserIDs for users with an association type of "MANAGER" with their
+
+            resulting status after adding access to the folder. This map corresponds to the
+
+            list of UserIDs passed through `manager_user_ids` in `AddUsersFoldersAssociationsRequest`'
+      title: FolderAssignmentsStatuses maps the user IDs to their status for the given folder
+    s12.directory.v1.FolderWithMembersCount:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The folder we are interested in
+        members_count:
+          type: integer
+          format: int32
+          description: The number of users with a direct association of type 'MEMBER' for the folder
+        has_children:
+          type: boolean
+          description: Whether or not a folder has children.
+        inherited_members_count:
+          type: integer
+          format: int32
+          description: The number of users with an inherited association of type 'MEMBER' for the folder
+        depth:
+          type: integer
+          format: int32
+          description: The depth of the folder. 0 being a top level folder with no parents
+        children_count:
+          type: integer
+          format: int32
+          description: The count of children folders
+      description: FolderWithMembersCount represents a a folder with additional properties
+      title: FolderWithMembersCount
+    s12.directory.v1.RemoveFoldersAssociationResponse.Status:
+      type: string
+      enum:
+      - UNKNOWN
+      - REMOVED
+      - NOT_FOUND
+      default: UNKNOWN
+      description: "- UNKNOWN: Status unknown\n - REMOVED: Folder was successfully removed from the user\n - NOT_FOUND: Folder user association was not found"
+      title: Resulting status values after removing a folder from a user
+    s12.directory.v1.GetFolderResponse:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The folder itself
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: 'When with_ancestors is true, an array of the folders ancestors will be
+
+            returned. The array will be ordered, closest ancestor to furthest'
+        all_children_count:
+          type: integer
+          format: int32
+          description: 'The total count of children underneath the folder. I
+
+            Including children of children recursively'
+        member_count:
+          type: integer
+          format: int32
+          description: The number of users with a direct association of type 'MEMBER' for the folder
+        deleted:
+          type: boolean
+          description: Whether the folder is deleted or not
+      description: Result returned from `GetFolderResponse`
+      title: GetFolderResponse
+    s12.directory.v1.CreateFolderRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Required. Non-empty folder name. Limited to maximum 250 characters.
+        parent_id:
+          type: string
+          description: 'Optional. Parent folder UUID. If unspecified, will be created as a root
+
+            folder'
+        id:
+          type: string
+          description: Optional. Folder UUID. If unspecified, backend will generate the ID.
+        meta_label:
+          type: string
+          description: 'Required. Must be one of: "location", "area", "region", "state", or "country".
+
+            Note that these meta labels may not match custom site hierarchy labels used by the organization.'
+        domain:
+          type: string
+          description: 'domain represents the type/domain/hierarchy for the folder. This is used
+
+            for getting folders of a certain domain, i.e. getting all `template`
+
+            folders or `site` folders'
+      description: The parameters for `CreateFolderRequest`
+      title: CreateFolderRequest
+      required:
+      - name
+      - meta_label
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.directory.v1.FoldersOrderBy:
+      type: object
+      example:
+        sort_field: 1
+        sort_order: 1
+      properties:
+        sort_field:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.FoldersOrderBy.SortField'
+          description: The field to order by
+        sort_order:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.FoldersOrderBy.SortOrder'
+          description: The direction to order by
+      description: FoldersOrderBy represents the sort order folders will be returned in
+      title: FoldersOrderBy
+    s12.directory.v1.FolderWithAncestors:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The folder we are interested in
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: 'The folders ancestors. For example, when returning a `location` leaf node,
+
+            the ancestors will be the [`area`,`region`] folders, when applicable'
+        members_count:
+          type: integer
+          format: int32
+          description: Members count are the count of active users associated with the folder.
+        has_children:
+          type: boolean
+          description: Whether the folder has children or not
+      description: FolderWithAncestors represents a a folder with an array of ancestor folders
+      title: FolderWithAncestors
     s12.directory.v1.RemoveUsersAssociationResponse:
       type: object
       properties:
@@ -1035,6 +894,155 @@ components:
             For example: <Key,Value> -> <5441fffcde344415bb7ccaceda27e196, Status>'
       description: Result returned from `RemoveUsersAssociationResponse`
       title: RemoveUsersAssociationResponse
+    s12.directory.v1.Directory.UpdateFolderPropertiesBody:
+      type: object
+      properties:
+        name:
+          description: Optional. Non-empty folder name. Limited to maximum 250 characters.
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.UpdateFolderPropertiesRequest.FolderName'
+        domain:
+          type: string
+          description: 'domain represents the type/domain/hierarchy for the folder. This is
+
+            used for changing the properties of a specific domain folder'
+      description: The parameters for `UpdateFolderPropertiesRequest`
+      title: UpdateFolderPropertiesRequest
+    s12.directory.v1.AddUsersFoldersAssociationsResponse:
+      type: object
+      properties:
+        assignments:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse.FolderAssignmentsStatuses'
+          description: Map of folder ID to statuses per user
+      title: AddUsersFoldersAssociationsResponse is the response for the `AddUsersFoldersAssociations` endpoint
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.directory.v1.RemoveFoldersAssociationResponse:
+      type: object
+      properties:
+        folder_status:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.RemoveFoldersAssociationResponse.Status'
+          description: 'Map of folders ids with their resulting status after removing the user
+
+            access to that folder. This map is populated with the list of folders
+
+            passed in through the `RemoveFoldersAssociation`
+
+            For example: <Key,Value> -> <5441fffcde344415bb7ccaceda27e196,
+
+            Status>'
+      description: Result returned from `RemoveFoldersAssociationResponse`
+      title: RemoveFoldersAssociationResponse
+    s12.directory.v1.AddUsersFoldersAssociationsRequest.FolderAssignments:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: List of UserIDs for users to be granted a "MEMBER" association with the given folder
+      title: FolderAssignments represents the folders to be assigned to a given user
+    s12.directory.v1.CreateFolderResponse:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: newly created folder
+      description: Result returned from `CreateFolderRequest`
+      title: CreateFolderResponse
+    s12.directory.v1.GetFoldersResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The list of folders belonging to the organisation specified in the request.
+        next_page_token:
+          type: string
+          description: 'Optional. base64 encoded. If this field is present, the value should be
+
+            used in subsequent calls to GetFolders to get the next page of results.
+
+            Otherwise, no further calls should be made.'
+        folders_with_ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.FolderWithAncestors'
+          description: 'When with_ancestors is true, folders with ancestors will be returned
+
+            instead of an array of folders'
+        folders_enabled:
+          type: boolean
+          description: Whether or not the org settings setting is enabled.
+      description: Result returned from `GetFoldersResponse`
+      title: GetFoldersResponse
+    s12.directory.v1.GetFolderIDsForUserResponse:
+      type: object
+      properties:
+        folder_ids:
+          type: array
+          items:
+            type: string
+          description: 'List of folder IDs the user has access to.
+
+            For example: ''5441fffcde344415bb7ccaceda27e196'''
+        folder_paths:
+          type: array
+          items:
+            type: string
+          description: 'List of folder paths the user has access to.
+
+            For example: ''07c7acbf5b1f450d817e5ebb11fda832.5441fffcde344415bb7ccaceda27e196'''
+      description: Result returned from `GetFolderIDsForUserResponse`
+      title: GetFolderIDsForUserResponse
+    s12.directory.v1.MoveFoldersResponse:
+      type: object
+      properties:
+        new_parent_id:
+          type: string
+          description: 'New parent folder ID. Empty means the folder has been moved
+
+            as root.'
+      description: Result returned from `MoveFoldersResponse`
+      title: MoveFoldersResponse
+    s12.directory.v1.DeleteFoldersResponse:
+      type: object
+      properties:
+        folder_ids:
+          type: array
+          items:
+            type: string
+          description: List of deleted folderIDs
+      description: Result returned from `DeleteFoldersResponse`
+      title: DeleteFoldersResponse
+    s12.directory.v1.UpdateFolderPropertiesResponse:
+      type: object
+      properties:
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/s12.directory.v1.Folder'
+          description: The updated folder itself
+      description: Result returned from `UpdateFolderPropertiesResponse`
+      title: UpdateFolderPropertiesResponse
     s12.directory.v1.MoveFoldersRequest:
       type: object
       properties:
@@ -1057,21 +1065,37 @@ components:
       title: MoveFoldersRequest
       required:
       - ids
+    s12.directory.v1.RemoveUsersAssociationResponse.Status:
+      type: string
+      enum:
+      - UNKNOWN
+      - REMOVED
+      - NOT_FOUND
+      default: UNKNOWN
+      description: "- UNKNOWN: Status unknown for user\n - REMOVED: User was successfully removed from the folder\n - NOT_FOUND: User folder association was not found"
+      title: Resulting status values after removing a user from a folder
+    s12.directory.v1.FoldersFilter:
+      type: object
+      properties:
+        not:
+          type: boolean
+          description: If true, exclude results that match the condition
+        meta_label:
+          type: string
+          description: Filter on the status
+        folder_id:
+          type: string
+          description: Filter on a specific folder id
+        is_dynamic:
+          type: boolean
+          description: Filter on whether a folder is dynamic or not
+      description: FoldersFilter represents a filter when getting folders
+      title: FoldersFilter
     s12.directory.v1.UpdateFolderPropertiesRequest.FolderName:
       type: object
       properties:
         val:
           type: string
-    s12.directory.v1.GetUsersByFolderResponse:
-      type: object
-      properties:
-        user_ids:
-          type: array
-          items:
-            type: string
-          description: List of UserIDs for users that have been granted a "MEMBER" association with the given folder
-      description: Result returned from `GetUsersByFolderResponse`
-      title: GetUsersByFolderResponse
     s12.directory.v1.FoldersOrderBy.SortField:
       type: string
       enum:
@@ -1083,6 +1107,49 @@ components:
       - SORT_FIELD_MODIFIED_AT
       default: SORT_FIELD_UNSPECIFIED
       title: "- SORT_FIELD_UNSPECIFIED: The sort field is unspecified\n - SORT_FIELD_NAME: Sort the folder by name\n - SORT_FIELD_FOLDER_ID: Sort the folders by folder id\n - SORT_FIELD_USER_ID: Sort the folders by user id\n - SORT_FIELD_CREATED_AT: Sort the folders by created at\n - SORT_FIELD_MODIFIED_AT: Sort the folders by modified at"
+    s12.directory.v1.GetFoldersByParentResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.FolderWithMembersCount'
+          description: 'List of children folders with a count of
+
+            their explicitly associated members
+
+            When `include_members_count` is set to false
+
+            `members_count` in `FolderWithMembersCount` is
+
+            always set to the default zero value'
+        next_page_token:
+          type: string
+          description: 'Optional. base64 encoded. If this field is present, the value should be
+
+            used in subsequent calls to GetFoldersByParent to get the next page of
+
+            results. Otherwise, no further calls should be made.'
+      description: Result returned from `GetFoldersByParentResponse`
+      title: GetFoldersByParentResponse
+    s12.directory.v1.FoldersOrderBy.SortOrder:
+      type: string
+      enum:
+      - SORT_ORDER_UNSPECIFIED
+      - SORT_ORDER_ASCENDING
+      - SORT_ORDER_DESCENDING
+      default: SORT_ORDER_UNSPECIFIED
+      title: "- SORT_ORDER_UNSPECIFIED: The sort order is not specified\n - SORT_ORDER_ASCENDING: The sort order is asc\n - SORT_ORDER_DESCENDING: The sort order is desc"
+    s12.directory.v1.AddUsersFoldersAssociationsRequest:
+      type: object
+      properties:
+        assignments:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsRequest.FolderAssignments'
+          description: Map of folder ID to users assignments
+      title: AddUsersFoldersAssociationsRequest is the request for the `AddUsersFoldersAssociations` endpoint
     s12.directory.v1.SearchFoldersRequest:
       type: object
       properties:
@@ -1149,7 +1216,44 @@ components:
             folders or `site` folders'
       description: The parameters for `SearchFoldersRequest`
       title: SearchFoldersRequest
-    s12.directory.v1.GetFoldersResponse:
+    s12.directory.v1.SearchFoldersResponse:
+      type: object
+      properties:
+        folders:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.directory.v1.FolderWithAncestors'
+          description: An array of folders with their ancestors that match the search results
+        folder_count:
+          type: integer
+          format: int32
+          description: The total number of folders found for the search query
+        next_page_token:
+          type: string
+          description: 'Optional. base64 encoded. If this field is present, the value should be
+
+            used in subsequent calls to SearchFolders to get the next page of results.
+
+            Otherwise, no further calls should be made.'
+        folders_enabled:
+          type: boolean
+          description: Whether or not the org settings setting is enabled.
+      description: Result returned from `SearchFoldersResponse`
+      title: SearchFoldersResponse
+    s12.directory.v1.GetOrgLabelsResponse:
+      type: object
+      properties:
+        custom_labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Custom labels is a map of ''meta_label'' to the display label to return
+
+            instead'
+      description: Result returned from `GetOrgLabelsResponse`
+      title: GetOrgLabelsResponse
+    s12.directory.v1.FolderList:
       type: object
       properties:
         folders:
@@ -1157,134 +1261,30 @@ components:
           items:
             type: object
             $ref: '#/components/schemas/s12.directory.v1.Folder'
-          description: The list of folders belonging to the organisation specified in the request.
-        next_page_token:
-          type: string
-          description: 'Optional. base64 encoded. If this field is present, the value should be
-
-            used in subsequent calls to GetFolders to get the next page of results.
-
-            Otherwise, no further calls should be made.'
-        folders_with_ancestors:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.directory.v1.FolderWithAncestors'
-          description: 'When with_ancestors is true, folders with ancestors will be returned
-
-            instead of an array of folders'
-        folders_enabled:
-          type: boolean
-          description: Whether or not the org settings setting is enabled.
-      description: Result returned from `GetFoldersResponse`
-      title: GetFoldersResponse
-    s12.directory.v1.FolderWithMembersCount:
-      type: object
-      properties:
-        folder:
-          allOf:
-          - $ref: '#/components/schemas/s12.directory.v1.Folder'
-          description: The folder we are interested in
-        members_count:
-          type: integer
-          format: int32
-          description: The number of users with a direct association of type 'MEMBER' for the folder
-        has_children:
-          type: boolean
-          description: Whether or not a folder has children.
-        inherited_members_count:
-          type: integer
-          format: int32
-          description: The number of users with an inherited association of type 'MEMBER' for the folder
-        depth:
-          type: integer
-          format: int32
-          description: The depth of the folder. 0 being a top level folder with no parents
-        children_count:
-          type: integer
-          format: int32
-          description: The count of children folders
-      description: FolderWithMembersCount represents a a folder with additional properties
-      title: FolderWithMembersCount
-    s12.directory.v1.Directory.UpdateFolderPropertiesBody:
-      type: object
-      properties:
-        name:
-          description: Optional. Non-empty folder name. Limited to maximum 250 characters.
-          allOf:
-          - $ref: '#/components/schemas/s12.directory.v1.UpdateFolderPropertiesRequest.FolderName'
-        domain:
-          type: string
-          description: 'domain represents the type/domain/hierarchy for the folder. This is
-
-            used for changing the properties of a specific domain folder'
-      description: The parameters for `UpdateFolderPropertiesRequest`
-      title: UpdateFolderPropertiesRequest
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.directory.v1.UpdateFolderPropertiesResponse:
-      type: object
-      properties:
-        folder:
-          allOf:
-          - $ref: '#/components/schemas/s12.directory.v1.Folder'
-          description: The updated folder itself
-      description: Result returned from `UpdateFolderPropertiesResponse`
-      title: UpdateFolderPropertiesResponse
-    s12.directory.v1.RemoveUsersAssociationResponse.Status:
+          description: The list of folders in the message
+      description: FolderList represents an array of folders
+      title: FolderList
+    s12.directory.v1.AddUsersFoldersAssociationsResponse.Status:
       type: string
       enum:
-      - UNKNOWN
-      - REMOVED
-      - NOT_FOUND
-      default: UNKNOWN
-      description: "- UNKNOWN: Status unknown for user\n - REMOVED: User was successfully removed from the folder\n - NOT_FOUND: User folder association was not found"
-      title: Resulting status values after removing a user from a folder
-    s12.directory.v1.AddUsersFoldersAssociationsResponse:
+      - STATUS_UNSPECIFIED
+      - STATUS_ADDED
+      - STATUS_ALREADY_DIRECT_MEMBER
+      - STATUS_ALREADY_INHERITED_MEMBER
+      - STATUS_REMOVED
+      default: STATUS_UNSPECIFIED
+      description: "- STATUS_UNSPECIFIED: Status unknown\n - STATUS_ADDED: Folder was successfully associated to the user\n - STATUS_ALREADY_DIRECT_MEMBER: User was already a direct member of the folder\n - STATUS_ALREADY_INHERITED_MEMBER: User was already an inherited member of the folder\n - STATUS_REMOVED: User was removed from the folder (side-effect of being added to an ancestor)"
+      title: Resulting status values after associating a folder and user
+    s12.directory.v1.GetUsersByFolderResponse:
       type: object
       properties:
-        assignments:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/s12.directory.v1.AddUsersFoldersAssociationsResponse.FolderAssignmentsStatuses'
-          description: Map of folder ID to statuses per user
-      title: AddUsersFoldersAssociationsResponse is the response for the `AddUsersFoldersAssociations` endpoint
-    s12.directory.v1.GetFolderResponse:
-      type: object
-      properties:
-        folder:
-          allOf:
-          - $ref: '#/components/schemas/s12.directory.v1.Folder'
-          description: The folder itself
-        ancestors:
+        user_ids:
           type: array
           items:
-            type: object
-            $ref: '#/components/schemas/s12.directory.v1.Folder'
-          description: 'When with_ancestors is true, an array of the folders ancestors will be
-
-            returned. The array will be ordered, closest ancestor to furthest'
-        all_children_count:
-          type: integer
-          format: int32
-          description: 'The total count of children underneath the folder. I
-
-            Including children of children recursively'
-        member_count:
-          type: integer
-          format: int32
-          description: The number of users with a direct association of type 'MEMBER' for the folder
-        deleted:
-          type: boolean
-          description: Whether the folder is deleted or not
-      description: Result returned from `GetFolderResponse`
-      title: GetFolderResponse
+            type: string
+          description: List of UserIDs for users that have been granted a "MEMBER" association with the given folder
+      description: Result returned from `GetUsersByFolderResponse`
+      title: GetUsersByFolderResponse
   securitySchemes:
     BearerAuthentication:
       type: http

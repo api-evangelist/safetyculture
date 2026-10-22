@@ -1,0 +1,89 @@
+overlay: 1.0.0
+info:
+  title: SafetyCulture Mitti Investigations API enhancements
+  version: 1.0.0
+extends: openapi/safetyculture-investigations-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-provider: SafetyCulture (Mitti)
+    x-apievangelist-mcp:
+      endpoint: https://mcp.mitti.com/mcp
+      auth: oauth
+      status: early-access
+      docs: https://developer.mitti.com/docs/connect-an-ai-tool-to-mitti
+    x-llms-txt: https://developer.mitti.com/llms.txt
+- target: $
+  update:
+    externalDocs:
+      description: Mitti developer portal
+      url: https://developer.mitti.com/reference/introduction
+- target: $.components.securitySchemes.BearerAuthentication
+  update:
+    description: 'User API token sent as Authorization: Bearer {api_token}. Tokens are managed per user (https://help.mitti.com/000007).'
+- target: $.paths['/incidents/v1/categories'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/categories/{category_id}/detail-fields'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/field-library'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/fields'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/count'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/access'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/actions'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/actions/count'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/courses'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/courses/count'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/inspections'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/inspections/count'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/issues'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/issues/count'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/log'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/media'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/media/count'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/investigations/{investigation_id}/pdf'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/log'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/statuses'].get
+  update:
+    x-agent-safe: read-only

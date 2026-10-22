@@ -1,0 +1,105 @@
+generated: '2026-10-20'
+method: searched
+source: https://developer.mitti.com/changelog
+docs: https://developer.mitti.com/changelog
+scheme: dated-entries
+current_version: null
+note: Dated ReadMe changelog; entries carry no API version number. Dates are the entry created_at values from the
+  changelog page. SafetyCulture rebranded to Mitti on 2026-08-10.
+entries:
+- version: null
+  date: '2026-10-11'
+  title: SCIM user provisioning seat_type mapping
+  type: fixed
+  breaking: false
+  highlights:
+  - Any SCIM configuration mapping `seat_type` through the `mitti:2.0 `namespace has been provisioning every user
+    as a full seat regardless of the intended seat type, which may have caused unexpected full-seat consumption
+    or billing.
+  url: https://developer.mitti.com/changelog/scim-user-provisioning-seat_type-mapping
+- version: null
+  date: '2026-09-30'
+  title: Roles API
+  type: added
+  breaking: false
+  highlights:
+  - There is no endpoint to list roles, so track the id returned by `POST /permissions/v1/roles`. Managing a role
+    created outside the API, such as one created in the web app, is not currently supported. `PUT /permissions/v1/roles/{role.id}`
+    is a full replacement, so send the complete role on every update, including the permissions you want to keep.
+  url: https://developer.mitti.com/changelog/roles-api
+- version: null
+  date: '2026-09-27'
+  title: Template editing APIs
+  type: added
+  breaking: false
+  highlights:
+  - You can now rename a template, set or clear its description, rename pages, relabel questions and items, and
+    toggle the inspection completion screen.&#x20;
+  url: https://developer.mitti.com/changelog/template-editing-apis
+- version: null
+  date: '2026-09-17'
+  title: Mitti MCP server available in Early Access
+  type: added
+  breaking: false
+  highlights:
+  - No existing integration changes. This is a new surface alongside the Mitti API, not a change to it. A client
+    that connects before the server is enabled for its organization receives no tools.
+  url: https://developer.mitti.com/changelog/mitti-mcp-server-available-in-early-access
+- version: null
+  date: '2026-08-26'
+  title: Structures API
+  type: added
+  breaking: false
+  highlights:
+  - Structures supersede the separate Sites and Groups models. The existing [Sites](https://developer.mitti.com/reference/directory-sites)
+    and [Groups](https://developer.mitti.com/reference/thepubservice_listgroups) endpoints are unaffected and continue
+    to work.
+  url: https://developer.mitti.com/changelog/structures-api-added
+- version: null
+  date: '2026-08-13'
+  title: What the Mitti rebrand means for developers
+  type: none
+  breaking: false
+  highlights:
+  - Existing integrations kept working through the rebrand. Endpoint paths, request and response schemas, authentication,
+    API tokens, rate limits, and webhook signature headers are all unchanged, and `api.safetyculture.io` still works.&#x20;
+  url: https://developer.mitti.com/changelog/what-the-mitti-rebrand-means-for-developers
+- version: null
+  date: '2026-08-12'
+  title: api.mitti.com is now available as the API base URL
+  type: added
+  breaking: false
+  highlights:
+  - Requests to <https://api.mitti.com> resolve to the same endpoints, paths, parameters, and responses as the SafetyCulture
+    host, using your existing API tokens.
+  url: https://developer.mitti.com/changelog/apimitticom-is-now-available-as-the-api-base-url
+- version: null
+  date: '2026-08-12'
+  title: SCIM provisioning and Activity log API access now require Enterprise Plan for new subscriptions
+  type: none
+  breaking: true
+  highlights:
+  - SCIM provisioning and Activity log API access now require Enterprise Plan for new subscriptions
+  url: https://developer.mitti.com/changelog/scim-provisioning-and-activity-log-api-access-now-require-enterprise-plan-for-new-subscriptions
+  breaking_note: Behavioural/entitlement change that can make previously-succeeding calls fail for affected organizations
+    (as the entry describes); the API contract itself did not change.
+- version: null
+  date: '2026-08-10'
+  title: SafetyCulture is now Mitti! 🚀
+  type: none
+  breaking: false
+  highlights:
+  - SafetyCulture is now Mitti! 🚀
+  url: https://developer.mitti.com/changelog/safetyculture-is-now-mitti
+- version: null
+  date: '2026-08-04'
+  title: Automatic seat purchasing can now be turned off per organization
+  type: added
+  breaking: true
+  highlights:
+  - If an organization turns this setting off, any API or SCIM call that would add a user beyond the organization's
+    contracted seat count now fails with a seat-limit error, instead of automatically purchasing a seat. Manually
+    adding a user through the web app is unaffected either way.
+  url: https://developer.mitti.com/changelog/automatic-seat-purchasing-can-now-be-turned-off-per-organization
+  breaking_note: Behavioural/entitlement change that can make previously-succeeding calls fail for affected organizations
+    (as the entry describes); the API contract itself did not change.

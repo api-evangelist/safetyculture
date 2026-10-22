@@ -1,24 +1,52 @@
-generated: '2026-07-21'
+generated: '2026-10-20'
 method: searched
-source: github.com/SafetyCulture + pypi.org
+source: https://github.com/SafetyCulture + https://pypi.org/pypi/safetyculture-sdk-python/json + https://developer.mitti.com/docs/mitti-exporter-run
 packages:
-- language: go
+- name: mitti-exporter
   registry: github
-  name: safetyculture-exporter
-  url: https://github.com/SafetyCulture/safetyculture-exporter
-  install: Download platform binary (Linux/amd64, macOS/amd64, macOS/arm64, Windows/amd64)
+  url: https://github.com/SafetyCulture/mitti-exporter/releases
+  language: go
   official: true
   kind: cli
-  note: >-
-    Official SafetyCulture Exporter, written in Go (with a Svelte desktop UI). Bulk-exports
-    inspections, templates, schedules, actions and more to CSV/SQL/PowerBI. Premium/Enterprise.
-- language: python
+  version: v6.1.0
+  published: '2026-10-19'
+  install: Download the platform binary (darwin-amd64, darwin-arm64, linux-amd64, windows-x86_64) or the desktop
+    UI build from GitHub releases
+  note: Formerly safetyculture-exporter (GitHub redirects the old repo name). Version/date from the GitHub releases/latest
+    API.
+- name: safetyculture-sdk-python
   registry: pypi
-  name: safetyculture-sdk-python
   url: https://pypi.org/project/safetyculture-sdk-python/
-  install: pip install safetyculture-sdk-python
+  language: python
   official: true
   deprecated: true
-  note: >-
-    Earlier first-party Python SDK / iAuditor exporter. Superseded by the Go
-    safetyculture-exporter and no longer maintained.
+  version: 4.2.2
+  published: '2021-08-03'
+  note: Earlier first-party Python SDK; GitHub repo SafetyCulture/safetyculture-sdk-python is archived. Version/date
+    from PyPI JSON.
+- name: mitti-mcp-server
+  registry: github
+  url: https://github.com/SafetyCulture/mitti-mcp-server
+  language: null
+  official: true
+  deprecated: true
+  kind: mcp-server
+  version: v0.3.3
+  published: '2026-08-12'
+  note: Local MCP connector; repo archived. The 2026-09-17 changelog tells users of the local connector to move
+    to the remote server at https://mcp.mitti.com/mcp.
+- name: api-json-schemas
+  registry: github
+  url: https://github.com/SafetyCulture/api-json-schemas
+  language: null
+  official: true
+  kind: schemas
+  version: null
+  published: null
+  note: '"JSON Schemas and OpenAPI specs for the SafetyCulture Public API"; no tagged releases checked, last push
+    2025-10-14.'
+checked_registries:
+  npm:
+  - safetyculture (404)
+  - mitti (404)
+  - '@safetyculture/sdk (404)'

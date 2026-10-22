@@ -1,54 +1,66 @@
-generated: '2026-07-21'
-method: derived
-status: candidate
-source: Derived from operations documented at https://developer.safetyculture.com/reference. No official
-  hosted/remote SafetyCulture MCP server was found (mcp.safetyculture.com and developer.safetyculture.com/docs/mcp
-  did not resolve to a published server).
-server:
-  name: safetyculture
-  transport: http
-  base_url: https://api.safetyculture.io
-  auth: bearer-token
-tools:
-- name: list_inspections_modified
-  description: Get inspections modified since a specified time.
-  source_operation: https://developer.safetyculture.com/reference/get-modified-inspections
-- name: start_inspection
-  description: Start an inspection, optionally pre-filled with answers.
-  source_operation: https://developer.safetyculture.com/reference/start-inspection
-- name: search_templates
-  description: Search modified inspection templates.
-  source_operation: https://developer.safetyculture.com/reference/thepubservice_searchtemplates
-- name: get_template
-  description: Get a template by ID.
-  source_operation: https://developer.safetyculture.com/reference/templatesservice_gettemplatebyid
-- name: list_assets
-  description: List assets.
-  source_operation: https://developer.safetyculture.com/reference/assetsservice_listassets
-- name: create_asset
-  description: Create an asset.
-  source_operation: https://developer.safetyculture.com/reference/assetsservice_createasset
-- name: list_issues
-  description: List issues (incidents).
-  source_operation: https://developer.safetyculture.com/reference/incidentsservice_getincidents
-- name: create_issue
-  description: Create an issue (incident).
-  source_operation: https://developer.safetyculture.com/reference/incidentsservice_submitincident
-- name: list_groups
-  description: List groups.
-  source_operation: https://developer.safetyculture.com/reference/thepubservice_listgroups
-- name: create_group
-  description: Create a group.
-  source_operation: https://developer.safetyculture.com/reference/thepubservice_creategroup
-- name: list_webhooks
-  description: List webhook subscriptions.
-  source_operation: https://developer.safetyculture.com/reference/webhooksservice_listwebhooks
-- name: create_webhook
-  description: Create a webhook subscription.
-  source_operation: https://developer.safetyculture.com/reference/webhooksservice_createwebhook
+generated: '2026-10-20'
+method: probed
+status: official-early-access
+source:
+- https://developer.mitti.com/docs/connect-an-ai-tool-to-mitti
+- https://developer.mitti.com/changelog/mitti-mcp-server-available-in-early-access
+- https://mcp.mitti.com/.well-known/oauth-protected-resource/mcp
+name: Mitti (SafetyCulture) MCP Server
+description: 'SafetyCulture (rebranded Mitti) runs a remote Model Context Protocol server, in Early Access / Preview,
+  that lets an MCP client authorized via OAuth 2.0 read Mitti data on behalf of the signed-in user. By default it
+  exposes a read-only subset of the Mitti tool registry, filtered by the user''s permissions; an "MCP: Write" role
+  permission lets a connected client create and update data. Requires a Premium or Enterprise plan, the org-level
+  "MCP server" setting, and the "MCP: Read" permission.'
 deployment:
-  mode: none
-  verified: derived
-  tools: 12
-  checked: '2026-08-12'
-  source: catalog MCP census
+  mode: remote
+  endpoint: https://mcp.mitti.com/mcp
+  auth: oauth
+  verified: probed
+probes:
+- url: https://mcp.mitti.com/mcp
+  request: POST JSON-RPC initialize (documented endpoint)
+  status: 401
+  www_authenticate: Bearer realm="OAuth", resource_metadata="https://mcp.mitti.com/.well-known/oauth-protected-resource/mcp"
+- url: https://mcp.mitti.com/.well-known/oauth-protected-resource/mcp
+  status: 200
+  resource: https://mcp.mitti.com/mcp
+  authorization_servers:
+  - https://mcp.mitti.com
+- url: https://mcp.mitti.com/.well-known/oauth-protected-resource
+  status: 200
+- url: https://mcp.mitti.com/.well-known/oauth-authorization-server
+  status: 200
+  grant_types_supported:
+  - authorization_code
+  - refresh_token
+  note: advertises authorization, token and dynamic client registration endpoints; none were called
+oauth:
+  protected_resource_metadata: https://mcp.mitti.com/.well-known/oauth-protected-resource/mcp
+  authorization_server_metadata: https://mcp.mitti.com/.well-known/oauth-authorization-server
+tools:
+  status: gated
+  note: tools/list requires an OAuth bearer token (initialize returned 401). The provider docs describe capability
+    areas but publish no tool names, so no tool names are recorded here.
+  documented_capabilities:
+  - Look up inspections and their responses, filtered by template, site, date range, or who completed them.
+  - Review actions, including assignee, status, and which ones are overdue.
+  - Read issues raised in your organization, including category, site, and status.
+  - Look up assets and their details, including asset type and the site each one belongs to.
+  - Check inspection schedules, including what is due and what has been missed.
+  - Read training records, including course completions and progress for the people you can already see.
+  - Look up your organization's sites and groups, and who belongs to them.
+access_controls:
+  org_setting: MCP server (on/off, default On)
+  role_permissions:
+    'MCP: Read': connect a client and read data (on for full seats)
+    'MCP: Write': connected client may create and update data (off by default)
+  scope: one organization per connection
+clients: Supported AI platforms are listed at https://integrations.mitti.com/t/categories/ai-platforms
+history: The changelog says a local Mitti connector existed before September 2026; users of it are told to move
+  to the remote server and revoke the user API token they created for the local version. No package for it is published
+  or linked, so it is not recorded as a deployment.
+community:
+- name: zerubroberts/safetyculture-mcp-server
+  url: https://glama.ai/mcp/servers/zerubroberts/safetyculture-mcp-server
+  official: false
+  note: third-party Python stdio server using the Feed API with an API key; not provider-published

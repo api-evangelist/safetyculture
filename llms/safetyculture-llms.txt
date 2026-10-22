@@ -148,6 +148,7 @@
   - [Data feed for assets maintenance details](https://developer.mitti.com/reference/feedservice_feedassetsmaintenance.md)
   - [Data feed for maintenance plans](https://developer.mitti.com/reference/feedservice_feedmaintenanceplans.md)
   - [Data feed for maintenance programs](https://developer.mitti.com/reference/feedservice_feedmaintenanceprograms.md)
+  - [Data feed for Lone Worker jobs](https://developer.mitti.com/reference/feedservice_feedjobs.md): Provides a data feed of finished and canceled Lone Worker jobs in the groups that you can see. Use this to sync job history to external systems. Supports incremental sync via the modified_after…
 - [Inspections](https://developer.mitti.com/reference/inspections.md): This API provides a number of interfaces to interact with your inspection data.
   - [Start an inspection](https://developer.mitti.com/reference/thepubservice_startinspection.md)
   - [Search modified inspections](https://developer.mitti.com/reference/thepubservice_searchinspections.md)
@@ -422,9 +423,9 @@ indirectly (inherited)](https://developer.mitti.com/reference/directory_getallus
   - [Update a custom field for an Action](https://developer.mitti.com/reference/tasksservice_updatetaskcustomfield.md)
   - [Get a single action type by id](https://developer.mitti.com/reference/customerconfigurationservice_gettasktype.md)
   - [List all action types for the org](https://developer.mitti.com/reference/customerconfigurationservice_gettasktypes.md)
-  - [Rename the options (values) of a multi-select custom field. Renaming an
-option updates every action that has it selected; option IDs are preserved.
-Adding or removing options is not supported.](https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md)
+  - [Rename the options (values) of a multi-select custom field, and add new
+options. Renaming an option updates every action that has it selected;
+option IDs are preserved. Removing options is not supported.](https://developer.mitti.com/reference/customerconfigurationservice_renamecustomfieldoptions.md)
 - [Issues](https://developer.mitti.com/reference/issues.md)
   - [List Categories](https://developer.mitti.com/reference/customerconfigurationservice_getcategories.md)
   - [Get Issue](https://developer.mitti.com/reference/incidentsservice_getincidentbyid.md)

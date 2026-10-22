@@ -1,20 +1,30 @@
-generated: '2026-07-21'
+generated: '2026-10-20'
 method: searched
-source: https://developer.safetyculture.com
+source: https://developer.mitti.com/changelog/apimitticom-is-now-available-as-the-api-base-url
 versioning:
   scheme: uri-path
   note: Resource paths are version-segmented (e.g. /users/v1/...). No global dated version header documented.
-  docs: https://developer.safetyculture.com/reference/introduction
+  docs: https://developer.mitti.com/reference/introduction
 deprecation:
   policy_url: null
   sunset_header: false
-  note: >-
-    No formal RFC 8594 Sunset/Deprecation header policy documented. Some operations are
-    marked "legacy" in the reference (e.g. Create Issue (legacy), Get Issue (legacy)),
-    superseded by newer endpoints, but no dated sunset policy is published.
+  note: No formal RFC 8594 Sunset/Deprecation header policy documented. Some operations are marked "legacy" in the
+    reference (e.g. Create Issue (legacy), Get Issue (legacy)), superseded by newer endpoints, but no dated sunset
+    policy is published.
   legacy_operations:
-  - https://developer.safetyculture.com/reference/incidentsservice_createincident
-  - https://developer.safetyculture.com/reference/incidentsservice_getincident
+  - https://developer.mitti.com/reference/thepubservice_getinspection
+  - https://developer.mitti.com/reference/thepubservice_feedschedules
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleoccurrences
+  - https://developer.mitti.com/reference/thepubservice_feedscheduleassignees
+  host_migration:
+    from: https://api.safetyculture.io
+    to: https://api.mitti.com
+    since: '2026-08-11'
+    statement: We'll publish a deprecation entry and email org admins before the SafetyCulture host is turned off.
+    shutdown_date: null
+    docs: https://developer.mitti.com/changelog/apimitticom-is-now-available-as-the-api-base-url
 sla:
   url: null
-status_page: https://status.safetyculture.com
+status_page: https://status.mitti.com
+changelog: changelog/safetyculture-changelog.yml
+status_page_legacy: https://status.safetyculture.com

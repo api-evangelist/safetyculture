@@ -1,6 +1,7 @@
-generated: '2026-10-14'
+generated: '2026-10-20'
 method: probed
-generator: harvest-llms.py
+generator: surfaces module (curl)
 source: https://developer.mitti.com/llms.txt
-bytes: 69694
-note: saved verbatim; the provider's own document
+status: 200
+bytes: 70003
+note: saved verbatim; the provider's own document (refreshed from the 2026-10-14 copy, 69694 bytes)

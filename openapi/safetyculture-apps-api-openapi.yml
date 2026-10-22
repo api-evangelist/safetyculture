@@ -347,18 +347,12 @@ paths:
       - Apps
 components:
   schemas:
-    s12.integrations.app.v1.ExternalWebExperience_LocationStandalone:
+    s12.integrations.app.v1.PartnerIntegrationService.UpdateConfigurationBody:
       type: object
       properties:
-        label:
-          type: string
-          description: The name for the app installation
-      title: Location Standalone
-      required:
-      - label
-    s12.integrations.app.v1.DeleteInstallationResponse:
-      type: object
-      title: Response for DeleteInstallation
+        external_web_experience:
+          $ref: '#/components/schemas/s12.integrations.app.v1.ApplicationTypeExternalWebExperience'
+      title: Request for updating the configuration
     s12.integrations.app.v1.ApplicationTypeExternalWebExperience:
       type: object
       properties:
@@ -373,28 +367,6 @@ components:
       required:
       - url
       - location
-    s12.integrations.app.v1.UpdateApplicationResponse:
-      type: object
-      title: Response for UpdateApplication
-    s12.integrations.app.v1.PartnerIntegrationService.UpdateConfigurationBody:
-      type: object
-      properties:
-        external_web_experience:
-          $ref: '#/components/schemas/s12.integrations.app.v1.ApplicationTypeExternalWebExperience'
-      title: Request for updating the configuration
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
     s12.integrations.app.v1.CreateConfigurationResponse:
       type: object
       properties:
@@ -402,33 +374,66 @@ components:
           type: string
           description: The unique identifier for the app installation configuration
       title: Response for creating a configuration
-    s12.integrations.app.v1.PartnerIntegrationService.UpdateApplicationBody:
+    s12.integrations.app.v1.RegisterApplicationTypeExternalWebExperience:
       type: object
       properties:
-        app_name:
-          type: string
-        external_web_experience:
-          $ref: '#/components/schemas/s12.integrations.app.v1.RegisterApplicationTypeExternalWebExperience'
-      title: Request for UpdateApplication
+        allowlist_hosts:
+          type: array
+          items:
+            type: string
+          description: 'the host that is intended to be the origin of the iframe. Ex: example.com'
+          title: The iframe url host allowlist
+      description: Object that describes an external iframe with a list of allowed hosts
+      title: Web Experience
       required:
-      - app_name
-    s12.integrations.app.v1.RegisterApplicationResponse:
+      - allowlist_hosts
+    s12.integrations.app.v1.ApplicationTypeExternalWebExperience.Location:
+      type: object
+      oneOf:
+      - type: object
+        title: Location Standalone
+        description: the iframe will be rendered on a separate page
+        properties:
+          location_standalone:
+            $ref: '#/components/schemas/s12.integrations.app.v1.ExternalWebExperience_LocationStandalone'
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.integrations.app.v1.App:
       type: object
       properties:
         app_id:
           type: string
           description: The ID of the app.
-      title: Response for RegisterApplication
-    s12.integrations.app.v1.RegisterApplicationRequest:
-      type: object
-      properties:
         app_name:
           type: string
+          description: The name of the application.
+        installation_id:
+          type: string
+          description: The ID of this installation.
+        installation_configuration:
+          type: string
+          description: The configuration of the installation.
+    s12.integrations.app.v1.PartnerIntegrationService.CreateConfigurationBody:
+      type: object
+      properties:
         external_web_experience:
-          $ref: '#/components/schemas/s12.integrations.app.v1.RegisterApplicationTypeExternalWebExperience'
-      title: Request for RegisterApplication
+          $ref: '#/components/schemas/s12.integrations.app.v1.ApplicationTypeExternalWebExperience'
+      title: Request for creating a configuration
+    s12.integrations.app.v1.ExternalWebExperience_LocationStandalone:
+      type: object
+      properties:
+        label:
+          type: string
+          description: The name for the app installation
+      title: Location Standalone
       required:
-      - app_name
+      - label
     s12.integrations.app.v1.ListApplicationsResponse:
       type: object
       properties:
@@ -443,6 +448,73 @@ components:
             $ref: '#/components/schemas/s12.integrations.app.v1.ExtApplication'
           description: The applications returned.
       title: Response for ListApplications
+    s12.integrations.app.v1.PartnerIntegrationService.CreateInstallationBody:
+      type: object
+      title: Request for CreateInstallation
+    s12.integrations.app.v1.UpdateConfigurationResponse:
+      type: object
+      title: Response for updating the configuration
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.common.v1.PaginationMetadata:
+      type: object
+      properties:
+        next_page:
+          type: string
+          description: The path to fetch the next page on.
+        next_page_token:
+          type: string
+          description: 'The value you can use to retrieve additional results. If a value exists, it
+
+            means there are more results than listed. Use the value in your request
+
+            body as a page_token field to view more results.'
+      description: Pagination structure.
+    s12.integrations.app.v1.RegisterApplicationResponse:
+      type: object
+      properties:
+        app_id:
+          type: string
+          description: The ID of the app.
+      title: Response for RegisterApplication
+    s12.integrations.app.v1.DeleteConfigurationResponse:
+      type: object
+      title: Response for deleting the configuration
+    s12.integrations.app.v1.CreateInstallationResponse:
+      type: object
+      properties:
+        installation_id:
+          type: string
+          description: The unique identifier for the app installation
+      title: Response for InstallApplication
+    s12.integrations.app.v1.DeleteInstallationResponse:
+      type: object
+      title: Response for DeleteInstallation
+    s12.integrations.app.v1.ListInstallationsResponse:
+      type: object
+      properties:
+        metadata:
+          description: The metadata for the response.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.v1.PaginationMetadata'
+        apps:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.integrations.app.v1.App'
+          description: The installations returned.
+      title: Response for ListInstallations
     s12.integrations.app.v1.GetInstallationResponse:
       type: object
       properties:
@@ -459,19 +531,26 @@ components:
           type: string
           description: The configuration of the installation.
       title: Response for GetInstallation
-    s12.integrations.app.v1.RegisterApplicationTypeExternalWebExperience:
+    s12.integrations.app.v1.PartnerIntegrationService.UpdateApplicationBody:
       type: object
       properties:
-        allowlist_hosts:
-          type: array
-          items:
-            type: string
-          description: 'the host that is intended to be the origin of the iframe. Ex: example.com'
-          title: The iframe url host allowlist
-      description: Object that describes an external iframe with a list of allowed hosts
-      title: Web Experience
+        app_name:
+          type: string
+        external_web_experience:
+          $ref: '#/components/schemas/s12.integrations.app.v1.RegisterApplicationTypeExternalWebExperience'
+      title: Request for UpdateApplication
       required:
-      - allowlist_hosts
+      - app_name
+    s12.integrations.app.v1.RegisterApplicationRequest:
+      type: object
+      properties:
+        app_name:
+          type: string
+        external_web_experience:
+          $ref: '#/components/schemas/s12.integrations.app.v1.RegisterApplicationTypeExternalWebExperience'
+      title: Request for RegisterApplication
+      required:
+      - app_name
     s12.integrations.app.v1.ExtApplication:
       type: object
       properties:
@@ -487,88 +566,9 @@ components:
         app_configuration:
           type: string
           description: The configuration of the application;
-    s12.integrations.app.v1.PartnerIntegrationService.CreateInstallationBody:
+    s12.integrations.app.v1.UpdateApplicationResponse:
       type: object
-      title: Request for CreateInstallation
-    s12.integrations.app.v1.DeleteConfigurationResponse:
-      type: object
-      title: Response for deleting the configuration
-    s12.integrations.app.v1.UpdateConfigurationResponse:
-      type: object
-      title: Response for updating the configuration
-    s12.integrations.app.v1.ListInstallationsResponse:
-      type: object
-      properties:
-        metadata:
-          description: The metadata for the response.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.v1.PaginationMetadata'
-        apps:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.integrations.app.v1.App'
-          description: The installations returned.
-      title: Response for ListInstallations
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.common.v1.PaginationMetadata:
-      type: object
-      properties:
-        next_page:
-          type: string
-          description: The path to fetch the next page on.
-        next_page_token:
-          type: string
-          description: 'The value you can use to retrieve additional results. If a value exists, it
-
-            means there are more results than listed. Use the value in your request
-
-            body as a page_token field to view more results.'
-      description: Pagination structure.
-    s12.integrations.app.v1.CreateInstallationResponse:
-      type: object
-      properties:
-        installation_id:
-          type: string
-          description: The unique identifier for the app installation
-      title: Response for InstallApplication
-    s12.integrations.app.v1.PartnerIntegrationService.CreateConfigurationBody:
-      type: object
-      properties:
-        external_web_experience:
-          $ref: '#/components/schemas/s12.integrations.app.v1.ApplicationTypeExternalWebExperience'
-      title: Request for creating a configuration
-    s12.integrations.app.v1.App:
-      type: object
-      properties:
-        app_id:
-          type: string
-          description: The ID of the app.
-        app_name:
-          type: string
-          description: The name of the application.
-        installation_id:
-          type: string
-          description: The ID of this installation.
-        installation_configuration:
-          type: string
-          description: The configuration of the installation.
-    s12.integrations.app.v1.ApplicationTypeExternalWebExperience.Location:
-      type: object
-      oneOf:
-      - type: object
-        title: Location Standalone
-        description: the iframe will be rendered on a separate page
-        properties:
-          location_standalone:
-            $ref: '#/components/schemas/s12.integrations.app.v1.ExternalWebExperience_LocationStandalone'
+      title: Response for UpdateApplication
   securitySchemes:
     BearerAuthentication:
       type: http

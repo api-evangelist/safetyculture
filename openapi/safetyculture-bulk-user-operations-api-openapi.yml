@@ -191,97 +191,11 @@ paths:
       - Bulk user operations
 components:
   schemas:
-    s12.users.v1.CreateOrUpdateUsersJob.Status:
-      type: string
-      enum:
-      - STATUS_UNSPECIFIED
-      - STATUS_PENDING
-      - STATUS_ERRORED
-      - STATUS_VALIDATING
-      - STATUS_VALIDATED
-      - STATUS_VALIDATED_WITH_ERRORS
-      - STATUS_EXECUTING
-      - STATUS_COMPLETED
-      - STATUS_COMPLETED_WITH_ERRORS
-      - STATUS_CANCELLED
-      default: STATUS_UNSPECIFIED
-      description: "PENDING --> ERRORED : Blocking errors (e.g. putting the job on the queue errored)\nPENDING --> VALIDATING\nPENDING --> CANCELLED\n\nVALIDATING --> VALIDATED : No errors\nVALIDATING --> VALIDATED_WITH_ERRORS : Non blocking errors\nVALIDATING --> ERRORED : Blocking errors (e.g. putting the job on the queue errored)\nVALIDATING --> EXECUTING\nVALIDATING --> CANCELLED\n\nEXECUTING --> COMPLETED : No errors\nEXECUTING --> COMPLETED_WITH_ERRORS : Non blocking errors\nEXECUTING --> ERRORED : Blocking errors\nEXECUTING --> CANCELLED\n```\n\n - STATUS_PENDING: Job pending validation.\n - STATUS_ERRORED: Job has critical blocking error.\n - STATUS_VALIDATING: Job is currently validating.\n - STATUS_VALIDATED: Job was successfully validated with no errors. Now pending create or update.\n - STATUS_VALIDATED_WITH_ERRORS: Job was validated, but there was non-blocking errors. Now pending create or update.\n - STATUS_EXECUTING: Job is currently creating or updating.\n - STATUS_COMPLETED: Job created or updated with no errors.\n - STATUS_COMPLETED_WITH_ERRORS: Job created or updated with non blocking errors.\n - STATUS_CANCELLED: Job was cancelled."
-      title: '```mermaid
-
-        stateDiagram-v2
-
-        PENDING
-
-        ERRORED
-
-        VALIDATING
-
-        VALIDATED
-
-        VALIDATED_WITH_ERRORS
-
-        EXECUTING
-
-        COMPLETED
-
-        COMPLETED_WITH_ERRORS
-
-        CANCELLED'
-    s12.users.v1.CreateOrUpdateUser.Attribute.Value:
+    s12.users.v1.CancelCreateOrUpdateUsersJobResponse:
       type: object
       properties:
-        valid:
-          type: boolean
-          description: Indicates whether the value is valid and will be applied to the user.
-        string_value:
+        job_id:
           type: string
-          description: The string value of a field.
-        timestamp_value:
-          type: string
-          format: date-time
-          description: The timestamp value of a field.
-        uuid_value:
-          description: The UUID value of a field.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
-    s12.users.v1.UserFieldMap:
-      type: object
-      properties:
-        key:
-          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.Field'
-        value:
-          type: integer
-          format: int32
-          description: The number of users with this field changed.
-      description: UserFieldMap is a map of counts of user field changes for a given job.
-    s12.users.v1.CreateOrUpdateUser.Memberships:
-      type: object
-      properties:
-        remove:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
-          description: References from which the user will be removed. ONLY supports "*" to remove from all existing references.
-        add:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
-          description: References to assign the user to. Each must be a valid, case-sensitive name or ID for the resource.
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
     s12.users.v1.UserActionMap:
       type: object
       properties:
@@ -292,23 +206,35 @@ components:
           format: int32
           description: The number of users with this action.
       description: UserActionMap is a map of counts of user actions for a given job.
-    s12.users.v1.CreateOrUpdateResponseUser:
-      type: object
-      properties:
-        operation:
-          description: The operation that occurred or will occur.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.Operation'
-        user:
-          description: The user being updated, references such as Group name will qualified to IDs.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser'
-        errors:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails'
-          description: Errors or warnings that occurred while attempting to add or update this user.
+    s12.common.UserActiveStatus:
+      type: string
+      enum:
+      - USER_ACTIVE_STATUS_UNSPECIFIED
+      - USER_ACTIVE_STATUS_ACTIVE
+      - USER_ACTIVE_STATUS_DEACTIVATED
+      default: USER_ACTIVE_STATUS_UNSPECIFIED
+      description: "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated"
+      title: UserActiveStatus enumerates possible states of 'status' a user may be in
+    s12.users.v1.CreateOrUpdateResponseUser.Field:
+      type: string
+      enum:
+      - FIELD_UNSPECIFIED
+      - FIELD_ID
+      - FIELD_USERNAME
+      - FIELD_FIRST_NAME
+      - FIELD_LAST_NAME
+      - FIELD_PASSWORD
+      - FIELD_SEAT_TYPE
+      - FIELD_TIMEZONE
+      - FIELD_STATUS
+      - FIELD_LANGUAGE
+      - FIELD_PERMISSION_SET_REFERENCE
+      - FIELD_GROUPS
+      - FIELD_SITES
+      - FIELD_ATTRIBUTES
+      - FIELD_COMPANIES
+      default: FIELD_UNSPECIFIED
+      title: "- FIELD_UNSPECIFIED: Unknown or unspecified field\n - FIELD_ID: `id` field\n - FIELD_USERNAME: `username` field\n - FIELD_FIRST_NAME: `first_name` field\n - FIELD_LAST_NAME: `last_name` field\n - FIELD_PASSWORD: `password` field\n - FIELD_SEAT_TYPE: `seat_type` field\n - FIELD_TIMEZONE: `timezone` field\n - FIELD_STATUS: `status` field\n - FIELD_LANGUAGE: `language` field\n - FIELD_PERMISSION_SET_REFERENCE: `permission_set_reference` field\n - FIELD_GROUPS: `groups` field\n - FIELD_SITES: `sites` field\n - FIELD_ATTRIBUTES: `attributes` field\n - FIELD_COMPANIES: `companies` field"
     s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Reason:
       type: string
       enum:
@@ -371,41 +297,24 @@ components:
       - REASON_PERMISSION_SET_DOES_NOT_SUPPORT_EMAIL_LESS
       default: REASON_UNSPECIFIED
       description: " - REASON_UNSPECIFIED: Default failure value.\nAvoid using in favor of defining a specific failure case.\n - REASON_INTERNAL: Something went wrong but, we're not quite sure.\nAvoid using in favor of defining a specific failure case.\n - REASON_USER_EXISTS: User already exists with this username.\n - REASON_USER_NOT_FOUND: User ID was unable to be found.\n - REASON_DUPLICATE_ROW: Duplicate rows detected.\n - REASON_DUPLICATE_USERNAME: Duplicate username detected - Different to REASON_DUPLICATE_ROW, this is thrown if the user manages to get a username past our validation, but our internal system detects a duplicate.\n - REASON_MUST_HAVE_ID_OR_USERNAME: A record must have an ID or a username to support with updating.\n - REASON_INVALID_ID_FORMAT: ID is in an invalid format\n - REASON_INVALID_USERNAME_FORMAT: Username is in an invalid format\n - REASON_ID_USERNAME_MISMATCH: Username does not match existing username, username updates are currently not supported.\n - REASON_FIELD_MANDATORY_FOR_CREATION: The field referenced is mandatory for creation.\n - REASON_CANNOT_CREATE_DEACTIVATED_USERS: Cannot create deactivated users\n - REASON_FIELD_CHANGE_NOT_ALLOWED_FOR_CALLER: Caller does not have permission to change this field for this action type.\n - REASON_INVALID_VALUE_GENERIC: Generic invalid field value error.\nAvoid using in favor of defining a specific failure case.\n - REASON_INVALID_SEAT_PERMISSION_SET_COMBINATION: Invalid permission set/seat assignment.\n - REASON_INVALID_VALUE_PASSWORD_TOO_WEAK: Password does not match password requirements\n - REASON_INVALID_VALUE_PASSWORD_CANNOT_UPDATE_USERS_PASSWORD: Updating an existing users password is not supported\n - REASON_INVALID_VALUE_REFERENCE_NAME_DOES_NOT_FOUND: Invalid site, group, or attribute Name reference.\n - REASON_INVALID_VALUE_REFERENCE_ID_DOES_NOT_FOUND: Invalid site, group, or attribute ID reference.\n - REASON_PERMISSION_SET_PERMISSION_DENIED: Requester does not have the permission(s) needed to interact with Permission Sets for other users\n - REASON_PERMISSION_SET_USER_NOT_ACTIVE: The requested user is not active and therefore cannot have Permission Set interactions\n - REASON_PERMISSION_SET_NOT_FOUND: The requested Permission Set cannot be found in the organisation\n - REASON_INVALID_PERMISSION_SET_FOR_ORGANISATION_TIER: The Permission Set is not allowed to be associated with this type of organisation.\nEx: Trying to use a custom Permission Set in a Free organisation (which is only allowed in Paid orgs)\n - REASON_USER_ATTRIBUTE_DUPLICATE_ATTRIBUTE: User attribute has already been declared in the input for this user\n - REASON_USER_ATTRIBUTE_NOT_FOUND: User attribute could not be found in the user's organisation\n - REASON_USER_ATTRIBUTE_INVALID_ATTRIBUTE_TYPE: User attribute type is not supported.\nThis may indicate a new field type has been added, but the service has not been updated to work out how to sanitise it\n - REASON_USER_ATTRIBUTE_INVALID_SELECT_VALUE: Provided value is not one of the values allowed by this Select field\n - REASON_USER_ATTRIBUTE_INVALID_USER_ID_VALUE: Provided value cannot be coerced to a User ID format\n - REASON_USER_ATTRIBUTE_INVALID_TIMESTAMP_VALUE: Provided value cannot be coerced to a Timestamp format\n - REASON_USER_ATTRIBUTE_INVALID_STRING_VALUE: Provided String value is not allowed.\nEx: a non-nil, empty string\n - REASON_INVALID_SEAT_TYPE_FOR_ORGANISATION_TIER: Invalid seat type for the organisation tier, i.e. using lite seats on a free team.\n - REASON_SEAT_LIMIT_REACHED: The request exceeds the seat limit\n - REASON_GROUP_NOT_FOUND: Group is not found, or does not exist in the current organisation\n - REASON_GROUP_DUPLICATE_ENTRY: Group has already been declared in the input for this user\n - REASON_GROUP_CANNOT_ASSIGN_TO_DEACTIVATED_USER: Group is not allowed to be assigned to a user that is - or will be - deactivated\n - REASON_GROUP_INVALID_REMOVE_REFERENCE: Group remove reference is invalid\n - REASON_GROUP_ASSOCIATION_LIMIT_REACHED: User cannot be assigned to more then 100 groups\n - REASON_GROUP_REFERENCE_AMBIGUOUS: Group reference is ambiguous, i.e. multiple groups with the same name\n - REASON_SITE_NOT_FOUND: Site is not found, or does not exist in the current organisation\n - REASON_SITE_DUPLICATE_ENTRY: Site has already been declared in the input for this user\n - REASON_SITE_CANNOT_ASSIGN_TO_DEACTIVATED_USER: Site is not allowed to be assigned to a user that is - or will be - deactivated\n - REASON_USER_ALREADY_ASSIGNED_TO_ANCESTOR_SITE: User is already assigned to a site further up the hierarchy (ex: requesting Site, but user is already in ancestor Country)\n - REASON_SITE_INVALID_REMOVE_REFERENCE: Site remove reference is invalid\n - REASON_SITE_ASSOCIATION_LIMIT_REACHED: User is already associated with the maximum number of sites\n - REASON_SITE_REFERENCE_AMBIGUOUS: Site reference is ambiguous, i.e. multiple sites with the same name\n - REASON_USER_ATTRIBUTE_DISABLED: User attribute is disabled\n - REASON_LAST_ADMINISTRATOR: Changing this permission set, or status will remove the last admin for the org\n - REASON_FIELD_VALUE_INVALID_MIN_LENGTH: Field value does not meet the minimum length\n - REASON_FIELD_VALUE_INVALID_MAX_LENGTH: Field value does exceeds the maximum length\n - REASON_COMPANY_NOT_FOUND: Company is not found, or does not exist in the current organisation\n - REASON_COMPANY_DUPLICATE_ENTRY: Company has already been declared in the input for this user\n - REASON_COMPANY_CANNOT_ASSIGN_TO_DEACTIVATED_USER: Company is not allowed to be assigned to a user that is - or will be - deactivated\n - REASON_COMPANY_INVALID_REMOVE_REFERENCE: Company remove reference is invalid\n - REASON_COMPANY_MEMBERSHIP_CHANGE_NOT_ALLOWED_FOR_CALLER: Caller does not have permissions to modify user membership for this company\n - REASON_GROUP_MEMBERSHIP_CHANGE_NOT_ALLOWED_FOR_DYNAMIC_GROUP: Group membership cannot be manually assigned to dynamic groups with automated membership rules\n - REASON_SITE_MEMBERSHIP_CHANGE_NOT_ALLOWED_FOR_DYNAMIC_SITE: Site membership cannot be manually assigned to dynamic sites with automated membership rules\n - REASON_PERMISSION_SET_DOES_NOT_SUPPORT_EMAIL_LESS: The specified permission set cannot be applied to an email-less user."
-    s12.users.v1.UsersService.StartCreateOrUpdateUsersJobBody:
+    s12.users.v1.ListCreateOrUpdateUsersJobsRequest:
       type: object
       properties:
-        validate_only:
-          type: boolean
-          description: If this job should be validate only.
-        email_settings:
+        filter:
           allOf:
-          - $ref: '#/components/schemas/s12.users.v1.EmailSettings'
-          description: 'Optional. Email settings for new users that are created - defaults to sending an email if not provided.
-
-            Overwritten by more specific EmailSettings on the individual user (as specified on InitCreateOrUpdateUsersJobRequest)'
-        password_settings:
-          description: Optional. Password settings for users in this job.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.PasswordSettings'
-    s12.users.v1.CancelCreateOrUpdateUsersJobResponse:
-      type: object
-      properties:
-        job_id:
-          type: string
-    s12.common.Language:
+          - $ref: '#/components/schemas/s12.users.v1.ListCreateOrUpdateUsersJobsRequest.Filter'
+          description: filters
+    s12.common.SubscriptionSeatTypes:
       type: string
       enum:
-      - LANGUAGE_UNSPECIFIED
-      - LANGUAGE_EN_US
-      - LANGUAGE_EN_GB
-      - LANGUAGE_DE_DE
-      - LANGUAGE_ES_ES
-      - LANGUAGE_FR_FR
-      - LANGUAGE_PT_BR
-      - LANGUAGE_NL_NL
-      default: LANGUAGE_UNSPECIFIED
-      description: "- LANGUAGE_UNSPECIFIED: Language unspecified\n - LANGUAGE_EN_US: Language en-US\n - LANGUAGE_EN_GB: Language en-GB\n - LANGUAGE_DE_DE: Language de-DE\n - LANGUAGE_ES_ES: Language es-ES\n - LANGUAGE_FR_FR: Language fr-FR\n - LANGUAGE_PT_BR: Language pt-BR\n - LANGUAGE_NL_NL: Language nl-NL"
-      title: Language represents the languages offered in SafetyCulture
+      - SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      - SUBSCRIPTION_SEAT_TYPE_PREMIUM
+      - SUBSCRIPTION_SEAT_TYPE_COLLABORATOR
+      - SUBSCRIPTION_SEAT_TYPE_LITE
+      - SUBSCRIPTION_SEAT_TYPE_SERVICE_USER
+      - SUBSCRIPTION_SEAT_TYPE_SUPPORT
+      default: SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      title: SubscriptionSeatTypes is a list of potential subscription seat types
     s12.users.v1.CreateOrUpdateResponseUser.Operation:
       type: object
       properties:
@@ -422,28 +331,27 @@ components:
           items:
             $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.Field'
           description: The fields to be updated.
-    s12.users.v1.UserStatusMap:
+    s12.users.v1.EmailSettings:
       type: object
       properties:
-        key:
-          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.Status'
-        value:
-          type: integer
-          format: int32
-          description: The number of users with this status.
-      description: UserStatusMap is a map of counts of user statuses for a given job.
-    s12.users.v1.CreateOrUpdateResponseUser.Status:
+        send_email:
+          type: boolean
+          description: Send a welcome email to newly created users.
+    s12.users.v1.CreateOrUpdateUsersJob.Status:
       type: string
       enum:
       - STATUS_UNSPECIFIED
       - STATUS_PENDING
       - STATUS_ERRORED
+      - STATUS_VALIDATING
       - STATUS_VALIDATED
       - STATUS_VALIDATED_WITH_ERRORS
+      - STATUS_EXECUTING
       - STATUS_COMPLETED
       - STATUS_COMPLETED_WITH_ERRORS
+      - STATUS_CANCELLED
       default: STATUS_UNSPECIFIED
-      description: "PENDING --> ERRORED : Blocking errors (e.g. invalid username)\nPENDING --> VALIDATED : No errors\nPENDING --> VALIDATED_WITH_ERRORS : Non blocking errors\n\nVALIDATED --> ERRORED : Blocking errors (e.g. create failed)\nVALIDATED --> COMPLETED : No errors\nVALIDATED --> COMPLETED_WITH_ERRORS : Non blocking errors\n\nVALIDATED_WITH_ERRORS --> ERRORED : Blocking errors\nVALIDATED_WITH_ERRORS --> COMPLETED_WITH_ERRORS : Non blocking errors\n```\n\n - STATUS_PENDING: User pending validation.\n - STATUS_ERRORED: Critical blocking error.\n - STATUS_VALIDATED: User was successfully validated with no errors. Now pending create or update.\n - STATUS_VALIDATED_WITH_ERRORS: User was validated, but there was non-blocking errors. Now pending create or update.\n - STATUS_COMPLETED: User was created or updated with no errors.\n - STATUS_COMPLETED_WITH_ERRORS: User was created or updated with non blocking errors."
+      description: "PENDING --> ERRORED : Blocking errors (e.g. putting the job on the queue errored)\nPENDING --> VALIDATING\nPENDING --> CANCELLED\n\nVALIDATING --> VALIDATED : No errors\nVALIDATING --> VALIDATED_WITH_ERRORS : Non blocking errors\nVALIDATING --> ERRORED : Blocking errors (e.g. putting the job on the queue errored)\nVALIDATING --> EXECUTING\nVALIDATING --> CANCELLED\n\nEXECUTING --> COMPLETED : No errors\nEXECUTING --> COMPLETED_WITH_ERRORS : Non blocking errors\nEXECUTING --> ERRORED : Blocking errors\nEXECUTING --> CANCELLED\n```\n\n - STATUS_PENDING: Job pending validation.\n - STATUS_ERRORED: Job has critical blocking error.\n - STATUS_VALIDATING: Job is currently validating.\n - STATUS_VALIDATED: Job was successfully validated with no errors. Now pending create or update.\n - STATUS_VALIDATED_WITH_ERRORS: Job was validated, but there was non-blocking errors. Now pending create or update.\n - STATUS_EXECUTING: Job is currently creating or updating.\n - STATUS_COMPLETED: Job created or updated with no errors.\n - STATUS_COMPLETED_WITH_ERRORS: Job created or updated with non blocking errors.\n - STATUS_CANCELLED: Job was cancelled."
       title: '```mermaid
 
         stateDiagram-v2
@@ -452,143 +360,138 @@ components:
 
         ERRORED
 
+        VALIDATING
+
         VALIDATED
 
         VALIDATED_WITH_ERRORS
 
+        EXECUTING
+
         COMPLETED
 
-        COMPLETED_WITH_ERRORS'
-    s12.users.v1.CreateOrUpdateUser:
+        COMPLETED_WITH_ERRORS
+
+        CANCELLED'
+    s12.users.v1.SeatUsageMap:
       type: object
       properties:
-        id:
-          type: string
-          description: Optional. At least one of `user_id` or `username` is REQUIRED. ID of the user for updates.
-        username:
-          type: string
-          description: Either `user_id` or `username` is required. Represents the user's email address or username.
-        first_name:
-          type: string
-          description: User's first name.
-        last_name:
-          type: string
-          description: User's last name.
-        password:
-          type: string
-          description: Password for the user. This field is used only during user creation.
-        seat_type:
-          description: 'User''s seat type: full, lite, or guest.'
-          allOf:
-          - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
-        timezone:
-          type: string
-          description: Timezone, must be a valid timezone in the IANA time zone database.
-        status:
-          description: User's activation status.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
-        language:
-          description: Language preference for the user. Follows the ISO-639 code. For example, `en-US`.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.Language'
-        permission_set:
-          description: The permission set assigned to the user. Must be a valid name or ID.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
-        groups:
-          description: Groups the user is assigned to.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Memberships'
-        sites:
-          description: Sites the user is assigned to.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Memberships'
-        companies:
-          description: Contractor companies the user is assigned to.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Memberships'
-        attributes:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Attribute'
-          description: User field attributes.
-        email_settings:
-          description: Controls whether a welcome email is sent to newly created users. By default, an email is sent if this field is not set. Overrides any request-level `EmailSettings` with this user-specific setting.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.EmailSettings'
-        password_settings:
-          description: Optional. Password settings for the user.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.PasswordSettings'
-    s12.users.v1.GetCreateOrUpdateUsersJobResponse:
+        key:
+          $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
+        value:
+          type: integer
+          format: int32
+    google.protobuf.Any:
       type: object
       properties:
-        job:
-          description: Status of the job.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUsersJob'
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser'
-          description: User details
-        page_token:
+        '@type':
           type: string
-          description: Token to request the next batch of users, if empty there are no more users.
-    s12.users.v1.CreateOrUpdateResponseUser.Field:
-      type: string
-      enum:
-      - FIELD_UNSPECIFIED
-      - FIELD_ID
-      - FIELD_USERNAME
-      - FIELD_FIRST_NAME
-      - FIELD_LAST_NAME
-      - FIELD_PASSWORD
-      - FIELD_SEAT_TYPE
-      - FIELD_TIMEZONE
-      - FIELD_STATUS
-      - FIELD_LANGUAGE
-      - FIELD_PERMISSION_SET_REFERENCE
-      - FIELD_GROUPS
-      - FIELD_SITES
-      - FIELD_ATTRIBUTES
-      - FIELD_COMPANIES
-      default: FIELD_UNSPECIFIED
-      title: "- FIELD_UNSPECIFIED: Unknown or unspecified field\n - FIELD_ID: `id` field\n - FIELD_USERNAME: `username` field\n - FIELD_FIRST_NAME: `first_name` field\n - FIELD_LAST_NAME: `last_name` field\n - FIELD_PASSWORD: `password` field\n - FIELD_SEAT_TYPE: `seat_type` field\n - FIELD_TIMEZONE: `timezone` field\n - FIELD_STATUS: `status` field\n - FIELD_LANGUAGE: `language` field\n - FIELD_PERMISSION_SET_REFERENCE: `permission_set_reference` field\n - FIELD_GROUPS: `groups` field\n - FIELD_SITES: `sites` field\n - FIELD_ATTRIBUTES: `attributes` field\n - FIELD_COMPANIES: `companies` field"
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     s12.users.v1.StartCreateOrUpdateUsersJobResponse:
       type: object
       properties:
         job_id:
           type: string
-    s12.users.v1.CreateOrUpdateUser.Reference:
+    s12.users.v1.InitCreateOrUpdateUsersJobRequest:
       type: object
       properties:
-        id:
+        job_id:
           type: string
-          description: The ID of the resource.
-        name:
-          type: string
-          description: The name of the resource.
-        valid:
-          type: boolean
-          description: Read-only. Indicates whether the reference is valid and will be applied to the user.
-        hierarchy:
+          description: ID of the job to add users to, if this is the first request this is optional.
+        users:
           type: array
           items:
-            type: string
-          description: 'map of the hierarchy of the reference, such as a group or site.
-
-            The target resource is the last element in the hierarchy.'
-      description: 'A reference to another resource, such as a group, site, or permission set.
-
-        At least one of `id` or `name` is required.
-
-        If both are provided, the `id` is used and `name` is ignored.
-
-        If only `name` is provided, it resolves the corresponding `id`.'
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateRequestUser'
+    s12.users.v1.CreateOrUpdateResponseUser.Action:
+      type: string
+      enum:
+      - ACTION_UNSPECIFIED
+      - ACTION_CREATE
+      - ACTION_UPDATE
+      - ACTION_NO_CHANGE
+      default: ACTION_UNSPECIFIED
+      title: "- ACTION_CREATE: User creation\n - ACTION_UPDATE: User update\n - ACTION_NO_CHANGE: No change to the user"
+    s12.common.Language:
+      type: string
+      enum:
+      - LANGUAGE_UNSPECIFIED
+      - LANGUAGE_EN_US
+      - LANGUAGE_EN_GB
+      - LANGUAGE_DE_DE
+      - LANGUAGE_ES_ES
+      - LANGUAGE_FR_FR
+      - LANGUAGE_PT_BR
+      - LANGUAGE_NL_NL
+      default: LANGUAGE_UNSPECIFIED
+      description: "- LANGUAGE_UNSPECIFIED: Language unspecified\n - LANGUAGE_EN_US: Language en-US\n - LANGUAGE_EN_GB: Language en-GB\n - LANGUAGE_DE_DE: Language de-DE\n - LANGUAGE_ES_ES: Language es-ES\n - LANGUAGE_FR_FR: Language fr-FR\n - LANGUAGE_PT_BR: Language pt-BR\n - LANGUAGE_NL_NL: Language nl-NL"
+      title: Language represents the languages offered in SafetyCulture
+    s12.common.PasswordSettings:
+      type: object
+      properties:
+        require_password_reset:
+          type: boolean
+      title: Parameters to force password reset for a user
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.users.v1.CreateOrUpdateUser.Attribute:
+      type: object
+      properties:
+        reference:
+          description: Attribute reference. Must be a valid Name or ID for the user field.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
+        values:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Attribute.Value'
+    s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails:
+      type: object
+      properties:
+        reason:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Reason'
+          description: Error reason
+        field_hint:
+          description: Optional field hint for where the error occurred.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.Field'
+        sub_field_reference:
+          description: Optional sub field reference if the field is a Key Value like Attributes.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
+        value_hint:
+          type: string
+          description: Optional value hint for the value that has issues, i.e. the username that is invalid.
+        value_reference:
+          description: Optional value reference for the value that has issues, i.e. the site that is invalid.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
+        message:
+          type: string
+          description: Error details.
+        level:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Level'
+          description: How severe this error is
+        details:
+          description: A message that includes additional details about the error.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Details'
     s12.users.v1.ListCreateOrUpdateUsersJobsRequest.Filter:
       type: object
       properties:
@@ -600,178 +503,21 @@ components:
         user_id:
           type: string
           description: Filter by user ID who started the job.
-    s12.users.v1.CreateOrUpdateUsersResponse:
+    s12.users.v1.CreateOrUpdateUser.Memberships:
       type: object
       properties:
-        users:
+        remove:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser'
-        seat_usage:
-          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateSeatUsage'
-    s12.users.v1.CreateOrUpdateUserOrigin:
-      type: object
-      properties:
-        source:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUserOrigin.Source'
-          description: Source of the user operation
-        description:
-          type: string
-          description: Additional description or context about the operation
-    s12.common.UserActiveStatus:
-      type: string
-      enum:
-      - USER_ACTIVE_STATUS_UNSPECIFIED
-      - USER_ACTIVE_STATUS_ACTIVE
-      - USER_ACTIVE_STATUS_DEACTIVATED
-      default: USER_ACTIVE_STATUS_UNSPECIFIED
-      description: "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated"
-      title: UserActiveStatus enumerates possible states of 'status' a user may be in
-    s12.users.v1.CreateOrUpdateUserOrigin.Source:
-      type: string
-      enum:
-      - SOURCE_UNSPECIFIED
-      - SOURCE_CSV
-      - SOURCE_PUBLIC_API
-      - SOURCE_INTEGRATION_UNKNOWN
-      - SOURCE_INTEGRATION_MERGE_API_BAMBOOHR
-      - SOURCE_INTEGRATION_BAMBOOHR
-      - SOURCE_INTEGRATION_7SHIFTS
-      - SOURCE_INTEGRATION_DAYFORCE
-      - SOURCE_INTEGRATION_EMPLOYMENT_HERO
-      - SOURCE_INTEGRATION_HIBOB
-      - SOURCE_INTEGRATION_ADP_WORKFORCE_NOW
-      - SOURCE_INTEGRATION_ORACLE_HUMAN_CAPITAL_MANAGEMENT
-      - SOURCE_INTEGRATION_SAP_SUCCESS_FACTORS
-      - SOURCE_INTEGRATION_UKG_PRO
-      - SOURCE_INTEGRATION_UKG_READY
-      - SOURCE_INTEGRATION_WORKDAY
-      default: SOURCE_UNSPECIFIED
-      description: "- SOURCE_CSV: User was imported from a CSV file\n - SOURCE_PUBLIC_API: User was created/updated via Public API\n - SOURCE_INTEGRATION_UNKNOWN: User was created/updated via an integration but source is unknown\n - SOURCE_INTEGRATION_MERGE_API_BAMBOOHR: @deprecated. Use SOURCE_INTEGRATION_BAMBOOHR. User was created/updated via Bamboo HR integration.\n - SOURCE_INTEGRATION_BAMBOOHR: User was created/updated via BambooHR integration\n - SOURCE_INTEGRATION_7SHIFTS: User was created/updated via 7 Shifts integration\n - SOURCE_INTEGRATION_DAYFORCE: User was created/updated via Dayforce integration\n - SOURCE_INTEGRATION_EMPLOYMENT_HERO: User was created/updated via Employment Hero integration\n - SOURCE_INTEGRATION_HIBOB: User was created/updated via HiBob integration\n - SOURCE_INTEGRATION_ADP_WORKFORCE_NOW: User was created/updated via ADP Workforce Now\n - SOURCE_INTEGRATION_ORACLE_HUMAN_CAPITAL_MANAGEMENT: User was created/updated via Oracle Cloud Human Capital Management (HCM)\n - SOURCE_INTEGRATION_SAP_SUCCESS_FACTORS: User was created/updated via SAP Success Factors\n - SOURCE_INTEGRATION_UKG_PRO: User was created/updated via UKG Pro\n - SOURCE_INTEGRATION_UKG_READY: User was created/updated via UKG Pro\n - SOURCE_INTEGRATION_WORKDAY: User was created/updated via Workday"
-      title: Source of the user operation
-    s12.users.v1.InitCreateOrUpdateUsersJobResponse:
-      type: object
-      properties:
-        job_id:
-          type: string
-          description: ID of the job that was started.
-        users_count:
-          type: integer
-          format: int32
-          description: The number of users in the request
-    s12.common.PasswordSettings:
-      type: object
-      properties:
-        require_password_reset:
-          type: boolean
-      title: Parameters to force password reset for a user
-    s12.users.v1.CreateOrUpdateRequestUser:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser'
-      required:
-      - user
-    s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Level:
-      type: string
-      enum:
-      - LEVEL_UNSPECIFIED
-      - LEVEL_INFO
-      - LEVEL_WARNING
-      - LEVEL_ERROR
-      - LEVEL_FATAL
-      default: LEVEL_UNSPECIFIED
-      description: " - LEVEL_INFO: Indicates an error is only for informational purposes and can be safely ignored.\n\nEx: An ID was changed in formatting from S12ID to UUID (no functional change, just an FYI)\n - LEVEL_WARNING: Indicates an error can be ignored, but may have a different or unexpected outcome than requested.\n\nEx: Adding a user-site association for both parent and child sites (will only be added to the parent, but no\nuser intervention is needed)\n - LEVEL_ERROR: Indicates an error where there was no way to auto-resolve the issue, but processing of the remaining data was\nable to continue\n\nEx: A requested group does not exists in the organisation (stop processing this group, move on to the next)\n - LEVEL_FATAL: Indicates an error that caused the process to catastrophically fail and further data processing is not possible\n\nEx: Organisation has a negative number of seats used (we cannot recover from this 'impossible' state)"
-    s12.users.v1.ListCreateOrUpdateUsersJobsResponse:
-      type: object
-      properties:
-        jobs:
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
+          description: References from which the user will be removed. ONLY supports "*" to remove from all existing references.
+        add:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUsersJob'
-          description: List of jobs sorted by most recent.
-    s12.users.v1.CreateOrUpdateUsersRequest:
-      type: object
-      properties:
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateRequestUser'
-        validate_only:
-          type: boolean
-          description: Only validate the data, don't apply the changes.
-        email_settings:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.EmailSettings'
-          description: 'Optional. Email settings for new users that are created - defaults to sending an email if not provided.
-
-            Overwritten by more specific EmailSettings on the individual user'
-      required:
-      - users
-    s12.users.v1.SeatUsageMap:
-      type: object
-      properties:
-        key:
-          $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
-        value:
-          type: integer
-          format: int32
-    s12.users.v1.CreateOrUpdateResponseUser.Action:
-      type: string
-      enum:
-      - ACTION_UNSPECIFIED
-      - ACTION_CREATE
-      - ACTION_UPDATE
-      - ACTION_NO_CHANGE
-      default: ACTION_UNSPECIFIED
-      title: "- ACTION_CREATE: User creation\n - ACTION_UPDATE: User update\n - ACTION_NO_CHANGE: No change to the user"
-    s12.users.v1.CreateOrUpdateSeatUsage:
-      type: object
-      properties:
-        used:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.SeatUsageMap'
-          description: 'The number of seats used for each type, up to the available limit
-
-            If you have 10 seats available, and the request wants to use 11 the value will be 10.'
-        required:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.SeatUsageMap'
-          description: The additional number of seats required for the request to be fully successful.
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Details:
-      type: object
-      properties:
-        ambiguous_reference:
-          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateAmbiguousReferenceError'
-    s12.users.v1.ListCreateOrUpdateUsersJobsRequest:
-      type: object
-      properties:
-        filter:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.ListCreateOrUpdateUsersJobsRequest.Filter'
-          description: filters
-    s12.users.v1.EmailSettings:
-      type: object
-      properties:
-        send_email:
-          type: boolean
-          description: Send a welcome email to newly created users.
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
+          description: References to assign the user to. Each must be a valid, case-sensitive name or ID for the resource.
     s12.users.v1.CreateOrUpdateUsersJob:
       type: object
       properties:
@@ -844,73 +590,6 @@ components:
         validate_only:
           type: boolean
           description: Whether the job is a ValidateOnly job
-    s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails:
-      type: object
-      properties:
-        reason:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Reason'
-          description: Error reason
-        field_hint:
-          description: Optional field hint for where the error occurred.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.Field'
-        sub_field_reference:
-          description: Optional sub field reference if the field is a Key Value like Attributes.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
-        value_hint:
-          type: string
-          description: Optional value hint for the value that has issues, i.e. the username that is invalid.
-        value_reference:
-          description: Optional value reference for the value that has issues, i.e. the site that is invalid.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
-        message:
-          type: string
-          description: Error details.
-        level:
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Level'
-          description: How severe this error is
-        details:
-          description: A message that includes additional details about the error.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Details'
-    s12.users.v1.CreateOrUpdateUser.Attribute:
-      type: object
-      properties:
-        reference:
-          description: Attribute reference. Must be a valid Name or ID for the user field.
-          allOf:
-          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
-        values:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Attribute.Value'
-    s12.common.SubscriptionSeatTypes:
-      type: string
-      enum:
-      - SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
-      - SUBSCRIPTION_SEAT_TYPE_PREMIUM
-      - SUBSCRIPTION_SEAT_TYPE_COLLABORATOR
-      - SUBSCRIPTION_SEAT_TYPE_LITE
-      - SUBSCRIPTION_SEAT_TYPE_SERVICE_USER
-      - SUBSCRIPTION_SEAT_TYPE_SUPPORT
-      default: SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
-      title: SubscriptionSeatTypes is a list of potential subscription seat types
-    s12.users.v1.InitCreateOrUpdateUsersJobRequest:
-      type: object
-      properties:
-        job_id:
-          type: string
-          description: ID of the job to add users to, if this is the first request this is optional.
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateRequestUser'
     s12.users.v1.CreateOrUpdateAmbiguousReferenceError:
       type: object
       properties:
@@ -921,6 +600,327 @@ components:
             $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
           description: Possible references that could be selected
       title: Error when a reference is ambiguous, as in there could be multiple possible selection options
+    s12.users.v1.CreateOrUpdateUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Optional. At least one of `user_id` or `username` is REQUIRED. ID of the user for updates.
+        username:
+          type: string
+          description: Either `user_id` or `username` is required. Represents the user's email address or username.
+        first_name:
+          type: string
+          description: User's first name.
+        last_name:
+          type: string
+          description: User's last name.
+        password:
+          type: string
+          description: Password for the user. This field is used only during user creation.
+        seat_type:
+          description: 'User''s seat type: full, lite, or guest.'
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
+        timezone:
+          type: string
+          description: Timezone, must be a valid timezone in the IANA time zone database.
+        status:
+          description: User's activation status.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
+        language:
+          description: Language preference for the user. Follows the ISO-639 code. For example, `en-US`.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Language'
+        permission_set:
+          description: The permission set assigned to the user. Must be a valid name or ID.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
+        groups:
+          description: Groups the user is assigned to.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Memberships'
+        sites:
+          description: Sites the user is assigned to.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Memberships'
+        companies:
+          description: Contractor companies the user is assigned to.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Memberships'
+        attributes:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Attribute'
+          description: User field attributes.
+        email_settings:
+          description: Controls whether a welcome email is sent to newly created users. By default, an email is sent if this field is not set. Overrides any request-level `EmailSettings` with this user-specific setting.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.EmailSettings'
+        password_settings:
+          description: Optional. Password settings for the user.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.PasswordSettings'
+    s12.users.v1.CreateOrUpdateUsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser'
+        seat_usage:
+          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateSeatUsage'
+    s12.users.v1.CreateOrUpdateResponseUser:
+      type: object
+      properties:
+        operation:
+          description: The operation that occurred or will occur.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.Operation'
+        user:
+          description: The user being updated, references such as Group name will qualified to IDs.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser'
+        errors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails'
+          description: Errors or warnings that occurred while attempting to add or update this user.
+    s12.users.v1.CreateOrUpdateUserOrigin.Source:
+      type: string
+      enum:
+      - SOURCE_UNSPECIFIED
+      - SOURCE_CSV
+      - SOURCE_PUBLIC_API
+      - SOURCE_INTEGRATION_UNKNOWN
+      - SOURCE_INTEGRATION_MERGE_API_BAMBOOHR
+      - SOURCE_INTEGRATION_BAMBOOHR
+      - SOURCE_INTEGRATION_7SHIFTS
+      - SOURCE_INTEGRATION_DAYFORCE
+      - SOURCE_INTEGRATION_EMPLOYMENT_HERO
+      - SOURCE_INTEGRATION_HIBOB
+      - SOURCE_INTEGRATION_ADP_WORKFORCE_NOW
+      - SOURCE_INTEGRATION_ORACLE_HUMAN_CAPITAL_MANAGEMENT
+      - SOURCE_INTEGRATION_SAP_SUCCESS_FACTORS
+      - SOURCE_INTEGRATION_UKG_PRO
+      - SOURCE_INTEGRATION_UKG_READY
+      - SOURCE_INTEGRATION_WORKDAY
+      default: SOURCE_UNSPECIFIED
+      description: "- SOURCE_CSV: User was imported from a CSV file\n - SOURCE_PUBLIC_API: User was created/updated via Public API\n - SOURCE_INTEGRATION_UNKNOWN: User was created/updated via an integration but source is unknown\n - SOURCE_INTEGRATION_MERGE_API_BAMBOOHR: @deprecated. Use SOURCE_INTEGRATION_BAMBOOHR. User was created/updated via Bamboo HR integration.\n - SOURCE_INTEGRATION_BAMBOOHR: User was created/updated via BambooHR integration\n - SOURCE_INTEGRATION_7SHIFTS: User was created/updated via 7 Shifts integration\n - SOURCE_INTEGRATION_DAYFORCE: User was created/updated via Dayforce integration\n - SOURCE_INTEGRATION_EMPLOYMENT_HERO: User was created/updated via Employment Hero integration\n - SOURCE_INTEGRATION_HIBOB: User was created/updated via HiBob integration\n - SOURCE_INTEGRATION_ADP_WORKFORCE_NOW: User was created/updated via ADP Workforce Now\n - SOURCE_INTEGRATION_ORACLE_HUMAN_CAPITAL_MANAGEMENT: User was created/updated via Oracle Cloud Human Capital Management (HCM)\n - SOURCE_INTEGRATION_SAP_SUCCESS_FACTORS: User was created/updated via SAP Success Factors\n - SOURCE_INTEGRATION_UKG_PRO: User was created/updated via UKG Pro\n - SOURCE_INTEGRATION_UKG_READY: User was created/updated via UKG Pro\n - SOURCE_INTEGRATION_WORKDAY: User was created/updated via Workday"
+      title: Source of the user operation
+    s12.users.v1.InitCreateOrUpdateUsersJobResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+          description: ID of the job that was started.
+        users_count:
+          type: integer
+          format: int32
+          description: The number of users in the request
+    s12.users.v1.CreateOrUpdateResponseUser.Status:
+      type: string
+      enum:
+      - STATUS_UNSPECIFIED
+      - STATUS_PENDING
+      - STATUS_ERRORED
+      - STATUS_VALIDATED
+      - STATUS_VALIDATED_WITH_ERRORS
+      - STATUS_COMPLETED
+      - STATUS_COMPLETED_WITH_ERRORS
+      default: STATUS_UNSPECIFIED
+      description: "PENDING --> ERRORED : Blocking errors (e.g. invalid username)\nPENDING --> VALIDATED : No errors\nPENDING --> VALIDATED_WITH_ERRORS : Non blocking errors\n\nVALIDATED --> ERRORED : Blocking errors (e.g. create failed)\nVALIDATED --> COMPLETED : No errors\nVALIDATED --> COMPLETED_WITH_ERRORS : Non blocking errors\n\nVALIDATED_WITH_ERRORS --> ERRORED : Blocking errors\nVALIDATED_WITH_ERRORS --> COMPLETED_WITH_ERRORS : Non blocking errors\n```\n\n - STATUS_PENDING: User pending validation.\n - STATUS_ERRORED: Critical blocking error.\n - STATUS_VALIDATED: User was successfully validated with no errors. Now pending create or update.\n - STATUS_VALIDATED_WITH_ERRORS: User was validated, but there was non-blocking errors. Now pending create or update.\n - STATUS_COMPLETED: User was created or updated with no errors.\n - STATUS_COMPLETED_WITH_ERRORS: User was created or updated with non blocking errors."
+      title: '```mermaid
+
+        stateDiagram-v2
+
+        PENDING
+
+        ERRORED
+
+        VALIDATED
+
+        VALIDATED_WITH_ERRORS
+
+        COMPLETED
+
+        COMPLETED_WITH_ERRORS'
+    s12.users.v1.UserFieldMap:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.Field'
+        value:
+          type: integer
+          format: int32
+          description: The number of users with this field changed.
+      description: UserFieldMap is a map of counts of user field changes for a given job.
+    s12.users.v1.CreateOrUpdateRequestUser:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser'
+      required:
+      - user
+    s12.users.v1.UserStatusMap:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser.Status'
+        value:
+          type: integer
+          format: int32
+          description: The number of users with this status.
+      description: UserStatusMap is a map of counts of user statuses for a given job.
+    s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Details:
+      type: object
+      properties:
+        ambiguous_reference:
+          $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateAmbiguousReferenceError'
+    s12.users.v1.UsersService.StartCreateOrUpdateUsersJobBody:
+      type: object
+      properties:
+        validate_only:
+          type: boolean
+          description: If this job should be validate only.
+        email_settings:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.EmailSettings'
+          description: 'Optional. Email settings for new users that are created - defaults to sending an email if not provided.
+
+            Overwritten by more specific EmailSettings on the individual user (as specified on InitCreateOrUpdateUsersJobRequest)'
+        password_settings:
+          description: Optional. Password settings for users in this job.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.PasswordSettings'
+    s12.users.v1.CreateOrUpdateResponseUser.ErrorDetails.Level:
+      type: string
+      enum:
+      - LEVEL_UNSPECIFIED
+      - LEVEL_INFO
+      - LEVEL_WARNING
+      - LEVEL_ERROR
+      - LEVEL_FATAL
+      default: LEVEL_UNSPECIFIED
+      description: " - LEVEL_INFO: Indicates an error is only for informational purposes and can be safely ignored.\n\nEx: An ID was changed in formatting from S12ID to UUID (no functional change, just an FYI)\n - LEVEL_WARNING: Indicates an error can be ignored, but may have a different or unexpected outcome than requested.\n\nEx: Adding a user-site association for both parent and child sites (will only be added to the parent, but no\nuser intervention is needed)\n - LEVEL_ERROR: Indicates an error where there was no way to auto-resolve the issue, but processing of the remaining data was\nable to continue\n\nEx: A requested group does not exists in the organisation (stop processing this group, move on to the next)\n - LEVEL_FATAL: Indicates an error that caused the process to catastrophically fail and further data processing is not possible\n\nEx: Organisation has a negative number of seats used (we cannot recover from this 'impossible' state)"
+    s12.users.v1.CreateOrUpdateUser.Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the resource.
+        name:
+          type: string
+          description: The name of the resource.
+        valid:
+          type: boolean
+          description: Read-only. Indicates whether the reference is valid and will be applied to the user.
+        hierarchy:
+          type: array
+          items:
+            type: string
+          description: 'map of the hierarchy of the reference, such as a group or site.
+
+            The target resource is the last element in the hierarchy.'
+      description: 'A reference to another resource, such as a group, site, or permission set.
+
+        At least one of `id` or `name` is required.
+
+        If both are provided, the `id` is used and `name` is ignored.
+
+        If only `name` is provided, it resolves the corresponding `id`.'
+    s12.users.v1.CreateOrUpdateUserOrigin:
+      type: object
+      properties:
+        source:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUserOrigin.Source'
+          description: Source of the user operation
+        description:
+          type: string
+          description: Additional description or context about the operation
+    s12.users.v1.GetCreateOrUpdateUsersJobResponse:
+      type: object
+      properties:
+        job:
+          description: Status of the job.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUsersJob'
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateResponseUser'
+          description: User details
+        page_token:
+          type: string
+          description: Token to request the next batch of users, if empty there are no more users.
+    s12.users.v1.CreateOrUpdateSeatUsage:
+      type: object
+      properties:
+        used:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.SeatUsageMap'
+          description: 'The number of seats used for each type, up to the available limit
+
+            If you have 10 seats available, and the request wants to use 11 the value will be 10.'
+        required:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.SeatUsageMap'
+          description: The additional number of seats required for the request to be fully successful.
+    s12.users.v1.CreateOrUpdateUsersRequest:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateRequestUser'
+        validate_only:
+          type: boolean
+          description: Only validate the data, don't apply the changes.
+        email_settings:
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.EmailSettings'
+          description: 'Optional. Email settings for new users that are created - defaults to sending an email if not provided.
+
+            Overwritten by more specific EmailSettings on the individual user'
+      required:
+      - users
+    s12.users.v1.CreateOrUpdateUser.Attribute.Value:
+      type: object
+      properties:
+        valid:
+          type: boolean
+          description: Indicates whether the value is valid and will be applied to the user.
+        string_value:
+          type: string
+          description: The string value of a field.
+        timestamp_value:
+          type: string
+          format: date-time
+          description: The timestamp value of a field.
+        uuid_value:
+          description: The UUID value of a field.
+          allOf:
+          - $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUser.Reference'
+    s12.users.v1.ListCreateOrUpdateUsersJobsResponse:
+      type: object
+      properties:
+        jobs:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.users.v1.CreateOrUpdateUsersJob'
+          description: List of jobs sorted by most recent.
   securitySchemes:
     BearerAuthentication:
       type: http

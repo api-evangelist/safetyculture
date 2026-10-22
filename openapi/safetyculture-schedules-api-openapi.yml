@@ -414,316 +414,38 @@ paths:
       - Schedules
 components:
   schemas:
-    s12.scheduling.v1.ScheduleTargetSummary:
+    s12.scheduling.v1.AssetScheduleTarget:
       type: object
       properties:
-        target_type:
-          description: Whether the targets are sites or assets.
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleTargetType'
-        total_count:
-          type: integer
-          format: int32
-          description: 'Number of resolved targets this schedule applies to.
-
-            For site targets, each registered site is expanded to the locations it
-
-            represents, so the count may differ from the number of registered site IDs.'
-          readOnly: true
-      description: The type and count of targets (sites or assets) attached to a schedule.
-    s12.scheduling.v1.SchedulingService.ResumeScheduleBody:
-      type: object
-      properties:
-        sites:
-          description: Sites to resume.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.Sites'
-        assets:
-          description: Assets to resume.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.Assets'
-    s12.scheduling.v1.ScheduleTarget:
-      type: object
-      description: Specifies which sites or assets this schedule applies to. Exactly one must be set.
-      oneOf:
-      - type: object
-        title: Sites
-        description: Target specific sites. A separate occurrence is created for each site at each recurrence.
-        properties:
-          sites:
-            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleBySites'
-        required:
-        - sites
-      - type: object
-        title: Assets
-        description: Target specific assets. A separate occurrence is created for each asset at each recurrence.
-        properties:
-          assets:
-            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleByAssets'
-        required:
-        - assets
-    s12.scheduling.v1.PauseScheduleResponse:
-      type: object
-    s12.scheduling.v1.CompletionRule:
-      type: string
-      enum:
-      - COMPLETION_RULE_UNSPECIFIED
-      - COMPLETION_RULE_ANY
-      - COMPLETION_RULE_ALL
-      default: COMPLETION_RULE_UNSPECIFIED
-      description: "Completion rule enum.\n\n - COMPLETION_RULE_UNSPECIFIED: Unspecified completion rule.\n - COMPLETION_RULE_ANY: Any assignee can complete the schedule.\n - COMPLETION_RULE_ALL: All assignees must complete the schedule."
-    s12.scheduling.v1.SchedulingService.UpdateScheduleDetailsBody:
-      type: object
-      properties:
-        title:
+        id:
           type: string
-          description: Title of the schedule.
-        completion_rule:
-          description: 'Completion rule for the schedule.
-
-            Determines how many assigned users must complete the work for an occurrence to be considered complete.'
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.CompletionRule'
-        update_mask:
+          description: System-generated unique ID of the asset.
+        code:
           type: string
-          description: 'Fields to update. Valid paths: "title", "completion_rule".'
-      description: Request message for UpdateScheduleDetails.
-      required:
-      - update_mask
-    s12.scheduling.v1.UpdateSites:
-      type: object
-      properties:
-        site_ids:
-          type: array
-          items:
-            type: string
-          description: 'The complete desired list of site IDs for this schedule.
-
-            Replaces the current site targets - sites not in this list will be removed,
-
-            and sites not currently targeted will be added.'
-      description: 'UpdateSites sets the complete list of sites this schedule applies to.
-
-        The provided list replaces the current set of site targets entirely.'
-      required:
-      - site_ids
-    s12.scheduling.v1.ScheduleByAssets:
+          description: The asset's code - its user-defined unique identifier.
+        display_name:
+          type: string
+          description: Display name of the asset.
+        type:
+          description: The asset's type.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.AssetTargetType'
+        site:
+          description: The site this asset is linked to.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.AssetSite'
+      description: AssetScheduleTarget is an asset a schedule applies to.
+    s12.scheduling.v1.Assets:
       type: object
       properties:
         asset_ids:
           type: array
           items:
             type: string
-          description: Assets included in the schedule.
-      description: 'ScheduleByAssets is a list of assets a schedule applies to.
-
-        Assignment and progress is tracked separately for each asset.
-
-        Assignees can be specified, or derived through the respective asset''s site.'
+          description: A list of asset IDs.
+      description: Assets specifies a list of assets.
       required:
       - asset_ids
-    s12.scheduling.v1.ScheduleAssignmentRule:
-      type: object
-      description: Specifies which users are assigned to complete the scheduled work. Exactly one rule must be set.
-      oneOf:
-      - type: object
-        title: Specific Users
-        description: Assign to a specific list of users by ID.
-        properties:
-          users:
-            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleUserAssignment'
-        required:
-        - users
-      - type: object
-        title: Group
-        description: Assign to all members of a group.
-        properties:
-          groups:
-            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleGroupAssignment'
-        required:
-        - groups
-      - type: object
-        title: Site Members
-        description: Assign to all members of each target site. Requires the schedule to have site or asset targets.
-        properties:
-          site_members:
-            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleSiteMemberAssignment'
-        required:
-        - site_members
-      - type: object
-        title: Site Members in Group
-        description: Assign to users who are both site members and in a specific group. Requires site or asset targets.
-        properties:
-          site_members_in_group:
-            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleSiteMemberInGroupAssignment'
-        required:
-        - site_members_in_group
-    s12.scheduling.v1.Grantee:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/s12.scheduling.v1.User'
-        group:
-          $ref: '#/components/schemas/s12.scheduling.v1.Group'
-      description: 'Grantee is the typed identifier of an entity holding an access grant.
-
-        Exactly one variant must be set.'
-    s12.scheduling.v1.SiteScheduleTarget:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique ID of the site.
-        name:
-          type: string
-          description: Name of the site.
-        timezone:
-          type: string
-          description: IANA time zone of the site (e.g. "Australia/Sydney"). Empty when the site has no time zone set.
-      description: SiteScheduleTarget is a site a schedule applies to.
-    s12.scheduling.v1.User:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-          readOnly: true
-      description: 'User represents a user identified by its id.
-
-        The name field is populated by the server on responses and ignored on requests.'
-      required:
-      - id
-    s12.scheduling.v1.ScheduleUserAssignment:
-      type: object
-      properties:
-        user_ids:
-          type: array
-          items:
-            type: string
-          description: User IDs to assign.
-      description: ScheduleUserAssignment assigns the scheduled work to specific users.
-      required:
-      - user_ids
-    s12.scheduling.v1.ScheduleInspectionWork:
-      type: object
-      properties:
-        template_id:
-          type: string
-          description: The ID of the inspection template to use.
-      description: ScheduleInspectionWork configures the schedule to create inspections.
-      required:
-      - template_id
-    s12.scheduling.v1.AccessGrant:
-      type: object
-      properties:
-        grantee:
-          $ref: '#/components/schemas/s12.scheduling.v1.Grantee'
-        level:
-          $ref: '#/components/schemas/s12.scheduling.v1.AccessLevel'
-      description: AccessGrant is a single discrete-access grant on a schedule.
-      required:
-      - grantee
-      - level
-    s12.scheduling.v1.UpdateUserAssignees:
-      type: object
-      properties:
-        user_ids:
-          type: array
-          items:
-            type: string
-          description: 'User IDs to assign.
-
-            Replaces any existing assignees with this list.'
-      description: UpdateUserAssignees modifies the list of specifically assigned users.
-      required:
-      - user_ids
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
-    s12.scheduling.v1.UpdateScheduleRecurrenceResponse:
-      type: object
-      description: Response message for UpdateScheduleRecurrence.
-    s12.scheduling.v1.ScheduleBySites:
-      type: object
-      properties:
-        site_ids:
-          type: array
-          items:
-            type: string
-          description: Sites included in the schedule.
-      description: 'ScheduleBySites is a list of sites a schedule applies to.
-
-        Assignment and progress is tracked separately for each site.
-
-        Assignees can be specified, or derived from site membership.'
-      required:
-      - site_ids
-    s12.scheduling.v1.Status:
-      type: string
-      enum:
-      - STATUS_UNSPECIFIED
-      - STATUS_FINISHED
-      - STATUS_ACTIVE
-      - STATUS_PAUSED
-      - STATUS_DELETED
-      - STATUS_PENDING
-      - STATUS_FAILED
-      - STATUS_ENDED
-      default: STATUS_UNSPECIFIED
-      description: "Status enum.\n\n - STATUS_UNSPECIFIED: Unspecified status. Default value; do not use explicitly.\n - STATUS_FINISHED: Schedule has completed all occurrences defined by its recurrence rule.\n - STATUS_ACTIVE: Schedule is active and generating occurrences as expected.\n - STATUS_PAUSED: Schedule is temporarily suspended. No new occurrences will be generated until resumed.\n - STATUS_DELETED: Schedule has been deleted and is no longer active or available.\n - STATUS_PENDING: Schedule has been created but has not yet started generating occurrences.\n - STATUS_FAILED: Schedule encountered an error and could not continue generating occurrences.\n - STATUS_ENDED: Schedule has reached its end date and will no longer generate occurrences."
-    s12.scheduling.v1.ScheduleUserAssignmentInfo:
-      type: object
-      properties:
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.scheduling.v1.User'
-          readOnly: true
-      description: Assignment to specific users.
-    s12.scheduling.v1.CreateNewScheduleResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the created schedule.
-      description: Response message for CreateNewSchedule.
-    s12.scheduling.v1.UpdateScheduleAssigneesResponse:
-      type: object
-      description: Response message for UpdateScheduleAssignees.
-    s12.scheduling.v1.ListScheduleTargetsResponse:
-      type: object
-      properties:
-        targets:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleTargetDetail'
-          description: The sites or assets the schedule applies to, filtered by the caller's access, with the recurrence for each.
-        total_count:
-          type: integer
-          format: int32
-          description: 'Total number of sites or assets the schedule applies to, regardless of the caller''s access or any search_query filter.
-
-            This value may exceed the number of items returned when the caller does not have permission to view all sites or assets,
-
-            or when a search_query is set.'
-        next_page_token:
-          type: string
-          description: Token for fetching the next page. Token is empty when there are no more results.
-      description: ListScheduleTargetsResponse is the response for ListScheduleTargets.
     s12.scheduling.v1.GetScheduleResponse:
       type: object
       properties:
@@ -808,95 +530,49 @@ components:
           allOf:
           - $ref: '#/components/schemas/s12.scheduling.v1.GetScheduleResponse.NextOccurrenceDateRange'
       description: Response message for GetSchedule.
-    s12.scheduling.v1.ScheduleTargetType:
-      type: string
-      enum:
-      - SCHEDULE_TARGET_TYPE_UNSPECIFIED
-      - SCHEDULE_TARGET_TYPE_SITES
-      - SCHEDULE_TARGET_TYPE_ASSETS
-      default: SCHEDULE_TARGET_TYPE_UNSPECIFIED
-      description: "Whether a schedule targets sites or assets.\n\n - SCHEDULE_TARGET_TYPE_SITES: The schedule targets specific sites.\n - SCHEDULE_TARGET_TYPE_ASSETS: The schedule targets specific assets."
-    s12.scheduling.v1.AssetScheduleTarget:
-      type: object
-      properties:
-        id:
-          type: string
-          description: System-generated unique ID of the asset.
-        code:
-          type: string
-          description: The asset's code - its user-defined unique identifier.
-        display_name:
-          type: string
-          description: Display name of the asset.
-        type:
-          description: The asset's type.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.AssetTargetType'
-        site:
-          description: The site this asset is linked to.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.AssetSite'
-      description: AssetScheduleTarget is an asset a schedule applies to.
-    s12.scheduling.v1.AssignmentGroup:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The group's ID.
-          readOnly: true
-        name:
-          type: string
-          description: The group's display name.
-          readOnly: true
-      description: A group associated with a schedule.
-    s12.scheduling.v1.EndScheduleResponse:
-      type: object
-    s12.scheduling.v1.ScheduleAssignmentRuleInfo:
+    s12.scheduling.v1.ScheduleUserAssignmentInfo:
       type: object
       properties:
         users:
-          description: Assigned to specific users.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleUserAssignmentInfo'
-        groups:
-          description: Assigned to all members of a group.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleGroupAssignmentInfo'
-        site_members:
-          description: 'Assigned to all members of each target site.
-
-            Only applies to site and asset schedules.'
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleSiteMemberAssignmentInfo'
-        site_members_in_group:
-          description: 'Assigned to users who are members of both the target site and specified groups.
-
-            Only applies to site and asset schedules.'
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleSiteMemberInGroupAssignmentInfo'
-      description: Who is assigned to complete the work at each occurrence.
-    s12.scheduling.v1.Group:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.scheduling.v1.User'
+          readOnly: true
+      description: Assignment to specific users.
+    s12.scheduling.v1.ScheduleTargetSummary:
       type: object
       properties:
-        id:
-          type: string
-        name:
-          type: string
+        target_type:
+          description: Whether the targets are sites or assets.
           readOnly: true
-      description: 'Group represents a group identified by its id.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleTargetType'
+        total_count:
+          type: integer
+          format: int32
+          description: 'Number of resolved targets this schedule applies to.
 
-        The name field is populated by the server on responses and ignored on requests.'
-      required:
-      - id
-    s12.scheduling.v1.Assets:
+            For site targets, each registered site is expanded to the locations it
+
+            represents, so the count may differ from the number of registered site IDs.'
+          readOnly: true
+      description: The type and count of targets (sites or assets) attached to a schedule.
+    s12.scheduling.v1.DeleteScheduleResponse:
+      type: object
+    s12.scheduling.v1.ScheduleByAssets:
       type: object
       properties:
         asset_ids:
           type: array
           items:
             type: string
-          description: A list of asset IDs.
-      description: Assets specifies a list of assets.
+          description: Assets included in the schedule.
+      description: 'ScheduleByAssets is a list of assets a schedule applies to.
+
+        Assignment and progress is tracked separately for each asset.
+
+        Assignees can be specified, or derived through the respective asset''s site.'
       required:
       - asset_ids
     s12.scheduling.v1.GetScheduleResponse.NextOccurrenceDateRange:
@@ -917,20 +593,247 @@ components:
           description: The IANA timezone for the occurrence (e.g. "America/New_York").
           readOnly: true
       description: The start and end time of an upcoming occurrence.
-    s12.scheduling.v1.ScheduleInspectionWorkInfo:
+    s12.scheduling.v1.ScheduleBySites:
+      type: object
+      properties:
+        site_ids:
+          type: array
+          items:
+            type: string
+          description: Sites included in the schedule.
+      description: 'ScheduleBySites is a list of sites a schedule applies to.
+
+        Assignment and progress is tracked separately for each site.
+
+        Assignees can be specified, or derived from site membership.'
+      required:
+      - site_ids
+    s12.scheduling.v1.ScheduleTargetType:
+      type: string
+      enum:
+      - SCHEDULE_TARGET_TYPE_UNSPECIFIED
+      - SCHEDULE_TARGET_TYPE_SITES
+      - SCHEDULE_TARGET_TYPE_ASSETS
+      default: SCHEDULE_TARGET_TYPE_UNSPECIFIED
+      description: "Whether a schedule targets sites or assets.\n\n - SCHEDULE_TARGET_TYPE_SITES: The schedule targets specific sites.\n - SCHEDULE_TARGET_TYPE_ASSETS: The schedule targets specific assets."
+    s12.scheduling.v1.UpdateScheduleDetailsResponse:
+      type: object
+      description: Response message for UpdateScheduleDetails.
+    s12.scheduling.v1.UpdateScheduleRecurrenceResponse:
+      type: object
+      description: Response message for UpdateScheduleRecurrence.
+    s12.scheduling.v1.ScheduleSiteMemberAssignmentInfo:
+      type: object
+      description: Assignment to all members of each target site.
+    s12.scheduling.v1.ScheduleSiteMemberAssignment:
+      type: object
+      description: 'ScheduleSiteMemberAssignment assigns work to all members of each target site.
+
+        For asset targets, assigns to members of the asset''s parent site.
+
+        No additional configuration needed - membership is derived from the target.'
+    s12.scheduling.v1.ScheduleSiteMemberInGroupAssignment:
+      type: object
+      properties:
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: Group IDs for intersection filtering. Currently supports only one group.
+      description: 'ScheduleSiteMemberInGroupAssignment assigns the scheduled work to users who are
+
+        both site members AND members of the specified group.
+
+        For asset targets, uses members of the asset''s parent site.'
+      required:
+      - group_ids
+    s12.scheduling.v1.ScheduleSiteMemberInGroupAssignmentInfo:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.scheduling.v1.AssignmentGroup'
+          readOnly: true
+      description: Assignment to users who belong to both the target site and specified groups.
+    s12.scheduling.v1.SiteScheduleTarget:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the site.
+        name:
+          type: string
+          description: Name of the site.
+        timezone:
+          type: string
+          description: IANA time zone of the site (e.g. "Australia/Sydney"). Empty when the site has no time zone set.
+      description: SiteScheduleTarget is a site a schedule applies to.
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.scheduling.v1.ScheduleUserAssignment:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: User IDs to assign.
+      description: ScheduleUserAssignment assigns the scheduled work to specific users.
+      required:
+      - user_ids
+    s12.scheduling.v1.ScheduleTarget:
+      type: object
+      description: Specifies which sites or assets this schedule applies to. Exactly one must be set.
+      oneOf:
+      - type: object
+        title: Sites
+        description: Target specific sites. A separate occurrence is created for each site at each recurrence.
+        properties:
+          sites:
+            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleBySites'
+        required:
+        - sites
+      - type: object
+        title: Assets
+        description: Target specific assets. A separate occurrence is created for each asset at each recurrence.
+        properties:
+          assets:
+            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleByAssets'
+        required:
+        - assets
+    s12.scheduling.v1.Grantee:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/s12.scheduling.v1.User'
+        group:
+          $ref: '#/components/schemas/s12.scheduling.v1.Group'
+      description: 'Grantee is the typed identifier of an entity holding an access grant.
+
+        Exactly one variant must be set.'
+    s12.scheduling.v1.ScheduleInspectionWork:
       type: object
       properties:
         template_id:
           type: string
-          description: ID of the inspection template.
-          readOnly: true
-        template_name:
-          type: string
-          description: Name of the inspection template.
-          readOnly: true
-      description: Details about the inspection template used by this schedule.
-    s12.scheduling.v1.ResumeScheduleResponse:
+          description: The ID of the inspection template to use.
+      description: ScheduleInspectionWork configures the schedule to create inspections.
+      required:
+      - template_id
+    s12.scheduling.v1.ScheduleRecurrence:
       type: object
+      properties:
+        dtstart_rrule:
+          type: string
+          description: "Examples:\n  - \"DTSTART:20240101T140000Z\\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR\" (UTC timezone)\n  - \"DTSTART;TZID=America/New_York:20240101T140000\\nRRULE:FREQ=DAILY;INTERVAL=1\" (with timezone)"
+          title: 'Supported RRULE frequencies and intervals:
+
+            - WEEKLY: BYDAY with multiple weekdays (e.g., BYDAY=MO,WE,FR)
+
+            - MONTHLY: BYMONTHDAY=1-28 OR BYSETPOS=1-4,-1 with BYDAY (single weekday)
+
+            - YEARLY: BYMONTH (required) with either BYMONTHDAY or BYSETPOS+BYDAY'
+        duration:
+          type: string
+          description: Duration in ISO 8601 format (e.g., "PT1H"). Defines the window from start to due.
+        use_site_timezone:
+          type: boolean
+          description: 'When true, use each target site''s timezone instead of the RRULE timezone.
+
+            Only applicable when target is sites or assets (uses the asset''s parent site timezone).
+
+            When enabled, any timezone specified in the RRULE will be ignored and set to the default time, UTC.'
+        late_submission_rule:
+          description: 'The conditions under which users can submit work late for each occurrence.
+
+            When not set, late submission is not allowed.'
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.LateSubmissionRule'
+      description: "ScheduleRecurrence defines when and how often the schedule repeats.\n\nRFC 5545 recurrence definition combining DTSTART and RRULE properties.\n DTSTART specifies the start time and timezone. RRULE defines the recurrence pattern.\n Timezone defaults to UTC if unspecified, or if `use_site_timezone` is true.\n\n Expected format: \"DTSTART;TZID=America/New_York:20240101T140000\\nRRULE:FREQ=DAILY;INTERVAL=1\""
+      required:
+      - dtstart_rrule
+      - duration
+    s12.scheduling.v1.ScheduleAssignmentRule:
+      type: object
+      description: Specifies which users are assigned to complete the scheduled work. Exactly one rule must be set.
+      oneOf:
+      - type: object
+        title: Specific Users
+        description: Assign to a specific list of users by ID.
+        properties:
+          users:
+            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleUserAssignment'
+        required:
+        - users
+      - type: object
+        title: Group
+        description: Assign to all members of a group.
+        properties:
+          groups:
+            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleGroupAssignment'
+        required:
+        - groups
+      - type: object
+        title: Site Members
+        description: Assign to all members of each target site. Requires the schedule to have site or asset targets.
+        properties:
+          site_members:
+            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleSiteMemberAssignment'
+        required:
+        - site_members
+      - type: object
+        title: Site Members in Group
+        description: Assign to users who are both site members and in a specific group. Requires site or asset targets.
+        properties:
+          site_members_in_group:
+            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleSiteMemberInGroupAssignment'
+        required:
+        - site_members_in_group
+    s12.scheduling.v1.ScheduleRecurrenceInfo:
+      type: object
+      properties:
+        dtstart_rrule:
+          type: string
+          description: 'The recurrence pattern as a combined DTSTART + RRULE string.
+
+
+            Format: "DTSTART[;TZID=<timezone>]:<datetime>\nRRULE:<rule>"
+
+            Example: "DTSTART;TZID=America/New_York:20240101T090000\nRRULE:FREQ=WEEKLY;BYDAY=MO"
+
+
+            When use_site_timezone is true, DTSTART is in UTC and each target site''s
+
+            local timezone is applied at runtime.'
+          readOnly: true
+        duration:
+          type: string
+          description: 'How long assignees have to complete the work after an occurrence starts.
+
+            ISO 8601 format (e.g. "PT8H", "P1D").'
+          readOnly: true
+        use_site_timezone:
+          type: boolean
+          description: 'When true, each target site''s local timezone is used instead of the
+
+            timezone in dtstart_rrule. Only applies to site and asset schedules.'
+          readOnly: true
+        late_submission_rule:
+          description: 'How long after an occurrence is due assignees can still submit work.
+
+            When absent, late submission is not allowed.'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.LateSubmissionRule'
+      description: The recurrence configuration for a schedule.
     s12.scheduling.v1.LateSubmissionRule:
       type: object
       properties:
@@ -944,19 +847,197 @@ components:
 
             Currently only supports a period of 14 days ("P14D"). ISO 8601 duration format.'
       description: The conditions under which users can submit work late for each occurrence.
-    s12.scheduling.v1.UpdateGroupAssignment:
+    s12.scheduling.v1.Sites:
+      type: object
+      properties:
+        site_ids:
+          type: array
+          items:
+            type: string
+          description: A list of site IDs.
+      description: Sites specifies a list of sites.
+      required:
+      - site_ids
+    s12.scheduling.v1.UpdateSiteMemberInGroupAssignment:
       type: object
       properties:
         group_ids:
           type: array
           items:
             type: string
-          description: 'Group IDs to assign. Currently supports only one group.
+          description: Group IDs for intersection filtering. Currently supports only one group.
+      description: 'UpdateSiteMemberInGroupAssignment changes the schedule to assign to site members
 
-            Replaces any existing assignment strategy.'
-      description: UpdateGroupAssignment changes the schedule to assign to all members of a group.
+        who are also in the specified group (intersection).
+
+
+        The schedule must have targets (sites or assets) set for this option to work.'
       required:
       - group_ids
+    s12.scheduling.v1.SchedulingService.UpdateScheduleTargetBody:
+      type: object
+      description: Updates schedule targets (sites or assets) and related configuration. Exactly one update option must be set.
+      oneOf:
+      - type: object
+        title: Sites
+        description: Update sites in the schedule target.
+        properties:
+          sites:
+            $ref: '#/components/schemas/s12.scheduling.v1.UpdateSites'
+        required:
+        - sites
+      - type: object
+        title: Assets
+        description: Update assets in the schedule target.
+        properties:
+          assets:
+            $ref: '#/components/schemas/s12.scheduling.v1.UpdateAssets'
+        required:
+        - assets
+    s12.scheduling.v1.ListScheduleAccessResponse:
+      type: object
+      properties:
+        grants:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.scheduling.v1.AccessGrant'
+          description: The discrete access grants on the schedule.
+      description: ListScheduleAccessResponse is the response for ListScheduleAccess.
+    s12.scheduling.v1.CompletionRule:
+      type: string
+      enum:
+      - COMPLETION_RULE_UNSPECIFIED
+      - COMPLETION_RULE_ANY
+      - COMPLETION_RULE_ALL
+      default: COMPLETION_RULE_UNSPECIFIED
+      description: "Completion rule enum.\n\n - COMPLETION_RULE_UNSPECIFIED: Unspecified completion rule.\n - COMPLETION_RULE_ANY: Any assignee can complete the schedule.\n - COMPLETION_RULE_ALL: All assignees must complete the schedule."
+    s12.scheduling.v1.ScheduleWorkType:
+      type: object
+      description: The type of work to be done as part of the schedule. Exactly one must be set.
+      oneOf:
+      - type: object
+        title: Inspection
+        description: Schedule creates inspection occurrences from a template.
+        properties:
+          inspection:
+            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleInspectionWork'
+        required:
+        - inspection
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.scheduling.v1.SchedulingService.UpdateScheduleAssigneesBody:
+      type: object
+      description: Replaces the assignment rule for a schedule. Exactly one update option must be set.
+      oneOf:
+      - type: object
+        title: Specific Users
+        description: Assign specific users by ID. Replaces the current user assignees with the provided list.
+        properties:
+          users:
+            $ref: '#/components/schemas/s12.scheduling.v1.UpdateUserAssignees'
+        required:
+        - users
+      - type: object
+        title: Group
+        description: Assign all members of the specified group. Replaces any current assignment with group-based assignment.
+        properties:
+          groups:
+            $ref: '#/components/schemas/s12.scheduling.v1.UpdateGroupAssignment'
+        required:
+        - groups
+      - type: object
+        title: Site Members
+        description: Assign all members of the target site(s). Requires the schedule to have targets (sites or assets) set.
+        properties:
+          site_members:
+            type: object
+            description: 'UpdateSiteMemberAssignment changes the schedule to assign to all members of the target site(s).
+
+
+              The schedule must have targets (sites or assets) set for this option to work.'
+            additionalProperties: false
+        required:
+        - site_members
+      - type: object
+        title: Site Members in Group
+        description: Assign site members who are also in the specified group (intersection). Requires the schedule to have targets (sites or assets) set.
+        properties:
+          site_members_in_group:
+            $ref: '#/components/schemas/s12.scheduling.v1.UpdateSiteMemberInGroupAssignment'
+        required:
+        - site_members_in_group
+    s12.scheduling.v1.UpdateAssets:
+      type: object
+      properties:
+        add_assets:
+          description: Assets to add to the schedule.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.Assets'
+        remove_assets:
+          description: Assets to remove from the schedule. The schedule will no longer apply to these assets, and any associated sub-schedules will be removed.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.Assets'
+      description: UpdateAssets modifies the list of assets the schedule applies across.
+    s12.scheduling.v1.CreateNewScheduleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the created schedule.
+      description: Response message for CreateNewSchedule.
+    s12.scheduling.v1.ScheduleGroupAssignment:
+      type: object
+      properties:
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: Group IDs to assign. Currently supports only one group.
+      description: ScheduleGroupAssignment assigns the scheduled work to all members of a group.
+      required:
+      - group_ids
+    s12.scheduling.v1.AccessGrant:
+      type: object
+      properties:
+        grantee:
+          $ref: '#/components/schemas/s12.scheduling.v1.Grantee'
+        level:
+          $ref: '#/components/schemas/s12.scheduling.v1.AccessLevel'
+      description: AccessGrant is a single discrete-access grant on a schedule.
+      required:
+      - grantee
+      - level
+    s12.scheduling.v1.SchedulingService.UpdateScheduleRecurrenceBody:
+      type: object
+      properties:
+        recurrence:
+          description: 'The new recurrence configuration for the schedule.
+
+            Replaces all existing recurrence fields, including the recurrence pattern,
+
+            duration, timezone, and late submission rule.'
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleRecurrence'
+        effective_from:
+          description: Controls when the recurrence changes take effect on sub-schedules.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.UpdateEffectiveFrom'
+      description: UpdateScheduleRecurrence replaces the recurrence configuration for an existing schedule.
+      required:
+      - recurrence
+      - effective_from
     s12.scheduling.v1.ScheduleGroupAssignmentInfo:
       type: object
       properties:
@@ -970,24 +1051,32 @@ components:
     s12.scheduling.v1.UpdateScheduleTargetResponse:
       type: object
       description: Response message for UpdateScheduleTarget.
-    s12.scheduling.v1.ScheduleSiteMemberInGroupAssignmentInfo:
+    s12.scheduling.v1.Group:
       type: object
       properties:
-        groups:
+        id:
+          type: string
+        name:
+          type: string
+          readOnly: true
+      description: 'Group represents a group identified by its id.
+
+        The name field is populated by the server on responses and ignored on requests.'
+      required:
+      - id
+    s12.scheduling.v1.UpdateUserAssignees:
+      type: object
+      properties:
+        user_ids:
           type: array
           items:
-            type: object
-            $ref: '#/components/schemas/s12.scheduling.v1.AssignmentGroup'
-          readOnly: true
-      description: Assignment to users who belong to both the target site and specified groups.
-    s12.scheduling.v1.ScheduleWorkTypeInfo:
-      type: object
-      properties:
-        inspection:
-          description: The schedule creates inspections.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleInspectionWorkInfo'
-      description: The type of work to be done for the schedule.
+            type: string
+          description: 'User IDs to assign.
+
+            Replaces any existing assignees with this list.'
+      description: UpdateUserAssignees modifies the list of specifically assigned users.
+      required:
+      - user_ids
     s12.scheduling.v1.UpdateEffectiveFrom:
       type: string
       enum:
@@ -996,6 +1085,98 @@ components:
       - UPDATE_EFFECTIVE_FROM_NEXT_OCCURRENCE
       default: UPDATE_EFFECTIVE_FROM_UNSPECIFIED
       description: "UpdateEffectiveFrom specifies when schedule changes should take effect.\n\n - UPDATE_EFFECTIVE_FROM_UNSPECIFIED: Unspecified.\n - UPDATE_EFFECTIVE_FROM_CURRENT_OCCURRENCE: Apply changes starting from the current occurrence.\n - UPDATE_EFFECTIVE_FROM_NEXT_OCCURRENCE: Apply changes starting from the next occurrence."
+    s12.scheduling.v1.UpdateSites:
+      type: object
+      properties:
+        site_ids:
+          type: array
+          items:
+            type: string
+          description: 'The complete desired list of site IDs for this schedule.
+
+            Replaces the current site targets - sites not in this list will be removed,
+
+            and sites not currently targeted will be added.'
+      description: 'UpdateSites sets the complete list of sites this schedule applies to.
+
+        The provided list replaces the current set of site targets entirely.'
+      required:
+      - site_ids
+    s12.scheduling.v1.AssignmentGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The group's ID.
+          readOnly: true
+        name:
+          type: string
+          description: The group's display name.
+          readOnly: true
+      description: A group associated with a schedule.
+    s12.scheduling.v1.UpdateGroupAssignment:
+      type: object
+      properties:
+        group_ids:
+          type: array
+          items:
+            type: string
+          description: 'Group IDs to assign. Currently supports only one group.
+
+            Replaces any existing assignment strategy.'
+      description: UpdateGroupAssignment changes the schedule to assign to all members of a group.
+      required:
+      - group_ids
+    s12.scheduling.v1.SchedulingService.ResumeScheduleBody:
+      type: object
+      properties:
+        sites:
+          description: Sites to resume.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.Sites'
+        assets:
+          description: Assets to resume.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.Assets'
+    s12.scheduling.v1.AccessLevel:
+      type: string
+      enum:
+      - ACCESS_LEVEL_UNSPECIFIED
+      - ACCESS_LEVEL_VIEWER
+      - ACCESS_LEVEL_EDITOR
+      - ACCESS_LEVEL_OWNER
+      default: ACCESS_LEVEL_UNSPECIFIED
+      description: AccessLevel is the discrete access a grantee holds on a schedule.
+    s12.scheduling.v1.AssetTargetType:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the asset type.
+        name:
+          type: string
+          description: Name of the asset type.
+      description: AssetTargetType is the type of an asset (e.g. "Forklift").
+    s12.scheduling.v1.SchedulingService.UpdateScheduleDetailsBody:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the schedule.
+        completion_rule:
+          description: 'Completion rule for the schedule.
+
+            Determines how many assigned users must complete the work for an occurrence to be considered complete.'
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.CompletionRule'
+        update_mask:
+          type: string
+          description: 'Fields to update. Valid paths: "title", "completion_rule".'
+      description: Request message for UpdateScheduleDetails.
+      required:
+      - update_mask
+    s12.scheduling.v1.PauseScheduleResponse:
+      type: object
     s12.scheduling.v1.CreateNewScheduleRequest:
       type: object
       properties:
@@ -1047,6 +1228,117 @@ components:
       - title
       - recurrence
       - assignment
+    s12.scheduling.v1.ResumeScheduleResponse:
+      type: object
+    s12.scheduling.v1.EndScheduleResponse:
+      type: object
+    s12.scheduling.v1.ScheduleAssignmentRuleInfo:
+      type: object
+      properties:
+        users:
+          description: Assigned to specific users.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleUserAssignmentInfo'
+        groups:
+          description: Assigned to all members of a group.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleGroupAssignmentInfo'
+        site_members:
+          description: 'Assigned to all members of each target site.
+
+            Only applies to site and asset schedules.'
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleSiteMemberAssignmentInfo'
+        site_members_in_group:
+          description: 'Assigned to users who are members of both the target site and specified groups.
+
+            Only applies to site and asset schedules.'
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleSiteMemberInGroupAssignmentInfo'
+      description: Who is assigned to complete the work at each occurrence.
+    s12.scheduling.v1.ScheduleWorkTypeInfo:
+      type: object
+      properties:
+        inspection:
+          description: The schedule creates inspections.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleInspectionWorkInfo'
+      description: The type of work to be done for the schedule.
+    s12.scheduling.v1.ScheduleInspectionWorkInfo:
+      type: object
+      properties:
+        template_id:
+          type: string
+          description: ID of the inspection template.
+          readOnly: true
+        template_name:
+          type: string
+          description: Name of the inspection template.
+          readOnly: true
+      description: Details about the inspection template used by this schedule.
+    s12.scheduling.v1.SchedulingService.PauseScheduleBody:
+      type: object
+      properties:
+        sites:
+          description: Sites to pause.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.Sites'
+        assets:
+          description: Assets to pause.
+          allOf:
+          - $ref: '#/components/schemas/s12.scheduling.v1.Assets'
+    s12.scheduling.v1.UntilNextOccurrence:
+      type: object
+      description: 'UntilNextOccurrence indicates late submission is allowed until the next occurrence starts.
+
+        Used as a marker type in oneof fields.'
+    s12.scheduling.v1.ListScheduleTargetsResponse:
+      type: object
+      properties:
+        targets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleTargetDetail'
+          description: The sites or assets the schedule applies to, filtered by the caller's access, with the recurrence for each.
+        total_count:
+          type: integer
+          format: int32
+          description: 'Total number of sites or assets the schedule applies to, regardless of the caller''s access or any search_query filter.
+
+            This value may exceed the number of items returned when the caller does not have permission to view all sites or assets,
+
+            or when a search_query is set.'
+        next_page_token:
+          type: string
+          description: Token for fetching the next page. Token is empty when there are no more results.
+      description: ListScheduleTargetsResponse is the response for ListScheduleTargets.
+    s12.scheduling.v1.Status:
+      type: string
+      enum:
+      - STATUS_UNSPECIFIED
+      - STATUS_FINISHED
+      - STATUS_ACTIVE
+      - STATUS_PAUSED
+      - STATUS_DELETED
+      - STATUS_PENDING
+      - STATUS_FAILED
+      - STATUS_ENDED
+      default: STATUS_UNSPECIFIED
+      description: "Status enum.\n\n - STATUS_UNSPECIFIED: Unspecified status. Default value; do not use explicitly.\n - STATUS_FINISHED: Schedule has completed all occurrences defined by its recurrence rule.\n - STATUS_ACTIVE: Schedule is active and generating occurrences as expected.\n - STATUS_PAUSED: Schedule is temporarily suspended. No new occurrences will be generated until resumed.\n - STATUS_DELETED: Schedule has been deleted and is no longer active or available.\n - STATUS_PENDING: Schedule has been created but has not yet started generating occurrences.\n - STATUS_FAILED: Schedule encountered an error and could not continue generating occurrences.\n - STATUS_ENDED: Schedule has reached its end date and will no longer generate occurrences."
+    s12.scheduling.v1.AssetSite:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the site.
+        name:
+          type: string
+          description: Name of the site.
+        timezone:
+          type: string
+          description: IANA time zone of the site (e.g. "Australia/Sydney"). Empty when the site has no time zone set.
+      description: AssetSite is the site an asset is linked to.
     s12.scheduling.v1.ScheduleTargetDetail:
       type: object
       description: A site or asset the schedule applies to, along with how the schedule recurs for it. Exactly one of site or asset is set.
@@ -1071,316 +1363,24 @@ components:
             $ref: '#/components/schemas/s12.scheduling.v1.AssetScheduleTarget'
         required:
         - asset
-    s12.scheduling.v1.ScheduleRecurrence:
-      type: object
-      properties:
-        dtstart_rrule:
-          type: string
-          description: "Examples:\n  - \"DTSTART:20240101T140000Z\\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR\" (UTC timezone)\n  - \"DTSTART;TZID=America/New_York:20240101T140000\\nRRULE:FREQ=DAILY;INTERVAL=1\" (with timezone)"
-          title: 'Supported RRULE frequencies and intervals:
-
-            - WEEKLY: BYDAY with multiple weekdays (e.g., BYDAY=MO,WE,FR)
-
-            - MONTHLY: BYMONTHDAY=1-28 OR BYSETPOS=1-4,-1 with BYDAY (single weekday)
-
-            - YEARLY: BYMONTH (required) with either BYMONTHDAY or BYSETPOS+BYDAY'
-        duration:
-          type: string
-          description: Duration in ISO 8601 format (e.g., "PT1H"). Defines the window from start to due.
-        use_site_timezone:
-          type: boolean
-          description: 'When true, use each target site''s timezone instead of the RRULE timezone.
-
-            Only applicable when target is sites or assets (uses the asset''s parent site timezone).
-
-            When enabled, any timezone specified in the RRULE will be ignored and set to the default time, UTC.'
-        late_submission_rule:
-          description: 'The conditions under which users can submit work late for each occurrence.
-
-            When not set, late submission is not allowed.'
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.LateSubmissionRule'
-      description: "ScheduleRecurrence defines when and how often the schedule repeats.\n\nRFC 5545 recurrence definition combining DTSTART and RRULE properties.\n DTSTART specifies the start time and timezone. RRULE defines the recurrence pattern.\n Timezone defaults to UTC if unspecified, or if `use_site_timezone` is true.\n\n Expected format: \"DTSTART;TZID=America/New_York:20240101T140000\\nRRULE:FREQ=DAILY;INTERVAL=1\""
-      required:
-      - dtstart_rrule
-      - duration
-    s12.scheduling.v1.ScheduleWorkType:
-      type: object
-      description: The type of work to be done as part of the schedule. Exactly one must be set.
-      oneOf:
-      - type: object
-        title: Inspection
-        description: Schedule creates inspection occurrences from a template.
-        properties:
-          inspection:
-            $ref: '#/components/schemas/s12.scheduling.v1.ScheduleInspectionWork'
-        required:
-        - inspection
-    s12.scheduling.v1.SchedulingService.UpdateScheduleAssigneesBody:
-      type: object
-      description: Replaces the assignment rule for a schedule. Exactly one update option must be set.
-      oneOf:
-      - type: object
-        title: Specific Users
-        description: Assign specific users by ID. Replaces the current user assignees with the provided list.
-        properties:
-          users:
-            $ref: '#/components/schemas/s12.scheduling.v1.UpdateUserAssignees'
-        required:
-        - users
-      - type: object
-        title: Group
-        description: Assign all members of the specified group. Replaces any current assignment with group-based assignment.
-        properties:
-          groups:
-            $ref: '#/components/schemas/s12.scheduling.v1.UpdateGroupAssignment'
-        required:
-        - groups
-      - type: object
-        title: Site Members
-        description: Assign all members of the target site(s). Requires the schedule to have targets (sites or assets) set.
-        properties:
-          site_members:
-            type: object
-            description: 'UpdateSiteMemberAssignment changes the schedule to assign to all members of the target site(s).
-
-
-              The schedule must have targets (sites or assets) set for this option to work.'
-            additionalProperties: false
-        required:
-        - site_members
-      - type: object
-        title: Site Members in Group
-        description: Assign site members who are also in the specified group (intersection). Requires the schedule to have targets (sites or assets) set.
-        properties:
-          site_members_in_group:
-            $ref: '#/components/schemas/s12.scheduling.v1.UpdateSiteMemberInGroupAssignment'
-        required:
-        - site_members_in_group
-    s12.scheduling.v1.AssetSite:
+    s12.scheduling.v1.User:
       type: object
       properties:
         id:
           type: string
-          description: Unique ID of the site.
         name:
           type: string
-          description: Name of the site.
-        timezone:
-          type: string
-          description: IANA time zone of the site (e.g. "Australia/Sydney"). Empty when the site has no time zone set.
-      description: AssetSite is the site an asset is linked to.
-    s12.scheduling.v1.SchedulingService.UpdateScheduleRecurrenceBody:
-      type: object
-      properties:
-        recurrence:
-          description: 'The new recurrence configuration for the schedule.
+          readOnly: true
+      description: 'User represents a user identified by its id.
 
-            Replaces all existing recurrence fields, including the recurrence pattern,
-
-            duration, timezone, and late submission rule.'
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.ScheduleRecurrence'
-        effective_from:
-          description: Controls when the recurrence changes take effect on sub-schedules.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.UpdateEffectiveFrom'
-      description: UpdateScheduleRecurrence replaces the recurrence configuration for an existing schedule.
+        The name field is populated by the server on responses and ignored on requests.'
       required:
-      - recurrence
-      - effective_from
-    s12.scheduling.v1.ScheduleSiteMemberAssignment:
-      type: object
-      description: 'ScheduleSiteMemberAssignment assigns work to all members of each target site.
-
-        For asset targets, assigns to members of the asset''s parent site.
-
-        No additional configuration needed - membership is derived from the target.'
-    s12.scheduling.v1.UpdateScheduleDetailsResponse:
-      type: object
-      description: Response message for UpdateScheduleDetails.
-    s12.scheduling.v1.AccessLevel:
-      type: string
-      enum:
-      - ACCESS_LEVEL_UNSPECIFIED
-      - ACCESS_LEVEL_VIEWER
-      - ACCESS_LEVEL_EDITOR
-      - ACCESS_LEVEL_OWNER
-      default: ACCESS_LEVEL_UNSPECIFIED
-      description: AccessLevel is the discrete access a grantee holds on a schedule.
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      - id
     s12.scheduling.v1.SchedulingService.EndScheduleBody:
       type: object
-    s12.scheduling.v1.Sites:
+    s12.scheduling.v1.UpdateScheduleAssigneesResponse:
       type: object
-      properties:
-        site_ids:
-          type: array
-          items:
-            type: string
-          description: A list of site IDs.
-      description: Sites specifies a list of sites.
-      required:
-      - site_ids
-    s12.scheduling.v1.UntilNextOccurrence:
-      type: object
-      description: 'UntilNextOccurrence indicates late submission is allowed until the next occurrence starts.
-
-        Used as a marker type in oneof fields.'
-    s12.scheduling.v1.ListScheduleAccessResponse:
-      type: object
-      properties:
-        grants:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.scheduling.v1.AccessGrant'
-          description: The discrete access grants on the schedule.
-      description: ListScheduleAccessResponse is the response for ListScheduleAccess.
-    s12.scheduling.v1.ScheduleSiteMemberAssignmentInfo:
-      type: object
-      description: Assignment to all members of each target site.
-    s12.scheduling.v1.DeleteScheduleResponse:
-      type: object
-    s12.scheduling.v1.SchedulingService.UpdateScheduleTargetBody:
-      type: object
-      description: Updates schedule targets (sites or assets) and related configuration. Exactly one update option must be set.
-      oneOf:
-      - type: object
-        title: Sites
-        description: Update sites in the schedule target.
-        properties:
-          sites:
-            $ref: '#/components/schemas/s12.scheduling.v1.UpdateSites'
-        required:
-        - sites
-      - type: object
-        title: Assets
-        description: Update assets in the schedule target.
-        properties:
-          assets:
-            $ref: '#/components/schemas/s12.scheduling.v1.UpdateAssets'
-        required:
-        - assets
-    s12.scheduling.v1.UpdateAssets:
-      type: object
-      properties:
-        add_assets:
-          description: Assets to add to the schedule.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.Assets'
-        remove_assets:
-          description: Assets to remove from the schedule. The schedule will no longer apply to these assets, and any associated sub-schedules will be removed.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.Assets'
-      description: UpdateAssets modifies the list of assets the schedule applies across.
-    s12.scheduling.v1.UpdateSiteMemberInGroupAssignment:
-      type: object
-      properties:
-        group_ids:
-          type: array
-          items:
-            type: string
-          description: Group IDs for intersection filtering. Currently supports only one group.
-      description: 'UpdateSiteMemberInGroupAssignment changes the schedule to assign to site members
-
-        who are also in the specified group (intersection).
-
-
-        The schedule must have targets (sites or assets) set for this option to work.'
-      required:
-      - group_ids
-    s12.scheduling.v1.ScheduleSiteMemberInGroupAssignment:
-      type: object
-      properties:
-        group_ids:
-          type: array
-          items:
-            type: string
-          description: Group IDs for intersection filtering. Currently supports only one group.
-      description: 'ScheduleSiteMemberInGroupAssignment assigns the scheduled work to users who are
-
-        both site members AND members of the specified group.
-
-        For asset targets, uses members of the asset''s parent site.'
-      required:
-      - group_ids
-    s12.scheduling.v1.ScheduleGroupAssignment:
-      type: object
-      properties:
-        group_ids:
-          type: array
-          items:
-            type: string
-          description: Group IDs to assign. Currently supports only one group.
-      description: ScheduleGroupAssignment assigns the scheduled work to all members of a group.
-      required:
-      - group_ids
-    s12.scheduling.v1.AssetTargetType:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique ID of the asset type.
-        name:
-          type: string
-          description: Name of the asset type.
-      description: AssetTargetType is the type of an asset (e.g. "Forklift").
-    s12.scheduling.v1.SchedulingService.PauseScheduleBody:
-      type: object
-      properties:
-        sites:
-          description: Sites to pause.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.Sites'
-        assets:
-          description: Assets to pause.
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.Assets'
-    s12.scheduling.v1.ScheduleRecurrenceInfo:
-      type: object
-      properties:
-        dtstart_rrule:
-          type: string
-          description: 'The recurrence pattern as a combined DTSTART + RRULE string.
-
-
-            Format: "DTSTART[;TZID=<timezone>]:<datetime>\nRRULE:<rule>"
-
-            Example: "DTSTART;TZID=America/New_York:20240101T090000\nRRULE:FREQ=WEEKLY;BYDAY=MO"
-
-
-            When use_site_timezone is true, DTSTART is in UTC and each target site''s
-
-            local timezone is applied at runtime.'
-          readOnly: true
-        duration:
-          type: string
-          description: 'How long assignees have to complete the work after an occurrence starts.
-
-            ISO 8601 format (e.g. "PT8H", "P1D").'
-          readOnly: true
-        use_site_timezone:
-          type: boolean
-          description: 'When true, each target site''s local timezone is used instead of the
-
-            timezone in dtstart_rrule. Only applies to site and asset schedules.'
-          readOnly: true
-        late_submission_rule:
-          description: 'How long after an occurrence is due assignees can still submit work.
-
-            When absent, late submission is not allowed.'
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/s12.scheduling.v1.LateSubmissionRule'
-      description: The recurrence configuration for a schedule.
+      description: Response message for UpdateScheduleAssignees.
   securitySchemes:
     BearerAuthentication:
       type: http

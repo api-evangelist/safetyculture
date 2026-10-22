@@ -1,34 +1,31 @@
 ---
-name: Capture and track an issue
-description: Submit an issue, assign collaborators, update its status, and list issues in SafetyCulture.
-api: https://api.safetyculture.io
+name: safetyculture-capture-and-track-issue
+description: Submit an issue, assign collaborators, move its status, comment on it,
+  and list issues.
+api: https://api.mitti.com
 operations:
-  - incidentsservice_submitincident
-  - incidentsservice_addcollaborators
-  - incidentsservice_updatestatus
-  - incidentsservice_getincidents
+- CustomerConfigurationService_GetCategories
+- IncidentsService_SubmitIncident
+- IncidentsService_AddCollaborators
+- IncidentsService_UpdateStatus
+- TimelineService_AddComment
+- IncidentsService_GetIncidents
+- IncidentsService_GetIncidentById
 ---
 
 # Capture and track an issue
 
-Authenticate with `Authorization: Bearer {api_token}` against
-`https://api.safetyculture.io`.
-
 ## Steps
 
-1. **Submit the issue** (`incidentsservice_submitincident`) with a title, description,
-   category, site, and (optionally) an occurred-at timestamp in RFC 3339.
-2. **Assign collaborators** (`incidentsservice_addcollaborators`) so the right people
-   own and act on it.
-3. **Update status** (`incidentsservice_updatestatus`) as the issue moves through its
-   workflow (e.g. open -> in progress -> resolved).
-4. **List / reconcile** (`incidentsservice_getincidents`) with filters and pagination
-   to poll open issues, or subscribe to `TRIGGER_EVENT_INCIDENT_*` webhooks instead of
-   polling (see the events skill).
+1. **Pick a category** with `CustomerConfigurationService_GetCategories`.
+2. **Submit the issue** (`IncidentsService_SubmitIncident`). Use this rather than `IncidentsService_CreateIncident`, which is marked legacy.
+3. **Assign people** (`IncidentsService_AddCollaborators`).
+4. **Move it through its workflow** (`IncidentsService_UpdateStatus`) and record notes with `TimelineService_AddComment`.
+5. **Reconcile** with `IncidentsService_GetIncidents` (a POST list with filters) or `IncidentsService_GetIncidentById`. To avoid polling, subscribe to `TRIGGER_EVENT_INCIDENT_*` webhooks (see the events skill).
 
 ## Conventions
 
-- Use the newer submit/get issue operations rather than the `legacy` variants
-  (`incidentsservice_createincident` / `incidentsservice_getincident`) — see
-  `lifecycle/safetyculture-lifecycle.yml`.
-- Respect 429 rate limits and `x-ratelimit-*` headers (`rate-limits/`).
+- Base URL `https://api.mitti.com`; authenticate every call with `Authorization: Bearer {api_token}` (a user API token).
+- Rate limits are per endpoint over a 60-second window; a throttled call returns `429 Too Many Requests`. Read the `x-ratelimit-*` headers and back off (see `rate-limits/`).
+- No client-supplied idempotency key is documented (see `conventions/`), so do not blindly retry writes: after a timeout, re-read the resource with a list/get call before you resubmit.
+- Prefer the current operations over the ones whose summary says `(legacy)`.

@@ -450,472 +450,6 @@ paths:
       - OSHA
 components:
   schemas:
-    s12.common.Media:
-      type: object
-      properties:
-        id:
-          type: string
-        token:
-          type: string
-        filename:
-          type: string
-          description: full file name, including file extension
-        media_type:
-          $ref: '#/components/schemas/s12.common.MediaType'
-      title: Represents an image or video
-    s12.incidents.v1.GetEstablishmentHoursResponse:
-      type: object
-      properties:
-        hours_worked:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.incidents.v1.EstablishmentHoursWorked'
-          description: hours_worked is the list of hours worked for each month in the year.
-      description: GetEstablishmentHoursResponse is the response message for retrieving establishment hours.
-    s12.incidents.v1.GetEstablishmentEmployeesResponse:
-      type: object
-      properties:
-        average_employees:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.incidents.v1.EstablishmentEmployees'
-          description: average_employees is the list of average employees for each year.
-      description: GetEstablishmentEmployeesResponse is the response message for retrieving establishment employees.
-    s12.incidents.v1.UpdateEstablishmentResponse:
-      type: object
-      properties:
-        establishment:
-          description: establishment is the establishment that was updated.
-          allOf:
-          - $ref: '#/components/schemas/s12.incidents.v1.Establishment'
-      description: UpdateEstablishmentResponse is the response message for updating an OSHA establishment.
-    s12.incidents.v1.UpdateEstablishmentEmployeesResponse:
-      type: object
-      description: UpdateEstablishmentEmployeesResponse is the response message for updating establishment employees.
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
-    s12.incidents.v1.ListEstablishmentsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.incidents.v1.Establishment'
-          description: results is the list of establishment records.
-        next_page_token:
-          type: string
-          description: next_page_token is a token which can be used to fetch further results (for pagination).
-      description: ListEstablishmentsResponse is the response message for listing OSHA establishments.
-    s12.incidents.v1.EstablishmentEmployees:
-      type: object
-      properties:
-        year_of_filing:
-          type: integer
-          format: int32
-          description: year_of_filing is the year for which the average employees are reported.
-        average_employees:
-          type: integer
-          format: int32
-          description: average_employees is the average number of employees in that year.
-      description: EstablishmentEmployees represents the average number of employees for an establishment for a specific year.
-    s12.incidents.v1.OSHAService.UpdateCaseBody:
-      type: object
-      properties:
-        case:
-          type: object
-          properties:
-            establishment_id:
-              type: string
-              description: establishment_id is the ID of the establishment this case belongs to.
-            created_at:
-              type: string
-              format: date-time
-              description: created_at is the timestamp when the case was created.
-            modified_at:
-              type: string
-              format: date-time
-              description: modified_at is the timestamp when the case was last modified.
-            created_by:
-              $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
-              description: created_by is the user who created the case.
-            modified_by:
-              $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
-              description: modified_by is the user who last modified the case.
-            year_of_filing:
-              type: integer
-              format: int32
-              description: year_of_filing is the year this case is filed for.
-            case_number:
-              type: string
-              description: case_number is the case number.
-            job_title:
-              type: string
-              description: job_title is the job title of the affected employee.
-            date_of_incident:
-              type: string
-              format: date-time
-              description: date_of_incident is the date the incident occurred.
-            incident_location:
-              type: string
-              description: incident_location is where the incident occurred.
-            incident_description:
-              type: string
-              description: incident_description is description of the incident.
-            incident_outcome:
-              type: integer
-              format: int32
-              description: incident_outcome is the outcome of the incident (1=Death, 2=Days away, 3=Job transfer, 4=Other).
-            dafw_num_away:
-              type: integer
-              format: int32
-              description: dafw_num_away is days away from work.
-            djtr_num_tr:
-              type: integer
-              format: int32
-              description: djtr_num_tr is days job transfer or restriction.
-            type_of_incident:
-              type: integer
-              format: int32
-              description: type_of_incident is the type of incident (1=Injury, 2=Skin disorder, 3=Respiratory, 4=Poisoning, 5=Hearing loss, 6=Other).
-            date_of_birth:
-              type: string
-              format: date-time
-              description: date_of_birth is the employee's date of birth.
-            date_of_hire:
-              type: string
-              format: date-time
-              description: date_of_hire is the employee's date of hire.
-            sex:
-              type: string
-              description: sex is the employee's sex (M or F).
-            treatment_facility_type:
-              type: integer
-              format: int32
-              description: treatment_facility_type is whether emergency room was used (1=yes, 0=no).
-            treatment_in_patient:
-              type: integer
-              format: int32
-              description: treatment_in_patient is whether hospitalization was required (1=yes, 0=no).
-            time_started_work:
-              type: string
-              description: time_started_work is time employee began work (hh:mm format).
-            time_of_incident:
-              type: string
-              description: time_of_incident is time of incident (hh:mm format).
-            time_unknown:
-              type: boolean
-              description: time_unknown is whether time of incident is unknown.
-            nar_before_incident:
-              type: string
-              description: nar_before_incident is what employee was doing before incident.
-            nar_what_happened:
-              type: string
-              description: nar_what_happened is how injury/illness occurred.
-            nar_injury_illness:
-              type: string
-              description: nar_injury_illness is what the injury/illness was.
-            nar_object_substance:
-              type: string
-              description: nar_object_substance is object/substance that harmed employee.
-            date_of_death:
-              type: string
-              format: date-time
-              description: date_of_death is the date of death if applicable.
-            employee_name:
-              type: string
-              description: employee_name is the name of the employee.
-            employee_street_address:
-              type: string
-              description: employee_street_address is the street address of the employee.
-            employee_city:
-              type: string
-              description: employee_city is the city where the employee resides.
-            employee_state:
-              type: string
-              description: employee_state is the two-letter state code for the employee.
-            employee_zip:
-              type: string
-              description: employee_zip is the ZIP code for the employee.
-            physician_name:
-              type: string
-              description: physician_name is the name of the physician who treated the employee.
-            facility_name:
-              type: string
-              description: facility_name is the name of the treatment facility.
-            facility_street_address:
-              type: string
-              description: facility_street_address is the street address of the treatment facility.
-            facility_city:
-              type: string
-              description: facility_city is the city where the treatment facility is located.
-            facility_state:
-              type: string
-              description: facility_state is the two-letter state code for the treatment facility.
-            facility_zip:
-              type: string
-              description: facility_zip is the ZIP code for the treatment facility.
-          description: case contains the updated case data.
-          title: case contains the updated case data.
-        field_mask:
-          type: string
-          description: field_mask specifies which fields to update. If not set, all fields will be updated.
-      description: 'UpdateCaseRequest is the request message for updating an OSHA case.
-
-        If field_mask is set, only the fields specified will be updated (PATCH semantics).
-
-        If field_mask is not set, all fields will be updated (PUT semantics).'
-    s12.incidents.v1.OSHAService.UpdateEstablishmentHoursBody:
-      type: object
-      properties:
-        hours_worked:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.incidents.v1.EstablishmentHoursWorked'
-          description: hours_worked is the list of hours worked for each month in the year.
-      description: UpdateEstablishmentHoursRequest is the request message for updating establishment hours.
-    s12.incidents.v1.UserMeta:
-      type: object
-      properties:
-        user_id:
-          type: string
-          description: unique identifier for the user
-        display_name:
-          type: string
-          description: name of the user
-        profile_image:
-          allOf:
-          - $ref: '#/components/schemas/s12.common.Media'
-          description: profile image of the user
-        email:
-          type: string
-          description: email address of the user
-        seat_type:
-          allOf:
-          - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
-          description: the seat type the user occupies
-        status:
-          allOf:
-          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
-          description: the active status of the user
-        timezone:
-          type: string
-          description: the timezone of the user
-      title: Partial user information for embedding in other messages
-    s12.incidents.v1.OSHAService.UpdateEstablishmentBody:
-      type: object
-      properties:
-        establishment:
-          type: object
-          properties:
-            establishment_name:
-              type: string
-              description: establishment_name is the name of the establishment.
-            created_at:
-              type: string
-              format: date-time
-              description: created_at is the timestamp when the establishment was created.
-            modified_at:
-              type: string
-              format: date-time
-              description: modified_at is the timestamp when the establishment was last modified.
-            created_by:
-              $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
-              description: created_by is the user who created the establishment.
-            modified_by:
-              $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
-              description: modified_by is the user who last modified the establishment.
-            ein:
-              type: string
-              description: ein is the Employer Identification Number.
-            company_name:
-              type: string
-              description: company_name is the name of the company.
-            street_address:
-              type: string
-              description: street_address is the street address of the establishment.
-            city:
-              type: string
-              description: city is the city where the establishment is located.
-            state:
-              type: string
-              description: state is the two-letter state code.
-            zip:
-              type: string
-              description: zip is the ZIP code.
-            naics_code:
-              type: string
-              description: naics_code is the North American Industry Classification System code.
-            industry_description:
-              type: string
-              description: industry_description is the description of the industry.
-            size:
-              type: integer
-              format: int32
-              description: 'size is the size classification: 1 (< 20 employees), 21 (20-99 employees), 22 (100-249 employees), 3 (250+ employees).'
-            establishment_type:
-              type: integer
-              format: int32
-              description: 'establishment_type is the type: 1 (Private), 2 (State Government), 3 (Local Government).'
-          description: establishment contains the updated establishment data.
-          title: establishment contains the updated establishment data.
-        field_mask:
-          type: string
-          description: field_mask specifies which fields to update. If not set, all fields will be updated.
-      description: 'UpdateEstablishmentRequest is the request message for updating an OSHA establishment.
-
-        If field_mask is set, only the fields specified will be updated (PATCH semantics).
-
-        If field_mask is not set, all fields will be updated (PUT semantics).'
-    s12.incidents.v1.DeleteEstablishmentResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: success indicates whether the deletion was successful.
-      description: DeleteEstablishmentResponse is the response message for deleting an OSHA establishment.
-    s12.incidents.v1.CreateCaseRequest:
-      type: object
-      properties:
-        establishment_id:
-          type: string
-          description: establishment_id is the ID of the establishment this case belongs to (required).
-        year_of_filing:
-          type: integer
-          format: int32
-          description: year_of_filing is the year this case is filed for (required).
-        case_number:
-          type: string
-          description: case_number is the case number.
-        job_title:
-          type: string
-          description: job_title is the job title of the affected employee.
-        date_of_incident:
-          type: string
-          format: date-time
-          description: date_of_incident is the date the incident occurred.
-        incident_location:
-          type: string
-          description: incident_location is where the incident occurred.
-        incident_description:
-          type: string
-          description: incident_description is description of the incident.
-        incident_outcome:
-          type: integer
-          format: int32
-          description: incident_outcome is the outcome of the incident (1=Death, 2=Days away, 3=Job transfer, 4=Other).
-        dafw_num_away:
-          type: integer
-          format: int32
-          description: dafw_num_away is days away from work.
-        djtr_num_tr:
-          type: integer
-          format: int32
-          description: djtr_num_tr is days job transfer or restriction.
-        type_of_incident:
-          type: integer
-          format: int32
-          description: type_of_incident is the type of incident (1=Injury, 2=Skin disorder, 3=Respiratory, 4=Poisoning, 5=Hearing loss, 6=Other).
-        date_of_birth:
-          type: string
-          format: date-time
-          description: date_of_birth is the employee's date of birth.
-        date_of_hire:
-          type: string
-          format: date-time
-          description: date_of_hire is the employee's date of hire.
-        sex:
-          type: string
-          description: sex is the employee's sex (M or F).
-        treatment_facility_type:
-          type: integer
-          format: int32
-          description: treatment_facility_type is whether emergency room was used (1=yes, 0=no).
-        treatment_in_patient:
-          type: integer
-          format: int32
-          description: treatment_in_patient is whether hospitalization was required (1=yes, 0=no).
-        time_started_work:
-          type: string
-          description: time_started_work is time employee began work (hh:mm format).
-        time_of_incident:
-          type: string
-          description: time_of_incident is time of incident (hh:mm format).
-        time_unknown:
-          type: boolean
-          description: time_unknown is whether time of incident is unknown.
-        nar_before_incident:
-          type: string
-          description: nar_before_incident is what employee was doing before incident.
-        nar_what_happened:
-          type: string
-          description: nar_what_happened is how injury/illness occurred.
-        nar_injury_illness:
-          type: string
-          description: nar_injury_illness is what the injury/illness was.
-        nar_object_substance:
-          type: string
-          description: nar_object_substance is object/substance that harmed employee.
-        date_of_death:
-          type: string
-          format: date-time
-          description: date_of_death is the date of death if applicable.
-        employee_name:
-          type: string
-          description: employee_name is the name of the employee.
-        employee_street_address:
-          type: string
-          description: employee_street_address is the street address of the employee.
-        employee_city:
-          type: string
-          description: employee_city is the city where the employee resides.
-        employee_state:
-          type: string
-          description: employee_state is the two-letter state code for the employee.
-        employee_zip:
-          type: string
-          description: employee_zip is the ZIP code for the employee.
-        physician_name:
-          type: string
-          description: physician_name is the name of the physician who treated the employee.
-        facility_name:
-          type: string
-          description: facility_name is the name of the treatment facility.
-        facility_street_address:
-          type: string
-          description: facility_street_address is the street address of the treatment facility.
-        facility_city:
-          type: string
-          description: facility_city is the city where the treatment facility is located.
-        facility_state:
-          type: string
-          description: facility_state is the two-letter state code for the treatment facility.
-        facility_zip:
-          type: string
-          description: facility_zip is the ZIP code for the treatment facility.
-      description: CreateCaseRequest is the request message for creating an OSHA case.
-    s12.incidents.v1.UpdateCaseResponse:
-      type: object
-      properties:
-        case:
-          description: case is the case that was updated.
-          allOf:
-          - $ref: '#/components/schemas/s12.incidents.v1.Case'
-      description: UpdateCaseResponse is the response message for updating an OSHA case.
     s12.common.UserActiveStatus:
       type: string
       enum:
@@ -925,200 +459,13 @@ components:
       default: USER_ACTIVE_STATUS_UNSPECIFIED
       description: "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated"
       title: UserActiveStatus enumerates possible states of 'status' a user may be in
-    s12.incidents.v1.OSHAService.UpdateEstablishmentEmployeesBody:
-      type: object
-      properties:
-        average_employees:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.incidents.v1.EstablishmentEmployees'
-          description: average_employees is the list of average employees for each year.
-      description: UpdateEstablishmentEmployeesRequest is the request message for updating establishment employees.
-    s12.incidents.v1.CreateEstablishmentRequest:
-      type: object
-      properties:
-        establishment_name:
-          type: string
-          description: establishment_name is the name of the establishment (required).
-        ein:
-          type: string
-          description: ein is the Employer Identification Number.
-        company_name:
-          type: string
-          description: company_name is the name of the company.
-        street_address:
-          type: string
-          description: street_address is the street address of the establishment.
-        city:
-          type: string
-          description: city is the city where the establishment is located.
-        state:
-          type: string
-          description: state is the two-letter state code.
-        zip:
-          type: string
-          description: zip is the ZIP code.
-        naics_code:
-          type: string
-          description: naics_code is the North American Industry Classification System code.
-        industry_description:
-          type: string
-          description: industry_description is the description of the industry.
-        size:
-          type: integer
-          format: int32
-          description: 'size is the size classification: 1 (< 20 employees), 21 (20-99 employees), 22 (100-249 employees), 3 (250+ employees).'
-        establishment_type:
-          type: integer
-          format: int32
-          description: 'establishment_type is the type: 1 (Private), 2 (State Government), 3 (Local Government).'
-      description: CreateEstablishmentRequest is the request message for creating an OSHA establishment.
-    s12.incidents.v1.DeleteCaseResponse:
+    s12.incidents.v1.DeleteEstablishmentResponse:
       type: object
       properties:
         success:
           type: boolean
           description: success indicates whether the deletion was successful.
-      description: DeleteCaseResponse is the response message for deleting an OSHA case.
-    s12.incidents.v1.CreateEstablishmentResponse:
-      type: object
-      properties:
-        establishment:
-          description: establishment is the establishment that was created.
-          allOf:
-          - $ref: '#/components/schemas/s12.incidents.v1.Establishment'
-      description: CreateEstablishmentResponse is the response message for creating an OSHA establishment.
-    s12.incidents.v1.GetCaseResponse:
-      type: object
-      properties:
-        case:
-          description: case is the case that was retrieved.
-          allOf:
-          - $ref: '#/components/schemas/s12.incidents.v1.Case'
-      description: GetCaseResponse is the response message for retrieving an OSHA case.
-    s12.incidents.v1.GetEstablishmentResponse:
-      type: object
-      properties:
-        establishment:
-          description: establishment is the establishment that was retrieved.
-          allOf:
-          - $ref: '#/components/schemas/s12.incidents.v1.Establishment'
-      description: GetEstablishmentResponse is the response message for retrieving an OSHA establishment.
-    s12.incidents.v1.Establishment:
-      type: object
-      properties:
-        establishment_id:
-          type: string
-          description: establishment_id is the unique identifier for the establishment.
-        establishment_name:
-          type: string
-          description: establishment_name is the name of the establishment.
-        created_at:
-          type: string
-          format: date-time
-          description: created_at is the timestamp when the establishment was created.
-        modified_at:
-          type: string
-          format: date-time
-          description: modified_at is the timestamp when the establishment was last modified.
-        created_by:
-          description: created_by is the user who created the establishment.
-          allOf:
-          - $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
-        modified_by:
-          description: modified_by is the user who last modified the establishment.
-          allOf:
-          - $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
-        ein:
-          type: string
-          description: ein is the Employer Identification Number.
-        company_name:
-          type: string
-          description: company_name is the name of the company.
-        street_address:
-          type: string
-          description: street_address is the street address of the establishment.
-        city:
-          type: string
-          description: city is the city where the establishment is located.
-        state:
-          type: string
-          description: state is the two-letter state code.
-        zip:
-          type: string
-          description: zip is the ZIP code.
-        naics_code:
-          type: string
-          description: naics_code is the North American Industry Classification System code.
-        industry_description:
-          type: string
-          description: industry_description is the description of the industry.
-        size:
-          type: integer
-          format: int32
-          description: 'size is the size classification: 1 (< 20 employees), 21 (20-99 employees), 22 (100-249 employees), 3 (250+ employees).'
-        establishment_type:
-          type: integer
-          format: int32
-          description: 'establishment_type is the type: 1 (Private), 2 (State Government), 3 (Local Government).'
-      description: Establishment represents an OSHA establishment record.
-    s12.common.MediaType:
-      type: string
-      enum:
-      - MEDIA_TYPE_IMAGE
-      - MEDIA_TYPE_VIDEO
-      - MEDIA_TYPE_PDF
-      - MEDIA_TYPE_DOCX
-      - MEDIA_TYPE_XLSX
-      - MEDIA_TYPE_PPTX
-      - MEDIA_TYPE_CSV
-      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.incidents.v1.EstablishmentHoursWorked:
-      type: object
-      properties:
-        year_of_filing:
-          type: integer
-          format: int32
-          description: year_of_filing is the year for which the hours are reported.
-        month_of_filing:
-          type: integer
-          format: int32
-          description: month_of_filing is the month for which the hours are reported.
-        hours_worked:
-          type: integer
-          format: int32
-          description: hours_worked is the number of hours worked in that month.
-      description: EstablishmentHoursWorked represents the hours worked by an establishment for a specific month and year.
-    s12.incidents.v1.ListCasesResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.incidents.v1.Case'
-          description: results is the list of case records.
-        next_page_token:
-          type: string
-          description: next_page_token is a token which can be used to fetch further results (for pagination).
-      description: ListCasesResponse is the response message for listing OSHA cases.
-    s12.incidents.v1.CreateCaseResponse:
-      type: object
-      properties:
-        case:
-          description: case is the case that was created.
-          allOf:
-          - $ref: '#/components/schemas/s12.incidents.v1.Case'
-      description: CreateCaseResponse is the response message for creating an OSHA case.
+      description: DeleteEstablishmentResponse is the response message for deleting an OSHA establishment.
     s12.incidents.v1.Case:
       type: object
       properties:
@@ -1269,9 +616,662 @@ components:
       - SUBSCRIPTION_SEAT_TYPE_SUPPORT
       default: SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
       title: SubscriptionSeatTypes is a list of potential subscription seat types
+    s12.incidents.v1.CreateEstablishmentRequest:
+      type: object
+      properties:
+        establishment_name:
+          type: string
+          description: establishment_name is the name of the establishment (required).
+        ein:
+          type: string
+          description: ein is the Employer Identification Number.
+        company_name:
+          type: string
+          description: company_name is the name of the company.
+        street_address:
+          type: string
+          description: street_address is the street address of the establishment.
+        city:
+          type: string
+          description: city is the city where the establishment is located.
+        state:
+          type: string
+          description: state is the two-letter state code.
+        zip:
+          type: string
+          description: zip is the ZIP code.
+        naics_code:
+          type: string
+          description: naics_code is the North American Industry Classification System code.
+        industry_description:
+          type: string
+          description: industry_description is the description of the industry.
+        size:
+          type: integer
+          format: int32
+          description: 'size is the size classification: 1 (< 20 employees), 21 (20-99 employees), 22 (100-249 employees), 3 (250+ employees).'
+        establishment_type:
+          type: integer
+          format: int32
+          description: 'establishment_type is the type: 1 (Private), 2 (State Government), 3 (Local Government).'
+      description: CreateEstablishmentRequest is the request message for creating an OSHA establishment.
     s12.incidents.v1.UpdateEstablishmentHoursResponse:
       type: object
       description: UpdateEstablishmentHoursResponse is the response message for updating establishment hours.
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.incidents.v1.UserMeta:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: unique identifier for the user
+        display_name:
+          type: string
+          description: name of the user
+        profile_image:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.Media'
+          description: profile image of the user
+        email:
+          type: string
+          description: email address of the user
+        seat_type:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
+          description: the seat type the user occupies
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
+          description: the active status of the user
+        timezone:
+          type: string
+          description: the timezone of the user
+      title: Partial user information for embedding in other messages
+    s12.incidents.v1.OSHAService.UpdateEstablishmentBody:
+      type: object
+      properties:
+        establishment:
+          type: object
+          properties:
+            establishment_name:
+              type: string
+              description: establishment_name is the name of the establishment.
+            created_at:
+              type: string
+              format: date-time
+              description: created_at is the timestamp when the establishment was created.
+            modified_at:
+              type: string
+              format: date-time
+              description: modified_at is the timestamp when the establishment was last modified.
+            created_by:
+              $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
+              description: created_by is the user who created the establishment.
+            modified_by:
+              $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
+              description: modified_by is the user who last modified the establishment.
+            ein:
+              type: string
+              description: ein is the Employer Identification Number.
+            company_name:
+              type: string
+              description: company_name is the name of the company.
+            street_address:
+              type: string
+              description: street_address is the street address of the establishment.
+            city:
+              type: string
+              description: city is the city where the establishment is located.
+            state:
+              type: string
+              description: state is the two-letter state code.
+            zip:
+              type: string
+              description: zip is the ZIP code.
+            naics_code:
+              type: string
+              description: naics_code is the North American Industry Classification System code.
+            industry_description:
+              type: string
+              description: industry_description is the description of the industry.
+            size:
+              type: integer
+              format: int32
+              description: 'size is the size classification: 1 (< 20 employees), 21 (20-99 employees), 22 (100-249 employees), 3 (250+ employees).'
+            establishment_type:
+              type: integer
+              format: int32
+              description: 'establishment_type is the type: 1 (Private), 2 (State Government), 3 (Local Government).'
+          description: establishment contains the updated establishment data.
+          title: establishment contains the updated establishment data.
+        field_mask:
+          type: string
+          description: field_mask specifies which fields to update. If not set, all fields will be updated.
+      description: 'UpdateEstablishmentRequest is the request message for updating an OSHA establishment.
+
+        If field_mask is set, only the fields specified will be updated (PATCH semantics).
+
+        If field_mask is not set, all fields will be updated (PUT semantics).'
+    s12.common.MediaType:
+      type: string
+      enum:
+      - MEDIA_TYPE_IMAGE
+      - MEDIA_TYPE_VIDEO
+      - MEDIA_TYPE_PDF
+      - MEDIA_TYPE_DOCX
+      - MEDIA_TYPE_XLSX
+      - MEDIA_TYPE_PPTX
+      - MEDIA_TYPE_CSV
+      description: " - MEDIA_TYPE_IMAGE: An image file (GIF, JPG, PNG, WEBP).\n - MEDIA_TYPE_VIDEO: A video file (MP4, MOV).\n - MEDIA_TYPE_PDF: A PDF document.\n - MEDIA_TYPE_DOCX: A Microsoft Word document (DOCX, DOC).\n - MEDIA_TYPE_XLSX: A Microsoft Excel spreadsheet (XLSX, XLS).\n - MEDIA_TYPE_PPTX: A Microsoft PowerPoint presentation (PPTX, PPT).\n - MEDIA_TYPE_CSV: A CSV file."
+    s12.incidents.v1.ListCasesResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.v1.Case'
+          description: results is the list of case records.
+        next_page_token:
+          type: string
+          description: next_page_token is a token which can be used to fetch further results (for pagination).
+      description: ListCasesResponse is the response message for listing OSHA cases.
+    s12.incidents.v1.EstablishmentHoursWorked:
+      type: object
+      properties:
+        year_of_filing:
+          type: integer
+          format: int32
+          description: year_of_filing is the year for which the hours are reported.
+        month_of_filing:
+          type: integer
+          format: int32
+          description: month_of_filing is the month for which the hours are reported.
+        hours_worked:
+          type: integer
+          format: int32
+          description: hours_worked is the number of hours worked in that month.
+      description: EstablishmentHoursWorked represents the hours worked by an establishment for a specific month and year.
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.incidents.v1.CreateEstablishmentResponse:
+      type: object
+      properties:
+        establishment:
+          description: establishment is the establishment that was created.
+          allOf:
+          - $ref: '#/components/schemas/s12.incidents.v1.Establishment'
+      description: CreateEstablishmentResponse is the response message for creating an OSHA establishment.
+    s12.incidents.v1.CreateCaseResponse:
+      type: object
+      properties:
+        case:
+          description: case is the case that was created.
+          allOf:
+          - $ref: '#/components/schemas/s12.incidents.v1.Case'
+      description: CreateCaseResponse is the response message for creating an OSHA case.
+    s12.incidents.v1.DeleteCaseResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: success indicates whether the deletion was successful.
+      description: DeleteCaseResponse is the response message for deleting an OSHA case.
+    s12.incidents.v1.OSHAService.UpdateEstablishmentEmployeesBody:
+      type: object
+      properties:
+        average_employees:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.v1.EstablishmentEmployees'
+          description: average_employees is the list of average employees for each year.
+      description: UpdateEstablishmentEmployeesRequest is the request message for updating establishment employees.
+    s12.incidents.v1.CreateCaseRequest:
+      type: object
+      properties:
+        establishment_id:
+          type: string
+          description: establishment_id is the ID of the establishment this case belongs to (required).
+        year_of_filing:
+          type: integer
+          format: int32
+          description: year_of_filing is the year this case is filed for (required).
+        case_number:
+          type: string
+          description: case_number is the case number.
+        job_title:
+          type: string
+          description: job_title is the job title of the affected employee.
+        date_of_incident:
+          type: string
+          format: date-time
+          description: date_of_incident is the date the incident occurred.
+        incident_location:
+          type: string
+          description: incident_location is where the incident occurred.
+        incident_description:
+          type: string
+          description: incident_description is description of the incident.
+        incident_outcome:
+          type: integer
+          format: int32
+          description: incident_outcome is the outcome of the incident (1=Death, 2=Days away, 3=Job transfer, 4=Other).
+        dafw_num_away:
+          type: integer
+          format: int32
+          description: dafw_num_away is days away from work.
+        djtr_num_tr:
+          type: integer
+          format: int32
+          description: djtr_num_tr is days job transfer or restriction.
+        type_of_incident:
+          type: integer
+          format: int32
+          description: type_of_incident is the type of incident (1=Injury, 2=Skin disorder, 3=Respiratory, 4=Poisoning, 5=Hearing loss, 6=Other).
+        date_of_birth:
+          type: string
+          format: date-time
+          description: date_of_birth is the employee's date of birth.
+        date_of_hire:
+          type: string
+          format: date-time
+          description: date_of_hire is the employee's date of hire.
+        sex:
+          type: string
+          description: sex is the employee's sex (M or F).
+        treatment_facility_type:
+          type: integer
+          format: int32
+          description: treatment_facility_type is whether emergency room was used (1=yes, 0=no).
+        treatment_in_patient:
+          type: integer
+          format: int32
+          description: treatment_in_patient is whether hospitalization was required (1=yes, 0=no).
+        time_started_work:
+          type: string
+          description: time_started_work is time employee began work (hh:mm format).
+        time_of_incident:
+          type: string
+          description: time_of_incident is time of incident (hh:mm format).
+        time_unknown:
+          type: boolean
+          description: time_unknown is whether time of incident is unknown.
+        nar_before_incident:
+          type: string
+          description: nar_before_incident is what employee was doing before incident.
+        nar_what_happened:
+          type: string
+          description: nar_what_happened is how injury/illness occurred.
+        nar_injury_illness:
+          type: string
+          description: nar_injury_illness is what the injury/illness was.
+        nar_object_substance:
+          type: string
+          description: nar_object_substance is object/substance that harmed employee.
+        date_of_death:
+          type: string
+          format: date-time
+          description: date_of_death is the date of death if applicable.
+        employee_name:
+          type: string
+          description: employee_name is the name of the employee.
+        employee_street_address:
+          type: string
+          description: employee_street_address is the street address of the employee.
+        employee_city:
+          type: string
+          description: employee_city is the city where the employee resides.
+        employee_state:
+          type: string
+          description: employee_state is the two-letter state code for the employee.
+        employee_zip:
+          type: string
+          description: employee_zip is the ZIP code for the employee.
+        physician_name:
+          type: string
+          description: physician_name is the name of the physician who treated the employee.
+        facility_name:
+          type: string
+          description: facility_name is the name of the treatment facility.
+        facility_street_address:
+          type: string
+          description: facility_street_address is the street address of the treatment facility.
+        facility_city:
+          type: string
+          description: facility_city is the city where the treatment facility is located.
+        facility_state:
+          type: string
+          description: facility_state is the two-letter state code for the treatment facility.
+        facility_zip:
+          type: string
+          description: facility_zip is the ZIP code for the treatment facility.
+      description: CreateCaseRequest is the request message for creating an OSHA case.
+    s12.incidents.v1.GetEstablishmentEmployeesResponse:
+      type: object
+      properties:
+        average_employees:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.v1.EstablishmentEmployees'
+          description: average_employees is the list of average employees for each year.
+      description: GetEstablishmentEmployeesResponse is the response message for retrieving establishment employees.
+    s12.incidents.v1.OSHAService.UpdateCaseBody:
+      type: object
+      properties:
+        case:
+          type: object
+          properties:
+            establishment_id:
+              type: string
+              description: establishment_id is the ID of the establishment this case belongs to.
+            created_at:
+              type: string
+              format: date-time
+              description: created_at is the timestamp when the case was created.
+            modified_at:
+              type: string
+              format: date-time
+              description: modified_at is the timestamp when the case was last modified.
+            created_by:
+              $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
+              description: created_by is the user who created the case.
+            modified_by:
+              $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
+              description: modified_by is the user who last modified the case.
+            year_of_filing:
+              type: integer
+              format: int32
+              description: year_of_filing is the year this case is filed for.
+            case_number:
+              type: string
+              description: case_number is the case number.
+            job_title:
+              type: string
+              description: job_title is the job title of the affected employee.
+            date_of_incident:
+              type: string
+              format: date-time
+              description: date_of_incident is the date the incident occurred.
+            incident_location:
+              type: string
+              description: incident_location is where the incident occurred.
+            incident_description:
+              type: string
+              description: incident_description is description of the incident.
+            incident_outcome:
+              type: integer
+              format: int32
+              description: incident_outcome is the outcome of the incident (1=Death, 2=Days away, 3=Job transfer, 4=Other).
+            dafw_num_away:
+              type: integer
+              format: int32
+              description: dafw_num_away is days away from work.
+            djtr_num_tr:
+              type: integer
+              format: int32
+              description: djtr_num_tr is days job transfer or restriction.
+            type_of_incident:
+              type: integer
+              format: int32
+              description: type_of_incident is the type of incident (1=Injury, 2=Skin disorder, 3=Respiratory, 4=Poisoning, 5=Hearing loss, 6=Other).
+            date_of_birth:
+              type: string
+              format: date-time
+              description: date_of_birth is the employee's date of birth.
+            date_of_hire:
+              type: string
+              format: date-time
+              description: date_of_hire is the employee's date of hire.
+            sex:
+              type: string
+              description: sex is the employee's sex (M or F).
+            treatment_facility_type:
+              type: integer
+              format: int32
+              description: treatment_facility_type is whether emergency room was used (1=yes, 0=no).
+            treatment_in_patient:
+              type: integer
+              format: int32
+              description: treatment_in_patient is whether hospitalization was required (1=yes, 0=no).
+            time_started_work:
+              type: string
+              description: time_started_work is time employee began work (hh:mm format).
+            time_of_incident:
+              type: string
+              description: time_of_incident is time of incident (hh:mm format).
+            time_unknown:
+              type: boolean
+              description: time_unknown is whether time of incident is unknown.
+            nar_before_incident:
+              type: string
+              description: nar_before_incident is what employee was doing before incident.
+            nar_what_happened:
+              type: string
+              description: nar_what_happened is how injury/illness occurred.
+            nar_injury_illness:
+              type: string
+              description: nar_injury_illness is what the injury/illness was.
+            nar_object_substance:
+              type: string
+              description: nar_object_substance is object/substance that harmed employee.
+            date_of_death:
+              type: string
+              format: date-time
+              description: date_of_death is the date of death if applicable.
+            employee_name:
+              type: string
+              description: employee_name is the name of the employee.
+            employee_street_address:
+              type: string
+              description: employee_street_address is the street address of the employee.
+            employee_city:
+              type: string
+              description: employee_city is the city where the employee resides.
+            employee_state:
+              type: string
+              description: employee_state is the two-letter state code for the employee.
+            employee_zip:
+              type: string
+              description: employee_zip is the ZIP code for the employee.
+            physician_name:
+              type: string
+              description: physician_name is the name of the physician who treated the employee.
+            facility_name:
+              type: string
+              description: facility_name is the name of the treatment facility.
+            facility_street_address:
+              type: string
+              description: facility_street_address is the street address of the treatment facility.
+            facility_city:
+              type: string
+              description: facility_city is the city where the treatment facility is located.
+            facility_state:
+              type: string
+              description: facility_state is the two-letter state code for the treatment facility.
+            facility_zip:
+              type: string
+              description: facility_zip is the ZIP code for the treatment facility.
+          description: case contains the updated case data.
+          title: case contains the updated case data.
+        field_mask:
+          type: string
+          description: field_mask specifies which fields to update. If not set, all fields will be updated.
+      description: 'UpdateCaseRequest is the request message for updating an OSHA case.
+
+        If field_mask is set, only the fields specified will be updated (PATCH semantics).
+
+        If field_mask is not set, all fields will be updated (PUT semantics).'
+    s12.incidents.v1.UpdateEstablishmentResponse:
+      type: object
+      properties:
+        establishment:
+          description: establishment is the establishment that was updated.
+          allOf:
+          - $ref: '#/components/schemas/s12.incidents.v1.Establishment'
+      description: UpdateEstablishmentResponse is the response message for updating an OSHA establishment.
+    s12.incidents.v1.UpdateCaseResponse:
+      type: object
+      properties:
+        case:
+          description: case is the case that was updated.
+          allOf:
+          - $ref: '#/components/schemas/s12.incidents.v1.Case'
+      description: UpdateCaseResponse is the response message for updating an OSHA case.
+    s12.incidents.v1.UpdateEstablishmentEmployeesResponse:
+      type: object
+      description: UpdateEstablishmentEmployeesResponse is the response message for updating establishment employees.
+    s12.incidents.v1.Establishment:
+      type: object
+      properties:
+        establishment_id:
+          type: string
+          description: establishment_id is the unique identifier for the establishment.
+        establishment_name:
+          type: string
+          description: establishment_name is the name of the establishment.
+        created_at:
+          type: string
+          format: date-time
+          description: created_at is the timestamp when the establishment was created.
+        modified_at:
+          type: string
+          format: date-time
+          description: modified_at is the timestamp when the establishment was last modified.
+        created_by:
+          description: created_by is the user who created the establishment.
+          allOf:
+          - $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
+        modified_by:
+          description: modified_by is the user who last modified the establishment.
+          allOf:
+          - $ref: '#/components/schemas/s12.incidents.v1.UserMeta'
+        ein:
+          type: string
+          description: ein is the Employer Identification Number.
+        company_name:
+          type: string
+          description: company_name is the name of the company.
+        street_address:
+          type: string
+          description: street_address is the street address of the establishment.
+        city:
+          type: string
+          description: city is the city where the establishment is located.
+        state:
+          type: string
+          description: state is the two-letter state code.
+        zip:
+          type: string
+          description: zip is the ZIP code.
+        naics_code:
+          type: string
+          description: naics_code is the North American Industry Classification System code.
+        industry_description:
+          type: string
+          description: industry_description is the description of the industry.
+        size:
+          type: integer
+          format: int32
+          description: 'size is the size classification: 1 (< 20 employees), 21 (20-99 employees), 22 (100-249 employees), 3 (250+ employees).'
+        establishment_type:
+          type: integer
+          format: int32
+          description: 'establishment_type is the type: 1 (Private), 2 (State Government), 3 (Local Government).'
+      description: Establishment represents an OSHA establishment record.
+    s12.incidents.v1.GetEstablishmentHoursResponse:
+      type: object
+      properties:
+        hours_worked:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.v1.EstablishmentHoursWorked'
+          description: hours_worked is the list of hours worked for each month in the year.
+      description: GetEstablishmentHoursResponse is the response message for retrieving establishment hours.
+    s12.common.Media:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        filename:
+          type: string
+          description: full file name, including file extension
+        media_type:
+          $ref: '#/components/schemas/s12.common.MediaType'
+      title: Represents an image or video
+    s12.incidents.v1.ListEstablishmentsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.v1.Establishment'
+          description: results is the list of establishment records.
+        next_page_token:
+          type: string
+          description: next_page_token is a token which can be used to fetch further results (for pagination).
+      description: ListEstablishmentsResponse is the response message for listing OSHA establishments.
+    s12.incidents.v1.GetCaseResponse:
+      type: object
+      properties:
+        case:
+          description: case is the case that was retrieved.
+          allOf:
+          - $ref: '#/components/schemas/s12.incidents.v1.Case'
+      description: GetCaseResponse is the response message for retrieving an OSHA case.
+    s12.incidents.v1.GetEstablishmentResponse:
+      type: object
+      properties:
+        establishment:
+          description: establishment is the establishment that was retrieved.
+          allOf:
+          - $ref: '#/components/schemas/s12.incidents.v1.Establishment'
+      description: GetEstablishmentResponse is the response message for retrieving an OSHA establishment.
+    s12.incidents.v1.EstablishmentEmployees:
+      type: object
+      properties:
+        year_of_filing:
+          type: integer
+          format: int32
+          description: year_of_filing is the year for which the average employees are reported.
+        average_employees:
+          type: integer
+          format: int32
+          description: average_employees is the average number of employees in that year.
+      description: EstablishmentEmployees represents the average number of employees for an establishment for a specific year.
+    s12.incidents.v1.OSHAService.UpdateEstablishmentHoursBody:
+      type: object
+      properties:
+        hours_worked:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.incidents.v1.EstablishmentHoursWorked'
+          description: hours_worked is the list of hours worked for each month in the year.
+      description: UpdateEstablishmentHoursRequest is the request message for updating establishment hours.
   securitySchemes:
     BearerAuthentication:
       type: http

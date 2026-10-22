@@ -1,11 +1,12 @@
-generated: '2026-07-21'
+generated: '2026-10-20'
 method: searched
 source: https://developer.safetyculture.com + https://safetyculture.com/security
 standards:
 - id: scim2
   conforms: true
-  evidence: User provisioning via SCIM 2.0 with Microsoft Entra ID (Azure AD) and Okta, documented at developer.safetyculture.com user-provisioning
-    guides.
+  evidence: SCIM 2.0 user provisioning with Microsoft Entra ID and Okta (https://developer.mitti.com/docs/user-provisioning-with-okta-and-scim);
+    the 2026-10-11 changelog names the extension URN urn:ietf:params:scim:schemas:extension:safetyculture:2.0 (docs, not the OpenAPI contract).
+    Enterprise plan for new subscriptions since 2026-08-12.
 - id: rfc3339-datetime
   conforms: true
   evidence: API accepts a subset of RFC 3339 Internet Date-Time Format for date/time values.
@@ -20,7 +21,7 @@ standards:
   evidence: ISO 27001 stated on https://safetyculture.com/security.
 - id: oauth2
   conforms: false
-  evidence: Auth is bearer API token; no OAuth 2.0 authorization flow documented.
+  evidence: REST API auth is a bearer API token (no OAuth 2.0 flow). The remote MCP server at https://mcp.mitti.com/mcp uses OAuth 2.0 (https://developer.mitti.com/docs/connect-an-ai-tool-to-mitti).
 - id: rfc9457-problem-details
   conforms: false
   evidence: No application/problem+json error format documented.
@@ -40,3 +41,9 @@ standards:
 - id: pagination
   conforms: true
   evidence: list operations take limit, next_page_token, offset, page, page_number, page_size
+- id: mcp
+  conforms: true
+  evidence: Remote Model Context Protocol server at https://mcp.mitti.com/mcp, Early Access (https://developer.mitti.com/changelog/mitti-mcp-server-available-in-early-access).
+- id: openapi-3.2
+  conforms: true
+  evidence: the document declares 3.2.0

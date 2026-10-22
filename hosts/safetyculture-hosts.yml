@@ -1,52 +1,120 @@
-generated: '2026-10-14'
+generated: '2026-10-20'
 method: derived
 source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
 generator: derive-hosts.py
 summary:
-  hosts: 6
-  own: 4
-  other_domain: 1
-  platform: 1
+  hosts: 17
+  own: 10
+  other_domain: 4
+  platform: 3
   roles:
   - api
+  - community
   - identity
+  - other
   - portal
   - source
   - status
+  - support
   - website
 hosts:
-- host: api.safetyculture.io
+- host: api.mitti.com
   found_by:
   - apis[]
+  - probed
+  - site-links
+  - contract-discovery
   types: []
   serves:
   - api
+  registrable_domain: mitti.com
+  role: api
+  relation: own
+- host: api.safetyculture.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: safetyculture.com
+  role: api
+  relation: other-domain
+- host: api.safetyculture.io
+  found_by:
+  - probed
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
   registrable_domain: safetyculture.io
   role: api
   relation: other-domain
-- host: app.safetyculture.com
+- host: app.mitti.com
   found_by:
   - pointer
+  - probed
+  - site-links
+  - well-known
   types:
   - SignUp
   serves: []
-  registrable_domain: safetyculture.com
+  registrable_domain: mitti.com
   role: identity
   relation: own
-- host: developer.safetyculture.com
+- host: app.safetyculture.com
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  types:
+  - Login
+  serves: []
+  registrable_domain: safetyculture.com
+  role: identity
+  relation: other-domain
+- host: community.mitti.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - well-known
+  types:
+  - Community
+  serves: []
+  registrable_domain: mitti.com
+  role: community
+  relation: own
+- host: developer.mitti.com
   found_by:
   - pointer
   - apis[]
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
   types:
+  - ChangeLog
   - DeveloperPortal
   - Documentation
   - APIReference
   - GettingStarted
   serves:
   - docs
-  registrable_domain: safetyculture.com
+  - documentation
+  vendor: readme
+  registrable_domain: mitti.com
   role: portal
   relation: own
+- host: developer.safetyculture.com
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: safetyculture.com
+  role: portal
+  relation: other-domain
 - host: github.com
   found_by:
   - pointer
@@ -56,28 +124,97 @@ hosts:
   registrable_domain: github.com
   role: source
   relation: platform
-- host: safetyculture.com
+- host: help.mitti.com
   found_by:
   - pointer
+  - probed
+  - site-links
+  - docs-index
+  - well-known
+  types:
+  - Support
+  serves:
+  - docs
+  registrable_domain: mitti.com
+  role: support
+  relation: own
+- host: insurance.mitti.com
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: mitti.com
+  role: other
+  relation: own
+- host: integrations.mitti.com
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: mitti.com
+  role: other
+  relation: own
+- host: mitti.com
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  - vendor-detect
   types:
   - Website
   - Blog
   - Pricing
   - TermsOfService
   - PrivacyPolicy
-  - Support
+  - PartnerProgram
   - Compliance
   - Security
-  serves: []
-  registrable_domain: safetyculture.com
+  serves:
+  - cdn
+  - hosting
+  vendor: cloudflare
+  registrable_domain: mitti.com
   role: website
   relation: own
-- host: status.safetyculture.com
+- host: status.mitti.com
   found_by:
   - pointer
+  - probed
+  - site-links
+  - well-known
   types:
   - StatusPage
   serves: []
-  registrable_domain: safetyculture.com
+  registrable_domain: mitti.com
   role: status
   relation: own
+- host: supply.mitti.com
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: mitti.com
+  role: other
+  relation: own
+- host: www.youtube.com
+  found_by:
+  - pointer
+  types:
+  - YouTube
+  serves: []
+  registrable_domain: youtube.com
+  role: other
+  relation: platform
+- host: x.com
+  found_by:
+  - pointer
+  types:
+  - Twitter
+  serves: []
+  registrable_domain: x.com
+  role: other
+  relation: platform

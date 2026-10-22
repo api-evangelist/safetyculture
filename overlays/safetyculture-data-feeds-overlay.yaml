@@ -1,0 +1,149 @@
+overlay: 1.0.0
+info:
+  title: SafetyCulture Mitti Data Feeds API enhancements
+  version: 1.0.0
+extends: openapi/safetyculture-data-feeds-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-provider: SafetyCulture (Mitti)
+    x-apievangelist-mcp:
+      endpoint: https://mcp.mitti.com/mcp
+      auth: oauth
+      status: early-access
+      docs: https://developer.mitti.com/docs/connect-an-ai-tool-to-mitti
+    x-llms-txt: https://developer.mitti.com/llms.txt
+- target: $
+  update:
+    externalDocs:
+      description: Mitti developer portal
+      url: https://developer.mitti.com/reference/introduction
+- target: $.components.securitySchemes.BearerAuthentication
+  update:
+    description: 'User API token sent as Authorization: Bearer {api_token}. Tokens are managed per user (https://help.mitti.com/000007).'
+- target: $.paths['/assets/v1/feed/assets_maintenance'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/assets/v1/feed/maintenance_plans'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/assets/v1/feed/maintenance_programs'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/companies/v1/feed/companies'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/companies/v1/feed/companies/documents'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/companies/v1/feed/companies/members'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/credentials/v1/feed/credential-types'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/credentials/v1/feed/credentials'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/action_assignees'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/action_fields'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/action_timeline_items'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/actions'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/activity_log_events'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/assets'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/group_users'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/groups'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/inspection_items'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/inspections'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/issue_assignees'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/issue_relations'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/issue_timeline_items'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/issues'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/schedule_assignees'].get
+  update:
+    x-legacy: true
+- target: $.paths['/feed/schedule_assignees'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/schedule_occurrences'].get
+  update:
+    x-legacy: true
+- target: $.paths['/feed/schedule_occurrences'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/schedules'].get
+  update:
+    x-legacy: true
+- target: $.paths['/feed/schedules'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/site_members'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/sites'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/template_permissions'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/templates'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/feed/users'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/feed/investigation_detail_fields'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/feed/investigation_fields'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/feed/investigation_relationships'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/incidents/v1/feed/investigations'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/scheduling/v1/feed/schedule_assignees'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/scheduling/v1/feed/schedule_occurrences'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/scheduling/v1/feed/schedules'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/tasks/v1/feed/action_fields'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/training/v1/feed/training-course-progress'].get
+  update:
+    x-agent-safe: read-only

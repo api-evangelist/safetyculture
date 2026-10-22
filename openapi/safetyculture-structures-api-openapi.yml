@@ -382,22 +382,199 @@ paths:
       - Structures
 components:
   schemas:
-    s12.search.v1.StructureSearchResult.Parent:
+    s12.typefield.v1.FieldValueType:
+      type: string
+      enum:
+      - FIELD_VALUE_TYPE_UNSPECIFIED
+      - FIELD_VALUE_TYPE_STRING
+      - FIELD_VALUE_TYPE_MONEY
+      - FIELD_VALUE_TYPE_TIMESTAMP
+      - FIELD_VALUE_TYPE_USER_ID
+      - FIELD_VALUE_TYPE_SELECT
+      - FIELD_VALUE_TYPE_TEMPLATE_ID
+      - FIELD_VALUE_TYPE_MULTI_SELECT
+      - FIELD_VALUE_TYPE_SITE
+      - FIELD_VALUE_TYPE_MULTI_SITE
+      - FIELD_VALUE_TYPE_INTEGER
+      - FIELD_VALUE_TYPE_ADDRESS
+      - FIELD_VALUE_TYPE_TIMEZONE
+      - FIELD_VALUE_TYPE_CONTACT_DETAILS
+      default: FIELD_VALUE_TYPE_UNSPECIFIED
+      description: "Type of FieldValue.\nDefaults to type String.\n\n - FIELD_VALUE_TYPE_UNSPECIFIED: Field value type unspecified.\n - FIELD_VALUE_TYPE_STRING: Field value type string.\n - FIELD_VALUE_TYPE_MONEY: Field value type money.\n - FIELD_VALUE_TYPE_TIMESTAMP: Field value type timestamp.\n - FIELD_VALUE_TYPE_USER_ID: Field value type user ID.\n - FIELD_VALUE_TYPE_SELECT: Field value type select\n - FIELD_VALUE_TYPE_TEMPLATE_ID: Field value type template ID.\n - FIELD_VALUE_TYPE_MULTI_SELECT: Field value type multi-select\n - FIELD_VALUE_TYPE_SITE: Field value type site\n - FIELD_VALUE_TYPE_MULTI_SITE: Field value type multi-site\n - FIELD_VALUE_TYPE_INTEGER: Field value type integer\n - FIELD_VALUE_TYPE_ADDRESS: Field value type address.\n - FIELD_VALUE_TYPE_TIMEZONE: Field value type timezone\n - FIELD_VALUE_TYPE_CONTACT_DETAILS: Field value type contact details"
+    s12.common.UserActiveStatus:
+      type: string
+      enum:
+      - USER_ACTIVE_STATUS_UNSPECIFIED
+      - USER_ACTIVE_STATUS_ACTIVE
+      - USER_ACTIVE_STATUS_DEACTIVATED
+      default: USER_ACTIVE_STATUS_UNSPECIFIED
+      description: "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated"
+      title: UserActiveStatus enumerates possible states of 'status' a user may be in
+    s12.structures.membership.v1.AddUserAssignmentsError:
       type: object
       properties:
-        uuid:
+        user_id:
           type: string
-          description: UUID of the parent structure.
+          description: The unique identifier of the user that could not be assigned.
+        structure_id:
+          type: string
+          description: The unique identifier of the structure the assignment targeted.
+        code:
+          type: integer
+          format: int32
+          description: The gRPC status code (google.rpc.Code) describing the failure.
+        message:
+          type: string
+          description: A human-readable, actionable description of why the assignment failed.
+        user_name:
+          type: string
+          description: 'The display name of the user that could not be assigned, for surfacing the
+
+            failure in the UI without a separate lookup. Best-effort: may be empty if
+
+            the name could not be resolved.'
+      description: A single failed (user, structure) assignment within an AddUsersToStructure request.
+    s12.structures.v1.Field:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the field.
+        field_value_type:
+          description: 'The type of value the field holds. A structure''s value for this field must
+
+            match this type.'
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
         name:
           type: string
-          description: Display name of the parent structure.
-      description: The matched structure's parent.
-    s12.structures.membership.v1.ListDirectUsersInStructureRequest.Filter:
+          description: The display name of the field.
+        description:
+          type: string
+          description: The description of the field.
+        category:
+          description: 'Whether the field is a system field that exists in every organization, or a
+
+            custom field this organization defined.'
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
+        select_options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: 'The options that a value for this field can be chosen from. Populated only
+
+            for the select and multi-select field value types.'
+        structure_settings:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.v1.FieldStructureTypeSettings'
+          description: 'The structure types this field applies to, and how it behaves on each —
+
+            whether it is required and whether it displays on that type''s profile.'
+        created_by:
+          type: string
+          description: The ID of the user who created the field.
+        status:
+          description: Whether the field is active or archived.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.FieldStatus'
+      description: A reusable attribute definition owned by the organization, such as "Region" or "Opening date". A field is defined once and then mapped to the structure types it applies to; a structure holds one value per field that applies to its type.
+      title: Field
+    s12.structures.v1.FieldValueInput:
+      type: object
+      description: 'FieldValueInput is the input message for setting a field value.
+
+        Used by CreateStructureRequest and UpdateStructureRequest.'
+      properties:
+        field_id:
+          type: string
+          description: The unique identifier of the field type definition.
+        is_default_value:
+          type: boolean
+          description: 'Whether the value is the field''s default value. The default value can be updated, causing this field value
+
+            to change.'
+      required:
+      - field_id
+      oneOf:
+      - type: object
+        title: String
+        properties:
+          string_value:
+            type: string
+            description: String value for FIELD_VALUE_TYPE_STRING, FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
+        required:
+        - string_value
+      - type: object
+        title: Integer
+        properties:
+          integer_value:
+            type: string
+            format: int64
+            description: Integer value for FIELD_VALUE_TYPE_INTEGER.
+        required:
+        - integer_value
+      - type: object
+        title: Timestamp
+        properties:
+          timestamp_value:
+            type: string
+            format: date-time
+            description: Timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
+        required:
+        - timestamp_value
+      - type: object
+        title: Address
+        properties:
+          address_location_value:
+            description: Address location value for FIELD_VALUE_TYPE_ADDRESS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.AddressLocation'
+        required:
+        - address_location_value
+      - type: object
+        title: Contact Details
+        properties:
+          contact_details_value:
+            description: Contact details value for FIELD_VALUE_TYPE_CONTACT_DETAILS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.ContactDetails'
+        required:
+        - contact_details_value
+    s12.common.SubscriptionSeatTypes:
+      type: string
+      enum:
+      - SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      - SUBSCRIPTION_SEAT_TYPE_PREMIUM
+      - SUBSCRIPTION_SEAT_TYPE_COLLABORATOR
+      - SUBSCRIPTION_SEAT_TYPE_LITE
+      - SUBSCRIPTION_SEAT_TYPE_SERVICE_USER
+      - SUBSCRIPTION_SEAT_TYPE_SUPPORT
+      default: SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
+      title: SubscriptionSeatTypes is a list of potential subscription seat types
+    s12.typefield.v1.FieldOption:
       type: object
       properties:
-        role_id:
+        id:
           type: string
-          description: Filter by role ID to list only users with a specific role.
+          description: The id of a field select option.
+        label:
+          type: string
+          description: The label of a field select option.
+        order:
+          type: integer
+          format: int32
+          description: 'The display order of this option, 0-indexed.
+
+            Options should be displayed in ascending order of this field,
+
+            matching the order they were defined in the field settings.'
+    s12.structures.membership.v1.ListUsersByRoleRequest.Filter:
+      type: object
+      properties:
         query:
           type: string
           description: Used for filtering users by their name, family name or email. This supports partial matches to allow flexible searching.
@@ -405,230 +582,7 @@ components:
           description: Used for filtering users by their active status. This allows clients to include or exclude inactive users from the results.
           allOf:
           - $ref: '#/components/schemas/s12.common.UserActiveStatus'
-      description: Filter criteria for listing direct users in a structure.
-    s12.common.GeoPosition:
-      type: object
-      properties:
-        longitude:
-          type: number
-          format: double
-          description: The geographical longitude
-        latitude:
-          type: number
-          format: double
-          description: The geographical latitude
-        accuracy:
-          type: integer
-          format: int32
-          description: The accuracy in meters
-      description: A position is the fundamental geographical geometry construct.
-    s12.structures.membership.v1.RoleDetails:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The role title.
-        id:
-          type: string
-          description: The unique identifier of the role.
-      title: RoleDetails contains basic details about a role
-    s12.structures.membership.v1.RemoveUsersFromStructureResponse:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.membership.v1.RemoveUserAssignmentsError'
-          description: 'The users that could not be removed, each with a reason. Empty when every
-
-            removal succeeded.'
-      description: 'Response message for removing users from a structure. Supports partial
-
-        success: the users that could not be removed are returned with a reason.'
-    s12.structures.v1.UpdateStructureResponse:
-      type: object
-    s12.structures.membership.v1.RoleUserAssignments:
-      type: object
-      properties:
-        user_data:
-          description: Details about the user.
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.membership.v1.UserDetails'
-        assigned_structure_details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.membership.v1.RoleStructureInfo'
-          description: 'Sampled structures assigned to the user for this role. The sample is
-
-            capped at max_structures_per_user PER structure_type_id, so each type a
-
-            user belongs to is represented. Use total_structure_count_by_type_id to
-
-            know the true per-type counts when a type is sampled out.'
-          readOnly: true
-        total_structure_count:
-          type: integer
-          format: int32
-          description: Total number of structures this user holds the role on.
-          readOnly: true
-        total_structure_count_by_type_id:
-          type: object
-          additionalProperties:
-            type: integer
-            format: int32
-          description: 'Total number of structures this user holds the role on, bucketed by
-
-            structure_type_id. Counts are NOT capped by max_structures_per_user, so
-
-            callers can render accurate per-type overflow ("+N more") even when the
-
-            sampled `assigned_structure_details` list is truncated. A missing key
-
-            means the user has zero structures of that type for this role.'
-          readOnly: true
-      description: Details and structure assignments for a user assigned to a role.
-    s12.search.v1.StructureSearchResult.MatchedField:
-      type: object
-      properties:
-        key:
-          type: string
-          description: Field name (e.g. "address", or a custom field id).
-        value:
-          type: string
-          description: Field value containing the matched substring.
-        field_id:
-          type: string
-          description: 'Field identifier for filter-derived matches. `key` may be empty for
-
-            such matches (e.g. optional custom fields), so clients should resolve
-
-            the display name from their own field definitions using this id.'
-      description: 'A field whose value matched the query. Useful for highlighting on
-
-        the client. The structure''s name is not included — it''s already at
-
-        the top level.'
-    s12.structures.membership.v1.StructureMembershipService.AddUsersToStructureBody:
-      type: object
-      properties:
-        user_ids:
-          type: array
-          items:
-            type: string
-          description: The unique identifiers of the users to add. Limited to 100 users per request.
-      description: Request message to add one or more users to a structure.
-      required:
-      - user_ids
-    s12.search.v1.StructureSearchResult.Ancestor:
-      type: object
-      properties:
-        uuid:
-          type: string
-          description: UUID of the ancestor structure.
-        name:
-          type: string
-          description: 'Display name of the ancestor structure. Empty when masked or
-
-            unresolved for the caller.'
-        label:
-          type: string
-          description: 'Hierarchical label of the ancestor structure (e.g. "region",
-
-            "country", "state").'
-        direct_member_count:
-          type: integer
-          format: int32
-          description: 'Number of direct members of the ancestor structure. Matches the type
-
-            of the outer StructureSearchResult.direct_member_count.'
-      description: Ancestor of the matched structure, from root down to the direct parent.
-    s12.structures.v1.Structure.Ancestor:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the Ancestor belonging to the Structure.
-          readOnly: true
-        name:
-          type: string
-          description: name of the Ancestor.
-          readOnly: true
-        depth:
-          type: integer
-          format: int32
-          description: Depth relative to the Structure. Structure self depth = 0. Direct parent depth = 1.
-          readOnly: true
-    s12.structures.membership.v1.RoleUserEntry:
-      type: object
-      properties:
-        user_id:
-          type: string
-          description: The unique identifier of the user.
-          readOnly: true
-        assignments:
-          description: Details and structure assignments for the user.
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.membership.v1.RoleUserAssignments'
-      description: A single user entry in a role user listing.
-    s12.structures.membership.v1.AddUsersToRoleResponse:
-      type: object
-      properties:
-        structure_memberships:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership'
-          description: The structure memberships that were successfully created.
-        errors:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.membership.v1.AddUsersToRoleError'
-          description: 'The (user, structure) assignments that failed, each with a reason. Empty
-
-            when every assignment succeeded.'
-      description: 'Response message for adding users to a role. Supports partial success: the
-
-        memberships that were created are returned alongside per (user, structure)
-
-        failures.'
-    s12.structures.types.v1.SystemStructureType:
-      type: string
-      enum:
-      - SYSTEM_STRUCTURE_TYPE_UNSPECIFIED
-      - SYSTEM_STRUCTURE_TYPE_SITE
-      - SYSTEM_STRUCTURE_TYPE_GROUP
-      default: SYSTEM_STRUCTURE_TYPE_UNSPECIFIED
-      description: 'Built-in structure types that exist across every organization without
-
-        needing an org-defined UUID. Use SystemStructureType when referring to
-
-        these well-known types by name.'
-    s12.typefield.v1.ContactDetails:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the contact.
-        phone:
-          type: string
-          description: The phone number of the contact.
-        email:
-          type: string
-          description: The email address of the contact.
-      description: Contact details for a person or entity.
-    s12.structures.v1.StatusType:
-      type: string
-      enum:
-      - STATUS_TYPE_ACTIVE
-      - STATUS_TYPE_PENDING
-      - STATUS_TYPE_DELETED
-      description: "- STATUS_TYPE_ACTIVE: The structure is active and can be used.\n - STATUS_TYPE_PENDING: The structure has been created but is not yet active.\n - STATUS_TYPE_DELETED: The structure has been deleted."
-      title: Status types for structures
+      description: Filter criteria for listing users by role.
     s12.structures.v1.FieldValue:
       type: object
       description: 'FieldValue represents a single field and its value within a structure profile.
@@ -720,73 +674,325 @@ components:
             - $ref: '#/components/schemas/s12.typefield.v1.ContactDetails'
         required:
         - contact_details_value
-    s12.search.v1.StructureSearchResult:
+    s12.search.v1.StructureSearchParams.Filters.FieldValueFilter:
       type: object
       properties:
-        structure_uuid:
+        field_id:
           type: string
-          description: UUID of the matched structure.
-        name:
-          type: string
-          description: Display name of the structure.
-        structure_type:
-          type: string
-          description: Structure type identifier (e.g. "folder", "site"). Empty if not categorized.
-        direct_member_count:
-          type: integer
-          format: int32
-          description: Number of direct members.
-        created_at:
-          type: string
-          format: date-time
-          description: When the structure was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: When the structure was last modified.
-        similarity_score:
-          type: number
-          format: float
-          description: Relevance score, 0.0–1.0. Higher is more relevant.
-        parent:
-          description: Parent of the matched structure. Unset for root structures.
-          allOf:
-          - $ref: '#/components/schemas/s12.search.v1.StructureSearchResult.Parent'
-        matches:
+        values:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.search.v1.StructureSearchResult.MatchedField'
-          description: 'Fields that matched the query. Only populated when the request set
+            $ref: '#/components/schemas/s12.structures.types.v1.FieldValueData'
+          description: 'Each entry is an exact-value predicate. Prefer `matches`, which
 
-            include_matches = true.'
-        is_dynamic:
-          type: boolean
-          description: True if membership is governed by a rule rather than explicit assignment.
+            supersedes this field; `values` is retained for callers that have not
+
+            migrated and will be marked deprecated once `matches` is no longer
+
+            experimental.'
+      description: 'A single field plus the values it may match. Values within one
+
+        filter are OR-combined; multiple filters are AND-combined.'
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.structures.membership.v1.StructureMembershipService.ListUsersByRoleBody:
+      type: object
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: 'Optional. The maximum number of users to return. Default of 1000.
+
+            You can specify a value between 1 to 1000.'
+        offset:
+          type: integer
+          format: int32
+          description: Optional. The number of results to offset by.
+        sort_direction:
+          description: Optional. The sort direction for query results (ascending or descending).
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+        filter:
+          description: Filters to apply against the list of users.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.ListUsersByRoleRequest.Filter'
+        max_structures_per_user:
+          type: integer
+          format: int32
+          description: 'Optional. Maximum structures sampled per user (1-50), applied PER
+
+            structure_type_id, not globally. Omit it to sample none.
+
+            total_structure_count_by_type_id is never capped.'
+      description: Request message to list users assigned to a role.
+    s12.structures.v1.SingleSelectValue:
+      type: object
+      properties:
+        selected_option_id:
+          type: string
+          description: 'The ID of the selected option.
+
+            This references a FieldOption defined in the associated field type.'
+        options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: 'The list of available options for this field.
+
+            This provides a snapshot of the options available at the time the value was set,
+
+            which is useful for historical accuracy and API convenience.'
+      description: 'SingleSelectValue represents a single-select field value.
+
+        This is used for fields where exactly one option can be selected from a predefined list.'
+    s12.structures.membership.v1.RemoveUserAssignmentsError:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user that could not be removed.
+        structure_id:
+          type: string
+          description: The unique identifier of the structure the removal targeted.
+        code:
+          type: integer
+          format: int32
+          description: The gRPC status code (google.rpc.Code) describing the failure.
+        message:
+          type: string
+          description: A human-readable, actionable description of why the removal failed.
+        user_name:
+          type: string
+          description: 'The display name of the user that could not be removed, for surfacing the
+
+            failure in the UI without a separate lookup. Best-effort: may be empty if
+
+            the name could not be resolved.'
+      description: A single failed user removal within a RemoveUsersFromStructure request.
+    s12.structures.membership.v1.UserStructurePairs:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user to assign.
+        structure_ids:
+          type: array
+          items:
+            type: string
+          description: 'The unique identifiers of the structures to assign the role on for this
+
+            user. Limited to 10 structures per entry.'
+      description: A single user paired with the structures to assign the role on.
+      required:
+      - user_id
+      - structure_ids
+    s12.structures.membership.v1.AddUsersToRoleError:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user that could not be assigned.
+        structure_id:
+          type: string
+          description: The unique identifier of the structure the assignment targeted.
+        code:
+          type: integer
+          format: int32
+          description: The gRPC status code (google.rpc.Code) describing the failure.
+        message:
+          type: string
+          description: A human-readable, actionable description of why the assignment failed.
+        user_name:
+          type: string
+          description: 'The display name of the user that could not be assigned, for surfacing the
+
+            failure in the UI without a separate lookup. Best-effort: may be empty if
+
+            the name could not be resolved.'
+      description: A single failed (user, structure) assignment within an AddUsersToRole request.
+    s12.structures.membership.v1.StructureMembership.AssignmentType:
+      type: string
+      enum:
+      - ASSIGNMENT_TYPE_UNSPECIFIED
+      - ASSIGNMENT_TYPE_MANUAL
+      - ASSIGNMENT_TYPE_RULE_BASED
+      default: ASSIGNMENT_TYPE_UNSPECIFIED
+      description: "AssignmentType classifies how this membership was assigned: explicitly\nby a user, or computed by a dynamic-structure rule.\n\n - ASSIGNMENT_TYPE_UNSPECIFIED: Unspecified assignment type value.\n - ASSIGNMENT_TYPE_MANUAL: The membership was explicitly assigned by a user.\n - ASSIGNMENT_TYPE_RULE_BASED: The membership was computed by a dynamic-structure rule."
+    s12.structures.membership.v1.StructureMembership:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user.
+          readOnly: true
+        structure_id:
+          type: string
+          description: The unique identifier of the structure.
+          readOnly: true
+        role_id:
+          type: string
+          description: The unique identifier of the role assigned to the user within the structure.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the user was added to the structure.
+          readOnly: true
+        modified_at:
+          type: string
+          format: date-time
+          description: The timestamp when the membership was last modified.
+          readOnly: true
+        assignment_type:
+          description: 'How this membership was assigned: explicitly by a user, or computed by a
+
+            dynamic-structure rule.'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership.AssignmentType'
+      description: StructureMembership represents a user's membership within a structure, including their assigned role.
+    s12.typefield.v1.FieldCategory:
+      type: string
+      enum:
+      - FIELD_CATEGORY_UNSPECIFIED
+      - FIELD_CATEGORY_SYSTEM_FIELD
+      - FIELD_CATEGORY_CUSTOM_FIELD
+      default: FIELD_CATEGORY_UNSPECIFIED
+      description: "- FIELD_CATEGORY_UNSPECIFIED: Field category Unspecified.\n - FIELD_CATEGORY_SYSTEM_FIELD: Field category pre-defined.\n - FIELD_CATEGORY_CUSTOM_FIELD: Field category custom."
+      title: Category of Field
+    s12.structures.membership.v1.RemoveUsersFromStructureResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.RemoveUserAssignmentsError'
+          description: 'The users that could not be removed, each with a reason. Empty when every
+
+            removal succeeded.'
+      description: 'Response message for removing users from a structure. Supports partial
+
+        success: the users that could not be removed are returned with a reason.'
+    s12.structures.membership.v1.RoleStructureInfo:
+      type: object
+      properties:
+        structure_id:
+          type: string
+          description: The unique identifier of the structure.
+          readOnly: true
+        structure_name:
+          type: string
+          description: The name of the structure.
+          readOnly: true
+        structure_type_id:
+          type: string
+          description: The unique identifier of the structure type.
+          readOnly: true
+      description: Basic info about a structure, used within a role user listing.
+    s12.common.SortDirection:
+      type: string
+      enum:
+      - SORT_DIRECTION_UNSPECIFIED
+      - SORT_DIRECTION_ASC
+      - SORT_DIRECTION_DESC
+      default: SORT_DIRECTION_UNSPECIFIED
+      title: Common set of sorting directions as used by lists
+    s12.structures.membership.v1.StructureMembershipService.ListDirectUsersInStructureBody:
+      type: object
+      properties:
+        filter:
+          description: Filters to apply against the list of users.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.ListDirectUsersInStructureRequest.Filter'
+        page_size:
+          type: integer
+          format: int32
+          description: 'Optional. The maximum number of users to return. Default of 1000.
+
+            You can specify a value between 1 to 1000.'
+        sort_direction:
+          description: Optional. The sort direction for query results (ascending or descending).
+          allOf:
+          - $ref: '#/components/schemas/s12.common.SortDirection'
+        offset:
+          type: integer
+          format: int32
+          description: Optional. The number of results to offset by.
+      description: Request message to list users directly assigned to a structure.
+    s12.structures.v1.StructuresService.UpdateStructureBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The updated name of the structure
         description:
           type: string
-          description: Free-text description of the structure. Empty if none is set.
+          description: The updated description for the structure (optional)
         fields:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.structures.types.v1.StructureFieldValue'
-          description: 'Fully-populated field values for the structure. Only populated when the
-
-            request set include_fields = true. Field display names (field_name) are
-
-            resolved to their current values at query time, so they stay correct even
-
-            if the field was renamed after the structure was last indexed.'
-        ancestors:
+            $ref: '#/components/schemas/s12.structures.v1.FieldValueInput'
+          description: The updated fields for the structure
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.search.v1.StructureSearchResult.Ancestor'
-          description: 'Full ancestor chain from root to direct parent, in order. Empty for root
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.common.GeoPosition:
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+          description: The geographical longitude
+        latitude:
+          type: number
+          format: double
+          description: The geographical latitude
+        accuracy:
+          type: integer
+          format: int32
+          description: The accuracy in meters
+      description: A position is the fundamental geographical geometry construct.
+    s12.structures.membership.v1.RoleUserEntry:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: The unique identifier of the user.
+          readOnly: true
+        assignments:
+          description: Details and structure assignments for the user.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.RoleUserAssignments'
+      description: A single user entry in a role user listing.
+    s12.structures.v1.StructuresService.MoveStructureBody:
+      type: object
+      properties:
+        new_parent_id:
+          type: string
+      title: 'Request to move a structure to a new parent
 
-            structures and for non-hierarchical (Group) results. Additive to `parent`.'
-      description: A single structure that matched the search query.
+        or orphan it by setting new_parent_id to uuid.Nil'
     s12.structures.membership.v1.UserDetails:
       type: object
       properties:
@@ -818,750 +1024,28 @@ components:
           allOf:
           - $ref: '#/components/schemas/s12.common.SubscriptionSeatTypes'
       title: UserDetails contains basic details about a user
-    s12.structures.v1.SingleSelectValue:
+    s12.structures.v1.UpdateStructureResponse:
       type: object
-      properties:
-        selected_option_id:
-          type: string
-          description: 'The ID of the selected option.
-
-            This references a FieldOption defined in the associated field type.'
-        options:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
-          description: 'The list of available options for this field.
-
-            This provides a snapshot of the options available at the time the value was set,
-
-            which is useful for historical accuracy and API convenience.'
-      description: 'SingleSelectValue represents a single-select field value.
-
-        This is used for fields where exactly one option can be selected from a predefined list.'
-    s12.search.v1.StructureSearchParams.Filters.FieldValueFilter:
-      type: object
-      properties:
-        field_id:
-          type: string
-        values:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.types.v1.FieldValueData'
-          description: 'Each entry is an exact-value predicate. Prefer `matches`, which
-
-            supersedes this field; `values` is retained for callers that have not
-
-            migrated and will be marked deprecated once `matches` is no longer
-
-            experimental.'
-      description: 'A single field plus the values it may match. Values within one
-
-        filter are OR-combined; multiple filters are AND-combined.'
-    s12.structures.types.v1.FieldValueData:
-      type: object
-      description: 'FieldValueData contains the typed value stored for a field, without field metadata such as
-
-        field ID, name, timestamps, or requirement/default information.
-
-
-        Intended to become the canonical FieldValueData across the API. For now the
-
-        wire-compatible original still lives at s12.structures.v1.FieldValueData to avoid
-
-        breaking existing consumers; that copy should be removed once callers have migrated.'
-      oneOf:
-      - type: object
-        title: String
-        properties:
-          string_value:
-            type: string
-            description: String value for FIELD_VALUE_TYPE_STRING, FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
-        required:
-        - string_value
-      - type: object
-        title: Integer
-        properties:
-          integer_value:
-            type: string
-            format: int64
-            description: Integer value for FIELD_VALUE_TYPE_INTEGER.
-        required:
-        - integer_value
-      - type: object
-        title: Timestamp
-        properties:
-          timestamp_value:
-            type: string
-            format: date-time
-            description: Timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
-        required:
-        - timestamp_value
-      - type: object
-        title: Select
-        properties:
-          select_value:
-            description: Single select value for FIELD_VALUE_TYPE_SELECT.
-            allOf:
-            - $ref: '#/components/schemas/s12.structures.types.v1.SingleSelectValue'
-        required:
-        - select_value
-      - type: object
-        title: Address
-        properties:
-          address_location_value:
-            description: Address location value for FIELD_VALUE_TYPE_ADDRESS.
-            allOf:
-            - $ref: '#/components/schemas/s12.typefield.v1.AddressLocation'
-        required:
-        - address_location_value
-      - type: object
-        title: Contact Details
-        properties:
-          contact_details_value:
-            description: Contact details value for FIELD_VALUE_TYPE_CONTACT_DETAILS.
-            allOf:
-            - $ref: '#/components/schemas/s12.typefield.v1.ContactDetails'
-        required:
-        - contact_details_value
-      - type: object
-        title: Reference
-        properties:
-          reference_value:
-            description: 'Reference value carrying both the raw id (the filter key) and an optional
-
-              resolved display label, for the reference field types FIELD_VALUE_TYPE_USER_ID,
-
-              FIELD_VALUE_TYPE_SITE and FIELD_VALUE_TYPE_TEMPLATE_ID. Used where a service
-
-              can resolve a human-readable label (e.g. ListUniqueFieldValues); the bare
-
-              string_value above is still used where no label is available.'
-            allOf:
-            - $ref: '#/components/schemas/s12.structures.types.v1.ReferenceValue'
-        required:
-        - reference_value
-    s12.structures.membership.v1.StructureMembershipService.ListUsersByRoleBody:
-      type: object
-      properties:
-        page_size:
-          type: integer
-          format: int32
-          description: 'Optional. The maximum number of users to return. Default of 1000.
-
-            You can specify a value between 1 to 1000.'
-        offset:
-          type: integer
-          format: int32
-          description: Optional. The number of results to offset by.
-        sort_direction:
-          description: Optional. The sort direction for query results (ascending or descending).
-          allOf:
-          - $ref: '#/components/schemas/s12.common.SortDirection'
-        filter:
-          description: Filters to apply against the list of users.
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.membership.v1.ListUsersByRoleRequest.Filter'
-        max_structures_per_user:
-          type: integer
-          format: int32
-          description: 'Optional. Maximum structures sampled per user (1-50), applied PER
-
-            structure_type_id, not globally. Omit it to sample none.
-
-            total_structure_count_by_type_id is never capped.'
-      description: Request message to list users assigned to a role.
-    s12.structures.v1.MoveStructureResponse:
-      type: object
-      title: Response message returned once a structure has been moved
-    s12.common.SortDirection:
+    s12.structures.types.v1.SystemStructureType:
       type: string
       enum:
-      - SORT_DIRECTION_UNSPECIFIED
-      - SORT_DIRECTION_ASC
-      - SORT_DIRECTION_DESC
-      default: SORT_DIRECTION_UNSPECIFIED
-      title: Common set of sorting directions as used by lists
-    s12.search.v1.StructureSearchParams.Filters:
-      type: object
-      properties:
-        is_dynamic:
-          type: boolean
-          description: 'Optional. Only return structures with this is_dynamic value.
+      - SYSTEM_STRUCTURE_TYPE_UNSPECIFIED
+      - SYSTEM_STRUCTURE_TYPE_SITE
+      - SYSTEM_STRUCTURE_TYPE_GROUP
+      default: SYSTEM_STRUCTURE_TYPE_UNSPECIFIED
+      description: 'Built-in structure types that exist across every organization without
 
-            Unset returns both dynamic and non-dynamic.'
-        structure_uuids:
-          type: array
-          items:
-            type: string
-          description: 'Optional. Restrict to these structure UUIDs (OR-combined).
+        needing an org-defined UUID. Use SystemStructureType when referring to
 
-            api-directory forwards a restricted caller''s entire visible-site scope in
-
-            this field when scoping SearchStructures, so the cap must exceed the largest
-
-            visible scope (tens of thousands) while staying under OpenSearch''s default
-
-            65,536 terms-query limit.'
-        parent_uuids:
-          type: array
-          items:
-            type: string
-          description: 'Optional. Restrict to structures whose direct parent is one of these
-
-            structure UUIDs (OR-combined). Only the immediate parent is matched;
-
-            structures nested deeper under a listed UUID are not returned.'
-        field_values:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.search.v1.StructureSearchParams.Filters.FieldValueFilter'
-          description: 'Optional. Restrict to structures whose field values match these
-
-            filters. OR within a filter, AND across filters.'
-      description: Filters narrow which structures are returned.
-    s12.structures.v1.StructuresService.UpdateStructureBody:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The updated name of the structure
-        description:
-          type: string
-          description: The updated description for the structure (optional)
-        fields:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.v1.FieldValueInput'
-          description: The updated fields for the structure
-    s12.structures.v1.SearchStructuresResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.search.v1.StructureSearchResult'
-          description: Matched structures, ordered by relevance.
-        next_page_token:
-          type: string
-          description: Token for the next page. Empty on the last page.
-        total_count:
-          type: integer
-          format: int32
-          description: 'Total number of matching structures across all pages. Accurate up to
-
-            10,000; beyond that it is a lower bound (treat a value of 10000 as
-
-            "10,000+").'
-      description: Response for SearchStructures.
-    s12.structures.v1.CreateStructureRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the structure
-        structure_type_id:
-          type: string
-          description: Structure type ID
-        parent_structure_id:
-          type: string
-          description: Parent structure ID
-        child_structure_id:
-          type: string
-          description: Child structure ID
-        fields:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.v1.FieldValueInput'
-          description: The fields for the structure
-        description:
-          type: string
-          description: The updated description for the structure (optional)
-        meta_label:
-          type: string
-          description: 'Optional. The meta label only used for top-level structures, used to identify the hierarchy level type
-
-            (e.g. "location", "area", "region", "state", "country"). ignored if parent_structure_id is provided.
-
-            use cases: create a solo structure without parent but still want to assign a meta label to it,'
-      title: Request message to create a structure
-      required:
-      - name
-      - structure_type_id
-    s12.structures.membership.v1.StructureMembershipDetails:
-      type: object
-      properties:
-        structure_membership:
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership'
-          description: The membership IDs
-        user_data:
-          description: Details for the user associated with the structure membership, used to display user details when available.
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.membership.v1.UserDetails'
-        role_data:
-          description: Details for the role associated with the structure membership, used to display role details when available.
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.membership.v1.RoleDetails'
-      description: 'StructureMembershipDetails is a structure membership resolved with the user
-
-        and role details needed to display it without a separate lookup.'
-    s12.structures.membership.v1.ListUsersByRoleRequest.Filter:
-      type: object
-      properties:
-        query:
-          type: string
-          description: Used for filtering users by their name, family name or email. This supports partial matches to allow flexible searching.
-        user_status:
-          description: Used for filtering users by their active status. This allows clients to include or exclude inactive users from the results.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
-      description: Filter criteria for listing users by role.
-    s12.structures.v1.ListFieldsRequest.FieldsFilter:
-      type: object
-      properties:
-        field_category:
-          description: 'Optional. Restrict to fields of a single category: the system fields that
-
-            exist in every organization, or the custom fields yours has defined.'
-          allOf:
-          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
-        field_value_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
-          description: Optional. Restrict to fields whose value is one of these types.
-        query:
-          type: string
-          description: Optional. Restrict to fields whose name matches this search text.
-        created_by:
-          type: array
-          items:
-            type: string
-          description: 'Optional. Restrict to fields created by any of these users, identified by
-
-            user ID.'
-        applies_to:
-          type: array
-          items:
-            type: string
-          description: 'Optional. Restrict to fields mapped to any of these structure types,
-
-            identified by structure type ID. Set this to find the fields that apply to
-
-            the type of structure you are about to create.'
-        status:
-          description: Optional. Restrict to fields in this status.
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.v1.FieldStatus'
-        mapping_metadata:
-          type: object
-          additionalProperties:
-            type: string
-          description: 'Optional. Restrict to fields that have at least one mapping whose
-
-            metadata contains every supplied key/value pair. Typically combined
-
-            with `applies_to` to scope to a specific structure type.
-
-            Supported keys today: "display_on_profiles", "field_required".'
-      description: 'Filters that narrow which fields are returned. Filters combine with AND —
-
-        a field is returned only when it satisfies every filter supplied.'
-    s12.structures.membership.v1.Avatar:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the avatar.
-        type:
-          type: string
-          description: The type of the avatar.
-        token:
-          type: string
-          description: The token used to access the avatar resource.
-      title: Avatar contains the information needed to render a user's avatar
-    s12.structures.v1.FieldStructureTypeSettings:
-      type: object
-      description: The mapping between a field and one structure type it applies to. The mapping controls whether the field is required for structures of that type, whether it displays on their profile, and what value it takes when none is supplied.
-      properties:
-        structure_type_id:
-          type: string
-          description: The unique identifier of the structure type this mapping applies to.
-        field_required:
-          type: boolean
-          description: Whether a structure of this type must carry a value for the field.
-        display_on_profiles:
-          type: boolean
-          description: Whether the field displays on the profile of a structure of this type. Reading a structure returns only the field values whose field has this set.
-      required:
-      - structure_type_id
-      oneOf:
-      - type: object
-        title: String
-        properties:
-          string_value:
-            type: string
-            description: Default string value for FIELD_VALUE_TYPE_STRING, FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
-        required:
-        - string_value
-      - type: object
-        title: Timestamp
-        properties:
-          timestamp_value:
-            type: string
-            format: date-time
-            description: Default timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
-        required:
-        - timestamp_value
-      - type: object
-        title: Integer
-        properties:
-          integer_value:
-            type: string
-            format: int64
-            description: Default integer value for FIELD_VALUE_TYPE_INTEGER.
-        required:
-        - integer_value
-      - type: object
-        title: Select
-        properties:
-          select_options:
-            description: Default option for FIELD_VALUE_TYPE_SELECT and FIELD_VALUE_TYPE_MULTI_SELECT.
-            allOf:
-            - $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
-        required:
-        - select_options
-    s12.structures.membership.v1.StructureMembershipService.AddUsersToRoleBody:
-      type: object
-      properties:
-        user_structure_pairs:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.membership.v1.UserStructurePairs'
-          description: 'The user-to-structures assignments to apply for the role. Limited to 100
-
-            entries per request.'
-      description: 'Request message to add users to a role. Each entry assigns one user to the
-
-        role on its own set of structures.'
-      required:
-      - user_structure_pairs
-    s12.structures.membership.v1.RoleStructureInfo:
-      type: object
-      properties:
-        structure_id:
-          type: string
-          description: The unique identifier of the structure.
-          readOnly: true
-        structure_name:
-          type: string
-          description: The name of the structure.
-          readOnly: true
-        structure_type_id:
-          type: string
-          description: The unique identifier of the structure type.
-          readOnly: true
-      description: Basic info about a structure, used within a role user listing.
-    s12.structures.membership.v1.AddUserAssignmentsError:
-      type: object
-      properties:
-        user_id:
-          type: string
-          description: The unique identifier of the user that could not be assigned.
-        structure_id:
-          type: string
-          description: The unique identifier of the structure the assignment targeted.
-        code:
-          type: integer
-          format: int32
-          description: The gRPC status code (google.rpc.Code) describing the failure.
-        message:
-          type: string
-          description: A human-readable, actionable description of why the assignment failed.
-        user_name:
-          type: string
-          description: 'The display name of the user that could not be assigned, for surfacing the
-
-            failure in the UI without a separate lookup. Best-effort: may be empty if
-
-            the name could not be resolved.'
-      description: A single failed (user, structure) assignment within an AddUsersToStructure request.
-    s12.structures.membership.v1.AddUsersToRoleError:
-      type: object
-      properties:
-        user_id:
-          type: string
-          description: The unique identifier of the user that could not be assigned.
-        structure_id:
-          type: string
-          description: The unique identifier of the structure the assignment targeted.
-        code:
-          type: integer
-          format: int32
-          description: The gRPC status code (google.rpc.Code) describing the failure.
-        message:
-          type: string
-          description: A human-readable, actionable description of why the assignment failed.
-        user_name:
-          type: string
-          description: 'The display name of the user that could not be assigned, for surfacing the
-
-            failure in the UI without a separate lookup. Best-effort: may be empty if
-
-            the name could not be resolved.'
-      description: A single failed (user, structure) assignment within an AddUsersToRole request.
-    s12.structures.v1.StructureMetadata:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the structure
-        name:
-          type: string
-          description: Name of the structure
-        structure_type_id:
-          type: string
-          description: Structure type ID
-        status:
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.v1.StatusType'
-          description: Status of the structure
-        creator_id:
-          type: string
-          readOnly: true
-          description: The user id responsible for creating the structure
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The creation timestamp of the structure
-        modified_at:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The timestamp of the last modification for the structure
-      description: 'StructureMetadata contains the core metadata fields of a structure,
-
-        without the heavy nested data (ancestors, profile, field values).'
-      required:
-      - name
-      - structure_type_id
-      - status
-    s12.common.UserActiveStatus:
+        these well-known types by name.'
+    s12.structures.v1.StatusType:
       type: string
       enum:
-      - USER_ACTIVE_STATUS_UNSPECIFIED
-      - USER_ACTIVE_STATUS_ACTIVE
-      - USER_ACTIVE_STATUS_DEACTIVATED
-      default: USER_ACTIVE_STATUS_UNSPECIFIED
-      description: "- USER_ACTIVE_STATUS_UNSPECIFIED: Status is unknown or not specified\n - USER_ACTIVE_STATUS_ACTIVE: User is active\n - USER_ACTIVE_STATUS_DEACTIVATED: User has been deactivated"
-      title: UserActiveStatus enumerates possible states of 'status' a user may be in
-    s12.typefield.v1.AddressLocation:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the location.
-        thoroughfare:
-          type: string
-          description: The thoroughfare of the location.
-        sub_thoroughfare:
-          type: string
-          description: The sub-thoroughfare of the location.
-        locality:
-          type: string
-          description: The locality of the location.
-        sub_locality:
-          type: string
-          description: The sub-locality of the location.
-        administrative_area:
-          type: string
-          description: The administrative area of the location.
-        sub_administrative_area:
-          type: string
-          description: The sub-administrative area of the location.
-        postal_code:
-          type: string
-          description: The postal code of the location.
-        country:
-          type: string
-          description: The country of the location.
-        iso_country_code:
-          type: string
-          description: The ISO country code of the location.
-        geo_position:
-          description: The geographic position of the location.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.GeoPosition'
-      description: Address and location details for a structure.
-    s12.structures.types.v1.ReferenceValue:
-      type: object
-      properties:
-        id:
-          type: string
-          description: 'The referenced entity''s id. This is the filter key — pass it back as a
-
-            string_value in SearchStructuresRequest.params.filters.field_values[].values
-
-            to filter on this value.'
-        label:
-          type: string
-          description: 'Human-readable label for the referenced entity (e.g. a user''s display name).
-
-            Display-only. Unset when the referent is deleted or inaccessible to the
-
-            caller; clients should fall back to the id in that case.'
-      description: 'ReferenceValue is the value of a reference field (user, site, template) paired
-
-        with an optional resolved display label.'
-    s12.structures.membership.v1.ListDirectUsersInStructureResponse:
-      type: object
-      properties:
-        structure_memberships:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembershipDetails'
-          description: The list of memberships for users directly assigned to the structure.
-        total_membership_count:
-          type: integer
-          format: int32
-          description: 'The total count of users directly assigned to the structure, for pagination.
-
-            This allows clients to understand the full size of the dataset when paginating results.'
-        offset:
-          type: integer
-          format: int32
-          description: The offset for the requested page.
-      description: Response message containing a list of direct user memberships in a structure.
-    s12.typefield.v1.FieldValueType:
-      type: string
-      enum:
-      - FIELD_VALUE_TYPE_UNSPECIFIED
-      - FIELD_VALUE_TYPE_STRING
-      - FIELD_VALUE_TYPE_MONEY
-      - FIELD_VALUE_TYPE_TIMESTAMP
-      - FIELD_VALUE_TYPE_USER_ID
-      - FIELD_VALUE_TYPE_SELECT
-      - FIELD_VALUE_TYPE_TEMPLATE_ID
-      - FIELD_VALUE_TYPE_MULTI_SELECT
-      - FIELD_VALUE_TYPE_SITE
-      - FIELD_VALUE_TYPE_MULTI_SITE
-      - FIELD_VALUE_TYPE_INTEGER
-      - FIELD_VALUE_TYPE_ADDRESS
-      - FIELD_VALUE_TYPE_TIMEZONE
-      - FIELD_VALUE_TYPE_CONTACT_DETAILS
-      default: FIELD_VALUE_TYPE_UNSPECIFIED
-      description: "Type of FieldValue.\nDefaults to type String.\n\n - FIELD_VALUE_TYPE_UNSPECIFIED: Field value type unspecified.\n - FIELD_VALUE_TYPE_STRING: Field value type string.\n - FIELD_VALUE_TYPE_MONEY: Field value type money.\n - FIELD_VALUE_TYPE_TIMESTAMP: Field value type timestamp.\n - FIELD_VALUE_TYPE_USER_ID: Field value type user ID.\n - FIELD_VALUE_TYPE_SELECT: Field value type select\n - FIELD_VALUE_TYPE_TEMPLATE_ID: Field value type template ID.\n - FIELD_VALUE_TYPE_MULTI_SELECT: Field value type multi-select\n - FIELD_VALUE_TYPE_SITE: Field value type site\n - FIELD_VALUE_TYPE_MULTI_SITE: Field value type multi-site\n - FIELD_VALUE_TYPE_INTEGER: Field value type integer\n - FIELD_VALUE_TYPE_ADDRESS: Field value type address.\n - FIELD_VALUE_TYPE_TIMEZONE: Field value type timezone\n - FIELD_VALUE_TYPE_CONTACT_DETAILS: Field value type contact details"
-    s12.structures.v1.FieldValueInput:
-      type: object
-      description: 'FieldValueInput is the input message for setting a field value.
-
-        Used by CreateStructureRequest and UpdateStructureRequest.'
-      properties:
-        field_id:
-          type: string
-          description: The unique identifier of the field type definition.
-        is_default_value:
-          type: boolean
-          description: 'Whether the value is the field''s default value. The default value can be updated, causing this field value
-
-            to change.'
-      required:
-      - field_id
-      oneOf:
-      - type: object
-        title: String
-        properties:
-          string_value:
-            type: string
-            description: String value for FIELD_VALUE_TYPE_STRING, FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
-        required:
-        - string_value
-      - type: object
-        title: Integer
-        properties:
-          integer_value:
-            type: string
-            format: int64
-            description: Integer value for FIELD_VALUE_TYPE_INTEGER.
-        required:
-        - integer_value
-      - type: object
-        title: Timestamp
-        properties:
-          timestamp_value:
-            type: string
-            format: date-time
-            description: Timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
-        required:
-        - timestamp_value
-      - type: object
-        title: Address
-        properties:
-          address_location_value:
-            description: Address location value for FIELD_VALUE_TYPE_ADDRESS.
-            allOf:
-            - $ref: '#/components/schemas/s12.typefield.v1.AddressLocation'
-        required:
-        - address_location_value
-      - type: object
-        title: Contact Details
-        properties:
-          contact_details_value:
-            description: Contact details value for FIELD_VALUE_TYPE_CONTACT_DETAILS.
-            allOf:
-            - $ref: '#/components/schemas/s12.typefield.v1.ContactDetails'
-        required:
-        - contact_details_value
-    s12.structures.v1.ListFieldsResponse:
-      type: object
-      properties:
-        fields:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.v1.Field'
-          description: 'The fields matching the request, ordered with system fields before custom
-
-            fields.'
-        next_page_token:
-          type: string
-          description: 'The token to pass as `page_token` to fetch the next page of results. Empty
-
-            when this is the last page.'
-      title: Response message containing a page of field definitions
-    s12.typefield.v1.FieldCategory:
-      type: string
-      enum:
-      - FIELD_CATEGORY_UNSPECIFIED
-      - FIELD_CATEGORY_SYSTEM_FIELD
-      - FIELD_CATEGORY_CUSTOM_FIELD
-      default: FIELD_CATEGORY_UNSPECIFIED
-      description: "- FIELD_CATEGORY_UNSPECIFIED: Field category Unspecified.\n - FIELD_CATEGORY_SYSTEM_FIELD: Field category pre-defined.\n - FIELD_CATEGORY_CUSTOM_FIELD: Field category custom."
-      title: Category of Field
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
+      - STATUS_TYPE_ACTIVE
+      - STATUS_TYPE_PENDING
+      - STATUS_TYPE_DELETED
+      description: "- STATUS_TYPE_ACTIVE: The structure is active and can be used.\n - STATUS_TYPE_PENDING: The structure has been created but is not yet active.\n - STATUS_TYPE_DELETED: The structure has been deleted."
+      title: Status types for structures
     s12.structures.v1.Structure:
       type: object
       properties:
@@ -1645,152 +1129,86 @@ components:
       - name
       - structure_type_id
       - status
-    s12.structures.types.v1.SingleSelectValue:
+    s12.search.v1.StructureSearchResult.MatchedField:
       type: object
       properties:
-        selected_option_id:
+        key:
           type: string
-          description: 'The ID of the selected option.
-
-            This references a FieldOption defined in the associated field type.'
-        options:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
-          description: 'The list of available options for this field.
-
-            This provides a snapshot of the options available at the time the value was set,
-
-            which is useful for historical accuracy and API convenience.'
-      description: 'SingleSelectValue represents a single-select field value.
-
-        This is used for fields where exactly one option can be selected from a predefined list.
-
-
-        Intended to become the canonical SingleSelectValue across the API. For now the
-
-        wire-compatible original still lives at s12.structures.v1.SingleSelectValue to avoid
-
-        breaking existing consumers; that copy should be removed once callers have migrated.'
-    s12.structures.v1.FieldStatus:
-      type: string
-      enum:
-      - FIELD_STATUS_ACTIVE
-      - FIELD_STATUS_ARCHIVED
-      description: "- FIELD_STATUS_ACTIVE: The field is active and can hold values on structures.\n - FIELD_STATUS_ARCHIVED: The field is archived and can no longer be set on structures."
-      title: Whether a field is available for use on structures
-    s12.search.v1.StructureSearchParams:
-      type: object
-      properties:
-        query:
+          description: Field name (e.g. "address", or a custom field id).
+        value:
           type: string
-          description: Search query matched against structure content. May be empty.
-        filters:
-          description: Optional. Filters to apply to the result set.
-          allOf:
-          - $ref: '#/components/schemas/s12.search.v1.StructureSearchParams.Filters'
-        page:
-          description: Optional. Pagination settings.
-          allOf:
-          - $ref: '#/components/schemas/s12.search.v1.StructureSearchParams.Page'
-        include_matches:
-          type: boolean
-          description: 'Optional. If true, each result includes the field key/value pairs
-
-            that matched the query (useful for highlighting). Off by default.'
-        include_fields:
-          type: boolean
-          description: 'Optional. If true, each result is returned with its fully-populated
-
-            field values (see StructureSearchResult.fields). Off by default, as it
-
-            adds field-name resolution on top of the search. Independent of
-
-            include_matches, which only reports the fields that matched the query.'
-      description: Inputs to SearchStructures.
-    s12.structures.membership.v1.StructureMembership:
-      type: object
-      properties:
-        user_id:
+          description: Field value containing the matched substring.
+        field_id:
           type: string
-          description: The unique identifier of the user.
-          readOnly: true
-        structure_id:
-          type: string
-          description: The unique identifier of the structure.
-          readOnly: true
-        role_id:
-          type: string
-          description: The unique identifier of the role assigned to the user within the structure.
-          readOnly: true
-        created_at:
-          type: string
-          format: date-time
-          description: The timestamp when the user was added to the structure.
-          readOnly: true
-        modified_at:
-          type: string
-          format: date-time
-          description: The timestamp when the membership was last modified.
-          readOnly: true
-        assignment_type:
-          description: 'How this membership was assigned: explicitly by a user, or computed by a
+          description: 'Field identifier for filter-derived matches. `key` may be empty for
 
-            dynamic-structure rule.'
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership.AssignmentType'
-      description: StructureMembership represents a user's membership within a structure, including their assigned role.
-    s12.structures.v1.GetStructureProfileResponse:
+            such matches (e.g. optional custom fields), so clients should resolve
+
+            the display name from their own field definitions using this id.'
+      description: 'A field whose value matched the query. Useful for highlighting on
+
+        the client. The structure''s name is not included — it''s already at
+
+        the top level.'
+    s12.structures.v1.CreateStructureResponse:
       type: object
       properties:
         structure:
           allOf:
           - $ref: '#/components/schemas/s12.structures.v1.Structure'
-          description: The retrieved structure
-      title: Response message containing the retrieved structure
-    s12.structures.v1.StructuresService.MoveStructureBody:
+          description: The created structure
+      title: Response message containing the created structure
+    s12.structures.v1.CreateStructureRequest:
       type: object
       properties:
-        new_parent_id:
+        name:
           type: string
-      title: 'Request to move a structure to a new parent
-
-        or orphan it by setting new_parent_id to uuid.Nil'
-    s12.structures.v1.SearchStructuresRequest:
-      type: object
-      properties:
-        params:
-          description: Search inputs.
-          allOf:
-          - $ref: '#/components/schemas/s12.search.v1.StructureSearchParams'
-        structure_type:
-          description: 'Required. Restricts the search to structures of this type. Either a
-
-            built-in system type or an org-defined structure type UUID.'
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.types.v1.StructureTypeIdentifier'
-      description: Request for SearchStructures. Organization is taken from the caller's auth.
-      required:
-      - structure_type
-    s12.structures.membership.v1.UserStructurePairs:
-      type: object
-      properties:
-        user_id:
+          description: Name of the structure
+        structure_type_id:
           type: string
-          description: The unique identifier of the user to assign.
-        structure_ids:
+          description: Structure type ID
+        parent_structure_id:
+          type: string
+          description: Parent structure ID
+        child_structure_id:
+          type: string
+          description: Child structure ID
+        fields:
           type: array
           items:
-            type: string
-          description: 'The unique identifiers of the structures to assign the role on for this
+            type: object
+            $ref: '#/components/schemas/s12.structures.v1.FieldValueInput'
+          description: The fields for the structure
+        description:
+          type: string
+          description: The updated description for the structure (optional)
+        meta_label:
+          type: string
+          description: 'Optional. The meta label only used for top-level structures, used to identify the hierarchy level type
 
-            user. Limited to 10 structures per entry.'
-      description: A single user paired with the structures to assign the role on.
+            (e.g. "location", "area", "region", "state", "country"). ignored if parent_structure_id is provided.
+
+            use cases: create a solo structure without parent but still want to assign a meta label to it,'
+      title: Request message to create a structure
       required:
-      - user_id
-      - structure_ids
+      - name
+      - structure_type_id
+    s12.structures.v1.Structure.Ancestor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Ancestor belonging to the Structure.
+          readOnly: true
+        name:
+          type: string
+          description: name of the Ancestor.
+          readOnly: true
+        depth:
+          type: integer
+          format: int32
+          description: Depth relative to the Structure. Structure self depth = 0. Direct parent depth = 1.
+          readOnly: true
     s12.structures.types.v1.StructureFieldValue:
       type: object
       properties:
@@ -1829,150 +1247,6 @@ components:
         the canonical metadata-carrying counterpart to FieldValueData (which holds the
 
         value only).'
-    s12.structures.membership.v1.StructureMembershipService.RemoveUsersFromStructureBody:
-      type: object
-      properties:
-        user_ids:
-          type: array
-          items:
-            type: string
-          description: The unique identifiers of the users to remove. Limited to 100 users per request.
-      description: Request message to remove one or more users from a structure.
-      required:
-      - user_ids
-    s12.structures.membership.v1.RemoveUserAssignmentsError:
-      type: object
-      properties:
-        user_id:
-          type: string
-          description: The unique identifier of the user that could not be removed.
-        structure_id:
-          type: string
-          description: The unique identifier of the structure the removal targeted.
-        code:
-          type: integer
-          format: int32
-          description: The gRPC status code (google.rpc.Code) describing the failure.
-        message:
-          type: string
-          description: A human-readable, actionable description of why the removal failed.
-        user_name:
-          type: string
-          description: 'The display name of the user that could not be removed, for surfacing the
-
-            failure in the UI without a separate lookup. Best-effort: may be empty if
-
-            the name could not be resolved.'
-      description: A single failed user removal within a RemoveUsersFromStructure request.
-    s12.structures.membership.v1.ListUsersByRoleResponse:
-      type: object
-      properties:
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.membership.v1.RoleUserEntry'
-          description: List of users assigned to the role, one entry per distinct user.
-        total_count:
-          type: integer
-          format: int32
-          description: The total count of distinct users assigned to the role.
-        offset:
-          type: integer
-          format: int32
-          description: The offset for the requested page.
-      description: Response message containing a list of users assigned to a role.
-    s12.structures.membership.v1.AddUsersToStructureResponse:
-      type: object
-      properties:
-        structure_memberships:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership'
-          description: The created structure memberships.
-        errors:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.membership.v1.AddUserAssignmentsError'
-          description: 'The (user, structure) assignments that failed, each with a reason. Empty
-
-            when every assignment succeeded.'
-      description: Response message containing the created structure memberships.
-    s12.structures.v1.CreateStructureResponse:
-      type: object
-      properties:
-        structure:
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.v1.Structure'
-          description: The created structure
-      title: Response message containing the created structure
-    s12.structures.v1.Field:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the field.
-        field_value_type:
-          description: 'The type of value the field holds. A structure''s value for this field must
-
-            match this type.'
-          allOf:
-          - $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
-        name:
-          type: string
-          description: The display name of the field.
-        description:
-          type: string
-          description: The description of the field.
-        category:
-          description: 'Whether the field is a system field that exists in every organization, or a
-
-            custom field this organization defined.'
-          allOf:
-          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
-        select_options:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
-          description: 'The options that a value for this field can be chosen from. Populated only
-
-            for the select and multi-select field value types.'
-        structure_settings:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.structures.v1.FieldStructureTypeSettings'
-          description: 'The structure types this field applies to, and how it behaves on each —
-
-            whether it is required and whether it displays on that type''s profile.'
-        created_by:
-          type: string
-          description: The ID of the user who created the field.
-        status:
-          description: Whether the field is active or archived.
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.v1.FieldStatus'
-      description: A reusable attribute definition owned by the organization, such as "Region" or "Opening date". A field is defined once and then mapped to the structure types it applies to; a structure holds one value per field that applies to its type.
-      title: Field
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.structures.membership.v1.StructureMembership.AssignmentType:
-      type: string
-      enum:
-      - ASSIGNMENT_TYPE_UNSPECIFIED
-      - ASSIGNMENT_TYPE_MANUAL
-      - ASSIGNMENT_TYPE_RULE_BASED
-      default: ASSIGNMENT_TYPE_UNSPECIFIED
-      description: "AssignmentType classifies how this membership was assigned: explicitly\nby a user, or computed by a dynamic-structure rule.\n\n - ASSIGNMENT_TYPE_UNSPECIFIED: Unspecified assignment type value.\n - ASSIGNMENT_TYPE_MANUAL: The membership was explicitly assigned by a user.\n - ASSIGNMENT_TYPE_RULE_BASED: The membership was computed by a dynamic-structure rule."
     s12.structures.types.v1.StructureTypeIdentifier:
       type: object
       description: 'Identifies a single structure type, either by built-in system type or
@@ -2002,40 +1276,570 @@ components:
             description: UUID of an org-defined structure type.
         required:
         - structure_type_id
+    s12.structures.v1.SearchStructuresResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.search.v1.StructureSearchResult'
+          description: Matched structures, ordered by relevance.
+        next_page_token:
+          type: string
+          description: Token for the next page. Empty on the last page.
+        total_count:
+          type: integer
+          format: int32
+          description: 'Total number of matching structures across all pages. Accurate up to
+
+            10,000; beyond that it is a lower bound (treat a value of 10000 as
+
+            "10,000+").'
+      description: Response for SearchStructures.
+    s12.structures.membership.v1.StructureMembershipService.RemoveUsersFromStructureBody:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: The unique identifiers of the users to remove. Limited to 100 users per request.
+      description: Request message to remove one or more users from a structure.
+      required:
+      - user_ids
+    s12.structures.membership.v1.AddUsersToRoleResponse:
+      type: object
+      properties:
+        structure_memberships:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership'
+          description: The structure memberships that were successfully created.
+        errors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.AddUsersToRoleError'
+          description: 'The (user, structure) assignments that failed, each with a reason. Empty
+
+            when every assignment succeeded.'
+      description: 'Response message for adding users to a role. Supports partial success: the
+
+        memberships that were created are returned alongside per (user, structure)
+
+        failures.'
+    s12.typefield.v1.AddressLocation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the location.
+        thoroughfare:
+          type: string
+          description: The thoroughfare of the location.
+        sub_thoroughfare:
+          type: string
+          description: The sub-thoroughfare of the location.
+        locality:
+          type: string
+          description: The locality of the location.
+        sub_locality:
+          type: string
+          description: The sub-locality of the location.
+        administrative_area:
+          type: string
+          description: The administrative area of the location.
+        sub_administrative_area:
+          type: string
+          description: The sub-administrative area of the location.
+        postal_code:
+          type: string
+          description: The postal code of the location.
+        country:
+          type: string
+          description: The country of the location.
+        iso_country_code:
+          type: string
+          description: The ISO country code of the location.
+        geo_position:
+          description: The geographic position of the location.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+      description: Address and location details for a structure.
+    s12.structures.v1.FieldStatus:
+      type: string
+      enum:
+      - FIELD_STATUS_ACTIVE
+      - FIELD_STATUS_ARCHIVED
+      description: "- FIELD_STATUS_ACTIVE: The field is active and can hold values on structures.\n - FIELD_STATUS_ARCHIVED: The field is archived and can no longer be set on structures."
+      title: Whether a field is available for use on structures
+    s12.structures.membership.v1.RoleUserAssignments:
+      type: object
+      properties:
+        user_data:
+          description: Details about the user.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.UserDetails'
+        assigned_structure_details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.RoleStructureInfo'
+          description: 'Sampled structures assigned to the user for this role. The sample is
+
+            capped at max_structures_per_user PER structure_type_id, so each type a
+
+            user belongs to is represented. Use total_structure_count_by_type_id to
+
+            know the true per-type counts when a type is sampled out.'
+          readOnly: true
+        total_structure_count:
+          type: integer
+          format: int32
+          description: Total number of structures this user holds the role on.
+          readOnly: true
+        total_structure_count_by_type_id:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          description: 'Total number of structures this user holds the role on, bucketed by
+
+            structure_type_id. Counts are NOT capped by max_structures_per_user, so
+
+            callers can render accurate per-type overflow ("+N more") even when the
+
+            sampled `assigned_structure_details` list is truncated. A missing key
+
+            means the user has zero structures of that type for this role.'
+          readOnly: true
+      description: Details and structure assignments for a user assigned to a role.
+    s12.structures.types.v1.FieldValueData:
+      type: object
+      description: 'FieldValueData contains the typed value stored for a field, without field metadata such as
+
+        field ID, name, timestamps, or requirement/default information.
+
+
+        Intended to become the canonical FieldValueData across the API. For now the
+
+        wire-compatible original still lives at s12.structures.v1.FieldValueData to avoid
+
+        breaking existing consumers; that copy should be removed once callers have migrated.'
+      oneOf:
+      - type: object
+        title: String
+        properties:
+          string_value:
+            type: string
+            description: String value for FIELD_VALUE_TYPE_STRING, FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
+        required:
+        - string_value
+      - type: object
+        title: Integer
+        properties:
+          integer_value:
+            type: string
+            format: int64
+            description: Integer value for FIELD_VALUE_TYPE_INTEGER.
+        required:
+        - integer_value
+      - type: object
+        title: Timestamp
+        properties:
+          timestamp_value:
+            type: string
+            format: date-time
+            description: Timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
+        required:
+        - timestamp_value
+      - type: object
+        title: Select
+        properties:
+          select_value:
+            description: Single select value for FIELD_VALUE_TYPE_SELECT.
+            allOf:
+            - $ref: '#/components/schemas/s12.structures.types.v1.SingleSelectValue'
+        required:
+        - select_value
+      - type: object
+        title: Address
+        properties:
+          address_location_value:
+            description: Address location value for FIELD_VALUE_TYPE_ADDRESS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.AddressLocation'
+        required:
+        - address_location_value
+      - type: object
+        title: Contact Details
+        properties:
+          contact_details_value:
+            description: Contact details value for FIELD_VALUE_TYPE_CONTACT_DETAILS.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.ContactDetails'
+        required:
+        - contact_details_value
+      - type: object
+        title: Reference
+        properties:
+          reference_value:
+            description: 'Reference value carrying both the raw id (the filter key) and an optional
+
+              resolved display label, for the reference field types FIELD_VALUE_TYPE_USER_ID,
+
+              FIELD_VALUE_TYPE_SITE and FIELD_VALUE_TYPE_TEMPLATE_ID. Used where a service
+
+              can resolve a human-readable label (e.g. ListUniqueFieldValues); the bare
+
+              string_value above is still used where no label is available.'
+            allOf:
+            - $ref: '#/components/schemas/s12.structures.types.v1.ReferenceValue'
+        required:
+        - reference_value
+    s12.structures.v1.ListFieldsRequest.FieldsFilter:
+      type: object
+      properties:
+        field_category:
+          description: 'Optional. Restrict to fields of a single category: the system fields that
+
+            exist in every organization, or the custom fields yours has defined.'
+          allOf:
+          - $ref: '#/components/schemas/s12.typefield.v1.FieldCategory'
+        field_value_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/s12.typefield.v1.FieldValueType'
+          description: Optional. Restrict to fields whose value is one of these types.
+        query:
+          type: string
+          description: Optional. Restrict to fields whose name matches this search text.
+        created_by:
+          type: array
+          items:
+            type: string
+          description: 'Optional. Restrict to fields created by any of these users, identified by
+
+            user ID.'
+        applies_to:
+          type: array
+          items:
+            type: string
+          description: 'Optional. Restrict to fields mapped to any of these structure types,
+
+            identified by structure type ID. Set this to find the fields that apply to
+
+            the type of structure you are about to create.'
+        status:
+          description: Optional. Restrict to fields in this status.
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.FieldStatus'
+        mapping_metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional. Restrict to fields that have at least one mapping whose
+
+            metadata contains every supplied key/value pair. Typically combined
+
+            with `applies_to` to scope to a specific structure type.
+
+            Supported keys today: "display_on_profiles", "field_required".'
+      description: 'Filters that narrow which fields are returned. Filters combine with AND —
+
+        a field is returned only when it satisfies every filter supplied.'
+    s12.structures.membership.v1.AddUsersToStructureResponse:
+      type: object
+      properties:
+        structure_memberships:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership'
+          description: The created structure memberships.
+        errors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.AddUserAssignmentsError'
+          description: 'The (user, structure) assignments that failed, each with a reason. Empty
+
+            when every assignment succeeded.'
+      description: Response message containing the created structure memberships.
+    s12.structures.types.v1.ReferenceValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'The referenced entity''s id. This is the filter key — pass it back as a
+
+            string_value in SearchStructuresRequest.params.filters.field_values[].values
+
+            to filter on this value.'
+        label:
+          type: string
+          description: 'Human-readable label for the referenced entity (e.g. a user''s display name).
+
+            Display-only. Unset when the referent is deleted or inaccessible to the
+
+            caller; clients should fall back to the id in that case.'
+      description: 'ReferenceValue is the value of a reference field (user, site, template) paired
+
+        with an optional resolved display label.'
+    s12.structures.membership.v1.StructureMembershipDetails:
+      type: object
+      properties:
+        structure_membership:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembership'
+          description: The membership IDs
+        user_data:
+          description: Details for the user associated with the structure membership, used to display user details when available.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.UserDetails'
+        role_data:
+          description: Details for the role associated with the structure membership, used to display role details when available.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.membership.v1.RoleDetails'
+      description: 'StructureMembershipDetails is a structure membership resolved with the user
+
+        and role details needed to display it without a separate lookup.'
+    s12.search.v1.StructureSearchResult:
+      type: object
+      properties:
+        structure_uuid:
+          type: string
+          description: UUID of the matched structure.
+        name:
+          type: string
+          description: Display name of the structure.
+        structure_type:
+          type: string
+          description: Structure type identifier (e.g. "folder", "site"). Empty if not categorized.
+        direct_member_count:
+          type: integer
+          format: int32
+          description: Number of direct members.
+        created_at:
+          type: string
+          format: date-time
+          description: When the structure was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: When the structure was last modified.
+        similarity_score:
+          type: number
+          format: float
+          description: Relevance score, 0.0–1.0. Higher is more relevant.
+        parent:
+          description: Parent of the matched structure. Unset for root structures.
+          allOf:
+          - $ref: '#/components/schemas/s12.search.v1.StructureSearchResult.Parent'
+        matches:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.search.v1.StructureSearchResult.MatchedField'
+          description: 'Fields that matched the query. Only populated when the request set
+
+            include_matches = true.'
+        is_dynamic:
+          type: boolean
+          description: True if membership is governed by a rule rather than explicit assignment.
+        description:
+          type: string
+          description: Free-text description of the structure. Empty if none is set.
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.types.v1.StructureFieldValue'
+          description: 'Fully-populated field values for the structure. Only populated when the
+
+            request set include_fields = true. Field display names (field_name) are
+
+            resolved to their current values at query time, so they stay correct even
+
+            if the field was renamed after the structure was last indexed.'
+        ancestors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.search.v1.StructureSearchResult.Ancestor'
+          description: 'Full ancestor chain from root to direct parent, in order. Empty for root
+
+            structures and for non-hierarchical (Group) results. Additive to `parent`.'
+      description: A single structure that matched the search query.
+    s12.search.v1.StructureSearchParams:
+      type: object
+      properties:
+        query:
+          type: string
+          description: Search query matched against structure content. May be empty.
+        filters:
+          description: Optional. Filters to apply to the result set.
+          allOf:
+          - $ref: '#/components/schemas/s12.search.v1.StructureSearchParams.Filters'
+        page:
+          description: Optional. Pagination settings.
+          allOf:
+          - $ref: '#/components/schemas/s12.search.v1.StructureSearchParams.Page'
+        include_matches:
+          type: boolean
+          description: 'Optional. If true, each result includes the field key/value pairs
+
+            that matched the query (useful for highlighting). Off by default.'
+        include_fields:
+          type: boolean
+          description: 'Optional. If true, each result is returned with its fully-populated
+
+            field values (see StructureSearchResult.fields). Off by default, as it
+
+            adds field-name resolution on top of the search. Independent of
+
+            include_matches, which only reports the fields that matched the query.'
+      description: Inputs to SearchStructures.
+    s12.structures.membership.v1.RoleDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The role title.
+        id:
+          type: string
+          description: The unique identifier of the role.
+      title: RoleDetails contains basic details about a role
+    s12.structures.v1.MoveStructureResponse:
+      type: object
+      title: Response message returned once a structure has been moved
+    s12.structures.v1.GetStructureProfileResponse:
+      type: object
+      properties:
+        structure:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.Structure'
+          description: The retrieved structure
+      title: Response message containing the retrieved structure
+    s12.structures.membership.v1.ListUsersByRoleResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.RoleUserEntry'
+          description: List of users assigned to the role, one entry per distinct user.
+        total_count:
+          type: integer
+          format: int32
+          description: The total count of distinct users assigned to the role.
+        offset:
+          type: integer
+          format: int32
+          description: The offset for the requested page.
+      description: Response message containing a list of users assigned to a role.
     s12.structures.v1.GetStructureMetadataResponse:
       type: object
       properties:
         structure:
           $ref: '#/components/schemas/s12.structures.v1.StructureMetadata'
       title: Response message containing the retrieved structure metadata
-    s12.search.v1.StructureSearchParams.Page:
+    s12.structures.types.v1.SingleSelectValue:
       type: object
       properties:
-        page_size:
-          type: integer
-          format: int32
-          description: Results per page. Default 20. Maximum 100.
-        page_token:
+        selected_option_id:
           type: string
-          description: Token for retrieving the next page of results. Absent on the first page.
-      description: Page controls result pagination.
-    s12.typefield.v1.FieldOption:
+          description: 'The ID of the selected option.
+
+            This references a FieldOption defined in the associated field type.'
+        options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+          description: 'The list of available options for this field.
+
+            This provides a snapshot of the options available at the time the value was set,
+
+            which is useful for historical accuracy and API convenience.'
+      description: 'SingleSelectValue represents a single-select field value.
+
+        This is used for fields where exactly one option can be selected from a predefined list.
+
+
+        Intended to become the canonical SingleSelectValue across the API. For now the
+
+        wire-compatible original still lives at s12.structures.v1.SingleSelectValue to avoid
+
+        breaking existing consumers; that copy should be removed once callers have migrated.'
+    s12.structures.v1.StructureMetadata:
       type: object
       properties:
         id:
           type: string
-          description: The id of a field select option.
-        label:
+          description: Unique identifier for the structure
+        name:
           type: string
-          description: The label of a field select option.
-        order:
-          type: integer
-          format: int32
-          description: 'The display order of this option, 0-indexed.
+          description: Name of the structure
+        structure_type_id:
+          type: string
+          description: Structure type ID
+        status:
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.v1.StatusType'
+          description: Status of the structure
+        creator_id:
+          type: string
+          readOnly: true
+          description: The user id responsible for creating the structure
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The creation timestamp of the structure
+        modified_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The timestamp of the last modification for the structure
+      description: 'StructureMetadata contains the core metadata fields of a structure,
 
-            Options should be displayed in ascending order of this field,
-
-            matching the order they were defined in the field settings.'
+        without the heavy nested data (ancestors, profile, field values).'
+      required:
+      - name
+      - structure_type_id
+      - status
+    s12.structures.membership.v1.ListDirectUsersInStructureRequest.Filter:
+      type: object
+      properties:
+        role_id:
+          type: string
+          description: Filter by role ID to list only users with a specific role.
+        query:
+          type: string
+          description: Used for filtering users by their name, family name or email. This supports partial matches to allow flexible searching.
+        user_status:
+          description: Used for filtering users by their active status. This allows clients to include or exclude inactive users from the results.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.UserActiveStatus'
+      description: Filter criteria for listing direct users in a structure.
+    s12.structures.membership.v1.StructureMembershipService.AddUsersToStructureBody:
+      type: object
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: The unique identifiers of the users to add. Limited to 100 users per request.
+      description: Request message to add one or more users to a structure.
+      required:
+      - user_ids
     s12.structures.v1.ListFieldsRequest:
       type: object
       properties:
@@ -2057,39 +1861,235 @@ components:
 
             Defaults to 25.'
       title: Request message to list the fields in an organization
-    s12.common.SubscriptionSeatTypes:
-      type: string
-      enum:
-      - SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
-      - SUBSCRIPTION_SEAT_TYPE_PREMIUM
-      - SUBSCRIPTION_SEAT_TYPE_COLLABORATOR
-      - SUBSCRIPTION_SEAT_TYPE_LITE
-      - SUBSCRIPTION_SEAT_TYPE_SERVICE_USER
-      - SUBSCRIPTION_SEAT_TYPE_SUPPORT
-      default: SUBSCRIPTION_SEAT_TYPE_UNSPECIFIED
-      title: SubscriptionSeatTypes is a list of potential subscription seat types
-    s12.structures.membership.v1.StructureMembershipService.ListDirectUsersInStructureBody:
+    s12.structures.v1.FieldStructureTypeSettings:
+      type: object
+      description: The mapping between a field and one structure type it applies to. The mapping controls whether the field is required for structures of that type, whether it displays on their profile, and what value it takes when none is supplied.
+      properties:
+        structure_type_id:
+          type: string
+          description: The unique identifier of the structure type this mapping applies to.
+        field_required:
+          type: boolean
+          description: Whether a structure of this type must carry a value for the field.
+        display_on_profiles:
+          type: boolean
+          description: Whether the field displays on the profile of a structure of this type. Reading a structure returns only the field values whose field has this set.
+      required:
+      - structure_type_id
+      oneOf:
+      - type: object
+        title: String
+        properties:
+          string_value:
+            type: string
+            description: Default string value for FIELD_VALUE_TYPE_STRING, FIELD_VALUE_TYPE_TIMEZONE, FIELD_VALUE_TYPE_USER_ID, FIELD_VALUE_TYPE_TEMPLATE_ID and FIELD_VALUE_TYPE_SITE.
+        required:
+        - string_value
+      - type: object
+        title: Timestamp
+        properties:
+          timestamp_value:
+            type: string
+            format: date-time
+            description: Default timestamp value for FIELD_VALUE_TYPE_TIMESTAMP.
+        required:
+        - timestamp_value
+      - type: object
+        title: Integer
+        properties:
+          integer_value:
+            type: string
+            format: int64
+            description: Default integer value for FIELD_VALUE_TYPE_INTEGER.
+        required:
+        - integer_value
+      - type: object
+        title: Select
+        properties:
+          select_options:
+            description: Default option for FIELD_VALUE_TYPE_SELECT and FIELD_VALUE_TYPE_MULTI_SELECT.
+            allOf:
+            - $ref: '#/components/schemas/s12.typefield.v1.FieldOption'
+        required:
+        - select_options
+    s12.structures.membership.v1.StructureMembershipService.AddUsersToRoleBody:
       type: object
       properties:
-        filter:
-          description: Filters to apply against the list of users.
-          allOf:
-          - $ref: '#/components/schemas/s12.structures.membership.v1.ListDirectUsersInStructureRequest.Filter'
-        page_size:
+        user_structure_pairs:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.UserStructurePairs'
+          description: 'The user-to-structures assignments to apply for the role. Limited to 100
+
+            entries per request.'
+      description: 'Request message to add users to a role. Each entry assigns one user to the
+
+        role on its own set of structures.'
+      required:
+      - user_structure_pairs
+    s12.structures.v1.ListFieldsResponse:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.v1.Field'
+          description: 'The fields matching the request, ordered with system fields before custom
+
+            fields.'
+        next_page_token:
+          type: string
+          description: 'The token to pass as `page_token` to fetch the next page of results. Empty
+
+            when this is the last page.'
+      title: Response message containing a page of field definitions
+    s12.search.v1.StructureSearchResult.Parent:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: UUID of the parent structure.
+        name:
+          type: string
+          description: Display name of the parent structure.
+      description: The matched structure's parent.
+    s12.typefield.v1.ContactDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the contact.
+        phone:
+          type: string
+          description: The phone number of the contact.
+        email:
+          type: string
+          description: The email address of the contact.
+      description: Contact details for a person or entity.
+    s12.search.v1.StructureSearchResult.Ancestor:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: UUID of the ancestor structure.
+        name:
+          type: string
+          description: 'Display name of the ancestor structure. Empty when masked or
+
+            unresolved for the caller.'
+        label:
+          type: string
+          description: 'Hierarchical label of the ancestor structure (e.g. "region",
+
+            "country", "state").'
+        direct_member_count:
           type: integer
           format: int32
-          description: 'Optional. The maximum number of users to return. Default of 1000.
+          description: 'Number of direct members of the ancestor structure. Matches the type
 
-            You can specify a value between 1 to 1000.'
-        sort_direction:
-          description: Optional. The sort direction for query results (ascending or descending).
+            of the outer StructureSearchResult.direct_member_count.'
+      description: Ancestor of the matched structure, from root down to the direct parent.
+    s12.structures.v1.SearchStructuresRequest:
+      type: object
+      properties:
+        params:
+          description: Search inputs.
           allOf:
-          - $ref: '#/components/schemas/s12.common.SortDirection'
+          - $ref: '#/components/schemas/s12.search.v1.StructureSearchParams'
+        structure_type:
+          description: 'Required. Restricts the search to structures of this type. Either a
+
+            built-in system type or an org-defined structure type UUID.'
+          allOf:
+          - $ref: '#/components/schemas/s12.structures.types.v1.StructureTypeIdentifier'
+      description: Request for SearchStructures. Organization is taken from the caller's auth.
+      required:
+      - structure_type
+    s12.structures.membership.v1.Avatar:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the avatar.
+        type:
+          type: string
+          description: The type of the avatar.
+        token:
+          type: string
+          description: The token used to access the avatar resource.
+      title: Avatar contains the information needed to render a user's avatar
+    s12.structures.membership.v1.ListDirectUsersInStructureResponse:
+      type: object
+      properties:
+        structure_memberships:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.structures.membership.v1.StructureMembershipDetails'
+          description: The list of memberships for users directly assigned to the structure.
+        total_membership_count:
+          type: integer
+          format: int32
+          description: 'The total count of users directly assigned to the structure, for pagination.
+
+            This allows clients to understand the full size of the dataset when paginating results.'
         offset:
           type: integer
           format: int32
-          description: Optional. The number of results to offset by.
-      description: Request message to list users directly assigned to a structure.
+          description: The offset for the requested page.
+      description: Response message containing a list of direct user memberships in a structure.
+    s12.search.v1.StructureSearchParams.Filters:
+      type: object
+      properties:
+        is_dynamic:
+          type: boolean
+          description: 'Optional. Only return structures with this is_dynamic value.
+
+            Unset returns both dynamic and non-dynamic.'
+        structure_uuids:
+          type: array
+          items:
+            type: string
+          description: 'Optional. Restrict to these structure UUIDs (OR-combined).
+
+            api-directory forwards a restricted caller''s entire visible-site scope in
+
+            this field when scoping SearchStructures, so the cap must exceed the largest
+
+            visible scope (tens of thousands) while staying under OpenSearch''s default
+
+            65,536 terms-query limit.'
+        parent_uuids:
+          type: array
+          items:
+            type: string
+          description: 'Optional. Restrict to structures whose direct parent is one of these
+
+            structure UUIDs (OR-combined). Only the immediate parent is matched;
+
+            structures nested deeper under a listed UUID are not returned.'
+        field_values:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.search.v1.StructureSearchParams.Filters.FieldValueFilter'
+          description: 'Optional. Restrict to structures whose field values match these
+
+            filters. OR within a filter, AND across filters.'
+      description: Filters narrow which structures are returned.
+    s12.search.v1.StructureSearchParams.Page:
+      type: object
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: Results per page. Default 20. Maximum 100.
+        page_token:
+          type: string
+          description: Token for retrieving the next page of results. Absent on the first page.
+      description: Page controls result pagination.
   securitySchemes:
     BearerAuthentication:
       type: http

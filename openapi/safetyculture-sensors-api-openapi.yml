@@ -225,7 +225,32 @@ paths:
       - Sensors
 components:
   schemas:
-    s12.sensors.v1.HeadingReadingType:
+    s12.sensors.v1.IngestSensorReadingsResponse:
+      type: object
+      title: IngestSensorReadingsResponse is the response for the endpoint `IngestSensorReadings`
+    s12.sensors.v1.CarbonMonoxideReadingType.CarbonMonoxideReadingTypeUnit:
+      type: string
+      enum:
+      - CARBON_MONOXIDE_READING_TYPE_UNIT_UNSPECIFIED
+      - CARBON_MONOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION
+      default: CARBON_MONOXIDE_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - CARBON_MONOXIDE_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - CARBON_MONOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION: Parts Per Million unit."
+    s12.sensors.v1.IngestSensorReadingsRequest:
+      type: object
+      properties:
+        id:
+          description: The id of the sensor.
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
+        readings:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.sensors.v1.SensorReading'
+          description: The readings to be ingested.
+      description: The parameters for `IngestSensorReadingsRequest`
+      title: IngestSensorReadingsRequest
+    s12.sensors.v1.CarbonMonoxideReadingType:
       type: object
       properties:
         value:
@@ -233,33 +258,99 @@ components:
           format: float
           description: Value of the reading.
         unit:
-          description: Unit of the reading. The default value is in degrees.
+          description: 'Unit of the reading.
+
+            The default value is in parts per million.'
           allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.HeadingReadingType.HeadingReadingTypeUnit'
-      description: HeadingReadingType describes the compass direction in which a craft or vehicle is pointed.
-    s12.common.GeoPosition:
+          - $ref: '#/components/schemas/s12.sensors.v1.CarbonMonoxideReadingType.CarbonMonoxideReadingTypeUnit'
+      description: CarbonMonoxideReadingType describes a carbon monoxide (CO) reading type.
+    s12.sensors.v1.SensorMetadata:
       type: object
       properties:
-        longitude:
+        source_name:
+          type: string
+          description: The provider/origin of the sensor data.
+        source_id:
+          type: string
+          description: An ID for the sensor, specified by the provider/origin.
+        asset_id:
+          type: string
+          description: The asset's id the sensor is associated with.
+        asset_name:
+          type: string
+          description: The asset's name the user has assigned the sensor with.
+        asset_timezone:
+          type: string
+          description: The timezone the sensor is operating in.
+        location_name:
+          type: string
+          description: The user created location label associated with the sensor.
+        site_id:
+          type: string
+          description: 'The SafetyCulture Site ID the sensor is associated with.
+
+            If empty, the sensor is not associated with any site.'
+      description: SensorMetadata represents the metadata associated with a single hardware sensor.
+    s12.sensors.v1.TemperatureReadingType:
+      type: object
+      properties:
+        value:
           type: number
-          format: double
-          description: The geographical longitude
-        latitude:
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in Celsius.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.TemperatureReadingType.TemperatureReadingTypeUnit'
+      description: TemperatureReadingType describes a temperature reading type.
+    s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType:
+      type: object
+      properties:
+        value:
           type: number
-          format: double
-          description: The geographical latitude
-        accuracy:
-          type: integer
-          format: int32
-          description: The accuracy in meters
-      description: A position is the fundamental geographical geometry construct.
-    s12.sensors.v1.CarbonDioxideReadingType.CarbonDioxideReadingTypeUnit:
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in decibel.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType.ReceivedSignalStrengthIndicatorReadingTypeUnit'
+      description: 'ReceivedSignalStrengthIndicatorReadingType describes a received signal
+
+        strength indicator (RSSI) reading type.'
+    s12.sensors.v1.SensorId:
+      type: object
+      properties:
+        source_name:
+          type: string
+          description: The provider/origin of the sensor data.
+        source_id:
+          type: string
+          description: An ID for the sensor, specified by the provider/origin.
+      description: 'SensorId represent a source name/source ID pairing that uniquely
+
+        identify a hardware sensor.'
+    s12.sensors.v1.HeadingReadingType.HeadingReadingTypeUnit:
       type: string
       enum:
-      - CARBON_DIOXIDE_READING_TYPE_UNIT_UNSPECIFIED
-      - CARBON_DIOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION
-      default: CARBON_DIOXIDE_READING_TYPE_UNIT_UNSPECIFIED
-      description: " - CARBON_DIOXIDE_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - CARBON_DIOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION: Parts Per Million unit."
+      - HEADING_READING_TYPE_UNIT_UNSPECIFIED
+      - HEADING_READING_TYPE_UNIT_DEGREES
+      default: HEADING_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - HEADING_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - HEADING_READING_TYPE_UNIT_DEGREES: A heading measured in degrees. This unit describes an angle in a circular coordinate system,\nwhere 0°, 90°, 180° and 270° represent North, South, East and West respectively."
+    s12.sensors.v1.ProvisionSensorResponse:
+      type: object
+      properties:
+        id:
+          description: 'The id of the provisioned sensor. This is the id that should be used to
+
+            interact with the sensor moving forward, such as ingesting new readings.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
+      description: Result returned from `ProvisionSensor`
+      title: ProvisionSensorResponse
     s12.sensors.v1.ListSensorsRequest:
       type: object
       properties:
@@ -278,7 +369,79 @@ components:
             returns 50 sensors. You can specify a page_size value between 1 to 100.'
       description: The parameters for `ListSensorsRequest`
       title: ListSensorsRequest
-    s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType:
+    s12.sensors.v1.GetSensorLatestReadingsResponse:
+      type: object
+      properties:
+        readings:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.sensors.v1.LatestSensorReading'
+          description: The latest readings associated with this device.
+      description: Result returned from `GetSensorLatestReadings`
+      title: GetSensorLatestReadingsResponse
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.sensors.v1.DeprovisionSensorResponse:
+      type: object
+      description: DeprovisionSensorResponse is the response for the endpoint `DeprovisionSensor`.
+    s12.sensors.v1.MovingReadingType:
+      type: object
+      properties:
+        value:
+          type: boolean
+          description: 'Value of the reading.
+
+            True if it is moving, false if it is not moving.'
+      description: MovingReadingType describes a moving reading type.
+    s12.sensors.v1.EngineOnReadingType:
+      type: object
+      properties:
+        value:
+          type: boolean
+          description: 'Value of the reading.
+
+            True if the engine is on, false if the engine is off.'
+      description: EngineOnReadingType describes an engine on/off reading type.
+    s12.sensors.v1.GetSensorIdResponse:
+      type: object
+      properties:
+        id:
+          description: 'The id of the provisioned sensor. This is the id that should be used to
+
+            interact with the sensor moving forward, such as ingesting new readings.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
+      description: Result returned from `GetSensorId`
+      title: GetSensorIdResponse
+    s12.sensors.v1.ListSensorsResponse:
+      type: object
+      properties:
+        sensors:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.sensors.v1.SensorMetadata'
+          description: The list of sensors.
+        next_page_token:
+          type: string
+          description: The value of next_page_token to be used in the next list sensors request.
+      description: Result returned from `ListSensors`
+      title: ListSensorsResponse
+    s12.sensors.v1.RelativeHumidityReadingType.RelativeHumidityReadingTypeUnit:
+      type: string
+      enum:
+      - RELATIVE_HUMIDITY_READING_TYPE_UNIT_UNSPECIFIED
+      - RELATIVE_HUMIDITY_READING_TYPE_UNIT_PERCENTAGE
+      default: RELATIVE_HUMIDITY_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - RELATIVE_HUMIDITY_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - RELATIVE_HUMIDITY_READING_TYPE_UNIT_PERCENTAGE: Percentage unit."
+    s12.sensors.v1.SignalToNoiseRatioReadingType:
       type: object
       properties:
         value:
@@ -290,17 +453,49 @@ components:
 
             The default value is in decibel.'
           allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType.ReceivedSignalStrengthIndicatorReadingTypeUnit'
-      description: 'ReceivedSignalStrengthIndicatorReadingType describes a received signal
+          - $ref: '#/components/schemas/s12.sensors.v1.SignalToNoiseRatioReadingType.SignalToNoiseRatioReadingTypeUnit'
+      description: SignalToNoiseRatioReadingType describes a signal-to-noise ratio (SNR) reading type.
+    s12.sensors.v1.LatestSensorReading:
+      type: object
+      properties:
+        id:
+          description: The id of the provisioned sensor.
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
+        timestamp:
+          type: string
+          format: date-time
+          description: The time of the reading.
+        name:
+          type: string
+          description: 'The name of the reading, eg: "Relative Humidity".'
+        type:
+          type: string
+          description: 'The type of the reading, eg: "relative_humidity".'
+        value:
+          type: string
+          description: 'The value of the reading, eg: "90". The value is rounded to 2 decimal places.'
+        unit:
+          type: string
+          description: 'The unit of the reading, eg: "Percentage". The unit might be converted from
 
-        strength indicator (RSSI) reading type.'
-    s12.sensors.v1.HeadingReadingType.HeadingReadingTypeUnit:
-      type: string
-      enum:
-      - HEADING_READING_TYPE_UNIT_UNSPECIFIED
-      - HEADING_READING_TYPE_UNIT_DEGREES
-      default: HEADING_READING_TYPE_UNIT_UNSPECIFIED
-      description: " - HEADING_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - HEADING_READING_TYPE_UNIT_DEGREES: A heading measured in degrees. This unit describes an angle in a circular coordinate system,\nwhere 0°, 90°, 180° and 270° represent North, South, East and West respectively."
+            the original unit to a corresponding standardised unit already supported on
+
+            SafetyCulture App for certain reading types.
+
+            For example, for the reading type "Odometer", if the unit is "Meters", it
+
+            will be converted to "Kilometers".'
+        raw_value:
+          type: string
+          description: The original value of the reading without any rounding.
+        raw_unit:
+          type: string
+          description: The original unit of the reading without any conversion.
+        alias:
+          type: string
+          description: Optional. A human-readable name for the reading specified by the user, e.g. 'Mileage', 'Usage'.
+      description: LatestSensorReading represents the latest sensor reading.
     s12.sensors.v1.SensorReading:
       type: object
       description: A sensor reading.
@@ -413,299 +608,6 @@ components:
             $ref: '#/components/schemas/s12.sensors.v1.HeadingReadingType'
         required:
         - heading
-    s12.sensors.v1.OdometerReadingType.OdometerReadingTypeUnit:
-      type: string
-      enum:
-      - ODOMETER_READING_TYPE_UNIT_UNSPECIFIED
-      - ODOMETER_READING_TYPE_UNIT_KILOMETER
-      - ODOMETER_READING_TYPE_UNIT_MILE
-      - ODOMETER_READING_TYPE_UNIT_METER
-      default: ODOMETER_READING_TYPE_UNIT_UNSPECIFIED
-      description: " - ODOMETER_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - ODOMETER_READING_TYPE_UNIT_KILOMETER: Kilometer unit.\n - ODOMETER_READING_TYPE_UNIT_MILE: Mile unit.\n - ODOMETER_READING_TYPE_UNIT_METER: Meter unit."
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
-    s12.sensors.v1.RelativeHumidityReadingType.RelativeHumidityReadingTypeUnit:
-      type: string
-      enum:
-      - RELATIVE_HUMIDITY_READING_TYPE_UNIT_UNSPECIFIED
-      - RELATIVE_HUMIDITY_READING_TYPE_UNIT_PERCENTAGE
-      default: RELATIVE_HUMIDITY_READING_TYPE_UNIT_UNSPECIFIED
-      description: " - RELATIVE_HUMIDITY_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - RELATIVE_HUMIDITY_READING_TYPE_UNIT_PERCENTAGE: Percentage unit."
-    s12.sensors.v1.OdometerReadingType:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-          description: Value of the reading.
-        unit:
-          description: 'Unit of the reading.
-
-            The default value is in kilometer.'
-          allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.OdometerReadingType.OdometerReadingTypeUnit'
-      description: OdometerReadingType describes an odometer reading type.
-    s12.sensors.v1.TemperatureReadingType.TemperatureReadingTypeUnit:
-      type: string
-      enum:
-      - TEMPERATURE_READING_TYPE_UNIT_UNSPECIFIED
-      - TEMPERATURE_READING_TYPE_UNIT_CELSIUS
-      - TEMPERATURE_READING_TYPE_UNIT_FAHRENHEIT
-      - TEMPERATURE_READING_TYPE_UNIT_MILLIDEGREE_CELSIUS
-      default: TEMPERATURE_READING_TYPE_UNIT_UNSPECIFIED
-      description: " - TEMPERATURE_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - TEMPERATURE_READING_TYPE_UNIT_CELSIUS: Celsius unit.\n - TEMPERATURE_READING_TYPE_UNIT_FAHRENHEIT: Fahrenheit unit.\n - TEMPERATURE_READING_TYPE_UNIT_MILLIDEGREE_CELSIUS: Millidegree Celsius unit."
-    s12.sensors.v1.RelativeHumidityReadingType:
-      type: object
-      properties:
-        value:
-          type: number
-          format: float
-          description: Value of the reading.
-        unit:
-          description: 'Unit of the reading.
-
-            The default value is in percentage.'
-          allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.RelativeHumidityReadingType.RelativeHumidityReadingTypeUnit'
-      description: RelativeHumidityReadingType describes a relative humidity reading type.
-    s12.sensors.v1.MovingReadingType:
-      type: object
-      properties:
-        value:
-          type: boolean
-          description: 'Value of the reading.
-
-            True if it is moving, false if it is not moving.'
-      description: MovingReadingType describes a moving reading type.
-    s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType.ReceivedSignalStrengthIndicatorReadingTypeUnit:
-      type: string
-      enum:
-      - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_UNSPECIFIED
-      - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_DECIBEL
-      default: RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_UNSPECIFIED
-      description: " - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_DECIBEL: Decibel unit."
-    s12.sensors.v1.GetSensorIdResponse:
-      type: object
-      properties:
-        id:
-          description: 'The id of the provisioned sensor. This is the id that should be used to
-
-            interact with the sensor moving forward, such as ingesting new readings.'
-          allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
-      description: Result returned from `GetSensorId`
-      title: GetSensorIdResponse
-    s12.sensors.v1.ProvisionSensorRequest:
-      type: object
-      properties:
-        device_id:
-          type: string
-          description: The id of the device that is being provisioned.
-        sensor_name:
-          type: string
-          description: The sensor name.
-        sensor_timezone:
-          type: string
-          description: IANA TZ Database timezone for the sensor.
-        sensor_location_name:
-          type: string
-          description: The location name for the sensor.
-        sc_site_id:
-          type: string
-          description: 'Optional. The SafetyCulture Directory Site ID (leaf-level site) to
-
-            associate the sensor with. Distinct from the legacy location tag.'
-      description: The parameters for `ProvisionSensorRequest`
-      title: ProvisionSensorRequest
-    s12.sensors.v1.SpeedReadingType:
-      type: object
-      properties:
-        value:
-          type: number
-          format: float
-          description: Value of the reading.
-        unit:
-          description: 'Unit of the reading.
-
-            The default value is in kilometers per hour.'
-          allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.SpeedReadingType.SpeedReadingTypeUnit'
-      description: SpeedReadingType describes a speed reading type.
-    s12.sensors.v1.SignalToNoiseRatioReadingType.SignalToNoiseRatioReadingTypeUnit:
-      type: string
-      enum:
-      - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_UNSPECIFIED
-      - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_DECIBEL
-      default: SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_UNSPECIFIED
-      description: " - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_DECIBEL: Decibel unit."
-    s12.sensors.v1.CarbonDioxideReadingType:
-      type: object
-      properties:
-        value:
-          type: number
-          format: float
-          description: Value of the reading.
-        unit:
-          description: 'Unit of the reading.
-
-            The default value is in parts per million.'
-          allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.CarbonDioxideReadingType.CarbonDioxideReadingTypeUnit'
-      description: CarbonDioxideReadingType describes a carbon dioxide (CO2) reading type.
-    s12.sensors.v1.ListSensorsResponse:
-      type: object
-      properties:
-        sensors:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.sensors.v1.SensorMetadata'
-          description: The list of sensors.
-        next_page_token:
-          type: string
-          description: The value of next_page_token to be used in the next list sensors request.
-      description: Result returned from `ListSensors`
-      title: ListSensorsResponse
-    s12.sensors.v1.GetSensorLatestReadingsResponse:
-      type: object
-      properties:
-        readings:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.sensors.v1.LatestSensorReading'
-          description: The latest readings associated with this device.
-      description: Result returned from `GetSensorLatestReadings`
-      title: GetSensorLatestReadingsResponse
-    s12.sensors.v1.GeoPositionReadingType:
-      type: object
-      properties:
-        value:
-          description: Value of the reading.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.GeoPosition'
-      description: GeoPositionReadingType describes geographic coordinates.
-    s12.sensors.v1.CarbonMonoxideReadingType.CarbonMonoxideReadingTypeUnit:
-      type: string
-      enum:
-      - CARBON_MONOXIDE_READING_TYPE_UNIT_UNSPECIFIED
-      - CARBON_MONOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION
-      default: CARBON_MONOXIDE_READING_TYPE_UNIT_UNSPECIFIED
-      description: " - CARBON_MONOXIDE_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - CARBON_MONOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION: Parts Per Million unit."
-    s12.sensors.v1.TemperatureReadingType:
-      type: object
-      properties:
-        value:
-          type: number
-          format: float
-          description: Value of the reading.
-        unit:
-          description: 'Unit of the reading.
-
-            The default value is in Celsius.'
-          allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.TemperatureReadingType.TemperatureReadingTypeUnit'
-      description: TemperatureReadingType describes a temperature reading type.
-    s12.sensors.v1.LatestSensorReading:
-      type: object
-      properties:
-        id:
-          description: The id of the provisioned sensor.
-          allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
-        timestamp:
-          type: string
-          format: date-time
-          description: The time of the reading.
-        name:
-          type: string
-          description: 'The name of the reading, eg: "Relative Humidity".'
-        type:
-          type: string
-          description: 'The type of the reading, eg: "relative_humidity".'
-        value:
-          type: string
-          description: 'The value of the reading, eg: "90". The value is rounded to 2 decimal places.'
-        unit:
-          type: string
-          description: 'The unit of the reading, eg: "Percentage". The unit might be converted from
-
-            the original unit to a corresponding standardised unit already supported on
-
-            SafetyCulture App for certain reading types.
-
-            For example, for the reading type "Odometer", if the unit is "Meters", it
-
-            will be converted to "Kilometers".'
-        raw_value:
-          type: string
-          description: The original value of the reading without any rounding.
-        raw_unit:
-          type: string
-          description: The original unit of the reading without any conversion.
-        alias:
-          type: string
-          description: Optional. A human-readable name for the reading specified by the user, e.g. 'Mileage', 'Usage'.
-      description: LatestSensorReading represents the latest sensor reading.
-    s12.sensors.v1.IgnitionOnReadingType:
-      type: object
-      properties:
-        value:
-          type: boolean
-          description: 'Value of the reading.
-
-            True if the ignition is on, false if the ignition is off.'
-      description: IgnitionOnReadingType describes an ignition on/off reading type.
-    s12.sensors.v1.SpeedReadingType.SpeedReadingTypeUnit:
-      type: string
-      enum:
-      - SPEED_READING_TYPE_UNIT_UNSPECIFIED
-      - SPEED_READING_TYPE_UNIT_KILOMETERS_PER_HOUR
-      - SPEED_READING_TYPE_UNIT_MILES_PER_HOUR
-      default: SPEED_READING_TYPE_UNIT_UNSPECIFIED
-      description: " - SPEED_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - SPEED_READING_TYPE_UNIT_KILOMETERS_PER_HOUR: Kilometers per hour unit.\n - SPEED_READING_TYPE_UNIT_MILES_PER_HOUR: Miles per hour unit."
-    s12.sensors.v1.DeprovisionSensorResponse:
-      type: object
-      description: DeprovisionSensorResponse is the response for the endpoint `DeprovisionSensor`.
-    s12.sensors.v1.CarbonMonoxideReadingType:
-      type: object
-      properties:
-        value:
-          type: number
-          format: float
-          description: Value of the reading.
-        unit:
-          description: 'Unit of the reading.
-
-            The default value is in parts per million.'
-          allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.CarbonMonoxideReadingType.CarbonMonoxideReadingTypeUnit'
-      description: CarbonMonoxideReadingType describes a carbon monoxide (CO) reading type.
-    s12.sensors.v1.SignalToNoiseRatioReadingType:
-      type: object
-      properties:
-        value:
-          type: number
-          format: float
-          description: Value of the reading.
-        unit:
-          description: 'Unit of the reading.
-
-            The default value is in decibel.'
-          allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.SignalToNoiseRatioReadingType.SignalToNoiseRatioReadingTypeUnit'
-      description: SignalToNoiseRatioReadingType describes a signal-to-noise ratio (SNR) reading type.
     s12.sensors.v1.RunningTimeReadingType:
       type: object
       properties:
@@ -720,23 +622,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/s12.sensors.v1.RunningTimeReadingType.RunningTimeReadingTypeUnit'
       description: RunningTimeReadingType describes an operating time reading type.
-    s12.sensors.v1.EngineOnReadingType:
-      type: object
-      properties:
-        value:
-          type: boolean
-          description: 'Value of the reading.
-
-            True if the engine is on, false if the engine is off.'
-      description: EngineOnReadingType describes an engine on/off reading type.
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     s12.sensors.v1.RunningTimeReadingType.RunningTimeReadingTypeUnit:
       type: string
       enum:
@@ -746,9 +631,96 @@ components:
       - RUNNING_TIME_READING_TYPE_UNIT_SECOND
       default: RUNNING_TIME_READING_TYPE_UNIT_UNSPECIFIED
       description: " - RUNNING_TIME_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - RUNNING_TIME_READING_TYPE_UNIT_HOUR: Hour unit.\n - RUNNING_TIME_READING_TYPE_UNIT_MINUTE: Minute unit.\n - RUNNING_TIME_READING_TYPE_UNIT_SECOND: Second unit."
-    s12.sensors.v1.IngestSensorReadingsResponse:
+    s12.sensors.v1.HeadingReadingType:
       type: object
-      title: IngestSensorReadingsResponse is the response for the endpoint `IngestSensorReadings`
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: Unit of the reading. The default value is in degrees.
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.HeadingReadingType.HeadingReadingTypeUnit'
+      description: HeadingReadingType describes the compass direction in which a craft or vehicle is pointed.
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.sensors.v1.SpeedReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in kilometers per hour.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.SpeedReadingType.SpeedReadingTypeUnit'
+      description: SpeedReadingType describes a speed reading type.
+    s12.common.GeoPosition:
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+          description: The geographical longitude
+        latitude:
+          type: number
+          format: double
+          description: The geographical latitude
+        accuracy:
+          type: integer
+          format: int32
+          description: The accuracy in meters
+      description: A position is the fundamental geographical geometry construct.
+    s12.sensors.v1.CarbonDioxideReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in parts per million.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.CarbonDioxideReadingType.CarbonDioxideReadingTypeUnit'
+      description: CarbonDioxideReadingType describes a carbon dioxide (CO2) reading type.
+    s12.sensors.v1.RelativeHumidityReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: float
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in percentage.'
+          allOf:
+          - $ref: '#/components/schemas/s12.sensors.v1.RelativeHumidityReadingType.RelativeHumidityReadingTypeUnit'
+      description: RelativeHumidityReadingType describes a relative humidity reading type.
+    s12.sensors.v1.ReceivedSignalStrengthIndicatorReadingType.ReceivedSignalStrengthIndicatorReadingTypeUnit:
+      type: string
+      enum:
+      - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_UNSPECIFIED
+      - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_DECIBEL
+      default: RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - RECEIVED_SIGNAL_STRENGTH_INDICATOR_READING_TYPE_UNIT_DECIBEL: Decibel unit."
     s12.sensors.v1.GetSensorResponse:
       type: object
       properties:
@@ -776,71 +748,99 @@ components:
           description: The location name for the sensor.
       description: Result returned from `GetSensor`
       title: GetSensorResponse
-    s12.sensors.v1.SensorMetadata:
+    s12.sensors.v1.OdometerReadingType.OdometerReadingTypeUnit:
+      type: string
+      enum:
+      - ODOMETER_READING_TYPE_UNIT_UNSPECIFIED
+      - ODOMETER_READING_TYPE_UNIT_KILOMETER
+      - ODOMETER_READING_TYPE_UNIT_MILE
+      - ODOMETER_READING_TYPE_UNIT_METER
+      default: ODOMETER_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - ODOMETER_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - ODOMETER_READING_TYPE_UNIT_KILOMETER: Kilometer unit.\n - ODOMETER_READING_TYPE_UNIT_MILE: Mile unit.\n - ODOMETER_READING_TYPE_UNIT_METER: Meter unit."
+    s12.sensors.v1.GeoPositionReadingType:
       type: object
       properties:
-        source_name:
-          type: string
-          description: The provider/origin of the sensor data.
-        source_id:
-          type: string
-          description: An ID for the sensor, specified by the provider/origin.
-        asset_id:
-          type: string
-          description: The asset's id the sensor is associated with.
-        asset_name:
-          type: string
-          description: The asset's name the user has assigned the sensor with.
-        asset_timezone:
-          type: string
-          description: The timezone the sensor is operating in.
-        location_name:
-          type: string
-          description: The user created location label associated with the sensor.
-        site_id:
-          type: string
-          description: 'The SafetyCulture Site ID the sensor is associated with.
-
-            If empty, the sensor is not associated with any site.'
-      description: SensorMetadata represents the metadata associated with a single hardware sensor.
-    s12.sensors.v1.IngestSensorReadingsRequest:
-      type: object
-      properties:
-        id:
-          description: The id of the sensor.
+        value:
+          description: Value of the reading.
           allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
-        readings:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.sensors.v1.SensorReading'
-          description: The readings to be ingested.
-      description: The parameters for `IngestSensorReadingsRequest`
-      title: IngestSensorReadingsRequest
-    s12.sensors.v1.ProvisionSensorResponse:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+      description: GeoPositionReadingType describes geographic coordinates.
+    s12.sensors.v1.SignalToNoiseRatioReadingType.SignalToNoiseRatioReadingTypeUnit:
+      type: string
+      enum:
+      - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_UNSPECIFIED
+      - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_DECIBEL
+      default: SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - SIGNAL_TO_NOISE_RATIO_READING_TYPE_UNIT_DECIBEL: Decibel unit."
+    s12.sensors.v1.IgnitionOnReadingType:
       type: object
       properties:
-        id:
-          description: 'The id of the provisioned sensor. This is the id that should be used to
+        value:
+          type: boolean
+          description: 'Value of the reading.
 
-            interact with the sensor moving forward, such as ingesting new readings.'
+            True if the ignition is on, false if the ignition is off.'
+      description: IgnitionOnReadingType describes an ignition on/off reading type.
+    s12.sensors.v1.SpeedReadingType.SpeedReadingTypeUnit:
+      type: string
+      enum:
+      - SPEED_READING_TYPE_UNIT_UNSPECIFIED
+      - SPEED_READING_TYPE_UNIT_KILOMETERS_PER_HOUR
+      - SPEED_READING_TYPE_UNIT_MILES_PER_HOUR
+      default: SPEED_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - SPEED_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - SPEED_READING_TYPE_UNIT_KILOMETERS_PER_HOUR: Kilometers per hour unit.\n - SPEED_READING_TYPE_UNIT_MILES_PER_HOUR: Miles per hour unit."
+    s12.sensors.v1.OdometerReadingType:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+          description: Value of the reading.
+        unit:
+          description: 'Unit of the reading.
+
+            The default value is in kilometer.'
           allOf:
-          - $ref: '#/components/schemas/s12.sensors.v1.SensorId'
-      description: Result returned from `ProvisionSensor`
-      title: ProvisionSensorResponse
-    s12.sensors.v1.SensorId:
+          - $ref: '#/components/schemas/s12.sensors.v1.OdometerReadingType.OdometerReadingTypeUnit'
+      description: OdometerReadingType describes an odometer reading type.
+    s12.sensors.v1.TemperatureReadingType.TemperatureReadingTypeUnit:
+      type: string
+      enum:
+      - TEMPERATURE_READING_TYPE_UNIT_UNSPECIFIED
+      - TEMPERATURE_READING_TYPE_UNIT_CELSIUS
+      - TEMPERATURE_READING_TYPE_UNIT_FAHRENHEIT
+      - TEMPERATURE_READING_TYPE_UNIT_MILLIDEGREE_CELSIUS
+      default: TEMPERATURE_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - TEMPERATURE_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - TEMPERATURE_READING_TYPE_UNIT_CELSIUS: Celsius unit.\n - TEMPERATURE_READING_TYPE_UNIT_FAHRENHEIT: Fahrenheit unit.\n - TEMPERATURE_READING_TYPE_UNIT_MILLIDEGREE_CELSIUS: Millidegree Celsius unit."
+    s12.sensors.v1.CarbonDioxideReadingType.CarbonDioxideReadingTypeUnit:
+      type: string
+      enum:
+      - CARBON_DIOXIDE_READING_TYPE_UNIT_UNSPECIFIED
+      - CARBON_DIOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION
+      default: CARBON_DIOXIDE_READING_TYPE_UNIT_UNSPECIFIED
+      description: " - CARBON_DIOXIDE_READING_TYPE_UNIT_UNSPECIFIED: Unit unspecified.\n - CARBON_DIOXIDE_READING_TYPE_UNIT_PARTS_PER_MILLION: Parts Per Million unit."
+    s12.sensors.v1.ProvisionSensorRequest:
       type: object
       properties:
-        source_name:
+        device_id:
           type: string
-          description: The provider/origin of the sensor data.
-        source_id:
+          description: The id of the device that is being provisioned.
+        sensor_name:
           type: string
-          description: An ID for the sensor, specified by the provider/origin.
-      description: 'SensorId represent a source name/source ID pairing that uniquely
+          description: The sensor name.
+        sensor_timezone:
+          type: string
+          description: IANA TZ Database timezone for the sensor.
+        sensor_location_name:
+          type: string
+          description: The location name for the sensor.
+        sc_site_id:
+          type: string
+          description: 'Optional. The SafetyCulture Directory Site ID (leaf-level site) to
 
-        identify a hardware sensor.'
+            associate the sensor with. Distinct from the legacy location tag.'
+      description: The parameters for `ProvisionSensorRequest`
+      title: ProvisionSensorRequest
   securitySchemes:
     BearerAuthentication:
       type: http

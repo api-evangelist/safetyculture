@@ -1,0 +1,44 @@
+overlay: 1.0.0
+info:
+  title: SafetyCulture Mitti Issues API enhancements
+  version: 1.0.0
+extends: openapi/safetyculture-issues-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-provider: SafetyCulture (Mitti)
+    x-apievangelist-mcp:
+      endpoint: https://mcp.mitti.com/mcp
+      auth: oauth
+      status: early-access
+      docs: https://developer.mitti.com/docs/connect-an-ai-tool-to-mitti
+    x-llms-txt: https://developer.mitti.com/llms.txt
+- target: $
+  update:
+    externalDocs:
+      description: Mitti developer portal
+      url: https://developer.mitti.com/reference/introduction
+- target: $.components.securitySchemes.BearerAuthentication
+  update:
+    description: 'User API token sent as Authorization: Bearer {api_token}. Tokens are managed per user (https://help.mitti.com/000007).'
+- target: $.paths['/tasks/v1/customerconfiguration/categories'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/tasks/v1/incident/{id}'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/tasks/v1/incidents'].post
+  update:
+    x-legacy: true
+- target: $.paths['/tasks/v1/incidents/{id}'].get
+  update:
+    x-legacy: true
+- target: $.paths['/tasks/v1/incidents/{id}'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/tasks/v1/incidents/{incident_id}/questions_answers'].get
+  update:
+    x-agent-safe: read-only
+- target: $.paths['/tasks/v1/incidents/{task_id}/pdf_report'].get
+  update:
+    x-agent-safe: read-only

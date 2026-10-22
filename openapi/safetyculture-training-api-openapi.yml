@@ -1168,20 +1168,214 @@ paths:
       - Training
 components:
   schemas:
-    s12.training.rapidrefresh.v1.GetRapidRefreshResponse:
+    s12.training.analytics.v1.SlideUserStatistics:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: ID of the user
+        courseId:
+          type: string
+          description: ID of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        slideId:
+          type: string
+          description: ID of the slide
+        lessonTitle:
+          type: string
+          description: Title of the lesson
+        question:
+          type: string
+          description: Question in the slide
+        totalDurationMs:
+          type: integer
+          format: int32
+          description: Total duration in milliseconds taken to attempt slide
+        attemptCount:
+          type: integer
+          format: int32
+          description: Number of times the slide was attempted
+        attemptCorrectCount:
+          type: integer
+          format: int32
+          description: Number of times the slide was successfully attempted
+        totalCorrect:
+          type: integer
+          format: int32
+          description: Total correct
+        attemptIncorrectCount:
+          type: integer
+          format: int32
+          description: Total incorrect attempts
+        slideType:
+          type: string
+          description: Type of the slide
+        firstAnswer:
+          type: string
+          description: Users first answer to the slide
+        latestAnswer:
+          type: string
+          description: Users latest answer to the slide
+        courseStatus:
+          type: string
+          description: Status of the course
+        courseExternalId:
+          type: string
+          description: External ID of the course
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson
+      title: Response type within GetSlideUserStatisticsResponse
+    s12.training.analytics.v1.GetSurveyQuestionDefinitionsResponse:
       type: object
       properties:
         totalCount:
           type: integer
           format: int32
-          description: The total number of rapid refreshes matching the request
+          description: The total number of survey question definitions matching the request
         items:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.training.rapidrefresh.v1.RapidRefreshSummary'
-          description: List of rapid refreshes
-      title: Response to GetRapidRefresh
+            $ref: '#/components/schemas/s12.training.analytics.v1.SurveyQuestionDefinition'
+          description: List of survey question definitions
+      title: Response to GetSurveyQuestionDefinitions
+    s12.training.courses.v1.Lesson:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the lesson
+        externalId:
+          type: string
+          description: External ID of the lesson
+        title:
+          type: string
+          description: Title of the lesson
+        description:
+          type: string
+          description: Description of the lesson
+        status:
+          type: string
+          description: Status of the lesson (published, draft)
+        minimumScore:
+          type: integer
+          format: int32
+          description: Minimum score required to pass the lesson
+      title: Response type within GetLessonsByCourseIdResponse
+    s12.training.paths.v1.PathSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the path
+        title:
+          type: string
+          description: Title of the path
+        isPublished:
+          type: boolean
+          description: Flag indicating of the path is published
+      title: Response type within GetPathsResponse
+    s12.training.individualleaderboards.v1.Ranking:
+      type: object
+      properties:
+        rank:
+          type: integer
+          format: int32
+          description: Ranking number
+        participantId:
+          type: string
+          description: ID of the participant/user
+        participantName:
+          type: string
+          description: Name of the participant/user
+        participantAvatarUrl:
+          type: string
+          description: URL of the participant/user's avatar
+        totalScore:
+          type: integer
+          format: int32
+          description: Total score of the participant/user
+        isNotAttempted:
+          type: boolean
+          description: Flag to indicate if the participant/user has not attempted the individual leaderboard
+      title: Response type within GetIndividualLeaderboardRankingsResponse
+    s12.training.analytics.v1.SurveyQuestionDefinition:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: ID of the course
+        courseExternalId:
+          type: string
+          description: External ID of the course
+        courseTitle:
+          type: string
+          description: Title of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson
+        lessonTitle:
+          type: string
+          description: Title of the lesson
+        slideId:
+          type: string
+          description: ID of the slide
+        questionId:
+          type: string
+          description: ID of the question
+        questionContent:
+          type: string
+          description: Content within the question
+        answerDefinitions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.AnswerDefinition'
+          description: Answers to the question
+      title: Response type within GetSurveyQuestionDefinitionsResponse
+    s12.training.analytics.v1.LessonAttempt:
+      type: object
+      properties:
+        attemptId:
+          type: string
+          description: Unique identifier of the lesson attempt
+        userId:
+          type: string
+          description: ID of the attempting user
+        courseId:
+          type: string
+          description: ID of the course attempted
+        courseExternalId:
+          type: string
+          description: External ID of the course attempted
+        lessonId:
+          type: string
+          description: ID of the lesson attempted
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson attempted
+        startedDatetime:
+          type: string
+          format: date-time
+          description: Start date time of the attempt
+        completedDatetime:
+          type: string
+          format: date-time
+          description: End date time of the attempt
+        score:
+          type: number
+          format: double
+          description: Score achieved within attempt
+        success:
+          type: boolean
+          description: Flag indicating if the attempt was successful
+      title: Response type within GetLessonAttemptsResponse
     s12.training.analytics.v1.GetRapidRefreshAnswersResponse:
       type: object
       properties:
@@ -1196,6 +1390,65 @@ components:
             $ref: '#/components/schemas/s12.training.analytics.v1.RapidRefreshAnswer'
           description: List of rapid refresh answers
       title: Response to GetRapidRefreshAnswers
+    s12.training.analytics.v1.GetLessonStatisticsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of lesson statistics matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonStatistics'
+          description: List of lesson statistics
+      title: Response to GetLessonStatistics
+    s12.training.analytics.v1.LessonProgressEvent:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: ID of the user
+        userEmail:
+          type: string
+          description: Email of the user
+        userFirstname:
+          type: string
+          description: First name of the user
+        userLastname:
+          type: string
+          description: Last name of the user
+        courseId:
+          type: string
+          description: ID of the course
+        courseTitle:
+          type: string
+          description: Title of the course
+        courseExternalId:
+          type: string
+          description: External ID of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        lessonTitle:
+          type: string
+          description: Title of the lesson
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson
+        eventName:
+          type: string
+          description: Lesson progress event name (LessonAttempted, LessonCompleted, LessonOpened, LessonUnlocked, LessonReset)
+        eventDateTime:
+          type: string
+          format: date-time
+          description: Date when event occurred
+        lessonScore:
+          type: number
+          format: double
+          description: Score achieved within event
+      title: Response type within GetLessonProgressEventsResponse
     s12.training.lessons.v1.GetLessonByIdResponse:
       type: object
       properties:
@@ -1220,166 +1473,24 @@ components:
           type: string
           description: External ID of the lesson
       title: Response to GetLessonById
-    s12.training.analytics.v1.GetCourseStatisticsResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: The total number of course statistics matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.CourseStatistics'
-          description: List of course statistics
-      title: Response to GetCourseStatistics
-    s12.training.analytics.v1.CourseStatistics:
+    s12.training.analytics.v1.LessonStatistics:
       type: object
       properties:
         courseId:
           type: string
           description: ID of the course
-        totalUsers:
-          type: integer
-          format: int32
-          description: Total users assigned to the course
-        completedCount:
-          type: integer
-          format: int32
-          description: Total completions of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
         openedCount:
           type: integer
           format: int32
-          description: Total opens of the course
-      title: Response type within GetCourseStatisticsResponse
-    s12.training.collections.v1.GetCoursesByCourseCollectionIdResponse:
-      type: object
-      properties:
-        totalCount:
+          description: Total opens of lesson
+        completedCount:
           type: integer
           format: int32
-          description: The total number of courses matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.collections.v1.Course'
-          description: List of courses
-      title: Response to GetCoursesByCourseCollectionId
-    s12.training.courseprogress.v1.ResetCourseProgressRequest:
-      type: object
-      properties:
-        courseId:
-          type: string
-          description: The course Id to reset the course progress for
-        userIds:
-          type: array
-          items:
-            type: string
-          description: The user Ids to reset the course progress for
-        allUsers:
-          type: boolean
-          description: If true, resets course progress for all users who have started the course
-      title: Reset Course Progress by User Ids
-    s12.training.courses.v1.GetLessonsByCourseIdResponse:
-      type: object
-      properties:
-        lessons:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.courses.v1.Lesson'
-          description: List of lessons
-      title: Response to GetLessonsByCourseId
-    s12.training.analytics.v1.GetUserLessonProgressEventsResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: The total number of user lesson progress events matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.LessonProgressEvent'
-          description: List of user lesson progress events
-      title: Response to GetUserLessonProgressEvents
-    s12.training.collections.v1.GetCourseCollectionsResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: The total number of collections matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.collections.v1.CourseCollection'
-          description: List of collections
-      title: Response to GetCourseCollections
-    s12.training.individualleaderboards.v1.IndividualLeaderboard:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the individual leaderboard
-        name:
-          type: string
-          description: Name of the individual leaderboard
-        learnerAccess:
-          type: boolean
-          description: Flag to indicate if the leaderboard is accessible to learners
-        startDate:
-          type: string
-          format: date-time
-          description: Start date of the individual leaderboard
-        endDate:
-          type: string
-          format: date-time
-          description: End date of the individual leaderboard
-        participantGroupId:
-          type: string
-          description: The ID of the participant group
-      title: Response type within GetIndividualLeaderboardRankingsResponse
-    s12.training.courses.v1.UpdateCourseAssignmentsRequest.AssignmentType:
-      type: string
-      enum:
-      - ASSIGNMENT_TYPE_UNSPECIFIED
-      - ASSIGNMENT_TYPE_USER
-      - ASSIGNMENT_TYPE_GROUP
-      - ASSIGNMENT_TYPE_SITE
-      default: ASSIGNMENT_TYPE_UNSPECIFIED
-      title: "- ASSIGNMENT_TYPE_UNSPECIFIED: Invalid default assignment type\n - ASSIGNMENT_TYPE_USER: The assignment should reflect a user being assigned the course\n - ASSIGNMENT_TYPE_GROUP: The assignment should reflect a group being assigned the course\n - ASSIGNMENT_TYPE_SITE: The assignment should reflect a site being assigned the course"
-    s12.training.analytics.v1.GetSlideUserStatisticsResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: The total number of slide user statistics matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.SlideUserStatistics'
-          description: List of slide user statistics
-      title: Response to GetSlideUserStatistics
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
+          description: Total completions of lesson
+      title: Response type within GetLessonStatisticsResponse
     s12.training.collections.v1.CourseCollection:
       type: object
       properties:
@@ -1414,41 +1525,305 @@ components:
           type: string
           description: The status of the collection (published, draft)
       title: Response type within GetCourseCollectionsResponse
-    s12.training.paths.v1.Path:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the path
-        title:
-          type: string
-          description: Title of the path
-        isPublished:
-          type: boolean
-          description: Publication status of the path
-        pathType:
-          type: string
-          description: Type of path (Free, Sequential)
-        userGroups:
-          type: array
-          items:
-            type: string
-          description: Group IDs assigned to path
-      title: Response type within GetPathByIdResponse
-    s12.training.analytics.v1.GetLessonStatisticsResponse:
+    s12.training.analytics.v1.GetSurveyAnswersResponse:
       type: object
       properties:
         totalCount:
           type: integer
           format: int32
-          description: The total number of lesson statistics matching the request
+          description: The total number of survey answers matching the request
         items:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.LessonStatistics'
-          description: List of lesson statistics
-      title: Response to GetLessonStatistics
+            $ref: '#/components/schemas/s12.training.analytics.v1.SurveyAnswer'
+          description: List of survey answers
+      title: Response to GetSurveyAnswers
+    s12.training.rapidrefresh.v1.GetRapidRefreshResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of rapid refreshes matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.rapidrefresh.v1.RapidRefreshSummary'
+          description: List of rapid refreshes
+      title: Response to GetRapidRefresh
+    s12.training.courses.v1.UpdateCourseAssignmentsResponse:
+      type: object
+      properties:
+        usersUpdated:
+          type: integer
+          format: int32
+          description: How many user assignment were updated in the request
+        groupsUpdated:
+          type: integer
+          format: int32
+          description: How many group assignments were updated in the request
+        sitesUpdated:
+          type: integer
+          format: int32
+          description: How man site assignments were updated in the request
+      title: Response from the unified update request
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.training.paths.v1.GetPathByIdResponse:
+      type: object
+      properties:
+        path:
+          allOf:
+          - $ref: '#/components/schemas/s12.training.paths.v1.Path'
+          description: path details
+      title: Response to GetPathById
+    s12.training.analytics.v1.GetSlideUserStatisticsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of slide user statistics matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.SlideUserStatistics'
+          description: List of slide user statistics
+      title: Response to GetSlideUserStatistics
+    s12.training.rapidrefresh.v1.GetRapidRefreshByIdResponse:
+      type: object
+      properties:
+        rapidRefresh:
+          allOf:
+          - $ref: '#/components/schemas/s12.training.rapidrefresh.v1.RapidRefresh'
+          description: The rapid refresh
+      title: Response to GetRapidRefreshById
+    s12.training.analytics.v1.CourseStatistics:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: ID of the course
+        totalUsers:
+          type: integer
+          format: int32
+          description: Total users assigned to the course
+        completedCount:
+          type: integer
+          format: int32
+          description: Total completions of the course
+        openedCount:
+          type: integer
+          format: int32
+          description: Total opens of the course
+      title: Response type within GetCourseStatisticsResponse
+    s12.training.rapidrefresh.v1.RapidRefresh:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the rapid refresh
+        title:
+          type: string
+          description: Title of the rapid refresh
+        description:
+          type: string
+          description: Description of the rapid refresh
+        startDate:
+          type: string
+          format: date-time
+          description: Start date of the rapid refresh
+        endDate:
+          type: string
+          format: date-time
+          description: End date of the rapid refresh
+        status:
+          type: string
+          description: Status of the rapid refresh (all, draft, scheduled, in-progress, ended)
+        schedule:
+          type: string
+          description: Schedule of the rapid refresh (NotSpecified, Once, Daily, Weekly)
+        language:
+          type: string
+          description: Language of the rapid refresh
+        leaderboardEnabled:
+          type: boolean
+          description: Flag indicating leaderboards are enabled
+        retriesEnabled:
+          type: boolean
+          description: Flag indicating retries are enabled
+        questions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.rapidrefresh.v1.Question'
+          description: List of questions in the rapid refresh
+      title: Response type within GetRapidRefreshByIdResponse
+    s12.training.collections.v1.GetCoursesByCourseCollectionIdResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of courses matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.collections.v1.Course'
+          description: List of courses
+      title: Response to GetCoursesByCourseCollectionId
+    s12.training.analytics.v1.GetUserLessonProgressEventsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of user lesson progress events matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonProgressEvent'
+          description: List of user lesson progress events
+      title: Response to GetUserLessonProgressEvents
+    s12.training.collections.v1.TranslationOriginalCourse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the original course
+        externalId:
+          type: string
+          description: External ID of the original course
+      title: Response type within GetCoursesByCourseCollectionIdResponse
+    s12.training.courseprogress.v1.ResetCourseProgressRequest:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: The course Id to reset the course progress for
+        userIds:
+          type: array
+          items:
+            type: string
+          description: The user Ids to reset the course progress for
+        allUsers:
+          type: boolean
+          description: If true, resets course progress for all users who have started the course
+      title: Reset Course Progress by User Ids
+    s12.training.courseprogress.v1.ResetCourseProgressResponse:
+      type: object
+    s12.training.collections.v1.Course:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the course
+        externalId:
+          type: string
+          description: External ID of the course
+        title:
+          type: string
+          description: Title of the course
+        description:
+          type: string
+          description: Description of the course
+        status:
+          type: string
+          description: Status of the course (published, draft)
+        locale:
+          type: string
+          description: Locale of the course
+        isMandatory:
+          type: boolean
+          description: Flag indicating if the course is mandatory
+        dueBy:
+          type: string
+          description: Due by type of the course (notSpecified, static, relative)
+        duration:
+          type: integer
+          format: int32
+          description: Duration of the course in seconds
+        thumbnailUrl:
+          type: string
+          description: URL of the thumbnail image for the course
+        createdDatetime:
+          type: string
+          format: date-time
+          description: Date the course was created
+        modifiedDatetime:
+          type: string
+          format: date-time
+          description: Date the course was last modified
+        translationOriginalCourse:
+          allOf:
+          - $ref: '#/components/schemas/s12.training.collections.v1.TranslationOriginalCourse'
+          description: Original course if this is a linked translation
+      title: Response type within GetCoursesByCourseCollectionIdResponse
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.training.analytics.v1.RapidRefreshAnswer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the answer
+        rapidRefreshId:
+          type: string
+          description: ID of the rapid refresh
+        userId:
+          type: string
+          description: ID of the user
+        questionId:
+          type: string
+          description: ID of the question
+        eventDatetime:
+          type: string
+          format: date-time
+          description: Date time the user answered
+        correct:
+          type: boolean
+          description: Flag indicating the answer was correct
+        timeSpentMs:
+          type: integer
+          format: int32
+          description: Time spent in milliseconds for the user to answer
+        scoreWeight:
+          type: number
+          format: double
+          description: Weighting of the answer
+        totalAttempts:
+          type: integer
+          format: int32
+          description: Total attempts to answer
+        selectedOptions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.RapidRefreshAnswerOption'
+          description: Options within the answer
+      title: Response type within GetRapidRefreshAnswersResponse
     s12.training.analytics.v1.LessonProgress:
       type: object
       properties:
@@ -1501,16 +1876,6 @@ components:
           format: double
           description: Score achieved by the user during lesson
       title: Response type within GetUserLessonProgressResponse
-    s12.training.collections.v1.TranslationOriginalCourse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the original course
-        externalId:
-          type: string
-          description: External ID of the original course
-      title: Response type within GetCoursesByCourseCollectionIdResponse
     s12.training.paths.v1.GetPathsResponse:
       type: object
       properties:
@@ -1525,119 +1890,95 @@ components:
             $ref: '#/components/schemas/s12.training.paths.v1.PathSummary'
           description: List of paths
       title: Response to GetPaths
-    s12.training.analytics.v1.RapidRefreshAnswer:
+    s12.training.collections.v1.GetCourseCollectionsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of collections matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.collections.v1.CourseCollection'
+          description: List of collections
+      title: Response to GetCourseCollections
+    s12.training.courses.v1.GetCoursesResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of courses matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.courses.v1.Course'
+          description: List of courses
+      title: Response to GetCourses
+    s12.training.individualleaderboards.v1.GetIndividualLeaderboardsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: Total number of individual leaderboards matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.individualleaderboards.v1.IndividualLeaderboard'
+          description: List of individual leaderboards
+      title: Response for GetIndividualLeaderboards
+    s12.training.rapidrefresh.v1.Question:
       type: object
       properties:
         id:
           type: string
-          description: ID of the answer
-        rapidRefreshId:
-          type: string
-          description: ID of the rapid refresh
-        userId:
-          type: string
-          description: ID of the user
-        questionId:
-          type: string
           description: ID of the question
-        eventDatetime:
+        questionNumber:
+          type: integer
+          format: int32
+          description: Number of the question
+        questionText:
+          type: string
+          description: Text of the question
+        followupText:
+          type: string
+          description: Follow-up text of the question
+        options:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.rapidrefresh.v1.Option'
+          description: List of question options
+      title: Response type within RapidRefresh
+    s12.training.individualleaderboards.v1.GetIndividualLeaderboardRankingsResponse:
+      type: object
+      properties:
+        leaderboardId:
+          type: string
+          description: ID of the individual leaderboard
+        leaderboardName:
+          type: string
+          description: Name of the individual leaderboard
+        leaderboardStartDate:
           type: string
           format: date-time
-          description: Date time the user answered
-        correct:
-          type: boolean
-          description: Flag indicating the answer was correct
-        timeSpentMs:
-          type: integer
-          format: int32
-          description: Time spent in milliseconds for the user to answer
-        scoreWeight:
-          type: number
-          format: double
-          description: Weighting of the answer
-        totalAttempts:
-          type: integer
-          format: int32
-          description: Total attempts to answer
-        selectedOptions:
+          description: Start date of the individual leaderboard
+        leaderboardEndDate:
+          type: string
+          format: date-time
+          description: End date of the individual leaderboard
+        rankings:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.RapidRefreshAnswerOption'
-          description: Options within the answer
-      title: Response type within GetRapidRefreshAnswersResponse
-    s12.training.paths.v1.PathSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the path
-        title:
-          type: string
-          description: Title of the path
-        isPublished:
-          type: boolean
-          description: Flag indicating of the path is published
-      title: Response type within GetPathsResponse
-    s12.training.analytics.v1.SurveyQuestionDefinition:
-      type: object
-      properties:
-        courseId:
-          type: string
-          description: ID of the course
-        courseExternalId:
-          type: string
-          description: External ID of the course
-        courseTitle:
-          type: string
-          description: Title of the course
-        lessonId:
-          type: string
-          description: ID of the lesson
-        lessonExternalId:
-          type: string
-          description: External ID of the lesson
-        lessonTitle:
-          type: string
-          description: Title of the lesson
-        slideId:
-          type: string
-          description: ID of the slide
-        questionId:
-          type: string
-          description: ID of the question
-        questionContent:
-          type: string
-          description: Content within the question
-        answerDefinitions:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.AnswerDefinition'
-          description: Answers to the question
-      title: Response type within GetSurveyQuestionDefinitionsResponse
-    s12.training.courses.v1.TrainingCoursesService.UpdateCourseAssignmentsBody:
-      type: object
-      properties:
-        assignments:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.courses.v1.UpdateCourseAssignmentsRequest.Assignment'
-          description: List of assignment changes for the course
-        universalAccess:
-          type: boolean
-          description: Assign course to all Training users within the orginzation
-        clearAllUsers:
-          type: boolean
-          description: Remove all course user assignments
-        clearAllGroups:
-          type: boolean
-          description: Remove all course group assignments
-        clearAllSites:
-          type: boolean
-          description: Remove all course site assignments
-      title: Unified request for saving assignments for a course
+            $ref: '#/components/schemas/s12.training.individualleaderboards.v1.Ranking'
+          description: Rankings for the individual leaderboard
+      title: Response for GetIndividualLeaderboardRankings
     s12.training.analytics.v1.GetSlideStatisticsResponse:
       type: object
       properties:
@@ -1652,31 +1993,189 @@ components:
             $ref: '#/components/schemas/s12.training.analytics.v1.SlideStatistics'
           description: List of slide statistics
       title: Response to GetSlideStatistics
-    s12.training.individualleaderboards.v1.Ranking:
+    s12.training.individualleaderboards.v1.IndividualLeaderboard:
       type: object
       properties:
-        rank:
-          type: integer
-          format: int32
-          description: Ranking number
-        participantId:
+        id:
           type: string
-          description: ID of the participant/user
-        participantName:
+          description: ID of the individual leaderboard
+        name:
           type: string
-          description: Name of the participant/user
-        participantAvatarUrl:
-          type: string
-          description: URL of the participant/user's avatar
-        totalScore:
-          type: integer
-          format: int32
-          description: Total score of the participant/user
-        isNotAttempted:
+          description: Name of the individual leaderboard
+        learnerAccess:
           type: boolean
-          description: Flag to indicate if the participant/user has not attempted the individual leaderboard
+          description: Flag to indicate if the leaderboard is accessible to learners
+        startDate:
+          type: string
+          format: date-time
+          description: Start date of the individual leaderboard
+        endDate:
+          type: string
+          format: date-time
+          description: End date of the individual leaderboard
+        participantGroupId:
+          type: string
+          description: The ID of the participant group
       title: Response type within GetIndividualLeaderboardRankingsResponse
-    s12.training.rapidrefresh.v1.RapidRefresh:
+    s12.training.courses.v1.TranslationOriginalCourse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the original course
+        externalId:
+          type: string
+          description: External ID of the original course
+      title: Response type within Course type
+    s12.training.analytics.v1.GetUserLessonProgressResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of user lesson progress matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonProgress'
+          description: List of user lesson progress
+      title: Response to GetUserLessonProgress
+    s12.training.courses.v1.GetLessonsByCourseIdResponse:
+      type: object
+      properties:
+        lessons:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.courses.v1.Lesson'
+          description: List of lessons
+      title: Response to GetLessonsByCourseId
+    s12.training.analytics.v1.GetLessonAttemptsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of lesson attempts matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonAttempt'
+          description: List of lesson attempts
+      title: Response to GetLessonAttempts
+    s12.training.analytics.v1.RapidRefreshAnswerOption:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the answer
+        answerNumber:
+          type: integer
+          format: int32
+          description: Number of the answer
+        answerText:
+          type: string
+          description: Text of the answer
+        correct:
+          type: boolean
+          description: Flag indicating the answer was correct
+      title: Response type within RapidRefreshAnswer
+    s12.training.courses.v1.UpdateCourseAssignmentsRequest.Assignment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Id of the type getting assigned.
+
+            (ie. if type=ASSIGNMENT_TYPE_USER then id should be a user Id)'
+        type:
+          allOf:
+          - $ref: '#/components/schemas/s12.training.courses.v1.UpdateCourseAssignmentsRequest.AssignmentType'
+          description: The type of assignment type
+        isAssigned:
+          type: boolean
+          description: The assignment state of the entity
+      title: An assignment change for an entity to a course
+    s12.training.analytics.v1.GetLessonProgressEventsResponse:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+          description: The total number of lesson progress events matching the request
+        items:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.analytics.v1.LessonProgressEvent'
+          description: List of lesson progress events
+      title: Response to GetLessonProgressEvents
+    s12.training.courses.v1.UpdateCourseAssignmentsRequest.AssignmentType:
+      type: string
+      enum:
+      - ASSIGNMENT_TYPE_UNSPECIFIED
+      - ASSIGNMENT_TYPE_USER
+      - ASSIGNMENT_TYPE_GROUP
+      - ASSIGNMENT_TYPE_SITE
+      default: ASSIGNMENT_TYPE_UNSPECIFIED
+      title: "- ASSIGNMENT_TYPE_UNSPECIFIED: Invalid default assignment type\n - ASSIGNMENT_TYPE_USER: The assignment should reflect a user being assigned the course\n - ASSIGNMENT_TYPE_GROUP: The assignment should reflect a group being assigned the course\n - ASSIGNMENT_TYPE_SITE: The assignment should reflect a site being assigned the course"
+    s12.training.analytics.v1.SlideStatistics:
+      type: object
+      properties:
+        courseId:
+          type: string
+          description: ID of the course
+        lessonId:
+          type: string
+          description: ID of the lesson
+        slideId:
+          type: string
+          description: ID of the slide
+        lessonTitle:
+          type: string
+          description: Title of the lesson
+        question:
+          type: string
+          description: Question in the slide
+        averageDurationMs:
+          type: number
+          format: double
+          description: Average duration in milliseconds taken to attempt the slide
+        averageAttempts:
+          type: number
+          format: double
+          description: Average number of slide attempts
+        totalAttempts:
+          type: integer
+          format: int32
+          description: Total number of slide attempts
+        totalCorrect:
+          type: integer
+          format: int32
+          description: Total number of correct attempts
+        totalIncorrect:
+          type: integer
+          format: int32
+          description: Total number of incorrect attempts
+        slideType:
+          type: string
+          description: Type of slide
+        slideAnswers:
+          type: string
+          description: Answers within slide
+        courseStatus:
+          type: string
+          description: Status of the course
+        courseExternalId:
+          type: string
+          description: External ID of the course
+        lessonExternalId:
+          type: string
+          description: External ID of the lesson
+      title: Response type within GetSlideStatisticsResponse
+    s12.training.rapidrefresh.v1.RapidRefreshSummary:
       type: object
       properties:
         id:
@@ -1702,76 +2201,38 @@ components:
         schedule:
           type: string
           description: Schedule of the rapid refresh (NotSpecified, Once, Daily, Weekly)
-        language:
-          type: string
-          description: Language of the rapid refresh
-        leaderboardEnabled:
-          type: boolean
-          description: Flag indicating leaderboards are enabled
-        retriesEnabled:
-          type: boolean
-          description: Flag indicating retries are enabled
-        questions:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.rapidrefresh.v1.Question'
-          description: List of questions in the rapid refresh
-      title: Response type within GetRapidRefreshByIdResponse
-    s12.training.courses.v1.TranslationOriginalCourse:
+      title: Response type within GetRapidRefreshResponse
+    s12.training.paths.v1.Path:
       type: object
       properties:
         id:
           type: string
-          description: ID of the original course
-        externalId:
+          description: ID of the path
+        title:
           type: string
-          description: External ID of the original course
-      title: Response type within Course type
-    s12.training.courses.v1.UpdateCourseAssignmentsResponse:
-      type: object
-      properties:
-        usersUpdated:
-          type: integer
-          format: int32
-          description: How many user assignment were updated in the request
-        groupsUpdated:
-          type: integer
-          format: int32
-          description: How many group assignments were updated in the request
-        sitesUpdated:
-          type: integer
-          format: int32
-          description: How man site assignments were updated in the request
-      title: Response from the unified update request
-    s12.training.analytics.v1.GetSurveyQuestionDefinitionsResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: The total number of survey question definitions matching the request
-        items:
+          description: Title of the path
+        isPublished:
+          type: boolean
+          description: Publication status of the path
+        pathType:
+          type: string
+          description: Type of path (Free, Sequential)
+        userGroups:
           type: array
           items:
-            type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.SurveyQuestionDefinition'
-          description: List of survey question definitions
-      title: Response to GetSurveyQuestionDefinitions
-    s12.training.courses.v1.GetCoursesResponse:
+            type: string
+          description: Group IDs assigned to path
+      title: Response type within GetPathByIdResponse
+    s12.training.analytics.v1.AnswerDefinition:
       type: object
       properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: The total number of courses matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.courses.v1.Course'
-          description: List of courses
-      title: Response to GetCourses
+        answerDefinitionId:
+          type: string
+          description: ID of the answer definition
+        answerContent:
+          type: string
+          description: Content within the answer
+      title: Response type within SurveyQuestionDefinition
     s12.training.courses.v1.Course:
       type: object
       properties:
@@ -1844,221 +2305,6 @@ components:
 
             0 if the course has never been published.'
       title: Response type with GetCoursesResponse
-    s12.training.individualleaderboards.v1.GetIndividualLeaderboardsResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: Total number of individual leaderboards matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.individualleaderboards.v1.IndividualLeaderboard'
-          description: List of individual leaderboards
-      title: Response for GetIndividualLeaderboards
-    s12.training.individualleaderboards.v1.GetIndividualLeaderboardRankingsResponse:
-      type: object
-      properties:
-        leaderboardId:
-          type: string
-          description: ID of the individual leaderboard
-        leaderboardName:
-          type: string
-          description: Name of the individual leaderboard
-        leaderboardStartDate:
-          type: string
-          format: date-time
-          description: Start date of the individual leaderboard
-        leaderboardEndDate:
-          type: string
-          format: date-time
-          description: End date of the individual leaderboard
-        rankings:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.individualleaderboards.v1.Ranking'
-          description: Rankings for the individual leaderboard
-      title: Response for GetIndividualLeaderboardRankings
-    s12.training.rapidrefresh.v1.GetRapidRefreshByIdResponse:
-      type: object
-      properties:
-        rapidRefresh:
-          allOf:
-          - $ref: '#/components/schemas/s12.training.rapidrefresh.v1.RapidRefresh'
-          description: The rapid refresh
-      title: Response to GetRapidRefreshById
-    s12.training.analytics.v1.SlideUserStatistics:
-      type: object
-      properties:
-        userId:
-          type: string
-          description: ID of the user
-        courseId:
-          type: string
-          description: ID of the course
-        lessonId:
-          type: string
-          description: ID of the lesson
-        slideId:
-          type: string
-          description: ID of the slide
-        lessonTitle:
-          type: string
-          description: Title of the lesson
-        question:
-          type: string
-          description: Question in the slide
-        totalDurationMs:
-          type: integer
-          format: int32
-          description: Total duration in milliseconds taken to attempt slide
-        attemptCount:
-          type: integer
-          format: int32
-          description: Number of times the slide was attempted
-        attemptCorrectCount:
-          type: integer
-          format: int32
-          description: Number of times the slide was successfully attempted
-        totalCorrect:
-          type: integer
-          format: int32
-          description: Total correct
-        attemptIncorrectCount:
-          type: integer
-          format: int32
-          description: Total incorrect attempts
-        slideType:
-          type: string
-          description: Type of the slide
-        firstAnswer:
-          type: string
-          description: Users first answer to the slide
-        latestAnswer:
-          type: string
-          description: Users latest answer to the slide
-        courseStatus:
-          type: string
-          description: Status of the course
-        courseExternalId:
-          type: string
-          description: External ID of the course
-        lessonExternalId:
-          type: string
-          description: External ID of the lesson
-      title: Response type within GetSlideUserStatisticsResponse
-    s12.training.analytics.v1.LessonStatistics:
-      type: object
-      properties:
-        courseId:
-          type: string
-          description: ID of the course
-        lessonId:
-          type: string
-          description: ID of the lesson
-        openedCount:
-          type: integer
-          format: int32
-          description: Total opens of lesson
-        completedCount:
-          type: integer
-          format: int32
-          description: Total completions of lesson
-      title: Response type within GetLessonStatisticsResponse
-    s12.training.collections.v1.Course:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the course
-        externalId:
-          type: string
-          description: External ID of the course
-        title:
-          type: string
-          description: Title of the course
-        description:
-          type: string
-          description: Description of the course
-        status:
-          type: string
-          description: Status of the course (published, draft)
-        locale:
-          type: string
-          description: Locale of the course
-        isMandatory:
-          type: boolean
-          description: Flag indicating if the course is mandatory
-        dueBy:
-          type: string
-          description: Due by type of the course (notSpecified, static, relative)
-        duration:
-          type: integer
-          format: int32
-          description: Duration of the course in seconds
-        thumbnailUrl:
-          type: string
-          description: URL of the thumbnail image for the course
-        createdDatetime:
-          type: string
-          format: date-time
-          description: Date the course was created
-        modifiedDatetime:
-          type: string
-          format: date-time
-          description: Date the course was last modified
-        translationOriginalCourse:
-          allOf:
-          - $ref: '#/components/schemas/s12.training.collections.v1.TranslationOriginalCourse'
-          description: Original course if this is a linked translation
-      title: Response type within GetCoursesByCourseCollectionIdResponse
-    s12.training.rapidrefresh.v1.RapidRefreshSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the rapid refresh
-        title:
-          type: string
-          description: Title of the rapid refresh
-        description:
-          type: string
-          description: Description of the rapid refresh
-        startDate:
-          type: string
-          format: date-time
-          description: Start date of the rapid refresh
-        endDate:
-          type: string
-          format: date-time
-          description: End date of the rapid refresh
-        status:
-          type: string
-          description: Status of the rapid refresh (all, draft, scheduled, in-progress, ended)
-        schedule:
-          type: string
-          description: Schedule of the rapid refresh (NotSpecified, Once, Daily, Weekly)
-      title: Response type within GetRapidRefreshResponse
-    s12.training.analytics.v1.RapidRefreshAnswerOption:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the answer
-        answerNumber:
-          type: integer
-          format: int32
-          description: Number of the answer
-        answerText:
-          type: string
-          description: Text of the answer
-        correct:
-          type: boolean
-          description: Flag indicating the answer was correct
-      title: Response type within RapidRefreshAnswer
     s12.training.rapidrefresh.v1.Option:
       type: object
       properties:
@@ -2076,36 +2322,20 @@ components:
           type: boolean
           description: Flag indicating correct option
       title: Response type within Question
-    s12.training.analytics.v1.GetLessonAttemptsResponse:
+    s12.training.analytics.v1.GetCourseStatisticsResponse:
       type: object
       properties:
         totalCount:
           type: integer
           format: int32
-          description: The total number of lesson attempts matching the request
+          description: The total number of course statistics matching the request
         items:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.LessonAttempt'
-          description: List of lesson attempts
-      title: Response to GetLessonAttempts
-    s12.training.courseprogress.v1.ResetCourseProgressResponse:
-      type: object
-    s12.training.analytics.v1.GetLessonProgressEventsResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: The total number of lesson progress events matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.LessonProgressEvent'
-          description: List of lesson progress events
-      title: Response to GetLessonProgressEvents
+            $ref: '#/components/schemas/s12.training.analytics.v1.CourseStatistics'
+          description: List of course statistics
+      title: Response to GetCourseStatistics
     s12.training.analytics.v1.SurveyAnswer:
       type: object
       properties:
@@ -2132,258 +2362,28 @@ components:
           format: date-time
           description: Date time the user answered
       title: Response type within GetSurveyAnswersResponse
-    s12.training.analytics.v1.SlideStatistics:
+    s12.training.courses.v1.TrainingCoursesService.UpdateCourseAssignmentsBody:
       type: object
       properties:
-        courseId:
-          type: string
-          description: ID of the course
-        lessonId:
-          type: string
-          description: ID of the lesson
-        slideId:
-          type: string
-          description: ID of the slide
-        lessonTitle:
-          type: string
-          description: Title of the lesson
-        question:
-          type: string
-          description: Question in the slide
-        averageDurationMs:
-          type: number
-          format: double
-          description: Average duration in milliseconds taken to attempt the slide
-        averageAttempts:
-          type: number
-          format: double
-          description: Average number of slide attempts
-        totalAttempts:
-          type: integer
-          format: int32
-          description: Total number of slide attempts
-        totalCorrect:
-          type: integer
-          format: int32
-          description: Total number of correct attempts
-        totalIncorrect:
-          type: integer
-          format: int32
-          description: Total number of incorrect attempts
-        slideType:
-          type: string
-          description: Type of slide
-        slideAnswers:
-          type: string
-          description: Answers within slide
-        courseStatus:
-          type: string
-          description: Status of the course
-        courseExternalId:
-          type: string
-          description: External ID of the course
-        lessonExternalId:
-          type: string
-          description: External ID of the lesson
-      title: Response type within GetSlideStatisticsResponse
-    google.protobuf.Any:
-      type: object
-      properties:
-        '@type':
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.training.paths.v1.GetPathByIdResponse:
-      type: object
-      properties:
-        path:
-          allOf:
-          - $ref: '#/components/schemas/s12.training.paths.v1.Path'
-          description: path details
-      title: Response to GetPathById
-    s12.training.analytics.v1.LessonAttempt:
-      type: object
-      properties:
-        attemptId:
-          type: string
-          description: Unique identifier of the lesson attempt
-        userId:
-          type: string
-          description: ID of the attempting user
-        courseId:
-          type: string
-          description: ID of the course attempted
-        courseExternalId:
-          type: string
-          description: External ID of the course attempted
-        lessonId:
-          type: string
-          description: ID of the lesson attempted
-        lessonExternalId:
-          type: string
-          description: External ID of the lesson attempted
-        startedDatetime:
-          type: string
-          format: date-time
-          description: Start date time of the attempt
-        completedDatetime:
-          type: string
-          format: date-time
-          description: End date time of the attempt
-        score:
-          type: number
-          format: double
-          description: Score achieved within attempt
-        success:
+        assignments:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.training.courses.v1.UpdateCourseAssignmentsRequest.Assignment'
+          description: List of assignment changes for the course
+        universalAccess:
           type: boolean
-          description: Flag indicating if the attempt was successful
-      title: Response type within GetLessonAttemptsResponse
-    s12.training.analytics.v1.GetUserLessonProgressResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: The total number of user lesson progress matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.LessonProgress'
-          description: List of user lesson progress
-      title: Response to GetUserLessonProgress
-    s12.training.analytics.v1.AnswerDefinition:
-      type: object
-      properties:
-        answerDefinitionId:
-          type: string
-          description: ID of the answer definition
-        answerContent:
-          type: string
-          description: Content within the answer
-      title: Response type within SurveyQuestionDefinition
-    s12.training.courses.v1.UpdateCourseAssignmentsRequest.Assignment:
-      type: object
-      properties:
-        id:
-          type: string
-          description: 'Id of the type getting assigned.
-
-            (ie. if type=ASSIGNMENT_TYPE_USER then id should be a user Id)'
-        type:
-          allOf:
-          - $ref: '#/components/schemas/s12.training.courses.v1.UpdateCourseAssignmentsRequest.AssignmentType'
-          description: The type of assignment type
-        isAssigned:
+          description: Assign course to all Training users within the orginzation
+        clearAllUsers:
           type: boolean
-          description: The assignment state of the entity
-      title: An assignment change for an entity to a course
-    s12.training.courses.v1.Lesson:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the lesson
-        externalId:
-          type: string
-          description: External ID of the lesson
-        title:
-          type: string
-          description: Title of the lesson
-        description:
-          type: string
-          description: Description of the lesson
-        status:
-          type: string
-          description: Status of the lesson (published, draft)
-        minimumScore:
-          type: integer
-          format: int32
-          description: Minimum score required to pass the lesson
-      title: Response type within GetLessonsByCourseIdResponse
-    s12.training.rapidrefresh.v1.Question:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the question
-        questionNumber:
-          type: integer
-          format: int32
-          description: Number of the question
-        questionText:
-          type: string
-          description: Text of the question
-        followupText:
-          type: string
-          description: Follow-up text of the question
-        options:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.rapidrefresh.v1.Option'
-          description: List of question options
-      title: Response type within RapidRefresh
-    s12.training.analytics.v1.GetSurveyAnswersResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-          description: The total number of survey answers matching the request
-        items:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.training.analytics.v1.SurveyAnswer'
-          description: List of survey answers
-      title: Response to GetSurveyAnswers
-    s12.training.analytics.v1.LessonProgressEvent:
-      type: object
-      properties:
-        userId:
-          type: string
-          description: ID of the user
-        userEmail:
-          type: string
-          description: Email of the user
-        userFirstname:
-          type: string
-          description: First name of the user
-        userLastname:
-          type: string
-          description: Last name of the user
-        courseId:
-          type: string
-          description: ID of the course
-        courseTitle:
-          type: string
-          description: Title of the course
-        courseExternalId:
-          type: string
-          description: External ID of the course
-        lessonId:
-          type: string
-          description: ID of the lesson
-        lessonTitle:
-          type: string
-          description: Title of the lesson
-        lessonExternalId:
-          type: string
-          description: External ID of the lesson
-        eventName:
-          type: string
-          description: Lesson progress event name (LessonAttempted, LessonCompleted, LessonOpened, LessonUnlocked, LessonReset)
-        eventDateTime:
-          type: string
-          format: date-time
-          description: Date when event occurred
-        lessonScore:
-          type: number
-          format: double
-          description: Score achieved within event
-      title: Response type within GetLessonProgressEventsResponse
+          description: Remove all course user assignments
+        clearAllGroups:
+          type: boolean
+          description: Remove all course group assignments
+        clearAllSites:
+          type: boolean
+          description: Remove all course site assignments
+      title: Unified request for saving assignments for a course
   securitySchemes:
     BearerAuthentication:
       type: http

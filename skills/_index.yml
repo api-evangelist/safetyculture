@@ -1,29 +1,53 @@
-generated: '2026-07-21'
+name: SafetyCulture (Mitti) agent skills
+generated: '2026-10-20'
 method: generated
-source: https://developer.safetyculture.com/reference
-note: >-
-  Skills are grounded in operations published in the SafetyCulture API reference. No
-  downloadable OpenAPI is offered; each step cites its documented reference operation.
+source: openapi/
+note: Each skill names real operationIds from the Mitti OpenAPI specs in openapi/
+  (server https://api.mitti.com). The provider publishes no agent skills or AGENTS.md;
+  its llms.txt is the agent index.
 skills:
 - file: safetyculture-subscribe-to-events.md
-  name: Subscribe to SafetyCulture events with webhooks
-  api: https://api.safetyculture.io
+  name: safetyculture-subscribe-to-events
+  title: Subscribe to Mitti events with webhooks
+  api: https://api.mitti.com
   operations:
-  - webhooksservice_createwebhook
-  - webhooksservice_gettoken
-  - webhooksservice_listwebhooks
+  - WebhooksService_CreateWebhook
+  - WebhooksService_GetToken
+  - WebhooksService_ListWebhooks
+  - WebhooksService_GetWebhook
+  - WebhooksService_UpdateWebhook
+  - WebhooksService_DeleteWebhook
 - file: safetyculture-capture-and-track-issue.md
-  name: Capture and track an issue
-  api: https://api.safetyculture.io
+  name: safetyculture-capture-and-track-issue
+  title: Capture and track an issue
+  api: https://api.mitti.com
   operations:
-  - incidentsservice_submitincident
-  - incidentsservice_addcollaborators
-  - incidentsservice_updatestatus
-  - incidentsservice_getincidents
+  - CustomerConfigurationService_GetCategories
+  - IncidentsService_SubmitIncident
+  - IncidentsService_AddCollaborators
+  - IncidentsService_UpdateStatus
+  - TimelineService_AddComment
+  - IncidentsService_GetIncidents
+  - IncidentsService_GetIncidentById
 - file: safetyculture-provision-users-and-groups.md
-  name: Provision users and groups
-  api: https://api.safetyculture.io
+  name: safetyculture-provision-users-and-groups
+  title: Provision users and groups
+  api: https://api.mitti.com
   operations:
-  - thepubservice_creategroup
-  - thepubservice_addnewusertogroup
-  - thepubservice_listusersingroup
+  - ThePubService_CreateGroup
+  - ThePubService_ListGroups
+  - UsersService_ListUsers
+  - ThePubService_AddNewUserToGroup
+  - ThePubService_ListUsersInGroup
+  - ThePubService_RemoveUser
+- file: safetyculture-run-and-export-inspection.md
+  name: safetyculture-run-and-export-inspection
+  title: Run and export an inspection
+  api: https://api.mitti.com
+  operations:
+  - ThePubService_SearchTemplates
+  - TemplatesService_GetTemplateByID
+  - InspectionService_CreateInspection
+  - InspectionService_CompleteInspection
+  - InspectionService_GetInspection
+  - ReportsService_StartInspectionExport

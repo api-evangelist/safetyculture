@@ -164,42 +164,23 @@ paths:
       - Lone Worker
 components:
   schemas:
-    s12.loneworker.v1.PanicTrigger:
-      type: string
-      enum:
-      - PANIC_TRIGGER_DURATION_EXPIRED
-      - PANIC_TRIGGER_MISSED_CHECK_IN
-      - PANIC_TRIGGER_BUTTON_PRESSED
-      - PANIC_TRIGGER_WIDGET_PRESSED
-      - PANIC_TRIGGER_MAN_DOWN
-      - PANIC_TRIGGER_SHAKE
-      description: "The enum representing the various reasons a job can enter a panic state.\n\n - PANIC_TRIGGER_DURATION_EXPIRED: The job entered a panic state due to duration expiry.\n - PANIC_TRIGGER_MISSED_CHECK_IN: The job entered a panic state due to a missed check-in.\n - PANIC_TRIGGER_BUTTON_PRESSED: The job entered a panic state due to panic button press.\n - PANIC_TRIGGER_WIDGET_PRESSED: The job entered a panic state due to widget button press.\n - PANIC_TRIGGER_MAN_DOWN: The job entered a panic state due to a man-down event.\n - PANIC_TRIGGER_SHAKE: The job entered a panic state due to a shake event."
-    s12.common.GeoPosition:
+    s12.loneworker.v1.GetJobsResponse:
       type: object
       properties:
-        longitude:
-          type: number
-          format: double
-          description: The geographical longitude
-        latitude:
-          type: number
-          format: double
-          description: The geographical latitude
-        accuracy:
+        jobs:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/s12.loneworker.v1.GetJobsResponse.Job'
+          description: The list of retrieved jobs.
+        next_page_token:
+          type: string
+          description: The token for the next page of results.
+        total_count:
           type: integer
           format: int32
-          description: The accuracy in meters
-      description: A position is the fundamental geographical geometry construct.
-    s12.loneworker.v1.JobStatus:
-      type: string
-      enum:
-      - JOB_STATUS_ACTIVE_OK
-      - JOB_STATUS_OVERTIME
-      - JOB_STATUS_IN_PANIC
-      - JOB_STATUS_FINISHED
-      - JOB_STATUS_TRAVELING
-      - JOB_STATUS_CANCELED
-      description: "The enum representing the various states a job can be in during its lifecycle.\n\n - JOB_STATUS_ACTIVE_OK: The job is active and operating normally.\n - JOB_STATUS_OVERTIME: The job has exceeded the expected duration due to time expiry or missed check-in.\n - JOB_STATUS_IN_PANIC: The job is in a panic state.\n - JOB_STATUS_FINISHED: The job has finished.\n - JOB_STATUS_TRAVELING: The worker is traveling to the job.\n - JOB_STATUS_CANCELED: The job has been canceled."
+          description: The total number of jobs that match the filter.
+      description: The message representing a location and its address.
     s12.loneworker.v1.GetJobEventsResponse:
       type: object
       properties:
@@ -213,35 +194,6 @@ components:
           type: string
           description: The token for the next page of results.
       description: The response from getting job events.
-    s12.loneworker.v1.GetJobEventsResponse.JobEvent.DurationExtendedEvent:
-      type: object
-      properties:
-        duration_minutes:
-          type: integer
-          format: int32
-          description: The duration by which the job was extended, in minutes.
-      description: Details about a job duration extension event.
-    google.rpc.Status:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/google.protobuf.Any'
-    s12.loneworker.v1.GetJobEventsResponse.JobEvent.PanicCanceledEvent:
-      type: object
-      properties:
-        panic_reason:
-          description: The reason that caused the job to exit the panic state.
-          allOf:
-          - $ref: '#/components/schemas/s12.loneworker.v1.PanicReason'
-      description: Details about a panic cancel event.
     s12.loneworker.v1.GetJobEventsResponse.JobEvent.PositionUpdatedEvent:
       type: object
       properties:
@@ -262,40 +214,38 @@ components:
 
             when the worker did not move or no later event was returned.'
       description: Details about a position update event.
-    s12.loneworker.v1.GetJobEventsResponse.JobEvent.PanicResolvedEvent:
+    s12.loneworker.v1.GetJobEventsResponse.JobEvent.DurationExtendedEvent:
       type: object
       properties:
-        panic_reason:
-          description: The reason that caused the job to exit the panic state.
-          allOf:
-          - $ref: '#/components/schemas/s12.loneworker.v1.PanicReason'
-      description: Details about a panic resolve event.
-    s12.loneworker.v1.GetJobEventsResponse.JobEvent.GeofenceExitedEvent:
+        duration_minutes:
+          type: integer
+          format: int32
+          description: The duration by which the job was extended, in minutes.
+      description: Details about a job duration extension event.
+    s12.loneworker.v1.JobStatus:
+      type: string
+      enum:
+      - JOB_STATUS_ACTIVE_OK
+      - JOB_STATUS_OVERTIME
+      - JOB_STATUS_IN_PANIC
+      - JOB_STATUS_FINISHED
+      - JOB_STATUS_TRAVELING
+      - JOB_STATUS_CANCELED
+      description: "The enum representing the various states a job can be in during its lifecycle.\n\n - JOB_STATUS_ACTIVE_OK: The job is active and operating normally.\n - JOB_STATUS_OVERTIME: The job has exceeded the expected duration due to time expiry or missed check-in.\n - JOB_STATUS_IN_PANIC: The job is in a panic state.\n - JOB_STATUS_FINISHED: The job has finished.\n - JOB_STATUS_TRAVELING: The worker is traveling to the job.\n - JOB_STATUS_CANCELED: The job has been canceled."
+    google.protobuf.Any:
       type: object
       properties:
-        geofence_id:
+        '@type':
           type: string
-          description: The ID of the geofence that was exited.
-        exit_reason:
-          description: The reason for exiting the geofence.
-          allOf:
-          - $ref: '#/components/schemas/s12.loneworker.v1.GeofenceExitReason'
-      description: Details about a geofence exited event.
-    s12.loneworker.v1.TimedLocation:
-      type: object
-      properties:
-        position:
-          description: The geographical position of the location.
-          allOf:
-          - $ref: '#/components/schemas/s12.common.GeoPosition'
-        address:
-          type: string
-          description: The address of the location.
-        recorded_at:
-          type: string
-          format: date-time
-          description: The timestamp when the location was recorded, in UTC.
-      description: The message representing a location and time when it was recorded.
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    s12.loneworker.v1.GeofenceExitReason:
+      type: string
+      enum:
+      - GEOFENCE_EXIT_REASON_BOUNDARY_CROSSED
+      - GEOFENCE_EXIT_REASON_GEOFENCE_DELETED
+      description: "GeofenceExitReason enumerates the possible reasons for exiting a geofence.\n\n - GEOFENCE_EXIT_REASON_BOUNDARY_CROSSED: The geofence boundary was crossed.\n - GEOFENCE_EXIT_REASON_GEOFENCE_DELETED: The geofence was deleted."
     s12.loneworker.v1.GetJobEventsResponse.JobEvent.PanicAcknowledgedEvent:
       type: object
       properties:
@@ -303,31 +253,26 @@ components:
           type: string
           description: The ID of the user who acknowledged the panic.
       description: Details about a panic acknowledgement event.
-    s12.loneworker.v1.GetJobEventsResponse.JobEvent.PanicStartedEvent:
+    s12.loneworker.v1.GetJobEventsResponse.JobEvent.PanicPositionUpdatedEvent:
       type: object
       properties:
-        panic_trigger:
-          description: The trigger that caused the job to enter a panic state.
-          allOf:
-          - $ref: '#/components/schemas/s12.loneworker.v1.PanicTrigger'
-      description: Details about a panic start event.
-    s12.loneworker.v1.GetJobsResponse:
-      type: object
-      properties:
-        jobs:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/s12.loneworker.v1.GetJobsResponse.Job'
-          description: The list of retrieved jobs.
-        next_page_token:
-          type: string
-          description: The token for the next page of results.
-        total_count:
+        events_count:
           type: integer
           format: int32
-          description: The total number of jobs that match the filter.
-      description: The message representing a location and its address.
+          description: The number of panic position updates combined into this event, at least one.
+        duration_seconds:
+          type: integer
+          format: int32
+          description: 'The number of seconds between the first and last of the combined panic position
+
+            updates, or zero when only one was combined.'
+        direction:
+          type: integer
+          format: int32
+          description: 'The compass bearing in degrees, from 0 to 360, toward the next position, or -1
+
+            when the worker did not move or no later event was returned.'
+      description: Details about a panic position update event.
     s12.loneworker.v1.JobEventType:
       type: string
       enum:
@@ -346,6 +291,21 @@ components:
       - JOB_EVENT_TYPE_GEOFENCE_ENTERED
       - JOB_EVENT_TYPE_GEOFENCE_EXITED
       description: "The enum representing the various events that can occur during the job's lifecycle.\n\n - JOB_EVENT_TYPE_STARTED: The job has started.\n - JOB_EVENT_TYPE_FINISHED: The job has finished.\n - JOB_EVENT_TYPE_DURATION_EXTENDED: The duration of the job has been extended.\n - JOB_EVENT_TYPE_POSITION_UPDATED: The job's position has been updated.\n - JOB_EVENT_TYPE_PANIC_STARTED: The job entered a panic state.\n - JOB_EVENT_TYPE_CHECKED_IN: The worker has manually checked in.\n - JOB_EVENT_TYPE_PANIC_POSITION_UPDATED: The job's position has been updated during a panic state.\n - JOB_EVENT_TYPE_CHECK_IN_MISSED: The worker missed a scheduled check-in.\n - JOB_EVENT_TYPE_DURATION_EXPIRED: The job's duration has expired.\n - JOB_EVENT_TYPE_PANIC_CANCELED: The panic state has been canceled.\n - JOB_EVENT_TYPE_PANIC_RESOLVED: The panic state has been resolved.\n - JOB_EVENT_TYPE_PANIC_ACKNOWLEDGED: The panic has been acknowledged.\n - JOB_EVENT_TYPE_GEOFENCE_ENTERED: The worker has entered a geofence area.\n - JOB_EVENT_TYPE_GEOFENCE_EXITED: The worker has exited a geofence area."
+    s12.loneworker.v1.GetJobsResponse.Location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+          description: The geographical latitude.
+        longitude:
+          type: number
+          format: double
+          description: The geographical longitude.
+        address:
+          type: string
+          description: '[Optional] The address of the location.'
+      description: The message representing a location and time when it was recorded.
     s12.loneworker.v1.GetJobEventsResponse.JobEvent.StartedEvent:
       type: object
       properties:
@@ -354,28 +314,76 @@ components:
           format: int32
           description: The planned duration of a job (minutes).
       description: Details about a job start event.
-    s12.loneworker.v1.GeofenceExitReason:
-      type: string
-      enum:
-      - GEOFENCE_EXIT_REASON_BOUNDARY_CROSSED
-      - GEOFENCE_EXIT_REASON_GEOFENCE_DELETED
-      description: "GeofenceExitReason enumerates the possible reasons for exiting a geofence.\n\n - GEOFENCE_EXIT_REASON_BOUNDARY_CROSSED: The geofence boundary was crossed.\n - GEOFENCE_EXIT_REASON_GEOFENCE_DELETED: The geofence was deleted."
-    google.protobuf.Any:
+    google.rpc.Status:
       type: object
       properties:
-        '@type':
+        code:
+          type: integer
+          format: int32
+        message:
           type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    s12.loneworker.v1.PanicReason:
-      type: string
-      enum:
-      - PANIC_REASON_NO_PANIC
-      - PANIC_REASON_FALSE_ALARM
-      - PANIC_REASON_INCIDENT
-      - PANIC_REASON_NEAR_MISS
-      description: "The enum representing the various reasons a job can resolve a panic state.\n\n - PANIC_REASON_NO_PANIC: The job did not have a panic at all.\n - PANIC_REASON_FALSE_ALARM: The panic state was a false alarm.\n - PANIC_REASON_INCIDENT: The panic state was due to an incident.\n - PANIC_REASON_NEAR_MISS: The panic state was due to a near miss."
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/google.protobuf.Any'
+    s12.common.GeoPosition:
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+          description: The geographical longitude
+        latitude:
+          type: number
+          format: double
+          description: The geographical latitude
+        accuracy:
+          type: integer
+          format: int32
+          description: The accuracy in meters
+      description: A position is the fundamental geographical geometry construct.
+    s12.loneworker.v1.GetJobEventsResponse.JobEvent.GeofenceEnteredEvent:
+      type: object
+      properties:
+        geofence_id:
+          type: string
+          description: The ID of the geofence that was entered.
+      description: Details about a geofence entered event.
+    s12.loneworker.v1.GetJobEventsResponse.JobEvent.GeofenceExitedEvent:
+      type: object
+      properties:
+        geofence_id:
+          type: string
+          description: The ID of the geofence that was exited.
+        exit_reason:
+          description: The reason for exiting the geofence.
+          allOf:
+          - $ref: '#/components/schemas/s12.loneworker.v1.GeofenceExitReason'
+      description: Details about a geofence exited event.
+    s12.loneworker.v1.GetJobEventsResponse.JobEvent.PanicCanceledEvent:
+      type: object
+      properties:
+        panic_reason:
+          description: The reason that caused the job to exit the panic state.
+          allOf:
+          - $ref: '#/components/schemas/s12.loneworker.v1.PanicReason'
+      description: Details about a panic cancel event.
+    s12.loneworker.v1.TimedLocation:
+      type: object
+      properties:
+        position:
+          description: The geographical position of the location.
+          allOf:
+          - $ref: '#/components/schemas/s12.common.GeoPosition'
+        address:
+          type: string
+          description: The address of the location.
+        recorded_at:
+          type: string
+          format: date-time
+          description: The timestamp when the location was recorded, in UTC.
+      description: The message representing a location and time when it was recorded.
     s12.loneworker.v1.GetJobsResponse.Job:
       type: object
       properties:
@@ -429,6 +437,40 @@ components:
           format: date-time
           description: '[Optional] The timestamp when the job finished.'
       description: The message representing an active job.
+    s12.loneworker.v1.GetJobEventsResponse.JobEvent.PanicResolvedEvent:
+      type: object
+      properties:
+        panic_reason:
+          description: The reason that caused the job to exit the panic state.
+          allOf:
+          - $ref: '#/components/schemas/s12.loneworker.v1.PanicReason'
+      description: Details about a panic resolve event.
+    s12.loneworker.v1.PanicTrigger:
+      type: string
+      enum:
+      - PANIC_TRIGGER_DURATION_EXPIRED
+      - PANIC_TRIGGER_MISSED_CHECK_IN
+      - PANIC_TRIGGER_BUTTON_PRESSED
+      - PANIC_TRIGGER_WIDGET_PRESSED
+      - PANIC_TRIGGER_MAN_DOWN
+      - PANIC_TRIGGER_SHAKE
+      description: "The enum representing the various reasons a job can enter a panic state.\n\n - PANIC_TRIGGER_DURATION_EXPIRED: The job entered a panic state due to duration expiry.\n - PANIC_TRIGGER_MISSED_CHECK_IN: The job entered a panic state due to a missed check-in.\n - PANIC_TRIGGER_BUTTON_PRESSED: The job entered a panic state due to panic button press.\n - PANIC_TRIGGER_WIDGET_PRESSED: The job entered a panic state due to widget button press.\n - PANIC_TRIGGER_MAN_DOWN: The job entered a panic state due to a man-down event.\n - PANIC_TRIGGER_SHAKE: The job entered a panic state due to a shake event."
+    s12.loneworker.v1.PanicReason:
+      type: string
+      enum:
+      - PANIC_REASON_NO_PANIC
+      - PANIC_REASON_FALSE_ALARM
+      - PANIC_REASON_INCIDENT
+      - PANIC_REASON_NEAR_MISS
+      description: "The enum representing the various reasons a job can resolve a panic state.\n\n - PANIC_REASON_NO_PANIC: The job did not have a panic at all.\n - PANIC_REASON_FALSE_ALARM: The panic state was a false alarm.\n - PANIC_REASON_INCIDENT: The panic state was due to an incident.\n - PANIC_REASON_NEAR_MISS: The panic state was due to a near miss."
+    s12.loneworker.v1.GetJobEventsResponse.JobEvent.PanicStartedEvent:
+      type: object
+      properties:
+        panic_trigger:
+          description: The trigger that caused the job to enter a panic state.
+          allOf:
+          - $ref: '#/components/schemas/s12.loneworker.v1.PanicTrigger'
+      description: Details about a panic start event.
     s12.loneworker.v1.GetJobEventsResponse.JobEvent:
       type: object
       description: An event that occurred during a job. At most one set of event details is present, and event types that carry no further detail, such as a check-in, have none at all.
@@ -538,48 +580,6 @@ components:
       - type: object
         title: No further detail
         description: The event type carries no further detail, such as a check-in or the job finishing.
-    s12.loneworker.v1.GetJobEventsResponse.JobEvent.GeofenceEnteredEvent:
-      type: object
-      properties:
-        geofence_id:
-          type: string
-          description: The ID of the geofence that was entered.
-      description: Details about a geofence entered event.
-    s12.loneworker.v1.GetJobEventsResponse.JobEvent.PanicPositionUpdatedEvent:
-      type: object
-      properties:
-        events_count:
-          type: integer
-          format: int32
-          description: The number of panic position updates combined into this event, at least one.
-        duration_seconds:
-          type: integer
-          format: int32
-          description: 'The number of seconds between the first and last of the combined panic position
-
-            updates, or zero when only one was combined.'
-        direction:
-          type: integer
-          format: int32
-          description: 'The compass bearing in degrees, from 0 to 360, toward the next position, or -1
-
-            when the worker did not move or no later event was returned.'
-      description: Details about a panic position update event.
-    s12.loneworker.v1.GetJobsResponse.Location:
-      type: object
-      properties:
-        latitude:
-          type: number
-          format: double
-          description: The geographical latitude.
-        longitude:
-          type: number
-          format: double
-          description: The geographical longitude.
-        address:
-          type: string
-          description: '[Optional] The address of the location.'
-      description: The message representing a location and time when it was recorded.
   securitySchemes:
     BearerAuthentication:
       type: http
